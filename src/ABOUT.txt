@@ -1,0 +1,45 @@
+********************************
+** en_GB en_US English        **
+********************************
+
+How to install?
+===============
+
+Linux
+-----
+Execute this command: (sudo) sh oStorybook.X.YZ.bin
+
+Linux Debian
+------------
+Load the package oStorybook.X.YZ.deb
+
+Windows
+-------
+Simply start the installer oStorybook.X.YZ.exe
+
+Mac OS X
+--------
+Load the software with your usual setup tool with oStorybook.X.YZ.tgz.
+
+********************************
+** fr_FR Français             **
+********************************
+Comment installer?
+==================
+
+Linux
+-----
+Executez la commande : (sudo) sh oStorybook.X.YZ.bin
+
+Linux Debian
+------------
+Chargez le paquage oStorybook.X.YZ.deb
+
+Windows
+-------
+Lancez l'exécution de l'installeur oStorybook.X.YZ.exe
+
+Mac OS x
+--------
+Utilsez l'outil d'installation habituel avec oStorybook.X.YZ.tgz
+

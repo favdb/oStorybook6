@@ -1,0 +1,29 @@
+/* default css for scenario*/
+body {
+    font-family: monospace;
+    font-size: 12pt;
+}
+p {
+    margin-left: 3.8cm;
+    margin-right: 2.5cm;
+    margin-top: 8pt;
+    margin-bottom: 8pt;
+}
+ul {
+    margin-top: 2pt;
+    margin-left: 4cm;
+    margin-bottom: 2pt;
+}
+h1 {
+    font-family: monospace;
+    text-align: center;
+}
+ol {
+    margin-top: 2pt;
+    margin-left: 4cm;
+    margin-bottom: 2pt;
+}
+table tr {
+    margin: 0pt;
+    padding: 0pt;
+}
