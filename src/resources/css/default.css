@@ -1,0 +1,69 @@
+/* default css for oStorybook*/
+body {
+    font-family:Times;
+    padding-left:2pt;
+    padding-right:2pt;
+}
+h1 {
+    font-size:140%;
+    text-align:center;
+    margin-top:10pt;
+    margin-bottom:1pt;
+}
+h2 {
+    font-size:130%;
+    text-align:left;
+    margin-top:10pt;
+    margin-bottom:1pt;
+}
+h3 {
+    font-size:120%;
+    text-align:left;
+    margin-top:6pt;
+    margin-bottom:3pt;
+}
+h4 {
+    font-size:110%;
+    text-align:left;
+    margin-top:6pt;
+    margin-bottom:3pt;
+}
+h5 {
+    font-size:100%;
+    text-align:left;
+    margin-top:6pt;
+    margin-bottom:3pt;
+}
+h6 {
+    font-size:100%;
+    text-align:left;
+    margin-top:6pt;
+    margin-bottom:3pt;
+}
+p {
+    margin-top: 6pt;
+    margin-bottom: 6pt;
+    text-align: justify;
+}
+#navbar {
+    background-color: lightgrey;
+    text-align:right;
+}
+ul {
+    margin-top:2pt;
+    margin-left:15pt;
+    margin-bottom:2pt;
+}
+ol {
+    margin-top:2pt;
+    margin-left:15pt;
+    margin-bottom:2pt;
+}
+table tr {
+    margin:0pt;
+    padding:0pt;
+}
+td {
+    margin-right:1pt;
+    padding:1pt;
+}

@@ -1,0 +1,50 @@
+Checklist des tests de validation d'une version
+
+1. Démarrage première utilisation : OK, avec validation installation en 4 étapes:
+1=Langue, 
+2=Chargement dictionnaire, 
+3=Chargement Assistant, 
+4=Configuration interface
+(étapes 2 à 4 facultatives)
+2. Ouverture fichier V5 avec conversion : OK
+3. Ouverture fichier V6 : OK
+4. Test d'ouverture des fichiers d'exemple avec conversion:
+4.1 Le Médecin Malgré Lui (théâtre) : OK
+4.2 De la Terre à la Lune (roman) : OK
+4.3 Orgeuil et Préjugés (roman) : OK
+4.4 Largo Winch (scénario) : OK
+4.5 Harry Potter (pour les épisodes) : OK
+5. Test de fonctionnement en mode Dactylo:
+5.1 De la Terre à la Lune (roman) : OK
+5.2 Largo Winch (scénario) : OK
+6. Création d'un projet : OK
+7. Validation de fonctionnement des tableaux
+7.1 simple sélection : OK
+7.2 double-click : OK
+7.3 colonnes à afficher et ordre de tri : OK
+8. Validation du fonctionnement des rapports
+8.1 Apparition des personnages par date : à faire
+8.2 Apparition des personnages par scène : OK
+8.3 QuiQuandOù : OK
+8.4 Occurrence des Personnages : OK
+8.5 Occurrence des Lieux : OK
+9. Validation des outils:
+9.1 Épisodes : OK
+9.2 Chercher : OK
+9.3 Remplacer : OK
+9.4 Ordre des Chapitres : OK
+9.5 Renuméroter les Scènes : OK
+9.6 Liens
+9.7 Renuméroter les notes de renvoi
+9.8 Renommer
+9.8 Créer une couverture (rien à faire, pas de modification): OK
+10. Validation des vues: OK
+11. Disposition (rien à faire, pas de modification): OK
+12. Aide (rien à faire, pas de modification): OK
+13. Exporter
+13.1 Livre: HTML=OK, EPUB=OK, DOCX=OK, ODT=OK, TEX=OK
+13.2 Autre format: Résumé=OK, Liste=OK, Fiches=OK
+14. Importer (à revoir entièrement, neutralisé)
+15. À ajouter:
+15.1 transformation des liens (images ou fichiers) vers fichiers réels: OK pour images
+15.2 export du projet vers une autre machine: export=OK, import=OK
