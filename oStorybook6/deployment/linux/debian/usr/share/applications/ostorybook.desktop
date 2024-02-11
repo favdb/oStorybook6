@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=oStorybook
+Version=@@version@@
+MimeType=application/vnd.oStorybook
+Terminal=false
+Icon=/usr/share/icons/oStorybook-icon.png
+Exec=ostorybook %f
+Categories=Application;Office;TextTools
+Comment=Open Source novel writing for Novelists, Authors and Creative Writers.
+Comment[fr]=Logiciel d'écriture pour romanciers.
+Keywords=novelist

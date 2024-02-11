@@ -82,8 +82,186 @@
     <!-- ===Build prepare================================================== -->
     <target name="build-prepare">
         <echo level="info" message="--- start of build-prepare"/>
+        <copy file="ABOUT.TXT" todir="${dist.dir}" />
+        <copy file="LICENSE.TXT" todir="${dist.dir}" />
+        <copy file="LICENSE-fr.TXT" todir="${dist.dir}" />
+        <copy file="README.md" todir="${dist.dir}" />
+        <copy file="THANKS.TXT" todir="${dist.dir}" />
+        <copy file="Versions.txt" todir="${dist.dir}" />
+        <copy file="splash.png" todir="${dist.dir}" />
+        <copy file="oStorybook-icon.icns" todir="${dist.dir}" />
+        <copy file="oStorybook-icon.ico" todir="${dist.dir}" />
+        <copy file="oStorybook-icon.png" todir="${dist.dir}" />
+        <copy file="oStorybook.bat" todir="${dist.dir}" />
+        <copy file="oStorybook.sh" todir="${dist.dir}" />
+        <chmod file="${dist.dir}/oStorybook.sh" perm="ugo+rx"/>
         <mkdir dir="${dist.dir}" />
+        <!--<mkdir dir="${dist.dir}/Assistant" />
+        <copy todir="${dist.dir}/Assistant" flatten="false">
+            <fileset dir="${basedir}/Assistant" />
+        </copy> -->
         <echo level="info" message="--- end of build-prepare"/>
+    </target>
+    <!-- ===Build ZIP file================================================ -->
+    <target name="build-appzip" depends="jar, build-prepare" >
+        <echo level="info" message="--- start of build-appzip"/>
+        <mkdir dir="${dist.dir}" />
+        <mkdir dir="${sb.distdir}" />
+        <zip destfile="${sb.distzip}" basedir="${basedir}/dist" />
+        <echo level="info" message="--- end of build-appzip"/>
+    </target>
+    <!-- ===Build Libs file================================================ -->
+    <target name="build-libs" depends="jar, build-prepare" >
+        <property name="sb.libzip" value="${basedir}/distrib/oStorybook_libs.zip" />
+        <echo level="info" message="--- start of build-libs"/>
+        <echo level="info" message="delete the old libs zip file..."/>
+        <delete file="${sb.libzip}"/>
+        <echo level="info" message="make the libs zip file..."/>
+        <mkdir dir="${basedir}/distrib" />
+        <zip destfile="${sb.libzip}" basedir="${basedir}/lib" />
+        <echo level="info" message="--- end of build-libs"/>
+    </target>
+    <!-- ===Build source zip file========================================== -->
+    <target name="build-zipsrc" depends="build-libs">
+        <property name="sb.srczip" value="${sb.distdir}/oStorybook-${sb.version}_src.zip" />
+        <echo level="info" message="--- start of build-srczip"/>
+        <echo level="info" message="make the src zip file..."/>
+        <delete file="${sb.srczip}"/>
+        <zip zipfile="${sb.srczip}">
+            <zipfileset dir="${basedir}">
+                <include name="src/**" />
+                <include name="build.xml" />
+                <include name="ABOUT.TXT" />
+                <include name="DEV-checklist.TXT" />
+                <include name="LICENSE.TXT" />
+                <include name="LICENSE-fr.TXT" />
+                <include name="README.TXT" />
+                <include name="THANKS.TXT" />
+                <include name="Versions.txt" />
+                <include name="oStorybook-*.*" />
+                <include name="splash.png" />
+            </zipfileset>
+        </zip>
+        <echo level="info" message="--- end of build-srczip"/>
+    </target>
+    <!-- ===Build jarbundler for MacOSX==================================== -->
+    <target name="build-jarbundler" depends="jar" >
+        <echo level="info" message="--- start of build-jarbundler"/>
+        <!-- jarbundler properties -->
+        <property name="jarbundler.name" value="${ant.project.name}" />
+        <property name="jarbundler.shortname" value="${ant.project.name}" />
+        <property name="jarbundler.signature" value="${ant.project.name}, oStorybook.eu" />
+        <property name="jarbundler.mainclass" value="storybook.App" />
+        <property name="jarbundler.icon" value="storybook-icon.icns" />
+        <property name="jarbundler.jvmversion" value="1.8+" />
+        <property name="jarbundler.version" value="${sb.version}" />
+        <property name="jarbundler.infostring" value="${ant.project.name} ${sb.version}, ${TODAY}" />
+        <property name="jarbundler.build" value="" />
+        <property name="jarbundler.bundleid" value="storybook.App" />
+        <property name="jarbundler.apple.laf.useScreenMenuBar" value="true" />
+        <property name="jarbundler.apple.awt.brushMetal" value="true" />
+        <property name="jarbundler.apple.awt.showGrowBox" value="true" />
+        <property name="jarbundler.apple.awt.textantialiasing" value="true" />
+        <taskdef name="jarbundler"
+                 classname="net.sourceforge.jarbundler.JarBundler"
+                 classpath="lib/jarbundler-2.2.0.jar" />
+        <jarbundler dir="${sb.distdir}"
+                    name="${jarbundler.name}"
+                    shortname="${jarbundler.shortname}"
+                    signature="${jarbundler.signature}"
+                    mainclass="${jarbundler.mainclass}"
+                    icon="${jarbundler.icon}"
+                    jvmversion="${jarbundler.jvmversion}"
+                    version="${jarbundler.version}"
+                    infostring="${jarbundler.infostring}"
+                    build="${jarbundler.build}"
+                    bundleid="${jarbundler.bundleid}"
+                    workingdirectory="$$APP_PACKAGE/Contents/Resources/Java">
+            <jarfileset dir="${dist.dir}">
+                <include name="*.txt" />
+                <include name="${sb.jar.name}" />
+                <include name="lib/**" />
+                <!-- <include name="resources/**" /> -->
+                <include name="splash.png" />
+                <include name="oStorybook-icon.icns" />
+                <include name="oStorybook-icon.ico" />
+                <include name="oStorybook-icon.png" />
+            </jarfileset>
+            <javaproperty name="apple.laf.useScreenMenuBar"
+                          value="${jarbundler.apple.laf.useScreenMenuBar}" />
+            <javaproperty name="apple.awt.brushMetal"
+                          value="${jarbundler.apple.awt.brushMetal}" />
+            <javaproperty name="apple.awt.showGrowBox"
+                          value="${jarbundler.apple.awt.showGrowBox}" />
+            <javaproperty name="apple.awt.textantialiasing"
+                          value="${jarbundler.apple.awt.textantialiasing}" />
+        </jarbundler>
+        <echo level="info" message="--- end of build-jarbundler"/>
+    </target>
+    <!-- ===Build for MacOSX=============================================== -->
+    <target name="build-macosx" depends="init,jar,build-prepare,build-jarbundler">
+        <echo level="info" message="--- start of build-macosx"/>
+        <!-- mac specific build parameters -->
+        <property name="sb.mac.deployment.dir" value="${sb.deployment.dir}/macintosh" />
+        <property name="sb.mac.installer.mount.dir" value="/Volumes/tmpStorybook-${TODAY}" />
+        <property name="sb.mac.installer.template" value="Storybook_template.dmg" />
+        <property name="sb.macfile" value="${sb.distdir}/oStorybook" />
+        <tar basedir="${sb.distdir}/${jarbundler.name}.app" destfile="${sb.macfile}.tar" />
+        <gzip src="${sb.macfile}.tar" destfile="${sb.macfile}-${sb.version}-macOSx.tar.gz"/>
+        <delete file="${sb.macfile}.tar"/>
+        <delete dir="${sb.distdir}/${jarbundler.name}.app"/>
+        <echo level="info" message="--- end of build-macosx"/>
+    </target> 
+    <!-- ===Build for Windows with NSIS==================================== -->
+    <target name="build-windows" depends="jar, build-prepare, build-appzip">
+        <echo level="info" message="--- start of build-windows"/>
+        <echo level="info" message="build-appzip utilisable seulement si NSIS a été installé (voir la documentation)"/>
+        <exec executable="wine">
+            <arg value="../../../nsis/makensis.exe" />
+            <arg value="${build.dir}/../deployment/windows/nsis/oStorybook.nsi" />
+        </exec>
+        <move file="dist/oStorybook-installer.exe" tofile="${sb.distdir}/oStorybook-${sb.version}.exe" />
+        <echo level="info" message="--- end of build-windows"/>
+    </target>
+    <!-- ===Build for Debian and for RPM=================================== -->
+    <target name="build-debian" depends="jar,build-prepare,app-singlejar">
+        <echo level="info" message="--- start of build-debian"/>
+        <echo level="info">Prepare DEBIAN package build</echo>
+        <echo file="${sb.linux.deployment.dir}/build-debian.sh" append="false" force="true">#!/bin/sh
+            echo DEBIAN package for ${sb.version}
+            rm -r -f /home/favdb/oStorybook/mainApp/distrib/5.61/debian-package
+            mkdir ${sb.debian.distdir}
+            echo Copy debian-package structure
+            cp -R ${sb.debian.deployment.dir}/DEBIAN ${sb.debian.distdir}
+            cp -R ${sb.debian.deployment.dir}/usr ${sb.debian.distdir}
+            sed -i -e "s/@@version@@/${sb.version}/g" ${sb.debian.distdir}/DEBIAN/control
+            sed -i -e "s/@@version@@/${sb.version}/g" ${sb.debian.distdir}/usr/share/applications/ostorybook.desktop
+            sed -i -e "s/(version)/(${sb.version})/g" ${sb.debian.distdir}/usr/share/doc/ostorybook/changelog
+            gzip -9 -n ${sb.debian.distdir}/usr/share/doc/ostorybook/changelog
+            echo Copy application
+            cp -R ${basedir}/Assistant ${sb.debian.distdir}/usr/share/ostorybook/
+            cp ${sb.distdir}/single_${sb.jar.name} ${sb.debian.distdir}/usr/share/ostorybook/${sb.jar.name}
+            echo Modification for permissions
+            find ${sb.debian.distdir}/usr -type d -exec chmod 755 {} +
+            chmod -R 755 ${sb.debian.distdir}/DEBIAN
+            echo set the md5
+            echo build of Debian package
+            dpkg-deb --build ${sb.debian.distdir} ${sb.distdir}/oStorybook-${sb.version}.deb
+            echo Cleaning...
+            rm -r -f ${sb.debian.distdir}
+            echo Build RPM package
+            cd ${sb.distdir}
+            alien -r ${sb.distdir}/oStorybook-${sb.version}.deb
+            mv ${sb.distdir}/ostorybook-${sb.version}*.rpm oStorybook-${sb.version}.rpm
+            lintian -i -I ${sb.distdir}/oStorybook-${sb.version}.deb
+        </echo>
+        <echo level="info" message="Build for DEB and RPM:"/>
+        <echo level="info" message="    sudo sh ${sb.linux.deployment.dir}/build-debian.sh"/>
+        <echo level="info" message="Install for a Linux Debian like:"/>
+        <echo level="info" message="    sudo dpkg -i ${sb.distdir}/oStorybook-${sb.version}.deb"/>
+        <echo level="info" message="or single copy of JAR (for Debian like only):"/>
+        <echo level="info" message="    sudo cp ${sb.distdir}/single-oStorybook.jar /usr/share/ostorybook/oStorybook.jar"/>
+        <echo level="info" message="--- end of build-debian"/>
     </target>
     <!-- ===Compile for a single JAR======================================= -->
     <target name="app-singlejar" depends="jar,build-prepare">
@@ -100,5 +278,64 @@
                         excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
         </zip>
         <delete file="${sb.distdir}/temp_final.jar"/>
+    </target>
+    <!-- ===Build for manual Linux ZIP file================================ -->
+    <target name="build-linux" depends="jar,build-prepare" >
+        <echo level="info" message="--- start of build-linux"/>
+        <mkdir dir="${sb.distdir}" />
+        <exec executable="sh">
+            <arg value="deployment/linux/other/makeself.sh" />
+            <arg value="${basedir}/dist" />
+            <arg value="${sb.distdir}/oStorybook-${sb.version}-linux.bin" />
+            <arg value="oStorybook" />
+            <arg value="./setup.sh" />
+        </exec>
+        <echo level="info" message="--- end of build-linux"/>
+    </target>
+    <!-- ===Build all packages============================================= -->
+    <target name="app-all"
+            depends="build-linux, build-appzip, build-macosx,
+                 build-windows, build-zipsrc, build-debian">
+        <echo level="info" message="--- start of app-all"/>
+        <copy file="Versions.txt" todir="${sb.distdir}" />
+        <exec executable="ls" failonerror="true"> 
+            <arg line=" -sh ${dist.jar}"/> 
+        </exec> 
+        <copy file="${basedir}/dist/oStorybook.jar" todir="${sb.distdir}" />
+        <echo level="info" message="--- end of app-all"/>
+    </target>
+    <!-- ===Statistics===================================================== -->
+    <target name="app-statistics">
+        <!-- use of cloc package -->
+        <echo level="info" message="--- start of statistics"/>
+        <echo level="info" message="+++ Global statistics"/>
+        <exec executable="cloc" failonerror="true"> 
+            <arg line=" --progress-rate=0 src "/> 
+        </exec> 
+        <echo level="info" message="+++ oStorybook only statistics"/>
+        <exec executable="cloc" failonerror="true"> 
+            <arg line=" --progress-rate=0 src/storybook"/> 
+        </exec> 
+        <echo level="info" message="+++ assistant only statistics"/>
+        <exec executable="cloc" failonerror="true"> 
+            <arg line=" --progress-rate=0 src/assistant"/> 
+        </exec> 
+        <echo level="info" message="+++ i18n only statistics"/>
+        <exec executable="cloc" failonerror="true"> 
+            <arg line=" --progress-rate=0 src/i18n"/> 
+        </exec> 
+        <echo level="info" message="+++ resources only statistics"/>
+        <exec executable="cloc" failonerror="true"> 
+            <arg line=" --progress-rate=0 src/resources"/> 
+        </exec> 
+        <echo level="info" message="+++ shef only statistics"/>
+        <exec executable="cloc" failonerror="true"> 
+            <arg line=" --progress-rate=0 src/api/shef"/> 
+        </exec> 
+        <echo level="info" message="+++ all api statistics (shef included)"/>
+        <exec executable="cloc" failonerror="true"> 
+            <arg line=" --progress-rate=0 src/api"/> 
+        </exec> 
+        <echo level="info" message="--- end of statistics"/>
     </target>
 </project>

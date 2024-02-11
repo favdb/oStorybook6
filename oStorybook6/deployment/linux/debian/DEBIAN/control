@@ -1,0 +1,14 @@
+Package: ostorybook
+Section: java
+Priority: optional
+Architecture: all
+Description: This is a Libre software for writers, novelists,
+ authors. From the draft to the final book, oStorybook you can never lose
+ sight of the overall story. oStorybook helps you maintain control over the
+ various developments of your story.
+Version: @@version@@
+Depends: default-jre | default-jdk
+Maintainer: oStorybook Team <dev@ostorybook.eu>
+Installed-Size: 25900
+Homepage: http://ostorybook.eu
+Bugs: http://ostorybook.tuxfamily.org/support/?lng=fr&tconfig=0
