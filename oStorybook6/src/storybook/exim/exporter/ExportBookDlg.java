@@ -69,7 +69,7 @@ public class ExportBookDlg extends AbsDialog {
 	 * @param mainFrame
 	 */
 	public static void show(MainFrame mainFrame) {
-		//LOG.printInfos(TT + ".show(mainFrame) " + mainFrame.getBook().getParam().getParamExport().toString());
+		//LOG.printInfos(TT + ".show(mainFrame) " + mainFrame.getBook().getParam().getParamExport().toPrint());
 		ExportBookDlg dlg = new ExportBookDlg(mainFrame);
 		dlg.setVisible(true);
 	}
@@ -102,7 +102,7 @@ public class ExportBookDlg extends AbsDialog {
 	 */
 	@Override
 	public void initUi() {
-		//LOG.printInfos(TT + ".initUi() " + paramExport.toString());
+		//LOG.printInfos(TT + ".initUi() " + paramExport.toPrint());
 		setLayout(new MigLayout(MIG.get(MIG.FILL, MIG.HIDEMODE3)));
 		setBackground(Color.white);
 		setTitle(I18N.getMsg("export"));

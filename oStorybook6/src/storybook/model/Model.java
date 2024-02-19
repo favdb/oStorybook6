@@ -152,12 +152,12 @@ public class Model extends AbstractModel {
 	}
 
 	/**
-	 * print the view, unusable because there is not print job
+	 * print the view
 	 *
 	 * @param view
 	 */
 	public void print(SbView view) {
-		//empty
+		firePropertyChange(Ctrl.PROPS.PRINT.toString(), null, view);
 	}
 
 	/**

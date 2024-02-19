@@ -71,7 +71,7 @@ public class ExportBookToHtml extends AbstractExport {
 	public boolean withExternal = false;
 	private Chapter chapterFirst, chapterLast, chapterPrior, chapterNext, chapterCur;
 	private Scene scenePrior, sceneNext;
-	private StringBuilder buffer;
+	private StringBuilder buffer = new StringBuilder();
 	private boolean bSeparator;
 	private String sceneSeparator = Const.SCENE_SEPARATOR;
 	private Strand strand;
@@ -160,15 +160,35 @@ public class ExportBookToHtml extends AbstractExport {
 	}
 
 	/**
-	 * do an export to a String
+	 * do an export to a String for printing
 	 *
-	 * @param m
-	 * @return true if done
+	 * @param mainFrame
+	 * @return
 	 */
-	public static String toString(MainFrame m) {
-		//LOG.printInfos(TT + ".toString(mainFrame)");
-		ExportBookToHtml export = new ExportBookToHtml(m);
-		return export.getString();
+	public static String toPrint(MainFrame mainFrame) {
+		//LOG.trace(TT + ".toPrint(mainFrame)");
+		ExportBookToHtml exp = new ExportBookToHtml(mainFrame);
+		exp.tocLink = false;
+		exp.review = false;
+		exp.onlyPart = null;
+		exp.param.setFormat(F_HTML);
+		exp.param.setHtmlMultiChapter(false);
+		exp.param.setHtmlMultiScene(false);
+		exp.param.setHtmlNav(false);
+		StringBuilder buf = new StringBuilder();
+		buf.append(Html.DOCTYPE);
+		buf.append(Html.HTML_B);
+		buf.append(Html.HEAD_B);
+		buf.append("<title>").append(mainFrame.getBook().getTitle()).append("</title>");
+		buf.append("<style>"
+		   + "body {font-size: 12pt;}"
+		   + "em {background-color: yellow;}"
+		   + "</style>");
+		buf.append(Html.HEAD_E);
+		buf.append(Html.BODY_B);
+		buf.append(exp.bookGetTitle());
+		buf.append(exp.bookGetText());
+		return buf.toString();
 	}
 
 	/**
@@ -209,7 +229,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 */
 	public static String toPanel(MainFrame mainFrame,
 	   Strand strand, Part onlyPart, boolean review, int level) {
-		/*LOG.printInfos(TT + ".toPanel(m, strand=" + (strand == null ? "null" : strand.toString())
+		/*LOG.printInfos(TT + ".toPanel(m, strand=" + (strand == null ? "null" : strand.toPrint())
 				+ ",onlyPart=" + (onlyPart != null ? "true" : "false")
 				+ ",tocLevel=" + tocLevel
 				+ ")");*/
@@ -234,7 +254,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 *
 	 * @return
 	 */
-	private String bookGetTitle() {
+	public String bookGetTitle() {
 		StringBuilder b = new StringBuilder();
 		b.append(Html.intoP(ExportBook.getTitle(book, false)));
 		b.append(ExportBook.getDedication(book, 30));
@@ -533,7 +553,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @return a String representation of the HTML code
 	 */
 	public String bookGetText() {
-		//LOG.printInfos(TT + ".bookGetText()");
+		//LOG.trace(TT + ".bookGetText()");
 		buffer = new StringBuilder();
 		if (!withExternal) {
 			buffer.append(Html.intoTag("div", ExportBook.getBlurb(book), "style=\"font-style:italic;\""));
@@ -756,7 +776,7 @@ public class ExportBookToHtml extends AbstractExport {
 		if (review) {
 			buffer.append(Review.reviewsToHtml(mainFrame, scene));
 		}
-		if (bookNeedToc() && !isOpened) {
+		if (bookNeedToc() && !isOpened && tocLink) {
 			buffer.append(tocGetLink());
 		}
 		if (param.getLayout().getSceneSeparator() && bSeparator) {

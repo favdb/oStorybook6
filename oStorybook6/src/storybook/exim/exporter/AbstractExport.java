@@ -142,7 +142,7 @@ public abstract class AbstractExport {
 			JOptionPane.showMessageDialog(mainFrame,
 			   I18N.getMsg("export.dir.error") + "\n" + fdir.getAbsolutePath(),
 			   I18N.getMsg("export"), 1);
-			return (false);
+			return false;
 		}
 		fdir = new File(dir + name + "." + param.getFormat());
 		if (ask && !EXIM.askExists(null, fdir.getAbsolutePath())) {

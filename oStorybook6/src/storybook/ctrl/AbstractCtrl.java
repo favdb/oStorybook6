@@ -45,6 +45,8 @@ import storybook.ui.panel.AbstractPanel;
  */
 public abstract class AbstractCtrl implements PropertyChangeListener {
 
+	private static final String TT = "AbstractCtrl.";
+
 	private final List<Component> attachedViews;
 	private final List<AbstractModel> attachedModels;
 
@@ -177,11 +179,10 @@ public abstract class AbstractCtrl implements PropertyChangeListener {
 	}
 
 	protected synchronized void setModelProperty(String propName, Object newValue) {
-		/*LOG.trace("TT.setModelProperty("
-				+ "prop="+propName
-				+", newValue="
-				+(newValue==null?"null":newValue.toString())
-				+")");*/
+		/*LOG.trace(TT + "setModelProperty("
+		   + "prop=" + propName
+		   + ", newValue="
+		   + (newValue == null ? "null" : newValue.toString()));*/
 		if (newValue != null) {
 			for (AbstractModel model : attachedModels) {
 				if (!(model instanceof Model)) {

@@ -46,7 +46,7 @@ import storybook.ui.panel.memoria.MemoriaPanel;
  */
 public class Exporter {
 
-	private static final String TT = "Exporter";
+	private static final String TT = "Exporter.";
 
 	private final MainFrame mainFrame;
 	private SbView view;
@@ -56,7 +56,7 @@ public class Exporter {
 	}
 
 	public boolean exec(SbView view) {
-		//LOG.trace(TT + ".exec(view=" + (view != null ? view.getName() : "null") + ")");
+		//LOG.trace(TT + "exec(view=" + (view != null ? view.getName() : "null") + ")");
 		this.view = view;
 		if (view == null) {
 			return (false);
@@ -136,10 +136,16 @@ public class Exporter {
 		   I18N.getMsg("export"), 1);
 	}
 
+	/**
+	 * exprt a JPanel as a PNG Image file
+	 *
+	 * @param panel
+	 * @return
+	 */
 	public boolean exportPanel(JPanel panel) {
-		//LOG.trace("Exporter.exportPanel(panel="+(panel!=null?panel.getName():"null")+")");
+		//LOG.trace(TT+"exportPanel(panel="+(panel!=null?panel.getName():"null")+")");
 		if (panel == null) {
-			LOG.log("unable to export null panel");
+			LOG.log("unable to export a null panel");
 			return (false);
 		}
 		try {
@@ -156,7 +162,7 @@ public class Exporter {
 	}
 
 	private void exportJTable(JPanel p, JTable table) {
-		//LOG.trace("Exporter.exportJTable(table="+(table!=null?table.getName():"null")+")");
+		//LOG.trace(TT+"exportJTable(table="+(table!=null?table.getName():"null")+")");
 		String filename = EXIM.getFileName(mainFrame, table.getName(), "html");
 		if (!EXIM.askExists(p, filename)) {
 			return;

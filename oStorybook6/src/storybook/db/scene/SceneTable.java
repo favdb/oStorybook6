@@ -33,6 +33,7 @@ import javax.swing.JToolBar;
 import resources.icons.ICONS;
 import storybook.App;
 import storybook.ctrl.ActKey;
+import storybook.ctrl.Ctrl;
 import storybook.ctrl.Ctrl.PROPS;
 import storybook.db.DB;
 import storybook.db.abs.AbsColumn;
@@ -238,11 +239,12 @@ public class SceneTable extends AbsTable implements ActionListener {
 
 	@Override
 	protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
-		//LOG.printInfos(TT + ".modelPropertyChangeLocal(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + ".modelPropertyChangeLocal(evt=" + evt.toString() + ")");
+		String propName = evt.getPropertyName();
+		Ctrl.PROPS prop = Ctrl.getPROPS(evt.getPropertyName());
+		Object newValue = evt.getNewValue();
+		ActKey act = new ActKey(evt);
 		try {
-			String propName = evt.getPropertyName();
-			Object newValue = evt.getNewValue();
-			ActKey act = new ActKey(evt);
 			if (isInit(act)) {
 				return;
 			}

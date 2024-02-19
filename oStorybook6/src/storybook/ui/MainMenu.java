@@ -1638,7 +1638,7 @@ public class MainMenu implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent evt) {
-		//LOG.printInfos(TT+".mouseClicked(evt=" + evt.toString());
+		//LOG.printInfos(TT+".mouseClicked(evt=" + evt.toPrint());
 		if (SwingUtilities.isRightMouseButton(evt)) {
 			ToolBarDlg dlg = new ToolBarDlg(mainFrame);
 			dlg.setVisible(true);

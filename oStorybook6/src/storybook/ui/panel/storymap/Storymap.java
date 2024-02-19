@@ -16,6 +16,8 @@
  */
 package storybook.ui.panel.storymap;
 
+import api.infonode.docking.View;
+import api.mig.swing.MigLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import i18n.I18N;
 import java.awt.event.ActionEvent;
@@ -29,17 +31,16 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
-import api.infonode.docking.View;
-import api.mig.swing.MigLayout;
 import storybook.App;
 import storybook.Pref;
 import storybook.ctrl.ActKey;
 import storybook.ctrl.Ctrl;
-import storybook.exim.EXIM;
+import static storybook.ctrl.Ctrl.PROPS.EXPORT;
 import storybook.db.book.Book;
 import storybook.db.strand.Strand;
+import storybook.exim.EXIM;
 import storybook.tools.LOG;
-import storybook.tools.swing.SwingUtil;
+import storybook.tools.print.ComponentPrinter;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractPanel;
@@ -52,8 +53,8 @@ import storybook.ui.panel.AbstractPanel;
 public class Storymap extends AbstractPanel implements ItemListener {
 
 	private static final String TT = "Storymap",
-			CB_TYPE = "cbType", CB_ZOOM = "cbZoom",
-			CK_HORIZONTAL = "ckHorizontal", CK_TITLE = "ckTitle";
+	   CB_TYPE = "cbType", CB_ZOOM = "cbZoom",
+	   CK_HORIZONTAL = "ckHorizontal", CK_TITLE = "ckTitle";
 
 	public Map<String, String> labelMap;
 	public Map<String, Icon> iconMap;
@@ -84,8 +85,8 @@ public class Storymap extends AbstractPanel implements ItemListener {
 		add(toolbar, MIG.get(MIG.SPAN, MIG.GROWX));
 		graph = new StorymapGraph(this);
 		scroll = new JScrollPane(graph);
-		SwingUtil.setUnitIncrement(scroll);
-		SwingUtil.setMaxPreferredSize(scroll);
+		//SwingUtil.setUnitIncrement(scroll);
+		//SwingUtil.setMaxPreferredSize(scroll);
 		add(scroll, MIG.get(MIG.GROW, MIG.SPAN));
 	}
 
@@ -114,10 +115,17 @@ public class Storymap extends AbstractPanel implements ItemListener {
 						EXIM.exporter(mainFrame, vv);
 					}
 					return;
+				case PRINT:
+					newView = (View) evt.getNewValue();
+					oldView = (View) getParent().getParent();
+					if (newView == oldView) {
+						printAction();
+					}
+					return;
 				default:
 					if ((str.startsWith("Update"))
-							|| (str.startsWith("Delete"))
-							|| (str.startsWith("New"))) {
+					   || (str.startsWith("Delete"))
+					   || (str.startsWith("New"))) {
 						refresh();
 					}
 					break;
@@ -127,8 +135,8 @@ public class Storymap extends AbstractPanel implements ItemListener {
 				case SCENE:
 				case STRAND:
 					if (Ctrl.PROPS.NEW.check(act.getCmd())
-							|| Ctrl.PROPS.UPDATE.check(act.getCmd())
-							|| Ctrl.PROPS.DELETE.check(act.getCmd())) {
+					   || Ctrl.PROPS.UPDATE.check(act.getCmd())
+					   || Ctrl.PROPS.DELETE.check(act.getCmd())) {
 						refresh();
 					}
 					break;
@@ -247,6 +255,10 @@ public class Storymap extends AbstractPanel implements ItemListener {
 		param += ckHorizontal.isSelected() ? "1" : "0";
 		param += ckTitle.isSelected() ? "1" : "0";
 		App.preferences.setString(Pref.KEY.STORYMAP, param);
+	}
+
+	private void printAction() {
+		ComponentPrinter.pr("storymap", mainFrame, graph, mainFrame.getBook().getTitle(), "");
 	}
 
 }

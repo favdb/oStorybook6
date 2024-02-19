@@ -87,6 +87,8 @@ import storybook.db.chapter.Chapter;
 import storybook.db.endnote.Endnote;
 import storybook.db.part.Part;
 import storybook.db.scene.Scene;
+import storybook.db.scene.ScenesChange;
+import storybook.dialog.ConfirmDeleteDlg;
 import storybook.exim.EXIM;
 import storybook.shortcut.Shortcuts;
 import storybook.tools.LOG;
@@ -95,6 +97,7 @@ import storybook.tools.TextUtil;
 import storybook.tools.clip.Clip;
 import storybook.tools.file.XEditorFile;
 import storybook.tools.html.Html;
+import storybook.tools.print.TablePrinter;
 import storybook.tools.swing.SwingUtil;
 import static storybook.tools.swing.SwingUtil.showModalDialog;
 import storybook.tools.swing.js.JSColumnControlIcon;
@@ -105,8 +108,6 @@ import storybook.ui.MainFrame;
 import storybook.ui.SbView;
 import storybook.ui.SbView.VIEWNAME;
 import storybook.ui.Ui;
-import storybook.dialog.ConfirmDeleteDlg;
-import storybook.db.scene.ScenesChange;
 import storybook.ui.panel.AbstractPanel;
 
 /**
@@ -116,12 +117,9 @@ import storybook.ui.panel.AbstractPanel;
  */
 @SuppressWarnings("serial")
 public abstract class AbsTable extends AbstractPanel implements
-   ActionListener,
-   FocusListener,
-   ListSelectionListener,
-   TableModelListener {
+   ActionListener, FocusListener, ListSelectionListener, TableModelListener {
 
-	public static final String TT = "AbstractTable",
+	public static final String TT = "AbsTable.",
 	   TABLE_HEADER = "Table",
 	   BT_EDIT = "BtEdit",
 	   BT_NEW = "BtNew",
@@ -408,27 +406,34 @@ public abstract class AbsTable extends AbstractPanel implements
 	 */
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
+		//LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString() + ")");
 		String propName = evt.getPropertyName();
-		//LOG.printInfos(TT + ".modelPropertyChange(evt=" + evt.toString() + ")");
 		ActKey act = new ActKey(evt);
-		if ("UPDATE".equals(act.getCmd())) {
-			modelPropertyChangeLocal(evt);
-			return;
-		}
-		switch (Ctrl.getPROPS(propName)) {
-			case REFRESH:
-				View newView = (View) evt.getNewValue();
-				View view = (View) getParent().getParent();
-				if (view == newView) {
-					refreshAll();
-				}
-				return;
-			case EXPORT:
-				EXIM.exporter(mainFrame, (SbView) evt.getNewValue());
-				return;
-			case SHOWINFO:
-				return;
-			default:
+		if (evt.getNewValue() instanceof View) {
+			View newView = (View) evt.getNewValue();
+			View oldView = (View) getParent().getParent();
+			switch (Ctrl.getPROPS(propName)) {
+				case UPDATE:
+					modelPropertyChangeLocal(evt);
+					return;
+				case REFRESH:
+					if (oldView == newView) {
+						refreshAll();
+					}
+					return;
+				case EXPORT:
+					EXIM.exporter(mainFrame, (SbView) evt.getNewValue());
+					return;
+				case SHOWINFO:
+					return;
+				case PRINT:
+					if (newView.getName().equalsIgnoreCase(table.getName().toLowerCase().replace("table", "") + "s")) {
+						printAction();
+						fillTable();
+					}
+					return;
+				default:
+			}
 		}
 		if (getTableName().toLowerCase().contains(act.type.toLowerCase())) {
 			switch (Ctrl.getPROPS(act.getCmd())) {
@@ -745,6 +750,12 @@ public abstract class AbsTable extends AbstractPanel implements
 				mainFrame.setUpdated();
 			}
 		}
+	}
+
+	private void printAction() {
+		LOG.trace(TT + "printAction()");
+		TablePrinter.pr(this.getTableName(), mainFrame, this.getTable(), "", "");
+		refresh();
 	}
 
 	/**
@@ -1289,7 +1300,9 @@ public abstract class AbsTable extends AbstractPanel implements
 		super.refresh();
 		table.getSelectionModel().removeListSelectionListener(this);
 		loadTableDesign();
-		table.setRowSelectionInterval(currentRow, currentRow);
+		if (currentRow > -1 && currentRow < table.getRowCount()) {
+			table.setRowSelectionInterval(currentRow, currentRow);
+		}
 		table.getSelectionModel().addListSelectionListener(this);
 	}
 

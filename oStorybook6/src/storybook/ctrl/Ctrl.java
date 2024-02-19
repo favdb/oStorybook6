@@ -27,6 +27,7 @@ import storybook.db.part.Part;
 import storybook.db.plot.Plot;
 import storybook.db.scene.SceneStatus;
 import storybook.db.strand.Strand;
+import storybook.exim.exporter.Exporter;
 import storybook.model.BlankModel;
 import storybook.model.Model;
 import storybook.project.Project;
@@ -175,7 +176,9 @@ public class Ctrl extends AbstractCtrl {
 
 	public void export(SbView view) {
 		//LOG.trace("Ctrl.export(view=" + view.getName() + ")");
-		setModelProperty(PROPS.EXPORT.toString(), view);
+		Exporter xp = new Exporter(mainFrame);
+		xp.exec(view);
+		//setModelProperty(PROPS.EXPORT.toString(), view);
 	}
 
 	/**

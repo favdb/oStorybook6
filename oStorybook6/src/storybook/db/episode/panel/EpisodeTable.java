@@ -54,7 +54,10 @@ public class EpisodeTable extends JTable {
 
 	@Override
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-		//LOG.trace(TT + ".prepareRenderer(rendere=" + (renderer == null ? "null" : "ok" + ", row=" + row + ", column=" + column + ")"));
+		//LOG.trace(TT + ".prepareRenderer(renderer=" + (renderer == null ? "null" : "ok")
+		//   + ", row=" + row
+		//   + ", column=" + column
+		//   + ")");
 		Component comp = super.prepareRenderer(renderer, row, column);
 		if (!comp.getBackground().equals(getSelectionBackground())) {
 			if (row % 2 == 0) {
@@ -116,13 +119,13 @@ public class EpisodeTable extends JTable {
 		MultiLineCellEditor multiEditor = new MultiLineCellEditor(panel);
 		EpisodeCellRenderer defRenderer = new EpisodeCellRenderer(panel.isTitle());
 		this.getColumnModel().getColumn(
-				EpisodePanel.NCOL.NUMBER.ordinal()).setCellRenderer(defRenderer);//number
+		   EpisodePanel.NCOL.NUMBER.ordinal()).setCellRenderer(defRenderer);//number
 		this.getColumnModel().getColumn(
-				EpisodePanel.NCOL.NAME.ordinal()).setCellEditor(multiEditor);//title
+		   EpisodePanel.NCOL.NAME.ordinal()).setCellEditor(multiEditor);//title
 		this.getColumnModel().getColumn(
-				EpisodePanel.NCOL.NAME.ordinal()).setCellRenderer(multiRenderer);//title
+		   EpisodePanel.NCOL.NAME.ordinal()).setCellRenderer(multiRenderer);//title
 		this.getColumnModel().getColumn(
-				EpisodePanel.NCOL.LINKS.ordinal()).setCellRenderer(defRenderer);//scene
+		   EpisodePanel.NCOL.LINKS.ordinal()).setCellRenderer(defRenderer);//scene
 		for (int col = EpisodePanel.NCOL.PLOT.ordinal(); col < this.getColumnCount(); col++) {
 			this.getColumnModel().getColumn(col).setCellEditor(multiEditor);//title
 			this.getColumnModel().getColumn(col).setCellRenderer(multiRenderer);//title

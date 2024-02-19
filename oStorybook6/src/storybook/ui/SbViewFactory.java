@@ -76,7 +76,7 @@ import storybook.ui.panel.typist.TypistScenario;
  */
 public class SbViewFactory {
 
-	private static String TT = "SbViewFactory";
+	private static String TT = "SbViewFactory.";
 
 	private final int NONE = 0, EXPORT = 1, OPTIONS = 10;
 	private final MainFrame mainFrame;
@@ -98,7 +98,7 @@ public class SbViewFactory {
 
 	@SuppressWarnings("null")
 	public void setViewTitle(View view) {
-		//LOG.trace(TT+".setViewTitle(" + view.getName() + ")");
+		//LOG.trace(TT+"setViewTitle(" + view.getName() + ")");
 		if (view == null) {
 			return;
 		}
@@ -230,7 +230,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getView(AbstractEntity entity) {
-		//LOG.trace(TT+".getView(" + viewName.name() + ")");
+		//LOG.trace(TT+"getView(" + viewName.name() + ")");
 		switch (entity.getObjType()) {
 			case ATTRIBUTE:
 				return getTableView(VIEWNAME.ATTRIBUTES);
@@ -279,7 +279,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getView(VIEWNAME viewName) {
-		//LOG.trace(TT+".getView(" + viewName.name() + ")");
+		//LOG.trace(TT+"getView(" + viewName.name() + ")");
 		SbView view = (SbView) viewMap.getView(viewName.toString());
 		//LOG.trace("view="+(view!=null?view.toString():"null")+", viewName="+viewName.toString());
 		if (view != null) {
@@ -381,12 +381,12 @@ public class SbViewFactory {
 	}
 
 	public SbView getView(String viewName) {
-		//LOG.trace(TT+".getView(string=" + viewName + ")");
+		//LOG.trace(TT+"getView(string=" + viewName + ")");
 		return (SbView) viewMap.getView(viewName);
 	}
 
 	public boolean loadView(SbView view) {
-		//LOG.trace(TT+".loadView(view=" + (view==null?"null":view.getName()) + ")");
+		//LOG.trace(TT+"loadView(view=" + (view==null?"null":view.getName()) + ")");
 		if (view == null) {
 			return (false);
 		}
@@ -560,7 +560,7 @@ public class SbViewFactory {
 	}
 
 	public void unloadView(SbView view) {
-		//LOG.trace(TT+".unloadView(" + view.getName() + ")");
+		//LOG.trace(TT+"unloadView(" + view.getName() + ")");
 		if (isTable(view)) {
 			saveTableDesign(view);
 		}
@@ -568,12 +568,12 @@ public class SbViewFactory {
 	}
 
 	private String getChartName(String i18nKey) {
-		//LOG.trace(TT+".getChartName(" + i18nKey + ")");
+		//LOG.trace(TT+"getChartName(" + i18nKey + ")");
 		return I18N.getMsg("chart") + ": " + I18N.getMsg(i18nKey);
 	}
 
 	public SbView getChartPersonsByDate() {
-		//LOG.trace(TT+".getChartPersonsByDate()");
+		//LOG.trace(TT+"getChartPersonsByDate()");
 		if (isViewInitialized(VIEWNAME.CHART_PERSONS_BY_DATE)) {
 			SbView view = new SbView(getChartName("tools.charts.overall.character.date"));
 			view.setName(VIEWNAME.CHART_PERSONS_BY_DATE.toString());
@@ -585,7 +585,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getChartPersonsByScene() {
-		//LOG.trace(TT+".getChartPersonsByScene()");
+		//LOG.trace(TT+"getChartPersonsByScene()");
 		if (isViewInitialized(VIEWNAME.CHART_PERSONS_BY_SCENE)) {
 			SbView view = new SbView(getChartName("tools.charts.part.character.scene"));
 			view.setName(VIEWNAME.CHART_PERSONS_BY_SCENE.toString());
@@ -597,7 +597,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getChartWiWW() {
-		//LOG.trace(TT+".getChartWiWW()");
+		//LOG.trace(TT+"getChartWiWW()");
 		if (isViewInitialized(VIEWNAME.CHART_WIWW)) {
 			SbView view = new SbView(getChartName("tools.charts.overall.whoIsWhereWhen"));
 			view.setName(VIEWNAME.CHART_WIWW.toString());
@@ -609,7 +609,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getChartStrandsByDate() {
-		//LOG.trace(TT+".getChartStrandsByDate()");
+		//LOG.trace(TT+"getChartStrandsByDate()");
 		if (isViewInitialized(VIEWNAME.CHART_STRANDS_BY_DATE)) {
 			SbView view = new SbView(getChartName("tools.charts.overall.strand.date"));
 			view.setName(VIEWNAME.CHART_STRANDS_BY_DATE.toString());
@@ -621,7 +621,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getChartOccurrenceOfPersons() {
-		//LOG.trace(TT+".getChartOccurrenceOfPersons()");
+		//LOG.trace(TT+"getChartOccurrenceOfPersons()");
 		if (isViewInitialized(VIEWNAME.CHART_OCCURRENCE_OF_PERSONS)) {
 			SbView view = new SbView(getChartName("tools.charts.overall.character.occurrence"));
 			view.setName(VIEWNAME.CHART_OCCURRENCE_OF_PERSONS.toString());
@@ -633,7 +633,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getChartOccurrenceOfLocations() {
-		//LOG.trace(TT+".getChartOccurrenceOfLocations()");
+		//LOG.trace(TT+"getChartOccurrenceOfLocations()");
 		if (isViewInitialized(VIEWNAME.CHART_OCCURRENCE_OF_LOCATIONS)) {
 			SbView view = new SbView(getChartName("tools.charts.overall.location.occurrence"));
 			view.setName(VIEWNAME.CHART_OCCURRENCE_OF_LOCATIONS.toString());
@@ -645,7 +645,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getChartOccurrenceOfItems() {
-		//LOG.trace(TT+".getChartOccurrenceOfItems()");
+		//LOG.trace(TT+"getChartOccurrenceOfItems()");
 		if (isViewInitialized(VIEWNAME.CHART_OCCURRENCE_OF_ITEMS)) {
 			SbView view = new SbView(getChartName("tools.charts.overall.item.occurrence"));
 			view.setName(VIEWNAME.CHART_OCCURRENCE_OF_ITEMS.toString());
@@ -663,13 +663,14 @@ public class SbViewFactory {
 			view.setName(vname.toString());
 			addRefreshButton(view);
 			addExportButton(view);
+			addPrintButton(view);
 			viewMap.addView(view.getName(), view);
 		}
 		return (view);
 	}
 
 	public SbView getBookView() {
-		//LOG.trace(TT+".getBookView()");
+		//LOG.trace(TT+"getBookView()");
 		if (isViewInitialized(VIEWNAME.BOOK)) {
 			SbView view = new SbView(I18N.getMsg("view.book"));
 			view.setName(VIEWNAME.BOOK.toString());
@@ -681,7 +682,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getChronoView() {
-		//LOG.trace(TT+".getChronoView()");
+		//LOG.trace(TT+"getChronoView()");
 		if (isViewInitialized(VIEWNAME.CHRONO)) {
 			SbView view = new SbView(I18N.getMsg("view.chrono"));
 			view.setName(VIEWNAME.CHRONO.toString());
@@ -695,7 +696,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getManageView() {
-		//LOG.trace(TT+".getManageView()");
+		//LOG.trace(TT+"getManageView()");
 		if (isViewInitialized(VIEWNAME.MANAGE)) {
 			SbView view = new SbView(I18N.getMsg("view.manage"));
 			view.setName(VIEWNAME.MANAGE.toString());
@@ -708,12 +709,13 @@ public class SbViewFactory {
 	}
 
 	public SbView getMemoriaView() {
-		//LOG.trace(TT+".getMemoriaView()");
+		//LOG.trace(TT+"getMemoriaView()");
 		if (isViewInitialized(VIEWNAME.MEMORIA)) {
 			SbView view = new SbView(I18N.getMsg("view.memoria"));
 			view.setName(VIEWNAME.MEMORIA.toString());
 			addRefreshButton(view);
 			addExportButton(view);
+			addPrintButton(view);
 			//addOptionsButton(view);
 			viewMap.addView(view.getName(), view);
 		}
@@ -721,7 +723,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getMemosView() {
-		//LOG.trace(TT+".getMemoriaView()");
+		//LOG.trace(TT+"getMemoriaView()");
 		if (isViewInitialized(VIEWNAME.MEMOS)) {
 			SbView view = new SbView(I18N.getMsg("memos"));
 			view.setName(VIEWNAME.MEMOS.toString());
@@ -734,7 +736,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getPlanView() {
-		//LOG.trace(TT+".getPlanView()");
+		//LOG.trace(TT+"getPlanView()");
 		if (isViewInitialized(VIEWNAME.PLAN)) {
 			SbView view = new SbView(I18N.getMsg("view.plan"));
 			view.setName(VIEWNAME.PLAN.toString());
@@ -745,18 +747,19 @@ public class SbViewFactory {
 	}
 
 	public SbView getReadingView() {
-		//LOG.trace(TT+".getReadingView()");
+		//LOG.trace(TT+"getReadingView()");
 		if (isViewInitialized(VIEWNAME.READING)) {
 			SbView view = new SbView(I18N.getMsg("view.reading"));
 			view.setName(VIEWNAME.READING.toString());
 			addRefreshButton(view);
+			addPrintButton(view);
 			viewMap.addView(view.getName(), view);
 		}
 		return (SbView) viewMap.getView(VIEWNAME.READING.toString());
 	}
 
 	public SbView getStoryboardView() {
-		//LOG.trace(TT+".getStoryboardView()");
+		//LOG.trace(TT+"getStoryboardView()");
 		if (isViewInitialized(VIEWNAME.STORYBOARD)) {
 			SbView view = new SbView(I18N.getMsg("view.storyboard"));
 			view.setName(VIEWNAME.STORYBOARD.toString());
@@ -767,23 +770,24 @@ public class SbViewFactory {
 	}
 
 	public SbView getStorymapView() {
-		//LOG.trace(TT+".getStoryboardView()");
+		//LOG.trace(TT+"getStoryboardView()");
 		if (isViewInitialized(VIEWNAME.STORYMAP)) {
 			SbView view = new SbView(I18N.getMsg("view.storymap"));
 			view.setName(VIEWNAME.STORYMAP.toString());
 			addRefreshButton(view);
+			addPrintButton(view);
 			viewMap.addView(view.getName(), view);
 		}
 		return (SbView) viewMap.getView(VIEWNAME.STORYMAP.toString());
 	}
 
 	public SbView getTimelineView() {
-		//LOG.trace(TT+".getTimelineView()");
+		//LOG.trace(TT+"getTimelineView()");
 		if (isViewInitialized(VIEWNAME.TIMELINE)) {
 			SbView view = new SbView(I18N.getMsg("view.timeline"));
 			view.setName(VIEWNAME.TIMELINE.toString());
 			addRefreshButton(view);
-			//addPrintButton(view);
+			addPrintButton(view);
 			//addExportButton(view);
 			//addOptionsButton(view);
 			viewMap.addView(view.getName(), view);
@@ -792,7 +796,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getTreeView() {
-		//LOG.trace(TT+".getTreeView()");
+		//LOG.trace(TT+"getTreeView()");
 		if (isViewInitialized(VIEWNAME.TREE)) {
 			SbView view = new SbView(I18N.getMsg("tree"));
 			view.setName(VIEWNAME.TREE.toString());
@@ -803,7 +807,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getQuickInfoView() {
-		//LOG.trace(TT+".getQuickInfoView()");
+		//LOG.trace(TT+"getQuickInfoView()");
 		if (isViewInitialized(VIEWNAME.INFO)) {
 			SbView view = new SbView(I18N.getMsg("view.info"));
 			view.setName(VIEWNAME.INFO.toString());
@@ -815,7 +819,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getAttributesListView() {
-		//LOG.trace(TT+".getAttributesListView()");
+		//LOG.trace(TT+"getAttributesListView()");
 		if (isViewInitialized(VIEWNAME.ATTRIBUTESLIST)) {
 			SbView view = new SbView(I18N.getMsg("attribute.list"));
 			view.setName(VIEWNAME.ATTRIBUTESLIST.toString());
@@ -826,29 +830,20 @@ public class SbViewFactory {
 	}
 
 	public SbView getEpsiodesView() {
-		//LOG.trace(TT+".getEpisodesView()");
+		//LOG.trace(TT+"getEpisodesView()");
 		if (isViewInitialized(VIEWNAME.EPISODES)) {
 			SbView view = new SbView(I18N.getMsg("episodes"));
 			view.setName(VIEWNAME.EPISODES.toString());
 			addRefreshButton(view);
 			addExportButton(view);
+			addPrintButton(view);
 			viewMap.addView(view.getName(), view);
 		}
 		return (SbView) viewMap.getView(VIEWNAME.EPISODES.toString());
 	}
 
-	/*public SbView getNavigationView() {
-		//LOG.trace(TT+".getNavigationView()");
-		if (isViewInitialized(VIEWNAME.NAVIGATION)) {
-			SbView view = new SbView(I18N.getMsg("navigation"));
-			view.setName(VIEWNAME.NAVIGATION.toString());
-			addRefreshButton(view);
-			viewMap.addView(view.getName(), view);
-		}
-		return (SbView) viewMap.getView(VIEWNAME.NAVIGATION.toString());
-	}*/
 	public SbView getScenarioView() {
-		//LOG.trace(TT+".getScenarioView()");
+		//LOG.trace(TT+"getScenarioView()");
 		if (isViewInitialized(VIEWNAME.SCENARIO)) {
 			SbView view = new SbView(I18N.getMsg("scenario"));
 			view.setName(VIEWNAME.SCENARIO.toString());
@@ -859,7 +854,7 @@ public class SbViewFactory {
 	}
 
 	public SbView getTypistView() {
-		//LOG.trace(TT+".getTypistView()");
+		//LOG.trace(TT+"getTypistView()");
 		if (isViewInitialized(VIEWNAME.TYPIST)) {
 			SbView view = new SbView(I18N.getMsg("typist"));
 			view.setName(VIEWNAME.TYPIST.toString());
@@ -871,7 +866,7 @@ public class SbViewFactory {
 
 	@SuppressWarnings("unchecked")
 	private void addRefreshButton(SbView view) {
-		//LOG.trace(TT+".addRefreshButton("+view.getName()+")");
+		//LOG.trace(TT+"addRefreshButton("+view.getName()+")");
 		JButton bt = createMiniButton("refresh");
 		bt.addActionListener((ActionEvent e) -> {
 			mainFrame.cursorSetWaiting();
@@ -883,7 +878,7 @@ public class SbViewFactory {
 
 	@SuppressWarnings("unchecked")
 	private void addOptionsButton(final SbView view) {
-		//LOG.trace(TT+".addOptionsButton("+view.getName()+")");
+		//LOG.trace(TT+"addOptionsButton("+view.getName()+")");
 		JButton bt = createMiniButton("options");
 		bt.addActionListener((ActionEvent e) -> {
 			mainFrame.getBookController().showOptions(view);
@@ -893,7 +888,7 @@ public class SbViewFactory {
 
 	@SuppressWarnings("unchecked")
 	private void addExportButton(final SbView view) {
-		//LOG.trace(TT+".addExportButton("+view.getName()+")");
+		//LOG.trace(TT+"addExportButton("+view.getName()+")");
 		JButton bt = createMiniButton("export");
 		bt.addActionListener((ActionEvent e) -> {
 			mainFrame.getBookController().export(view);
@@ -903,7 +898,7 @@ public class SbViewFactory {
 
 	@SuppressWarnings({"unchecked", "unused"})
 	private void addPrintButton(final SbView view) {
-		//LOG.trace(TT+".addPrintButton("+view.getName()+")");
+		//LOG.trace(TT+"addPrintButton("+view.getName()+")");
 		JButton bt = createMiniButton("print");
 		bt.addActionListener((ActionEvent e) -> {
 			mainFrame.getBookModel().print(view);
@@ -912,7 +907,7 @@ public class SbViewFactory {
 	}
 
 	private JButton createMiniButton(String iconKey) {
-		//LOG.trace(TT+".createMiniButton("+iconKey+","+toolTipKey+")");
+		//LOG.trace(TT+"createMiniButton("+iconKey+","+toolTipKey+")");
 		final JButton bt = new JButton(IconUtil.getIconMini(iconKey));
 		bt.setOpaque(false);
 		bt.setBorder(null);
@@ -923,7 +918,7 @@ public class SbViewFactory {
 	}
 
 	public StringViewMap getViewMap() {
-		//LOG.trace(TT+".getViewMap()");
+		//LOG.trace(TT+"getViewMap()");
 		return viewMap;
 	}
 

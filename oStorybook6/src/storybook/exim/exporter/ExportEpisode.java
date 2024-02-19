@@ -68,9 +68,57 @@ public class ExportEpisode extends AbstractExport {
 	 * @return true if export to file is ok
 	 */
 	public static boolean toFile(MainFrame mainFrame, String format) {
-		//LOG.printInfos(TT + ".toFile(mainFrame)");
+		//LOG.trace(TT + ".toFile(mainFrame, format='" + format + "')");
 		ExportEpisode export = new ExportEpisode(mainFrame, format);
 		return export.writeFile();
+	}
+
+	public static String toHtml(MainFrame mf) {
+		ExportEpisode export = new ExportEpisode(mf, "html");
+		return export.toHtml();
+	}
+
+	@SuppressWarnings("unchecked")
+	private String toHtml() {
+		String title = I18N.getColonMsg("episodes") + " " + book.getTitle();
+		StringBuilder buf = new StringBuilder();
+		buf.append(Html.DOCTYPE);
+		buf.append(Html.HTML_B_LANG);
+		buf.append(Html.HEAD_B);
+		buf.append(Html.META_UTF8);
+		if (!title.isEmpty()) {
+			buf.append(Html.intoTag("title", title));
+		} else {
+			buf.append(Html.intoTag("title", mainFrame.getBook().getTitle()));
+		}
+		//String st1 = "style=\"border: 1px solid black; border-collapse: collapse;\"\n";
+		String st1 = "border=\"1\" cellspacing=\"0\" cellpadding=\"0\"";
+		buf.append(Html.HEAD_E);
+		buf.append(Html.BODY_B);
+		buf.append(Html.intoH(1, title, "style=\"text-align:center;\""));
+		buf.append(Html.P_CENTER).append(Html.intoI("("
+		   + DateUtil.simpleDateTimeToString(new Date(), true)
+		   + ")")).append(Html.P_E);
+		// table start
+		buf.append("<table ").append(st1).append(">\n");
+		// heading columns
+		StringBuilder bx = new StringBuilder();
+		bx.append(Html.intoTD(I18N.getMsg("number"), st1));
+		bx.append(Html.intoTD(I18N.getMsg("name"), st1));
+		bx.append(Html.intoTD(I18N.getMsg("chapters") + "/" + I18N.getMsg("scenes"), st1));
+		bx.append(Html.intoTD(I18N.getMsg("plot"), st1));
+		for (Strand strand : strands) {
+			bx.append(Html.intoTD(strand.getName(), st1));
+		}
+		buf.append(Html.intoTR(bx.toString(), st1));
+		// table content
+		buf.append(getHtmlEpisodes());
+		// table end
+		buf.append(Html.TABLE_E);
+		buf.append(Html.BODY_E);
+		buf.append(Html.HTML_E);
+
+		return buf.toString();
 	}
 
 	/**
@@ -122,38 +170,74 @@ public class ExportEpisode extends AbstractExport {
 		String title = I18N.getColonMsg("episodes") + " " + book.getTitle();
 		setHtmlTitle(title);
 		if (!openFile(fileName, true)) {
-			return (false);
+			return false;
 		}
-		writeText(Html.intoH(1, title));
-		writeText(Html.P_CENTER
-		   + Html.intoI("("
-			  + DateUtil.simpleDateTimeToString(new Date(), true)
-			  + ")")
-		   + Html.P_E);
-		// table start
-		writeText("<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n");
-		// heading columns
-		StringBuilder b = new StringBuilder();
-		b.append(Html.TR_B);
-		b.append(Html.intoTD(I18N.getMsg("number")));
-		b.append(Html.intoTD(I18N.getMsg("name")));
-		b.append(Html.intoTD(I18N.getMsg("chapters") + "/" + I18N.getMsg("scenes")));
-		b.append(Html.intoTD(I18N.getMsg("plot")));
-		for (Strand strand : strands) {
-			b.append(Html.intoTD(strand.getName()));
-		}
-		b.append(Html.TR_E);
-		writeText(b.toString());
-		// table content
-		writeHtmlEpisodes();
-		// table end
-		writeText(Html.TABLE_E);
-
+		writeText(toHtml());
 		closeFile(SILENT);
 		JOptionPane.showMessageDialog(mainFrame,
 		   I18N.getMsg("export.success", param.getFileName()),
 		   I18N.getMsg("export"), JOptionPane.INFORMATION_MESSAGE);
 		return true;
+	}
+
+	private String getHtmlEpisodes() {
+		//String st1 = "border-collapse: collapse;border: 1px solid;", stx = "style=\"" + st1 + "\"";
+		StringBuilder buf = new StringBuilder();
+		boolean b = false;
+		int col = 0;
+		//String style1 = "style=\"vertical-align: top;text-align: center;" + st1 + "\"",
+		//   style2 = "style=\"vertical-align: top;" + st1 + "\"";
+		String style1 = "style=\"vertical-align: top;text-align: center;" + "\"",
+		   style2 = "style=\"vertical-align: top;" + "\"";
+		for (int i = 0; i < episodes.size(); i++) {
+			Episode episode = episodes.get(i);
+			if (episode.getStrand() == null) {
+				if (b) {
+					while (col < nbStrands) {
+						buf.append(Html.intoTD(Html.nbsp(1)));
+						col++;
+					}
+					buf.append(Html.TR_E);
+				}
+				buf.append(Html.TR_B);
+				buf.append(Html.intoTD(episode.getNumber().toString(), style1));
+				buf.append(Html.intoTD(episode.getName(), style2));
+				if (episode.hasLink()) {
+					buf.append(Html.intoTD(episode.getLink().getName(), style1));
+				} else {
+					buf.append(Html.intoTD("&nbsp;"));
+				}
+				String txt = episode.getNotes();
+				if (txt.isEmpty()) {
+					buf.append(Html.intoTD(Html.nbsp(1)));
+				} else {
+					buf.append(Html.intoTD(txt, style2));
+				}
+				b = true;
+				col = 0;
+			} else {
+				int ncol = strands.indexOf(episode.getStrand());
+				for (int j = col; j < ncol; j++) {
+					buf.append(Html.intoTD(Html.nbsp(1)));
+					col++;
+				}
+				String txt = episode.getNotes();
+				if (txt.isEmpty()) {
+					buf.append(Html.intoTD(Html.nbsp(1)));
+				} else {
+					buf.append(Html.intoTD(txt, style2));
+				}
+				col++;
+			}
+		}
+		if (b) {
+			while (col < nbStrands) {
+				buf.append(Html.intoTD(Html.nbsp(1)));
+				col++;
+			}
+			buf.append(Html.TR_E);
+		}
+		return buf.toString();
 	}
 
 	private void writeHtmlEpisodes() {

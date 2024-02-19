@@ -16,6 +16,7 @@
  */
 package storybook.ui.panel.timeline;
 
+import api.infonode.docking.View;
 import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.Color;
@@ -35,12 +36,18 @@ import javax.swing.event.ChangeListener;
 import storybook.App;
 import storybook.ctrl.ActKey;
 import storybook.ctrl.Ctrl;
+import static storybook.ctrl.Ctrl.PROPS.PRINT;
+import static storybook.ctrl.Ctrl.PROPS.REFRESH;
+import static storybook.ctrl.Ctrl.PROPS.SHOWOPTIONS;
+import static storybook.ctrl.Ctrl.PROPS.TIMELINE_OPTIONS;
+import static storybook.ctrl.Ctrl.PROPS.TIMELINE_ZOOM;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.person.Person;
 import storybook.db.scene.Scene;
 import storybook.db.scene.Scenes;
 import storybook.dialog.OptionsDlg;
+import storybook.tools.print.ComponentPrinter;
 import storybook.tools.swing.LaF;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.js.JSLabel;
@@ -57,7 +64,7 @@ import storybook.ui.panel.AbstractPanel;
  */
 public class TimelinePanel extends AbstractPanel implements ChangeListener {
 
-	private static final String TT = "TimelinePanel";
+	private static final String TT = "TimelinePanel.";
 
 	public static final int ZOOM_MIN = 2, ZOOM_MAX = 10;
 	private JSlider sl_zoom;
@@ -68,7 +75,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 
 	private JPanel panel;
 	private Date begin, end;
-	private List<TimelineEntity> tlEntities = new ArrayList<>();
+	private final List<TimelineEntity> tlEntities = new ArrayList<>();
 	private TimelineScale scale;
 	public int zoomValue;
 	private JCheckBox ckEvents,
@@ -84,7 +91,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 
 	@Override
 	public void init() {
-		//LOG.printInfos(TT + ".init()");
+		//LOG.trace(TT + ".init()");
 		this.withPart = false;
 		zoomValue = getZoom();
 		String s = App.preferences.timelineGetOptions();
@@ -98,7 +105,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 
 	@Override
 	public void initUi() {
-		//LOG.printInfos(TT + ".initUi()");
+		//LOG.trace(TT + ".initUi()");
 		setLayout(new MigLayout("ins 0"));
 		if (!LaF.isDark()) {
 			setBackground(Color.white);
@@ -122,7 +129,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 
 	@Override
 	public JToolBar initToolbar() {
-		//LOG.printInfos(TT + ".initToolbar()");
+		//LOG.trace(TT + ".initToolbar()");
 		//no part to select
 		super.initToolbar();
 		//options size
@@ -161,55 +168,66 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.printInfos(TT + ".modelPropertyChange(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString() + ")");
 		if (evt.getPropertyName().equals("SCENE_INIT")) {
 			return;
 		}
 		Object newValue = evt.getNewValue();
-		SbView view = (SbView) getParent().getParent();
-		switch (Ctrl.getPROPS(evt.getPropertyName())) {
-			case REFRESH:
-				refresh();
-				return;
-			case TIMELINE_OPTIONS:
-				String s = App.preferences.timelineGetOptions();
-				while (s.length() < 3) {
-					s += "0";
+		SbView sbView = (SbView) getParent().getParent();
+		if (newValue instanceof AbstractEntity) {
+			switch (ActKey.getType(evt)) {
+				case EVENT:
+				case PERSON:
+				case SCENE:
+					if (evt.getPropertyName().toLowerCase().contains("update")) {
+						refresh();
+					}
+					break;
+				default:
+					break;
+			}
+		} else if (newValue instanceof View) {
+			View view = (View) evt.getNewValue();
+			if (!view.getName().equals(SbView.VIEWNAME.READING.toString())) {
+				switch (Ctrl.getPROPS(evt.getPropertyName())) {
+					case PRINT:
+						if (sbView.getName().equals(((SbView) newValue).getName())) {
+							printAction();
+						}
+						return;
+					case REFRESH:
+						refresh();
+						return;
+					case TIMELINE_OPTIONS:
+						String s = App.preferences.timelineGetOptions();
+						while (s.length() < 3) {
+							s += "0";
+						}
+						bScenes = s.charAt(0) == '1';
+						bPersons = s.charAt(1) == '1';
+						bEvents = s.charAt(2) == '1';
+						ckScenes.setSelected(bScenes);
+						ckPersons.setSelected(bPersons);
+						ckEvents.setSelected(bEvents);
+						refresh();
+						break;
+					case TIMELINE_ZOOM:
+						sl_zoom.setValue((Integer) newValue);
+						break;
+					case SHOWOPTIONS:
+						if (sbView.getName().equals(((SbView) newValue).getName())) {
+							OptionsDlg.show(mainFrame, sbView.getName());
+						}
+						break;
 				}
-				bScenes = s.charAt(0) == '1';
-				bPersons = s.charAt(1) == '1';
-				bEvents = s.charAt(2) == '1';
-				ckScenes.setSelected(bScenes);
-				ckPersons.setSelected(bPersons);
-				ckEvents.setSelected(bEvents);
-				refresh();
-				break;
-			case TIMELINE_ZOOM:
-				sl_zoom.setValue((Integer) newValue);
-				break;
-			case SHOWOPTIONS:
-				if (!view.getName().equals(((SbView) newValue).getName())) {
-					return;
-				}
-				OptionsDlg.show(mainFrame, view.getName());
-				return;
-		}
-		switch (ActKey.getType(evt)) {
-			case EVENT:
-			case PERSON:
-			case SCENE:
-				if (evt.getPropertyName().toLowerCase().contains("update")) {
-					refresh();
-				}
-				break;
-			default:
-				break;
+			}
 		}
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent event) {
-		//LOG.printInfos(TT + ".actionPerformed(event=" + event.toString() + ")");
+	public void actionPerformed(ActionEvent event
+	) {
+		//LOG.trace(TT + ".actionPerformed(event=" + event.toString() + ")");
 		if (event.getSource() instanceof JCheckBox) {
 			bScenes = ckScenes.isSelected();
 			bEvents = ckEvents.isSelected();
@@ -221,7 +239,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 
 	@Override
 	public void refresh() {
-		//LOG.printInfos(TT + ".refresh()");
+		//LOG.trace(TT + "refresh()");
 		refreshData();
 		panel.removeAll();
 		if (tlEntities.isEmpty()) {
@@ -267,10 +285,11 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 			tle.setTooltips(scale.isSameDay());
 		}
 		scale.setEntityTo(panel, null, 9);
+		panel.revalidate();
 	}
 
 	private void refreshData() {
-		//LOG.printInfos(TT + ".refreshData()");
+		//LOG.trace(TT + "refreshData()");
 		if (!tlEntities.isEmpty()) {
 			tlEntities.clear();
 		}
@@ -314,7 +333,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 	}
 
 	private Date computeBegin() {
-		//LOG.printInfos(TT + ".computeBegin()");
+		//LOG.trace(TT + ".computeBegin()");
 		Date r = null;
 		for (TimelineEntity t : tlEntities) {
 			if (r == null) {
@@ -328,7 +347,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 	}
 
 	private Date computeEnd() {
-		//LOG.printInfos(TT + ".computeEnd()");
+		//LOG.trace(TT + ".computeEnd()");
 		Date r = null;
 		for (TimelineEntity t : tlEntities) {
 			if (r == null) {
@@ -342,7 +361,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 	}
 
 	private void setScale() {
-		/*LOG.printInfos(TT + ".setScale()"
+		/*LOG.trace(TT + ".setScale()"
 				+ " begin date=" + DateUtil.dateToString(begin)
 				+ ", ending date=" + DateUtil.dateToString(end));*/
 		scale = new TimelineScale(zoomValue, begin, end);
@@ -351,7 +370,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		//LOG.printInfos(TT + ".stateChanged(e=" + e.toString() + ")");
+		//LOG.trace(TT + ".stateChanged(e=" + e.toString() + ")");
 		if (e.getSource() instanceof JSlider) {
 			JSlider s = (JSlider) e.getSource();
 			zoomValue = s.getValue() * 320;
@@ -377,4 +396,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 		return App.preferences.timelineGetZoom();
 	}
 
+	private void printAction() {
+		ComponentPrinter.pr("timeline", mainFrame, panel, mainFrame.getBook().getTitle(), "");
+	}
 }

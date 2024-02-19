@@ -292,7 +292,7 @@ public class ExportDlg extends AbsDialog implements ActionListener, CaretListene
 	}
 
 	private boolean doExport() {
-		//LOG.printInfos("ExportDlg.doExport()");
+		//LOG.trace("ExportDlg.doExport()");
 		String title = book.getTitle();
 		if (title.isEmpty()) {
 			JOptionPane.showMessageDialog(this,
@@ -306,7 +306,7 @@ public class ExportDlg extends AbsDialog implements ActionListener, CaretListene
 			JOptionPane.showMessageDialog(this,
 			   I18N.getMsg("export.dir.missing"),
 			   I18N.getMsg(EXPORT), 1);
-			return (false);
+			return false;
 		}
 		//check if dir is a directory
 		File f = new File(dir);
@@ -314,7 +314,7 @@ public class ExportDlg extends AbsDialog implements ActionListener, CaretListene
 			JOptionPane.showMessageDialog(this,
 			   I18N.getMsg("export.dir.error"),
 			   I18N.getMsg(EXPORT), 1);
-			return (false);
+			return false;
 		}
 		param.setDirectory(dir);
 		saveParam();

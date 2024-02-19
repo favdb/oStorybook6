@@ -31,6 +31,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
@@ -52,6 +53,7 @@ import storybook.tools.ViewUtil;
 import storybook.tools.html.CSS;
 import storybook.tools.html.Html;
 import storybook.tools.net.Net;
+import storybook.tools.print.HtmlPrinter;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
@@ -69,15 +71,15 @@ import static storybook.ui.panel.AbstractPanel.EMPTY;
 @SuppressWarnings("serial")
 public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 
-	private static final String TT = "ReadingPanel";
+	private static final String TT = "ReadingPanel.";
 
 	private JEditorPane tpText;
 	private JScrollPane scroller;
 	private int scrollerWidth;
 	private JComboBox cbToc;
 	private JComboBox cbStrand;
-	private JLabel lbStrand;
 	private JCheckBox ckReview;
+	private JPanel pStrand;
 
 	public ReadingPanel(MainFrame mainFrame) {
 		super(mainFrame);
@@ -85,75 +87,75 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.printInfos(TT + ".modelPropertyChange(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString() + ")");
 		String propName = evt.getPropertyName();
 		Object newValue = evt.getNewValue();
-		switch (ActKey.getType(evt)) {
-			case CHAPTER:
-			case ENDNOTE:
-			case SCENE:
-				refresh();
-				return;
-			case PART:
-				if (cbPartFilter != null) {
-					int p = cbPartFilter.getSelectedIndex();
-					Ui.fillCB(cbPartFilter, (List) mainFrame.project.getList(Book.TYPE.PART), BALL, this);
-					cbPartFilter.setSelectedIndex(p);
-				}
-				refresh();
-				ViewUtil.scrollToTop(scroller);
-				return;
-			case STRAND:
-				int n = cbStrand.getSelectedIndex();
-				Ui.fillCB(cbStrand, (List) mainFrame.project.getList(Book.TYPE.STRAND), BALL, this);
-				cbStrand.setSelectedIndex(n);
-				refresh();
-				ViewUtil.scrollToTop(scroller);
-				return;
-			case LOCATION:
-				if (mainFrame.getBook().getParam().getParamLayout().getChapterDateLocation()) {
+		if (newValue instanceof AbstractEntity) {
+			switch (ActKey.getType(evt)) {
+				case CHAPTER:
+				case ENDNOTE:
+				case SCENE:
 					refresh();
-				}
-				return;
-			case ITEM:
-				if (mainFrame.getBook().getParam().getParamLayout().getSceneDidascalie()) {
+					break;
+				case PART:
+					if (cbPartFilter != null) {
+						int p = cbPartFilter.getSelectedIndex();
+						Ui.fillCB(cbPartFilter, (List) mainFrame.project.getList(Book.TYPE.PART), BALL, this);
+						cbPartFilter.setSelectedIndex(p);
+					}
 					refresh();
-				}
-				return;
-			default:
-				break;
-		}
-		View view;
-		switch (Ctrl.getPROPS(propName)) {
-			case REFRESH:
-				if (newValue instanceof AbstractEntity) {
+					ViewUtil.scrollToTop(scroller);
+					break;
+				case STRAND:
+					int n = cbStrand.getSelectedIndex();
+					Ui.fillCB(cbStrand, (List) mainFrame.project.getList(Book.TYPE.STRAND), BALL, this);
+					cbStrand.setSelectedIndex(n);
 					refresh();
-				} else if (newValue instanceof View) {
-					View vparent = (View) (getParent().getParent());
-					view = (View) evt.getNewValue();
-					if (vparent.equals(view)) {
+					ViewUtil.scrollToTop(scroller);
+					break;
+				case LOCATION:
+					if (mainFrame.getBook().getParam().getParamLayout().getChapterDateLocation()) {
 						refresh();
 					}
+					break;
+				case ITEM:
+					if (mainFrame.getBook().getParam().getParamLayout().getSceneDidascalie()) {
+						refresh();
+					}
+					break;
+				default:
+					break;
+			}
+		} else if (newValue instanceof View) {
+			View view = (View) evt.getNewValue();
+			if (view.getName().equals(SbView.VIEWNAME.READING.toString())) {
+				switch (Ctrl.getPROPS(propName)) {
+					case REFRESH:
+						View vparent = (View) (getParent().getParent());
+						if (vparent.equals(view)) {
+							refresh();
+						}
+						break;
+					case SHOWOPTIONS:
+						OptionsDlg.show(mainFrame, view.getName());
+						break;
+					case READING_LAYOUT:
+						setZoomedSize((Integer) newValue);
+						scroller.setMaximumSize(new Dimension(scrollerWidth, 10000));
+						scroller.getParent().invalidate();
+						scroller.getParent().validate();
+						scroller.getParent().repaint();
+						break;
+					case SHOWINFO:
+						refresh();
+						break;
+					case PRINT:
+						printAction();
+						break;
+					default:
+						break;
 				}
-				break;
-			case SHOWOPTIONS:
-				view = (View) evt.getNewValue();
-				if (!view.getName().equals(SbView.VIEWNAME.READING.toString())) {
-					return;
-				}
-				OptionsDlg.show(mainFrame, view.getName());
-				break;
-			case READING_LAYOUT:
-				setZoomedSize((Integer) newValue);
-				scroller.setMaximumSize(new Dimension(scrollerWidth, 10000));
-				scroller.getParent().invalidate();
-				scroller.getParent().validate();
-				scroller.getParent().repaint();
-				break;
-			case SHOWINFO:
-				refresh();
-			default:
-				break;
+			}
 		}
 	}
 
@@ -173,7 +175,7 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 
 	@Override
 	public void initUi() {
-		//LOG.printInfos(TT + ".initUi()");
+		//LOG.trace(TT + "initUi()");
 		setLayout(new MigLayout(MIG.get(MIG.FLOWX, MIG.HIDEMODE3), "[][fill,grow]", ""));
 		initToolbar();
 		if (toolbar.getComponentCount() > 0) {
@@ -200,14 +202,16 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 	@Override
 	@SuppressWarnings("unchecked")
 	public JToolBar initToolbar() {
-		//LOG.printInfos(TT + ".initToolbar()");
+		//LOG.trace(TT + "initToolbar()");
 		super.initToolbar();
-		lbStrand = new JLabel(I18N.getColonMsg("strand"));
+		pStrand = new JPanel(new MigLayout(MIG.INS1));
+		pStrand.add(new JLabel(I18N.getColonMsg("strand")));
 		cbStrand = Ui.initComboBox("cbStrand", "",
 		   (List) mainFrame.project.getList(Book.TYPE.STRAND),
 		   null, !EMPTY, ALL, this);
-		toolbar.add(lbStrand);
-		toolbar.add(cbStrand);
+		pStrand.add(cbStrand);
+		toolbar.add(pStrand);
+
 		ckReview = Ui.initCheckBox(null, "ckReview", "review",
 		   book.param.getParamLayout().getShowReview(), BNONE,
 		   e -> changeReview());
@@ -234,8 +238,7 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 	@Override
 	public void refresh() {
 		boolean nb = mainFrame.project.getList(Book.TYPE.STRAND).size() > 1;
-		lbStrand.setVisible(nb);
-		cbStrand.setVisible(nb);
+		pStrand.setVisible(nb);
 		ckReview.setVisible(!Review.find(mainFrame).isEmpty());
 		int n = 0;
 		for (Component c : toolbar.getComponents()) {
@@ -280,7 +283,7 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 
 	@Override
 	public void hyperlinkUpdate(HyperlinkEvent evt) {
-		//LOG.printInfos(TT + ".hyperlinkUpdate(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + ".hyperlinkUpdate(evt=" + evt.toPrint() + ")");
 		if (evt.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 			Net.openUrl(evt);
 		}
@@ -288,7 +291,7 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//LOG.printInfos("ReadingPanel.actionPerformed(e=" + e.toString());
+		//LOG.trace(TT+"actionPerformed(e=" + e.toPrint());
 		if (e.getSource() instanceof JComboBox) {
 			JComboBox cb = (JComboBox) e.getSource();
 			if (cb.getName().equals("cbPartFilter")) {
@@ -304,6 +307,12 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 		book.param.getParamLayout().setShowReview(ckReview.isSelected());
 		mainFrame.setUpdated();
 		refresh();
+	}
+
+	private void printAction() {
+		//LOG.trace(TT + "printAction()");
+		String html = ExportBookToHtml.toPrint(mainFrame);
+		HtmlPrinter.pr("reading", this, html, book.getTitle(), "");
 	}
 
 }

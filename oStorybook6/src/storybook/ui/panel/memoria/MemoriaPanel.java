@@ -59,6 +59,7 @@ import storybook.dialog.OptionsDlg;
 import storybook.exim.EXIM;
 import storybook.renderer.EntityLCR;
 import storybook.tools.LOG;
+import storybook.tools.print.ComponentPrinter;
 import storybook.tools.swing.LaF;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MainFrame;
@@ -69,7 +70,7 @@ import storybook.ui.panel.AbstractPanel;
 
 public class MemoriaPanel extends AbstractPanel implements ActionListener {
 
-	private static final String TT = "MemoriaPanel";
+	private static final String TT = "MemoriaPanel.";
 
 	public DelegateForest<AbstractEntity, Long> graph;
 	private VisualizationViewer<AbstractEntity, Long> vv;
@@ -644,7 +645,7 @@ public class MemoriaPanel extends AbstractPanel implements ActionListener {
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.printInfos(TT+".modelPropertyChange(evt=" + evt.toString() + ")");
+		//LOG.trace(TT+"modelPropertyChange(evt=" + evt.toString() + ")");
 		String str = evt.getPropertyName();
 		View newView;
 		View oldView;
@@ -683,6 +684,12 @@ public class MemoriaPanel extends AbstractPanel implements ActionListener {
 						EXIM.exporter(mainFrame, vv);
 					}
 					return;
+				case PRINT:
+					newView = (View) evt.getNewValue();
+					if (newView.getName().equals(SbView.VIEWNAME.MEMORIA.toString())) {
+						printAction();
+					}
+					return;
 				default:
 					if ((str.startsWith("Update"))
 					   || (str.startsWith("Delete"))
@@ -717,6 +724,10 @@ public class MemoriaPanel extends AbstractPanel implements ActionListener {
 
 	public JPanel getPanelToExport() {
 		return (vv);
+	}
+
+	private void printAction() {
+		ComponentPrinter.pr("memoria", mainFrame, vv, book.getTitle(), "");
 	}
 
 	public class MemoriaGraphMouse extends AbstractPopupGraphMousePlugin implements MouseListener {

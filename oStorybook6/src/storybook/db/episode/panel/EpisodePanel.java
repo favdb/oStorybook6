@@ -16,6 +16,7 @@
  */
 package storybook.db.episode.panel;
 
+import api.infonode.docking.View;
 import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.Rectangle;
@@ -52,6 +53,7 @@ import resources.icons.ICONS;
 import resources.icons.IconUtil;
 import storybook.App;
 import storybook.ctrl.ActKey;
+import storybook.ctrl.Ctrl;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.chapter.Chapter;
@@ -62,10 +64,12 @@ import storybook.db.strand.Strand;
 import storybook.tools.ListUtil;
 import storybook.tools.TextUtil;
 import storybook.tools.html.Html;
+import storybook.tools.print.TablePrinter;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.js.JSMenuItem;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
+import storybook.ui.SbView;
 import storybook.ui.Ui;
 import storybook.ui.panel.AbstractPanel;
 
@@ -116,8 +120,8 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 	public void init() {
 		//LOG.printInfos(TT + ".init()");
 		strands = (List) mainFrame.project.getList(Book.TYPE.STRAND);
-		charW = SwingUtil.getCharWidth(App.getInstance().fonts.defGet());
-		charH = SwingUtil.getCharHeight(App.getInstance().fonts.defGet());
+		charW = SwingUtil.getCharWidth(App.fonts.defGet());
+		charH = SwingUtil.getCharHeight(App.fonts.defGet());
 		zoom = App.preferences.episodesGetZoom();
 		rowHeight = (3 + zoom) * charH;
 	}
@@ -140,7 +144,7 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 	 */
 	@Override
 	public void initUi() {
-		//LOG.printInfos(TT + ".initUi()");
+		//LOG.trace(TT + ".initUi()");
 		setLayout(new MigLayout(MIG.get(MIG.FILL, MIG.WRAP1)));
 		this.removeAll();
 		add(initToolbar(), MIG.GROWX);
@@ -150,6 +154,8 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 		initKeyStroke("up", KeyEvent.VK_UP, InputEvent.CTRL_DOWN_MASK, new ActionMinus(this));
 		initKeyStroke("right", KeyEvent.VK_RIGHT, 0, new ActionArrow(this, KeyEvent.VK_RIGHT));
 		initKeyStroke("left", KeyEvent.VK_LEFT, 0, new ActionArrow(this, KeyEvent.VK_LEFT));
+		//initKeyStroke("printAction", KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK, new PrintAction(mainFrame));
+		initKeyStroke("print", KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK, new PrintAction(this));
 
 		scrollPane = new JScrollPane(episodeTable);
 		scrollPane.setPreferredSize(SwingUtil.getScreenSize());
@@ -184,6 +190,7 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 	}
 
 	private void initKeyStroke(String title, int key, int mask, AbstractAction action) {
+		//LOG.trace(TT + "initKeyStroke(title=" + title + ", key, mask, action)");
 		KeyStroke ks = KeyStroke.getKeyStroke(key, mask);
 		episodeTable.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks, title + "Action");
 		episodeTable.getActionMap().put(title + "Action", action);
@@ -303,8 +310,20 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 	 */
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.printInfos(TT + ".modelPropertyChange(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + ".modelPropertyChange(evt=" + evt.toString() + ")");
+		Ctrl.PROPS prop = Ctrl.getPROPS(evt.getPropertyName());
 		ActKey act = new ActKey(evt);
+		switch (prop) {
+			case PRINT:
+				View newView = (View) evt.getNewValue();
+				if (newView.getName().equals(SbView.VIEWNAME.EPISODES.toString())) {
+					printAction();
+				}
+				return;
+			case REFRESH:
+				refresh();
+				return;
+		}
 		switch (Book.getTYPE(act.type)) {
 			case STRAND:
 			case CHAPTER:
@@ -884,6 +903,12 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 		mainFrame.setVisible(true);
 	}
 
+	public void printAction() {
+		save();
+		TablePrinter.pr("episodes", mainFrame, episodeTable, mainFrame.getBook().getTitle(), "");
+		refresh();
+	}
+
 	/**
 	 * action class when Enter was typed in EpisodeTable
 	 *
@@ -990,6 +1015,25 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 				return;
 			}
 			panel.getEpisodeTable().selectCell(row, col);
+		}
+	}
+
+	private static class PrintAction extends AbstractAction {
+
+		private final EpisodePanel ep;
+
+		public PrintAction(EpisodePanel episodePanel) {
+			this.ep = episodePanel;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			ep.save();
+			TablePrinter.pr("episodes",
+			   ep.getMainFrame(),
+			   ep.getEpisodeTable(),
+			   ep.getMainFrame().getBook().getTitle(), "");
+			ep.refresh();
 		}
 	}
 
