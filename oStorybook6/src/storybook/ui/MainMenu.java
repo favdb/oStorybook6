@@ -256,6 +256,7 @@ public class MainMenu implements MouseListener {
 	private JMenuItem toolsTypist;
 	private JMenuItem fileImportSql;
 	private JMenuItem fileExportProject;
+	private JMenuItem toolsChallenge;
 
 	public MainMenu(MainFrame m) {
 		//LOG.printInfos("MainMenu(mainFrame)");
@@ -1118,6 +1119,8 @@ public class MainMenu implements MouseListener {
 		//LOG.printInfos(TT+"initMenuTools()");
 		menuTools = initMenu("tools");
 
+		//toolsChallenge = initScMenuItem("challenge", evt -> ChallengeDlg.show(mainFrame));
+		//menuTools.add(toolsChallenge);
 		toolsTypist = initMenuItem("typist", evt -> {
 			if (mainFrame.isEpisode) {
 				mainFrame.episodeActivate();

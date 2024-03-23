@@ -118,6 +118,14 @@ public class Pref {
 		setString(KEY.VOGLER_OPTIONS, value);
 	}
 
+	public boolean getPrintPage() {
+		return (getBoolean(KEY.PRINTPAGE));
+	}
+
+	public void setPrintPage(boolean value) {
+		setBoolean(KEY.PRINTPAGE, value);
+	}
+
 	public enum KEY {
 		ASSISTANT("Assistant", ""),
 		ASSISTANT_USE("AssistantUse", "internal"),
@@ -201,6 +209,7 @@ public class Pref {
 		MEMORY("SeeMemory", "0"),
 		MSGFILE("MessagesFile", ""),
 		OPEN_LASTFILE("OpenLastFile", "false"),
+		PRINTPAGE("PrintPage", "false"),
 		READING_FONT_SIZE("ReadingFontSize", "11"),
 		READING_TOCLEVEL("ReadingToclevel", "0"),
 		READING_ZOOM("ReadingZoom", "60"),

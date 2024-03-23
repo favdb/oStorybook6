@@ -40,14 +40,14 @@ import storybook.ui.panel.info.InfoPanel;
  *
  * @author favdb
  */
-public class ExportInfo extends AbstractExport {
+public class ExportInfoView extends AbstractExport {
 
-	private static final String TT = "ExportInfo.", EXPORT_TITLE = "Info Export";
+	private static final String TT = "ExportInfo.";
 
 	private InfoPanel infoPanel;
 	private AbstractEntity entity;
 
-	public ExportInfo(MainFrame mainFrame) {
+	public ExportInfoView(MainFrame mainFrame) {
 		super(mainFrame, "html");
 	}
 
@@ -100,7 +100,7 @@ public class ExportInfo extends AbstractExport {
 	public static boolean exec(MainFrame mainFrame, String type) {
 		LOG.trace(TT + "exec(mainFrame, type='" + type + "')");
 		if (type.equals("summary")) {
-			ExportInfo exp = new ExportInfo(mainFrame);
+			ExportInfoView exp = new ExportInfoView(mainFrame);
 			if (exp.openFile(I18N.getMsg("export.book.summary"), true)) {
 				exp.writeSummary();
 			}
@@ -112,7 +112,7 @@ public class ExportInfo extends AbstractExport {
 		if (entities.isEmpty()) {
 			return true;
 		}
-		ExportInfo exp = new ExportInfo(mainFrame);
+		ExportInfoView exp = new ExportInfoView(mainFrame);
 		if (exp.openFile("info_" + I18N.getMsg(type), true)) {
 			for (AbstractEntity entity : entities) {
 				exp.writeText(entity.toDetail(3));
@@ -124,7 +124,7 @@ public class ExportInfo extends AbstractExport {
 	}
 
 	public boolean exec(InfoPanel infoPanel) {
-		//LOG.trace("ExportInfo.exec(infoPanel)");
+		//LOG.trace("ExportInfoView.exec(infoPanel)");
 		this.infoPanel = infoPanel;
 		this.entity = infoPanel.getEntity();
 		// open the output file to write

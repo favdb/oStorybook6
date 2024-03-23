@@ -49,6 +49,7 @@ public class PrefExport extends AbstractPanel {
 	private JCheckBox ckPhp;
 	private JComboBox cbPhpTheme;
 	private JLabel lbTheme;
+	private JCheckBox ckPrint;
 
 	public PrefExport(PreferencesDlg dlg) {
 		super(dlg.getMainFrame());
@@ -95,6 +96,7 @@ public class PrefExport extends AbstractPanel {
 		bgExport.add(rbXml);
 		add(p);
 		add(initPhpBB(), MIG.get(MIG.SPAN, MIG.GROW));
+		add(initPrint(), MIG.get(MIG.SPAN, MIG.GROWX));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -124,6 +126,15 @@ public class PrefExport extends AbstractPanel {
 	private void changePhpBB() {
 		lbTheme.setEnabled(ckPhp.isSelected());
 		cbPhpTheme.setEnabled(ckPhp.isSelected());
+	}
+
+	private JPanel initPrint() {
+		JPanel p = new JPanel(new MigLayout());
+		p.setBorder(BorderFactory.createTitledBorder(I18N.getMsg("print")));
+		ckPrint = new JCheckBox(I18N.getMsg("print.page"));
+		ckPrint.setSelected(App.preferences.getPrintPage());
+		p.add(ckPrint);
+		return p;
 	}
 
 	@Override
@@ -159,6 +170,7 @@ public class PrefExport extends AbstractPanel {
 			i = ExportToPhpBB.COLORS.length - 1;
 		}
 		pref.setString(Pref.KEY.EXP_PHPBB_THEME, ExportToPhpBB.COLORS[i][0]);
+		pref.setBoolean(Pref.KEY.PRINTPAGE, ckPrint.isSelected());
 	}
 
 	public void refreshUi() {

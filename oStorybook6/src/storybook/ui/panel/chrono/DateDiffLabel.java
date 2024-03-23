@@ -51,6 +51,6 @@ public class DateDiffLabel extends JSLabel {
 	}
 
 	public final int getDays() {
-		return DateUtil.calculateDaysBetween(date1, date2);
+		return DateUtil.daysBetween(date1, date2);
 	}
 }

@@ -35,10 +35,10 @@ import storybook.tools.html.Html;
 public class ClipHtml implements Transferable, ClipboardOwner {
 
 	public static final DataFlavor htmlFlavor = new DataFlavor("text/html", "HTML"),
-			textFlavor = new DataFlavor("text/plain", "TEXT");
+	   textFlavor = new DataFlavor("text/plain", "TEXT");
 	private final DataFlavor[] supportedFlavors = {
-		htmlFlavor,
-		textFlavor
+		htmlFlavor//,
+	//textFlavor
 	};
 	private final String htmlText, plainText;
 
@@ -47,9 +47,9 @@ public class ClipHtml implements Transferable, ClipboardOwner {
 		this.plainText = plainText;
 	}
 
-	public ClipHtml(String htmlText) {
-		this.htmlText = htmlText;
-		this.plainText = Html.htmlToText(htmlText);
+	public ClipHtml(String html) {
+		this.htmlText = html;
+		this.plainText = Html.htmlToText(html);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class ClipHtml implements Transferable, ClipboardOwner {
 
 	@Override
 	public Object getTransferData(DataFlavor flavor)
-			throws UnsupportedFlavorException, IOException {
+	   throws UnsupportedFlavorException, IOException {
 		if (flavor.equals(htmlFlavor)) {
 			return new ByteArrayInputStream(htmlText.getBytes());
 		}

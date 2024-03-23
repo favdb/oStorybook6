@@ -98,9 +98,9 @@ public class AssAction {
 			}
 			if (create && file.exists()) {
 				int n = JOptionPane.showConfirmDialog(jfc,
-						I18N.getMsg("file.exists"),
-						I18N.getMsg("save"),
-						JOptionPane.YES_NO_OPTION);
+				   I18N.getMsg("file.exists"),
+				   I18N.getMsg("save"),
+				   JOptionPane.YES_NO_OPTION);
 				if (n != JOptionPane.YES_OPTION) {
 					return null;
 				}
@@ -117,8 +117,8 @@ public class AssAction {
 		//LOG.trace(TT + ".helpAbout()");
 		StringBuilder msg = new StringBuilder();
 		msg.append("Version ").append(AppAssistant.VERSION)
-				.append(" (").append(AppAssistant.VERSION_YEAR).append(")")
-				.append("\n").append("(c)GPL V2");
+		   .append(" (").append(AppAssistant.VERSION_YEAR).append(")")
+		   .append("\n").append("(c) GPL V2");
 		JTextArea textArea = new JTextArea(6, 20);
 		textArea.setText(msg.toString());
 		textArea.setLineWrap(true);
@@ -126,9 +126,9 @@ public class AssAction {
 		textArea.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		JOptionPane.showMessageDialog(app,
-				scrollPane,
-				I18N.getMsg("assistant"),
-				JOptionPane.INFORMATION_MESSAGE);
+		   scrollPane,
+		   I18N.getMsg("assistant"),
+		   JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void testDialog(SECTION type, String values) {

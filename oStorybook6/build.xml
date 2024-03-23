@@ -229,7 +229,7 @@
         <echo level="info">Prepare DEBIAN package build</echo>
         <echo file="${sb.linux.deployment.dir}/build-debian.sh" append="false" force="true">#!/bin/sh
             echo DEBIAN package for ${sb.version}
-            rm -r -f /home/favdb/oStorybook/mainApp/distrib/5.61/debian-package
+            rm -r -f ${sb.debian.distdir}
             mkdir ${sb.debian.distdir}
             echo Copy debian-package structure
             cp -R ${sb.debian.deployment.dir}/DEBIAN ${sb.debian.distdir}
@@ -239,12 +239,15 @@
             sed -i -e "s/(version)/(${sb.version})/g" ${sb.debian.distdir}/usr/share/doc/ostorybook/changelog
             gzip -9 -n ${sb.debian.distdir}/usr/share/doc/ostorybook/changelog
             echo Copy application
-            cp -R ${basedir}/Assistant ${sb.debian.distdir}/usr/share/ostorybook/
-            cp ${sb.distdir}/single_${sb.jar.name} ${sb.debian.distdir}/usr/share/ostorybook/${sb.jar.name}
+            <!--cp -R ${basedir}/Assistant ${sb.debian.distdir}/usr/share/ostorybook/-->
+            cp ${sb.distdir}/${sb.jar.name} ${sb.debian.distdir}/usr/share/ostorybook/${sb.jar.name}
             echo Modification for permissions
             find ${sb.debian.distdir}/usr -type d -exec chmod 755 {} +
             chmod -R 755 ${sb.debian.distdir}/DEBIAN
             echo set the md5
+            cd ${sb.debian.distdir}
+            rm -f ./DEBIAN/md5sums
+            find . -type f -not -path "./DEBIAN/*" -exec md5sum {} + | sort -k 2 | sed 's/\.\/\(.*\)/\1/' > ./DEBIAN/md5sums
             echo build of Debian package
             dpkg-deb --build ${sb.debian.distdir} ${sb.distdir}/oStorybook-${sb.version}.deb
             echo Cleaning...
@@ -298,10 +301,10 @@
                  build-windows, build-zipsrc, build-debian">
         <echo level="info" message="--- start of app-all"/>
         <copy file="Versions.txt" todir="${sb.distdir}" />
-        <exec executable="ls" failonerror="true"> 
-            <arg line=" -sh ${dist.jar}"/> 
-        </exec> 
         <copy file="${basedir}/dist/oStorybook.jar" todir="${sb.distdir}" />
+        <!-- <exec executable="ls" failonerror="true"> 
+            <arg line=" -sh ${sb.distdir}"/> 
+        </exec> -->
         <echo level="info" message="--- end of app-all"/>
     </target>
     <!-- ===Statistics===================================================== -->

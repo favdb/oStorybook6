@@ -38,7 +38,7 @@ import storybook.db.EntityUtil;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.chapter.Chapter;
 import storybook.db.scene.Scene;
-import storybook.exim.exporter.ExportInfo;
+import storybook.exim.exporter.ExportInfoView;
 import storybook.project.Project;
 import storybook.tools.LOG;
 import storybook.tools.file.XEditorFile;
@@ -80,7 +80,7 @@ public class InfoPanel extends AbstractPanel implements HyperlinkListener {
 			refreshInfo();
 		}
 		if (Ctrl.PROPS.EXPORT.check(propName)) {
-			ExportInfo export = new ExportInfo(mainFrame);
+			ExportInfoView export = new ExportInfoView(mainFrame);
 			export.exec(this);
 		}
 		if (Ctrl.PROPS.REFRESH.check(propName)) {

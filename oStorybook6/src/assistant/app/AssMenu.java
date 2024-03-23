@@ -96,7 +96,6 @@ public class AssMenu extends JMenuBar {
 		add(testMenu);
 
 		JMenu helpMenu = addMenu(I18N.getMsg("help"));
-		//helpMenu.add(addMenuItem(I18N.getMsg("help.contents"), e -> appAction.helpContents()));
 		helpMenu.add(addMenuItem(I18N.getMsg("help.about"), e -> appAction.helpAbout()));
 		add(helpMenu);
 	}

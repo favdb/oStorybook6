@@ -215,6 +215,7 @@ public class Project {
 
 	public void initData() {
 		//LOG.trace(TT + "initData()");
+		//challenge = new Challenge();
 		attributes = new Attributes(this);
 		categorys = new Categorys(this);
 		chapters = new Chapters(this);
@@ -413,6 +414,7 @@ public class Project {
 		if (rootNode != null) {
 			book.load();
 			loadEntities();
+			//challenge.fromXml(this, rootNode);
 		} else {
 			LOG.trace(TT + "load() not an OSBK file");
 		}
@@ -754,6 +756,11 @@ public class Project {
 		b.append(statuss.toXml());
 		b.append(strands.toXml());
 		b.append(tags.toXml());
+		/*if (challenge.nbWordsGet() > 0) {
+			challenge.lastDateSet();
+			challenge.lastWordsSet(BookUtil.getNbWords(this));
+			b.append(challenge.toXml());
+		}*/
 		b.append("</book>");
 		this.setFile(outfile);
 		ZipUtil.writeString(out.getAbsolutePath(), "db.xml", b.toString());
@@ -1137,9 +1144,7 @@ public class Project {
 	   File curDir, ZipOutputStream zos, File destZip) throws Exception {
 		byte[] data = new byte[2048];
 		File[] files = curDir.listFiles();
-		if (files == null) {
-			// no files were found or this is not a directory
-		} else {
+		if (files != null) {
 			for (File file : files) {
 				if (file.isDirectory()) {
 					archiveProjectFiles(dir, file, zos, destZip);
@@ -1149,8 +1154,8 @@ public class Project {
 					}
 					FileInputStream fi = new FileInputStream(file);
 					// creating structure and avoiding duplicate file names
-					String name = file.getAbsolutePath().replace(dir.getAbsolutePath(), "");
-					ZipEntry entry = new ZipEntry(name);
+					String nx = file.getAbsolutePath().replace(dir.getAbsolutePath(), "");
+					ZipEntry entry = new ZipEntry(nx);
 					zos.putNextEntry(entry);
 					int count;
 					try (BufferedInputStream origin = new BufferedInputStream(fi, 2048)) {
@@ -1164,24 +1169,22 @@ public class Project {
 	}
 
 	public static boolean isOsbk(File file) {
-		LOG.trace(TT + "isOsbk(file=" + file.getAbsolutePath() + ")");
+		//LOG.trace(TT + "isOsbk(file=" + file.getAbsolutePath() + ")");
 		boolean rc = false;
 		List<String> entries = ZipUtil.listEntries(file.getAbsolutePath());
 		if (!entries.isEmpty() && entries.get(0).equals("db.xml")) {
 			rc = true;
 		}
-		LOG.trace("file is " + (rc ? "osbk" : "not osbk"));
 		return rc;
 	}
 
 	public static boolean isSql(File file) {
-		LOG.trace(TT + "isSql(file=" + file.getAbsolutePath() + ")");
+		//LOG.trace(TT + "isSql(file=" + file.getAbsolutePath() + ")");
 		boolean rc = false;
 		List<String> entries = ZipUtil.listEntries(file.getAbsolutePath());
 		if (!entries.isEmpty() && entries.get(0).equals("script.sql")) {
 			rc = true;
 		}
-		LOG.trace("file is " + (rc ? "sql" : "not sql"));
 		return rc;
 	}
 
@@ -1223,6 +1226,10 @@ public class Project {
 			//unzip file into folder
 		}
 		return null;
+	}
+
+	private void challengeLoad() {
+
 	}
 
 }

@@ -324,6 +324,13 @@ public class Html {
 		return html;
 	}
 
+	public static String forPrint(String s) {
+		return "<html><head>"
+		   + STYLE_B + "h1, h2, h3 {text-aligne: center}" + STYLE_E
+		   + "</head>"
+		   + intoTag("body", s, "style=\"font-size:12px;") + HTML_E;
+	}
+
 	private Html() {
 		throw new IllegalStateException("Utility class Html");
 	}

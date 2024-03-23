@@ -935,8 +935,8 @@ public class ExportBookToEpub extends AbstractExport {
 		   .append(XHTML_TAG)
 		   .append(Html.intoTag("head", Html.getHeadTitle(I18N.getMsg("epub.titlepage"))));
 		b.append("<body class=\"ostorybook\" id=\"titlepage\">\n");
-		b.append(Html.toXhtml(ExportBook.getTitle(book, true)));
-		b.append(ExportBook.getDedication(book, 30));
+		b.append(Html.toXhtml(ExportBookInfo.getTitle(book, true)));
+		b.append(ExportBookInfo.getDedication(book, 30));
 		b.append(Html.BODY_E).append(Html.HTML_E);
 		File f = new File(epubDirText + "titlepage.xhtml");
 		writeToFile(f, b);

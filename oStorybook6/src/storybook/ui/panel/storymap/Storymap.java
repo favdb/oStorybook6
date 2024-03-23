@@ -258,7 +258,7 @@ public class Storymap extends AbstractPanel implements ItemListener {
 	}
 
 	private void printAction() {
-		ComponentPrinter.pr("storymap", mainFrame, graph, mainFrame.getBook().getTitle(), "");
+		ComponentPrinter.pr(mainFrame, graph, mainFrame.getBook().getTitle(), "");
 	}
 
 }

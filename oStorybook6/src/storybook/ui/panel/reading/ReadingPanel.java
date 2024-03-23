@@ -53,7 +53,7 @@ import storybook.tools.ViewUtil;
 import storybook.tools.html.CSS;
 import storybook.tools.html.Html;
 import storybook.tools.net.Net;
-import storybook.tools.print.HtmlPrinter;
+import storybook.tools.print.PrinterUtil;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
@@ -311,8 +311,14 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 
 	private void printAction() {
 		//LOG.trace(TT + "printAction()");
-		String html = ExportBookToHtml.toPrint(mainFrame);
-		HtmlPrinter.pr("reading", this, html, book.getTitle(), "");
+		if (!App.preferences.getPrintPage()) {
+			String html = ExportBookToHtml.toPrint(mainFrame);
+			PrinterUtil.printHtml(mainFrame, html, book.getTitle(), I18N.getMsg("print.page_num"));
+		} else {
+			//todo tester si possible via une table HTML
+			List<String> ls = ExportBookToHtml.toPrintList(mainFrame);
+			PrinterUtil.printHtml(mainFrame, ls, book.getTitle(), I18N.getMsg("print.page_num"), 2);
+		}
 	}
 
 }

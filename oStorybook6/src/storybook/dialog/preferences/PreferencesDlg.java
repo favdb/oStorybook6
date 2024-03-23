@@ -91,7 +91,7 @@ public class PreferencesDlg extends AbsDialog implements ActionListener {
 		cbMemory.addActionListener(this);
 		add(cbMemory, MIG.get(MIG.SPAN, MIG.RIGHT));
 		JButton btDumpPreferences = new JButton("Dump Preferences");
-		btDumpPreferences.setFont((App.getInstance().fonts.defGet()));
+		btDumpPreferences.setFont((App.fonts.defGet()));
 		btDumpPreferences.addActionListener(evt -> App.preferences.dump());
 		add(btDumpPreferences, "split 4, left");
 		JSLabel lbEmpty = new JSLabel(" ");

@@ -17,7 +17,6 @@
 package assistant;
 
 import i18n.I18N;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -26,7 +25,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import resources.icons.ICONS;
-import resources.icons.IconUtil;
 import storybook.tools.LOG;
 import storybook.tools.swing.FontUtil;
 import storybook.ui.MIG;
@@ -54,6 +52,7 @@ public class AssistantItemAbstract {
 	public AssistantAddElement dlgItem;
 	public final Document assistantDoc;
 
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public AssistantItemAbstract(AssistantTab tab, Node item, boolean editable, Document assistantDoc) {
 		this.panel = tab;
 		this.xml = Assistant.getXml();
@@ -102,12 +101,8 @@ public class AssistantItemAbstract {
 	public void addEditButton() {
 		if (editable) {
 			JPanel p = new JPanel();
-			JButton btEdit = new JButton(IconUtil.getIconSmall(ICONS.K.EDIT));
-			btEdit.addActionListener(e -> edit());
-			p.add(btEdit);
-			JButton btDelete = new JButton(IconUtil.getIconSmall(ICONS.K.MINUS));
-			btDelete.addActionListener(e -> delete());
-			p.add(btDelete);
+			p.add(Ui.initButton("edit", "", ICONS.K.EDIT, "edit", e -> edit()));
+			p.add(Ui.initButton("delete", "", ICONS.K.CANCEL, "delete", e -> delete()));
 			panel.add(p, MIG.TOP);
 		} else {
 			panel.add(new JLabel());

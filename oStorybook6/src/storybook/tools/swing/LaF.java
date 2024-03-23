@@ -73,9 +73,9 @@ public class LaF {
 			try {
 				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			} catch (ClassNotFoundException
-				| IllegalAccessException
-				| InstantiationException
-				| UnsupportedLookAndFeelException ex1) {
+			   | IllegalAccessException
+			   | InstantiationException
+			   | UnsupportedLookAndFeelException ex1) {
 				LOG.err("unable to initialize default Laf");
 			}
 		}
@@ -100,9 +100,9 @@ public class LaF {
 			Object obj = newKeys.nextElement();
 			Object current = UIManager.get(obj);
 			if (current instanceof FontUIResource) {
-				defaults.put(obj, new FontUIResource(App.getInstance().fonts.defGet()));
+				defaults.put(obj, new FontUIResource(App.fonts.defGet()));
 			} else if (current instanceof Font) {
-				defaults.put(obj, App.getInstance().fonts.defGet());
+				defaults.put(obj, App.fonts.defGet());
 			}
 		}
 	}

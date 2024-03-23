@@ -160,7 +160,10 @@ public class ExportBookDlg extends AbsDialog {
 			}
 			File file = chooser.getSelectedFile();
 			tfFolder.setText(file.getAbsolutePath());
-			checkExists();
+			if (checkExists()) {
+				mainFrame.project.book.param.getParamExport().setDirectory(file.getAbsolutePath());
+				mainFrame.setUpdated();
+			}
 		});
 		bt.setMargin(new Insets(0, 0, 0, 0));
 		add(bt, MIG.WRAP);

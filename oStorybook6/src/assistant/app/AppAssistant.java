@@ -16,6 +16,7 @@
  */
 package assistant.app;
 
+import api.mig.swing.MigLayout;
 import assistant.Assistant;
 import assistant.AssistantPanel;
 import i18n.I18N;
@@ -27,7 +28,6 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import api.mig.swing.MigLayout;
 import resources.icons.IconUtil;
 import storybook.App;
 import static storybook.App.preferences;
@@ -41,9 +41,9 @@ import storybook.tools.swing.LaF;
  */
 public class AppAssistant extends JDialog implements ActionListener {
 
-	private static final String TT = "AssistantApp";
+	private static final String TT = "AssistantApp.";
 
-	public static final String VERSION = "0.2", VERSION_YEAR = "2023";
+	public static final String VERSION = "0.3", VERSION_YEAR = "2024";
 
 	private static String filename = "";
 	private static boolean subJar = false;
@@ -70,7 +70,7 @@ public class AppAssistant extends JDialog implements ActionListener {
 		if (!s.isEmpty()) {
 			Assistant.init(s);
 		}
-		//LOG.trace(TT + ".main(args=" + ListUtil.join(args) + ")");
+		//LOG.trace(TT + "main(args=" + ListUtil.join(args) + ")");
 		for (String str : args) {
 			switch (str) {
 				case "--sub":
@@ -108,7 +108,7 @@ public class AppAssistant extends JDialog implements ActionListener {
 	}
 
 	public void init() {
-		//LOG.trace(TT + ".init()");
+		//LOG.trace(TT + "init()");
 		setModal(true);
 		File file = null;
 		if (!filename.isEmpty()) {
@@ -132,7 +132,7 @@ public class AppAssistant extends JDialog implements ActionListener {
 	}
 
 	public void initUi() {
-		//LOG.trace(TT + ".initUi()");
+		//LOG.trace(TT + "initUi()");
 		setAppTitle();
 		dataPanel.reinit();
 		add(dataPanel);
@@ -154,7 +154,7 @@ public class AppAssistant extends JDialog implements ActionListener {
 	}
 
 	public void setModified(boolean b) {
-		//LOG.trace(TT + ".setModified(b=" + (b ? "true" : "false") + ")");
+		//LOG.trace(TT + "setModified(b=" + (b ? "true" : "false") + ")");
 		modified = b;
 		setAppTitle();
 		appMenu.setSaveEnable(b);
@@ -174,7 +174,7 @@ public class AppAssistant extends JDialog implements ActionListener {
 	}
 
 	public void close() {
-		//LOG.trace(TT + ".close()");
+		//LOG.trace(TT + "close()");
 		if (modified) {
 			Object[] choix = {
 				I18N.getMsg("cancel"),
@@ -182,11 +182,11 @@ public class AppAssistant extends JDialog implements ActionListener {
 				I18N.getMsg("ignore")
 			};
 			int n = JOptionPane.showOptionDialog(null,
-					I18N.getMsg("close.confirm"),
-					I18N.getMsg("exit"),
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE,
-					null, choix, choix[0]);
+			   I18N.getMsg("close.confirm"),
+			   I18N.getMsg("exit"),
+			   JOptionPane.YES_NO_OPTION,
+			   JOptionPane.QUESTION_MESSAGE,
+			   null, choix, choix[0]);
 			if (n == 0) {
 				return;
 			}

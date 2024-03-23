@@ -397,6 +397,6 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 	}
 
 	private void printAction() {
-		ComponentPrinter.pr("timeline", mainFrame, panel, mainFrame.getBook().getTitle(), "");
+		ComponentPrinter.pr(mainFrame, panel, mainFrame.getBook().getTitle(), "");
 	}
 }

@@ -358,7 +358,7 @@ public class ExportDlg extends AbsDialog implements ActionListener, CaretListene
 		SwingUtil.setWaitingCursor(this);
 		switch (exportName) {
 			case "summary":
-				ExportInfo.exec(mainFrame, exportName);
+				ExportInfoView.exec(mainFrame, exportName);
 				break;
 			case "list_all":
 				for (ExportType t : entities) {
@@ -370,7 +370,7 @@ public class ExportDlg extends AbsDialog implements ActionListener, CaretListene
 			case "data_all":
 				for (ExportType t : entities) {
 					if (t.isList) {
-						ExportInfo.exec(mainFrame, t.getName());
+						ExportInfoView.exec(mainFrame, t.getName());
 					}
 				}
 				break;
@@ -379,7 +379,7 @@ public class ExportDlg extends AbsDialog implements ActionListener, CaretListene
 					ExportTable.exportTable(mainFrame, entityType, format);
 				}
 				if (exportName.startsWith("data")) {
-					ExportInfo.exec(mainFrame, entityType);
+					ExportInfoView.exec(mainFrame, entityType);
 				}
 				break;
 		}

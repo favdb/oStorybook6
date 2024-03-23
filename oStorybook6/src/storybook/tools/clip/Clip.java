@@ -42,9 +42,9 @@ public class Clip {
 
 	public static void okMessage(Component comp, String title) {
 		JOptionPane.showMessageDialog(comp,
-				I18N.getMsg("copy.to_clip_ok"),
-				I18N.getMsg(title),
-				JOptionPane.INFORMATION_MESSAGE);
+		   I18N.getMsg("copy.to_clip_ok"),
+		   I18N.getMsg(title),
+		   JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	/**
@@ -112,8 +112,8 @@ public class Clip {
 		@Override
 		public Object getTransferData(DataFlavor df) throws UnsupportedFlavorException, IOException {
 			if (df.getMimeType().contains("text/html")
-					|| df.getMimeType().contains("text/xml")
-					|| df.getMimeType().contains("text/plain")) {
+			   || df.getMimeType().contains("text/xml")
+			   || df.getMimeType().contains("text/plain")) {
 				return datas[0];
 			} else {
 				throw new UnsupportedFlavorException(df);
@@ -123,8 +123,8 @@ public class Clip {
 		@Override
 		public boolean isDataFlavorSupported(DataFlavor df) {
 			return df.getMimeType().contains("text/html")
-					|| df.getMimeType().contains("text/xml")
-					|| df.getMimeType().contains("text/plain");
+			   || df.getMimeType().contains("text/xml")
+			   || df.getMimeType().contains("text/plain");
 		}
 
 		@Override

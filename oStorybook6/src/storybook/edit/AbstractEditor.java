@@ -378,11 +378,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 	 * @param time
 	 * @return
 	 */
-	public JSDateChooser initSbDate(JPanel p,
-	   String title,
-	   Date date,
-	   String opt,
-	   int time) {
+	public JSDateChooser initSbDate(JPanel p, String title, Date date, String opt, int time) {
 		JSDateChooser d = new JSDateChooser(mainFrame, time);
 		d.setName(title);
 		if (date != null) {

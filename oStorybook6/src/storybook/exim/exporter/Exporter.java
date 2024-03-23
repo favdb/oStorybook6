@@ -93,7 +93,7 @@ public class Exporter {
 				ExportEpisode.toFile(mainFrame, "html");
 				break;
 			case INFO:
-				ExportInfo exportInfo = new ExportInfo(mainFrame);
+				ExportInfoView exportInfo = new ExportInfoView(mainFrame);
 				exportInfo.exec((InfoPanel) view.getComponent());
 				break;
 			case MEMORIA:

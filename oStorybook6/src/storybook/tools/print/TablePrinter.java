@@ -32,6 +32,7 @@ package storybook.tools.print;
 
 import api.mig.swing.MigLayout;
 import i18n.I18N;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -46,7 +47,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import storybook.tools.LOG;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
 
 /**
  * from https://www.docs4dev.com/docs/en/java/java8/tutorials/uiswing-misc-printtable.html <br>
@@ -59,41 +59,32 @@ public class TablePrinter extends JFrame {
 
 	private static final String TT = "TablePrinter.";
 
-	/* UI Components */
 	private final String title;
 	private JPanel contentPane;
 	private JLabel titleLabel;
 	private JTable table;
 	private JScrollPane scroll;
 	private JButton printButton;
-
-	/* Protected so that they can be modified/disabled by subclasses */
-	private final MainFrame mainFrame;
+	private final Component parent;
 	private JButton cancelButton;
 	private JPanel buttonPane;
-
-	public static void pr(String msg, MainFrame m, JTable t, String header, String footer) {
-		/*LOG.trace(TT + "pr(msg=" + msg + ",m"
-		   + ", t=" + t.getName()
-		   + ", header='" + header + "'"
-		   + ", footer='" + footer + "')");*/
-		TablePrinter p = new TablePrinter(m, t, header, footer);
-		p.setVisible(true);
-	}
-	private final String header;
-	private final String footer;
+	private final String header, footer;
 
 	/**
 	 * Constructs an instance of the demo.
 	 *
 	 * @param mainFrame
 	 * @param table
+	 * @param header
+	 * @param footer
 	 */
-	public TablePrinter(MainFrame mainFrame, JTable table, String header, String footer) {
+	public TablePrinter(Component mainFrame, JTable table, String header, String footer) {
 		super(I18N.getMsg("print"));
-		this.mainFrame = mainFrame;
+		this.parent = mainFrame;
 		this.table = table;
-		this.title = I18N.getMsg(table.getName().toLowerCase().replace("table", "") + "s");
+		this.title = table.getName().startsWith("!")
+		   ? table.getName().substring(1)
+		   : I18N.getMsg(table.getName().toLowerCase().replace("table", "") + "s");
 		this.header = header;
 		this.footer = footer;
 		init();
@@ -101,13 +92,10 @@ public class TablePrinter extends JFrame {
 	}
 
 	private void init() {
-
 		titleLabel = new JLabel(title);
 		titleLabel.setFont(new Font("Dialog", Font.BOLD, 16));
-
 		scroll = new JScrollPane(table);
 		scroll.setPreferredSize(new Dimension(800, 600));
-
 		buttonPane = new JPanel(new MigLayout());
 		cancelButton = new JButton(I18N.getMsg("cancel"));
 		cancelButton.addActionListener((ActionEvent ae) -> {
@@ -125,18 +113,15 @@ public class TablePrinter extends JFrame {
 
 	private void initUi() {
 		contentPane = new JPanel(new MigLayout(MIG.FILL));
-
 		JPanel top = new JPanel(new MigLayout(MIG.FILL));
 		top.add(titleLabel, MIG.WRAP);
 		top.add(scroll, MIG.get(MIG.SPAN, MIG.GROW));
 		contentPane.add(top, MIG.get(MIG.SPAN, MIG.GROW));
-
 		contentPane.add(buttonPane, MIG.RIGHT);
-
 		setContentPane(contentPane);
 		setSize(800, 600);
 		pack();
-		setLocationRelativeTo(mainFrame);
+		setLocationRelativeTo(parent);
 	}
 
 	/**
@@ -144,33 +129,41 @@ public class TablePrinter extends JFrame {
 	 */
 	private void printTable() {
 		try {
-			/* print the table */
 			boolean complete = table.print(JTable.PrintMode.FIT_WIDTH,
-			   new MessageFormat(header), new MessageFormat("Page {0}"),
+			   new MessageFormat(header),
+			   new MessageFormat(footer),
 			   true, null, true, null);
-
-			/* if printing completes */
 			if (complete) {
-				/* show a success message */
 				JOptionPane.showMessageDialog(this,
 				   I18N.getMsg("print.ok"),
 				   I18N.getMsg("print"),
 				   JOptionPane.INFORMATION_MESSAGE);
 			} else {
-				/* show a message indicating that printing was cancelled */
 				JOptionPane.showMessageDialog(this,
 				   I18N.getMsg("print.cancelled"),
 				   I18N.getMsg("print"),
 				   JOptionPane.INFORMATION_MESSAGE);
 			}
 		} catch (PrinterException ex) {
-			/* Printing failed, report to the user */
 			LOG.err("Printing error", ex);
 			JOptionPane.showMessageDialog(this,
-			   I18N.getMsg("print.error", ex.getMessage()),
+			   I18N.getMsg("print.error", ex.getLocalizedMessage()),
 			   I18N.getMsg("print"),
 			   JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	/**
+	 * print the given table
+	 *
+	 * @param comp the caller component
+	 * @param table
+	 * @param header
+	 * @param footer
+	 */
+	public static void pr(Component comp, JTable table, String header, String footer) {
+		TablePrinter p = new TablePrinter(comp, table, header, footer);
+		p.setVisible(true);
 	}
 
 }

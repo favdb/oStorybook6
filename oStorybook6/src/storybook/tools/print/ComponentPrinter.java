@@ -42,21 +42,21 @@ public class ComponentPrinter {
 
 	private final Component component;
 	private final MainFrame mainFrame;
-	private final String header, footer;
+	//private final String header, footer;
 
 	public ComponentPrinter(MainFrame mainFrame, Component com, String header, String footer) {
 		this.mainFrame = mainFrame;
-		this.header = header;
-		this.footer = footer;
+		//this.header = header;
+		//this.footer = footer;
 		component = com;
 	}
 
 	public void print() {
 		try {
-			PrinterJob printJob = PrinterJob.getPrinterJob();
-			printJob.setPrintable(new ComponentPrintable(component, false));
-			if (printJob.printDialog()) {
-				printJob.print();
+			PrinterJob pj = PrinterJob.getPrinterJob();
+			pj.setPrintable(new ComponentPrintable(component, false));
+			if (pj.printDialog()) {
+				pj.print();
 				JOptionPane.showMessageDialog(mainFrame,
 				   I18N.getMsg("print.ok"),
 				   I18N.getMsg("print"),
@@ -77,12 +77,8 @@ public class ComponentPrinter {
 		   JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	static public void pr(String msg, MainFrame mainFrame, Component com, String header, String footer) {
-		/*LOG.trace(TT + "pr(msg=" + msg + ",m"
-		   + ", com class=" + com.getClass().toString()
-		   + ", header='" + header
-		   + "', footer='" + footer + "')");*/
-		ComponentPrinter p = new ComponentPrinter(mainFrame, com, header, footer);
+	static public void pr(MainFrame mainFrame, Component comp, String header, String footer) {
+		ComponentPrinter p = new ComponentPrinter(mainFrame, comp, header, footer);
 		p.print();
 	}
 
@@ -99,28 +95,20 @@ public class ComponentPrinter {
 			if (page_index > 0) {
 				return Printable.NO_SUCH_PAGE;
 			}
-
-			// get the bounds of the component
 			Dimension dim = comp.getSize();
-			double cHeight = dim.getHeight();
-			double cWidth = dim.getWidth();
-
-			// get the bounds of the printable area
-			double pHeight = format.getImageableHeight();
-			double pWidth = format.getImageableWidth();
-
-			double pXStart = format.getImageableX();
-			double pYStart = format.getImageableY();
-
-			double xRatio = pWidth / cWidth;
-			double yRatio = pHeight / cHeight;
-			double ratio = Math.min(xRatio, yRatio);
-
+			double cHeight = dim.getHeight(),
+			   cWidth = dim.getWidth(),
+			   pHeight = format.getImageableHeight(),
+			   pWidth = format.getImageableWidth(),
+			   pXStart = format.getImageableX(),
+			   pYStart = format.getImageableY(),
+			   xRatio = pWidth / cWidth,
+			   yRatio = pHeight / cHeight,
+			   ratio = Math.min(xRatio, yRatio);
 			Graphics2D g2 = (Graphics2D) g;
 			g2.translate(pXStart, pYStart);
 			g2.scale(ratio, ratio);
 			comp.printAll(g2);
-
 			return Printable.PAGE_EXISTS;
 		}
 	}

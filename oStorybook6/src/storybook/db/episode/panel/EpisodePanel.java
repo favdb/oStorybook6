@@ -905,7 +905,7 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 
 	public void printAction() {
 		save();
-		TablePrinter.pr("episodes", mainFrame, episodeTable, mainFrame.getBook().getTitle(), "");
+		TablePrinter.pr(mainFrame, episodeTable, mainFrame.getBook().getTitle(), "");
 		refresh();
 	}
 
@@ -1029,8 +1029,7 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			ep.save();
-			TablePrinter.pr("episodes",
-			   ep.getMainFrame(),
+			TablePrinter.pr(ep.getMainFrame(),
 			   ep.getEpisodeTable(),
 			   ep.getMainFrame().getBook().getTitle(), "");
 			ep.refresh();

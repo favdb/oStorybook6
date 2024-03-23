@@ -754,7 +754,7 @@ public abstract class AbsTable extends AbstractPanel implements
 
 	private void printAction() {
 		LOG.trace(TT + "printAction()");
-		TablePrinter.pr(this.getTableName(), mainFrame, this.getTable(), "", "");
+		TablePrinter.pr(mainFrame, this.getTable(), "", "");
 		refresh();
 	}
 
@@ -783,14 +783,13 @@ public abstract class AbsTable extends AbstractPanel implements
 	 *
 	 */
 	private void initRenderer() {
-		TableRowSorter<TableModel> sorter
-		   = new TableRowSorter<>(tableModel);
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
 		for (AbsColumn sbc : columns) {
 			TableColumn tcol;
 			try {
 				tcol = table.getColumn(sbc.toString());
 			} catch (IllegalArgumentException ex) {
-				LOG.err("AbstactTable.initUi() Error tcol");
+				LOG.err(TT + "initUi() Error tcol");
 				continue;
 			}
 			initCellRenderer(sbc, tcol);

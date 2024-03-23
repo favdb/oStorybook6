@@ -532,9 +532,8 @@ public class App extends Component {
 	 * @return
 	 */
 	public boolean selectProject() {
-		LOG.trace(TT + "selectProject()");
+		//LOG.trace(TT + "selectProject()");
 		Project db = BookUtil.chooseProject();
-		LOG.trace("db=" + (db == null ? "null" : "not null"));
 		if (db == null || db.getFilename() == null) {
 			return false;
 		}

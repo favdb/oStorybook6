@@ -85,6 +85,7 @@ public class AssistantDlg extends JDialog {
 		   entity.getAssistant());
 	}
 
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public AssistantDlg(Container parent, AssistantXml xml, SECTION typeDlg, String values) {
 		super();
 		this.xml = xml;
@@ -124,8 +125,6 @@ public class AssistantDlg extends JDialog {
 		});
 		add(btCancel, MIG.RIGHT);
 		setMinimumSize(new Dimension(800, 10));
-		//setMaximumSize(new Dimension(2048, 1024));
-		//setPreferredSize(new Dimension(800, 800));
 		pack();
 		setLocationRelativeTo(caller);
 		this.setModal(true);

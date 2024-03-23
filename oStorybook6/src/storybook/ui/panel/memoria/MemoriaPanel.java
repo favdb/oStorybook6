@@ -727,7 +727,7 @@ public class MemoriaPanel extends AbstractPanel implements ActionListener {
 	}
 
 	private void printAction() {
-		ComponentPrinter.pr("memoria", mainFrame, vv, book.getTitle(), "");
+		ComponentPrinter.pr(mainFrame, vv, book.getTitle(), "");
 	}
 
 	public class MemoriaGraphMouse extends AbstractPopupGraphMousePlugin implements MouseListener {

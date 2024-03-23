@@ -33,6 +33,8 @@ import storybook.Pref;
 
 public class DateUtil {
 
+	private static final String TT = "DateUtil.";
+
 	public static Date forYear(Date ds) {
 		ds = DateUtil.setMonths(ds, 0);
 		ds = DateUtil.setDays(ds, 0);
@@ -213,7 +215,8 @@ public class DateUtil {
 		return cal.getTime();
 	}
 
-	public static int calculateDaysBetween(Date d1, Date d2) {
+	public static int daysBetween(Date d1, Date d2) {
+		LOG.trace(TT + "daysBetween(d1=" + d1.toString() + ", d2=" + d2.toString() + ")");
 		return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
 	}
 
@@ -379,7 +382,7 @@ public class DateUtil {
 	 */
 	public static String simpleDateTimeToString(Date date, boolean... seconds) {
 		if (date == null) {
-			return "null";
+			return "";
 		}
 		SimpleDateFormat formatter = new SimpleDateFormat(App.preferences.getString(Pref.KEY.DATEFORMAT) + " HH:mm");
 		if (seconds != null && seconds.length > 0 && seconds[0]) {
@@ -614,8 +617,12 @@ public class DateUtil {
 	 * @return the new {@code Date} with the amount added
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date addDays(final Date date, final int amount) {
+	public static Date addDays(Date date, int amount) {
 		return add(date, Calendar.DAY_OF_MONTH, amount);
+	}
+
+	public static Timestamp addNbDays(Timestamp date, Integer days) {
+		return new Timestamp(addDays(new Date(date.getTime()), days).getTime());
 	}
 
 	/**
@@ -700,7 +707,7 @@ public class DateUtil {
 		if (duration == null) {
 			return date;
 		}
-		//App.trace("DateUtil.add(date=" + date.toString() + ", SbDuration=" + d.toText()+")");
+		//LOG.trace("DateUtil.add(date=" + date.toString() + ", SbDuration=" + d.toText()+")");
 		Calendar c = Calendar.getInstance();
 		if (c == null) {
 			LOG.err("DateUtil.add Calendar.getInstance return null");
@@ -736,6 +743,7 @@ public class DateUtil {
 	 * @return the computed Date
 	 */
 	public static Date add(Date date, String duration) {
+		//LOG.trace(TT + "add(date=" + date.toString() + ", duration=" + duration + ")");
 		if (duration == null || duration.isEmpty()) {
 			return date;
 		}
@@ -857,7 +865,7 @@ public class DateUtil {
 	}
 
 	public static boolean isSameDay(Date dtb, Date dte) {
-		return (calculateDaysBetween(dtb, dte) < 1);
+		return (daysBetween(dtb, dte) < 1);
 	}
 
 	public static Long difMinutes(Date end, Date begin) {

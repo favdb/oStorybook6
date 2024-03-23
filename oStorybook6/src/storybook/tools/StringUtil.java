@@ -530,4 +530,14 @@ public class StringUtil {
 		}
 	}
 
+	public static Integer getInteger(String text) {
+		if (text == null || text.isEmpty()) {
+			return 0;
+		}
+		if (isNumeric(text)) {
+			return Integer.valueOf(text);
+		}
+		return 0;
+	}
+
 }

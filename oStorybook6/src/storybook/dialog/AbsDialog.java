@@ -94,7 +94,7 @@ public abstract class AbsDialog extends JDialog implements ActionListener {
 	}
 
 	public void addOkCancel() {
-		add(getOkButton(), "right,split 2");
+		add(getOkButton(), MIG.get(MIG.RIGHT, MIG.SPLIT2));
 		add(getCancelButton());
 	}
 
@@ -141,7 +141,7 @@ public abstract class AbsDialog extends JDialog implements ActionListener {
 	 * @return the intialized JTextField
 	 */
 	public JTextField initTF(JPanel p, String name, String title, String icon, int len,
-		String value, boolean mandatory, String grow) {
+	   String value, boolean mandatory, String grow) {
 		p.add(initLabel(title, icon, mandatory));
 		JTextField tf = new JTextField();
 		tf.setName(name);
@@ -172,7 +172,7 @@ public abstract class AbsDialog extends JDialog implements ActionListener {
 	 * @return the intialized JTextArea
 	 */
 	public JTextArea initTA(JPanel p, String name, String title, boolean top, String icon, int cols, int rows,
-		String value, boolean mandatory, String grow) {
+	   String value, boolean mandatory, String grow) {
 		p.add(initLabel(title, icon, mandatory), (top ? MIG.TOP : ""));
 
 		JTextArea tf = new JTextArea();
@@ -206,7 +206,7 @@ public abstract class AbsDialog extends JDialog implements ActionListener {
 	 * @return the initialized JCheckBox
 	 */
 	public JCheckBox initCB(JPanel p, String name, String title,
-		boolean sel, boolean mandatory, String grow) {
+	   boolean sel, boolean mandatory, String grow) {
 		JCheckBox cb = new JCheckBox((mandatory ? "*" : "") + I18N.getMsg(title));
 		if (mandatory) {
 			cb.setFont(FontUtil.getBold());

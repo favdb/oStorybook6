@@ -89,14 +89,10 @@ public class Planning extends AbstractPanel implements MouseListener {
 	@Override
 	public void initUi() {
 		//LOG.printInfos("Planning.initUi()");
-		//no toolbar to set
-		// Create tabbed pane
+		setLayout(new MigLayout(MIG.get(MIG.FILLX, MIG.WRAP), "[]"));
 		tabbedPane = new JTabbedPane();
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
-		setLayout(new MigLayout(MIG.get(MIG.FILLX, MIG.WRAP), "[]"));
-		// add all subpanels to tabbed pane
 		add(initGlobalPanel(), MIG.get(MIG.GROWX));
-		//addTimePanel();
 		add(addProgressPanel(), MIG.get(MIG.GROWX));
 	}
 
@@ -107,7 +103,6 @@ public class Planning extends AbstractPanel implements MouseListener {
 		//LOG.printInfos("Planning.addGlobalPanel()");
 		globalPanel = new JPanel(new MigLayout(MIG.get(MIG.FILL, MIG.WRAP + " 5"),
 		   "[center, sizegroup]", "[][grow]"));
-		//tabbedPane.addTab(I18N.getMsg("plan.title.global"), globalPanel);
 		// add progress bars
 		for (int i = 0; i < STATUS.values().length; i++) {
 			progress[i] = new CircleProgressBar(0, 100);
@@ -126,7 +121,6 @@ public class Planning extends AbstractPanel implements MouseListener {
 	 */
 	private void refreshProgressBarsValues() {
 		//LOG.printInfos(TT+".setProgressBarsValues()");
-		Model model = mainFrame.getBookModel();
 		int allScenes = mainFrame.project.scenes.getList().size();
 		int[] nbs = new int[STATUS.values().length];
 		for (STATUS st : STATUS.values()) {

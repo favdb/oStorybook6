@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import resources.icons.IconUtil;
@@ -182,13 +183,122 @@ public class ExportBookToHtml extends AbstractExport {
 		buf.append("<title>").append(mainFrame.getBook().getTitle()).append("</title>");
 		buf.append("<style>"
 		   + "body {font-size: 12pt;}"
+		   + "h1, h2, h3 {text-align: center;page-break-before:always;}"
 		   + "em {background-color: yellow;}"
 		   + "</style>");
 		buf.append(Html.HEAD_E);
 		buf.append(Html.BODY_B);
 		buf.append(exp.bookGetTitle());
 		buf.append(exp.bookGetText());
+		buf.append(Html.BODY_E).append(Html.HTML_E);
 		return buf.toString();
+	}
+
+	public static String toPrint2(MainFrame mainFrame) {
+		//LOG.trace(TT + ".toPrint(mainFrame)");
+		ExportBookToHtml exp = new ExportBookToHtml(mainFrame);
+		exp.tocLink = false;
+		exp.review = false;
+		exp.onlyPart = null;
+		exp.param.setFormat(F_HTML);
+		exp.param.setHtmlMultiChapter(false);
+		exp.param.setHtmlMultiScene(false);
+		exp.param.setHtmlNav(false);
+		StringBuilder sbuf = new StringBuilder();
+		sbuf.append(Html.DOCTYPE);
+		sbuf.append(Html.HTML_B);
+		sbuf.append(Html.HEAD_B);
+		sbuf.append("<title>").append(mainFrame.getBook().getTitle()).append("</title>");
+		sbuf.append("<style>"
+		   + "body {font-size: 12pt;}"
+		   + "h1, h2, h3 {text-align: center;page-break-before:always;}"
+		   + "em {background-color: yellow;}"
+		   + "</style>");
+		sbuf.append(Html.HEAD_E);
+		sbuf.append(Html.BODY_B);
+		String head = sbuf.toString(),
+		   foot = Html.BODY_E + Html.HTML_E,
+		   newpage = "<div>\fnew_page\f</div>";
+
+		Book bk = mainFrame.getBook();
+		StringBuilder lb = new StringBuilder();
+		lb.append(head).append(newpage).append(exp.bookGetTitle());
+		String str = ExportBookInfo.getBlurb(bk);
+		lb.append(Html.intoTag("div", str, "style=\"font-style:italic;\""));
+		str = ExportBookInfo.getDedication(bk, 50);
+		if (!str.isEmpty()) {
+			lb.append(newpage).append(str);
+		}
+		List<Part> parts = (List<Part>) bk.project.parts.getList();
+		for (Part part : parts) {
+			if (parts.size() > 1) {
+				lb.append(newpage).append(exp.partGetTitle(part));
+			}
+			List<Chapter> chapters = (List<Chapter>) bk.project.chapters.find(part);
+			for (Chapter c : chapters) {
+				sbuf = new StringBuilder();
+				str = exp.titleOf(2, c.getIdent(), exp.chapterGetTitle(c));
+				sbuf.append(str);
+				List<Scene> scenes = (List<Scene>) bk.project.scenes.find(c);
+				for (Scene s : scenes) {
+					sbuf.append(exp.sceneGetContent(s));
+				}
+				lb.append(newpage).append(sbuf.toString());
+			}
+		}
+		lb.append(foot);
+		return lb.toString();
+	}
+
+	/**
+	 * get the list of pages, only the body part
+	 *
+	 * @param mainFrame
+	 * @return
+	 */
+	public static List<String> toPrintList(MainFrame mainFrame) {
+		//LOG.trace(TT + ".toPrint(mainFrame)");
+		ExportBookToHtml exp = new ExportBookToHtml(mainFrame);
+		exp.tocLink = false;
+		exp.review = false;
+		exp.onlyPart = null;
+		exp.param.setFormat(F_HTML);
+		exp.param.setHtmlMultiChapter(false);
+		exp.param.setHtmlMultiScene(false);
+		exp.param.setHtmlNav(false);
+		//exp.param.getLayout().setChapterTitle(true);
+		Book bk = mainFrame.getBook();
+		List<String> ls = new ArrayList<>();
+		ls.add(exp.bookGetTitle());
+		String str;
+		ls.add(Html.intoTag("div", ExportBookInfo.getBlurb(bk), "style=\"font-style:italic;\""));
+		str = ExportBookInfo.getDedication(bk, 50);
+		if (!str.isEmpty()) {
+			ls.add(str);
+		}
+		StringBuilder htmlheader = new StringBuilder();
+		htmlheader.append(Html.DOCTYPE).append(Html.HTML_B).append(Html.HEAD_B);
+		htmlheader.append("<title>").append(mainFrame.project.book.getTitle()).append("</title>");
+		htmlheader.append("<style>"
+		   + " body {font-size: 12pt;}"
+		   + " h1, h2, h3 {text-align: center;}"
+		   + " em {background-color: yellow;}"
+		   + "</style>");
+		String htmlfooter = Html.HEAD_E + Html.BODY_B;
+
+		List<Part> parts = (List<Part>) bk.project.parts.getList();
+		for (Part part : parts) {
+			if (parts.size() > 1) {
+				ls.add(htmlheader + Html.intoH(1, part.getName()) + htmlfooter);
+			}
+			List<Chapter> chapters = (List<Chapter>) bk.project.chapters.find(part);
+			for (Chapter c : chapters) {
+				exp.chapterGetContent(c);
+				ls.add(htmlheader + exp.buffer.toString() + htmlfooter);
+				exp.buffer = null;
+			}
+		}
+		return ls;
 	}
 
 	/**
@@ -256,8 +366,8 @@ public class ExportBookToHtml extends AbstractExport {
 	 */
 	public String bookGetTitle() {
 		StringBuilder b = new StringBuilder();
-		b.append(Html.intoP(ExportBook.getTitle(book, false)));
-		b.append(ExportBook.getDedication(book, 30));
+		b.append(Html.intoP(ExportBookInfo.getTitle(book, false)));
+		b.append(ExportBookInfo.getDedication(book, 30));
 		return b.toString();
 	}
 
@@ -269,7 +379,7 @@ public class ExportBookToHtml extends AbstractExport {
 	public boolean writeFile() {
 		//LOG.trace(TT + ".writeFile()");
 		toFile = true;
-		String fileName = mainFrame.getProject().getName();
+		String fileName = IOUtil.removeExtension(mainFrame.project.getName());
 		String imgdir = param.getDirectory() + File.separator + "Images" + File.separator;
 		if (param.isHtml()) {
 			// create the export dir if not exists
@@ -288,10 +398,10 @@ public class ExportBookToHtml extends AbstractExport {
 			return false;
 		}
 		review = mainFrame.getBook().getParam().getParamLayout().getShowReview();
-		writeText(ExportBook.getTitle(book, false));
+		writeText(ExportBookInfo.getTitle(book, false));
 		writeText(Html.intoP(book.getBlurb(),
 		   "font-style: italic; text-align: center; margin-left: 10%; margin-right: 10%"));
-		writeText(ExportBook.getDedication(book, 30));
+		writeText(ExportBookInfo.getDedication(book, 30));
 		bookGetToc(0);
 		bSeparator = true;
 		bookGetText();
@@ -320,7 +430,7 @@ public class ExportBookToHtml extends AbstractExport {
 		param.setHtmlMultiScene(false);
 		param.setHtmlNav(false);
 		buf.append(Html.DOCTYPE).append(Html.HTML_B).append(Html.BODY_B);
-		buf.append(ExportBook.getTitle(book, false));
+		buf.append(ExportBookInfo.getTitle(book, false));
 		bSeparator = true;
 		buf.append(bookGetText());
 		buf.append(Html.BODY_E).append(Html.HTML_E);
@@ -556,9 +666,9 @@ public class ExportBookToHtml extends AbstractExport {
 		//LOG.trace(TT + ".bookGetText()");
 		buffer = new StringBuilder();
 		if (!withExternal) {
-			buffer.append(Html.intoTag("div", ExportBook.getBlurb(book), "style=\"font-style:italic;\""));
+			buffer.append(Html.intoTag("div", ExportBookInfo.getBlurb(book), "style=\"font-style:italic;\""));
 		}
-		buffer.append(ExportBook.getDedication(book, 50));
+		buffer.append(ExportBookInfo.getDedication(book, 50));
 		for (Part part : parts) {
 			if (onlyPart != null && !part.equals(onlyPart)) {
 				continue;
@@ -593,7 +703,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 *
 	 * @param chapter
 	 */
-	private void chapterGetBegin(Chapter chapter) {
+	private String chapterGetBegin(Chapter chapter) {
 		if (param.getHtmlMultiChapter()) {
 			openFile(filenameOfChapter(chapter).replace(Html.EXT, ""), false);
 		}
@@ -603,6 +713,7 @@ public class ExportBookToHtml extends AbstractExport {
 		if (buffer == null) {
 			buffer = new StringBuilder();
 		}
+		return "";
 	}
 
 	/**
@@ -610,9 +721,10 @@ public class ExportBookToHtml extends AbstractExport {
 	 *
 	 * @param chapter
 	 */
-	private void chapterGetContent(Chapter chapter) {
-		//App.printInfos(TT + ".chapterGet(chapter=" + App.traceEntity(chapter) + ")");
-		chapterGetBegin(chapter);
+	private String chapterGetContent(Chapter chapter) {
+		//LOG.trace(TT + ".chapterGet(chapter=" + App.traceEntity(chapter) + ")");
+		StringBuilder b = new StringBuilder();
+		b.append(chapterGetBegin(chapter));
 		int lev = 1;
 		if (param.getLayout().getPartTitle()) {
 			lev++;
@@ -621,22 +733,26 @@ public class ExportBookToHtml extends AbstractExport {
 			openFile(book.getTitle() + "-C" + chapter.getIdent(), false);
 		}
 		if (param.getLayout().getChapterTitle()) {
+			b.append(titleOf(lev, chapter.getIdent(), chapterGetTitle(chapter)));
 			buffer.append(titleOf(lev, chapter.getIdent(), chapterGetTitle(chapter)));
 		}
+		b.append(chapterGetDidascalie(chapter));
 		buffer.append(chapterGetDidascalie(chapter));
+		b.append(chapterGetDescription(chapter));
 		buffer.append(chapterGetDescription(chapter));
 		for (Scene scene : mainFrame.project.scenes.findBy(chapter)) {
 			if (sceneIsOK(scene)) {
 				sceneGetContent(scene);
 			}
 		}
-		chapterGetEnd();
+		b.append(chapterGetEnd());
+		return b.toString();
 	}
 
 	/**
 	 * do the ending action for the current Chapter
 	 */
-	private void chapterGetEnd() {
+	private String chapterGetEnd() {
 		if (param.getHtmlMultiChapter() && buffer.length() > 0) {
 			buffer.append(Html.P_E);
 			buffer.append(navbar());
@@ -644,6 +760,7 @@ public class ExportBookToHtml extends AbstractExport {
 			closeFile(SILENT);
 			buffer = new StringBuilder();
 		}
+		return "";
 	}
 
 	/**
@@ -737,21 +854,12 @@ public class ExportBookToHtml extends AbstractExport {
 	 *
 	 * @param scene
 	 */
-	private void sceneGetContent(Scene scene) {
+	private String sceneGetContent(Scene scene) {
 		//LOG.printInfos(TT + ".sceneGetContent(scene=" + LOG.printInfos(scene) + ")");
-		sceneBegin(scene);
-		if (param.getLayout().getSceneTitle() && !getTitle(scene.getName()).isEmpty()) {
-			int n = 2;
-			if (param.getLayout().getPartTitle()) {
-				n++;
-			}
-			if (param.getLayout().getChapterTitle()) {
-				n++;
-			}
-			buffer.append(titleOf(n, scene.getIdent(), getTitle(scene.getName())));
-		}
+		StringBuilder sb = new StringBuilder();
+		sb.append(sceneBegin(scene));
 		if (param.getLayout().getSceneDidascalie()) {
-			buffer.append(sceneGetDidascalie(param, scene));
+			sb.append(sceneGetDidascalie(param, scene));
 		}
 		String x = scene.getTextToHtml(param.isMulti());
 		if (withExternal) {
@@ -772,17 +880,19 @@ public class ExportBookToHtml extends AbstractExport {
 			x = linkReplaceInternal(x);
 		}
 		x = x.replace("<p align=\"center\">", "<p style=\"text-align:center;\">");
-		buffer.append(x).append("\n");
+		sb.append(x).append("\n");
 		if (review) {
-			buffer.append(Review.reviewsToHtml(mainFrame, scene));
+			sb.append(Review.reviewsToHtml(mainFrame, scene));
 		}
 		if (bookNeedToc() && !isOpened && tocLink) {
-			buffer.append(tocGetLink());
+			sb.append(tocGetLink());
 		}
 		if (param.getLayout().getSceneSeparator() && bSeparator) {
-			buffer.append(Html.P_CENTER).append(sceneSeparator).append("</p>\n");
+			sb.append(Html.P_CENTER).append(sceneSeparator).append("</p>\n");
 		}
-		sceneEnd();
+		sb.append(sceneEnd());
+		buffer.append(sb.toString());
+		return sb.toString();
 	}
 
 	/**
@@ -828,7 +938,8 @@ public class ExportBookToHtml extends AbstractExport {
 	 *
 	 * @param scene
 	 */
-	private void sceneBegin(Scene scene) {
+	private String sceneBegin(Scene scene) {
+		StringBuilder sb = new StringBuilder();
 		if (param.getHtmlMultiScene()) {
 			openFile(filenameOfScene(scene).replace(Html.EXT, ""), false);
 		}
@@ -837,18 +948,31 @@ public class ExportBookToHtml extends AbstractExport {
 		if (buffer == null) {
 			buffer = new StringBuilder();
 		}
+		if (param.getLayout().getSceneTitle() && !getTitle(scene.getName()).isEmpty()) {
+			int n = 2;
+			if (param.getLayout().getPartTitle()) {
+				n++;
+			}
+			if (param.getLayout().getChapterTitle()) {
+				n++;
+			}
+			String bx = titleOf(n, scene.getIdent(), getTitle(scene.getName()));
+			sb.append(bx);
+		}
+		return sb.toString();
 	}
 
 	/**
 	 * do the endind action for the current Scene
 	 */
-	private void sceneEnd() {
+	private String sceneEnd() {
 		if (param.getHtmlMultiScene() && buffer.length() > 0) {
 			buffer.append(navbar());
 			writeText(buffer.toString());
 			closeFile(SILENT);
 			buffer = new StringBuilder();
 		}
+		return "";
 	}
 
 	/**
@@ -1190,11 +1314,12 @@ public class ExportBookToHtml extends AbstractExport {
 	 *
 	 * @param part
 	 */
-	private void partGetBegin(Part part) {
+	private String partGetBegin(Part part) {
 		if (param.isMulti()) {
 			//openFile(partGetFilename(part).replace(Html.EXT, ""), true);
 			//buffer = new StringBuilder();
 		}
+		return "";
 	}
 
 	/**
@@ -1202,24 +1327,28 @@ public class ExportBookToHtml extends AbstractExport {
 	 *
 	 * @param part
 	 */
-	private void partGetContent(Part part) {
-		partGetBegin(part);
+	private String partGetContent(Part part) {
+		StringBuilder b = new StringBuilder();
+		b.append(partGetBegin(part));
+		b.append(partGetTitle(part));
 		buffer.append(partGetTitle(part));
 		for (Chapter chapter : chapters) {
 			if (chapter.hasPart() && chapter.getPart().equals(part)) {
 				chapterGetContent(chapter);
 			}
 		}
-		partGetEnd();
+		b.append(partGetEnd());
+		return b.toString();
 	}
 
 	/**
 	 * get the ending of a given Part
 	 */
-	private void partGetEnd() {
+	private String partGetEnd() {
 		if (param.isMulti()) {
 			writeFileEnd();
 		}
+		return "";
 	}
 
 	/**

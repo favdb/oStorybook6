@@ -50,7 +50,6 @@ import storybook.db.status.StatusLCR;
 import storybook.db.strand.Strand;
 import storybook.exim.exporter.ExportToPhpBB;
 import storybook.tools.DateUtil;
-import storybook.tools.LOG;
 import storybook.tools.SbDuration;
 import storybook.tools.TextUtil;
 import storybook.tools.comparator.ObjectComparator;
@@ -427,8 +426,9 @@ public class SceneTable extends AbsTable implements ActionListener {
 		return cols;
 	}
 
+	@Override
 	protected synchronized void copyToPhpBB(int row) {
-		LOG.trace(TT + ".copyToPhpBB(r=" + row + ")");
+		//LOG.trace(TT + ".copyToPhpBB(r=" + row + ")");
 		Scene scene = (Scene) getEntityFromRow(row);
 		if (scene != null) {
 			ExportToPhpBB.getScene(mainFrame, scene);

@@ -22,27 +22,28 @@ import storybook.db.book.Book;
 import storybook.tools.html.Html;
 
 /**
- * common functions for exporting a Book
+ * common functions for exporting a Book to HTML
  *
  * @author favdb
  */
-public class ExportBook {
+public class ExportBookInfo {
 
-	private static final String TT = "ExportBook";
+	private static final String TT = "ExportBook.";
 
-	private ExportBook() {
+	private ExportBookInfo() {
 		//empty
 	}
 
 	/**
-	 * get the page title with common informations: title, author, copyright, ISBN and UUID, by
+	 * get the title page with common informations: title, author, copyright, ISBN and UUID, by
 	 *
 	 * @param book: the book parameters
+	 * @param isbn: true for including ISBN and/or UUID
 	 *
 	 * @return
 	 */
 	public static String getTitle(Book book, boolean isbn) {
-		//LOG.trace(TT + ".getTitle(book)");
+		//LOG.trace(TT + "getTitle(book)");
 		StringBuilder t = new StringBuilder();
 		t.append(Html.BR).append(Html.BR);
 		t.append(Html.intoH(1, book.getTitle(), "text-align:center;"));
@@ -69,31 +70,31 @@ public class ExportBook {
 		}
 		t.append(Html.P_CENTER);
 		t.append(
-			Html.intoSmall(
-				Html.intoI(I18N.getMsg("export.by") + " " + Const.getFullName())
-			)
+		   Html.intoSmall(
+			  Html.intoI(I18N.getMsg("export.by") + " " + Const.getFullName())
+		   )
 		);
 		t.append(Html.P_E);
 		return t.toString();
 	}
 
 	public static String getBlurb(Book book) {
-		//LOG.trace(TT + ".getBlurb(book)");
+		//LOG.trace(TT + "getBlurb(book)");
 		StringBuilder b = new StringBuilder();
 		b.append(Html.P_EMPTY).append(Html.intoP(book.getBlurb()));
 		return b.toString();
 	}
 
 	public static String getDedication(Book book, Integer lmargin) {
-		//LOG.trace(TT + ".getDedication(book, lmargin=" + lmargin.toString() + ")");
+		//LOG.trace(TT + "getDedication(book, lmargin=" + lmargin.toString() + ")");
 		StringBuilder b = new StringBuilder();
 		if (!book.getDedication().isEmpty()) {
 			b.append(Html.P_EMPTY);
 			b.append("<div style=\"")
-				.append("padding-left: ").append(lmargin.toString()).append("%;")
-				.append("text-align: justify;")
-				.append("font-style: italic;")
-				.append("\">");
+			   .append("padding-left: ").append(lmargin.toString()).append("%;")
+			   .append("text-align: justify;")
+			   .append("font-style: italic;")
+			   .append("\">");
 			b.append(book.getDedication());
 			b.append("</div>");
 			b.append(Html.P_EMPTY);
