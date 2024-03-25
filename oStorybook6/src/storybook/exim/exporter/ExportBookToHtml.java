@@ -229,6 +229,7 @@ public class ExportBookToHtml extends AbstractExport {
 		if (!str.isEmpty()) {
 			lb.append(newpage).append(str);
 		}
+		@SuppressWarnings("unchecked")
 		List<Part> parts = (List<Part>) bk.project.parts.getList();
 		for (Part part : parts) {
 			if (parts.size() > 1) {
@@ -286,6 +287,7 @@ public class ExportBookToHtml extends AbstractExport {
 		   + "</style>");
 		String htmlfooter = Html.HEAD_E + Html.BODY_B;
 
+		@SuppressWarnings("unchecked")
 		List<Part> parts = (List<Part>) bk.project.parts.getList();
 		for (Part part : parts) {
 			if (parts.size() > 1) {
