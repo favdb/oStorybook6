@@ -217,7 +217,7 @@
         <echo level="info" message="--- start of build-windows"/>
         <echo level="info" message="build-appzip utilisable seulement si NSIS a été installé (voir la documentation)"/>
         <exec executable="wine">
-            <arg value="../../../nsis/makensis.exe" />
+            <arg value="${basedir}/../../../nsis/makensis.exe" />
             <arg value="${build.dir}/../deployment/windows/nsis/oStorybook.nsi" />
         </exec>
         <move file="dist/oStorybook-installer.exe" tofile="${sb.distdir}/oStorybook-${sb.version}.exe" />
