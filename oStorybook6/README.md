@@ -17,5 +17,7 @@ Windows users : oStorybook-X.ZZ.exe
 where X is the version major, and ZZ is the version minor
 
 ========================================================
+
 == Please install or update Java (minimal version 8). ==
+
 ========================================================
