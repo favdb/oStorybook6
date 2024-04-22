@@ -12,9 +12,9 @@
     <import file="nbproject/build-impl.xml"/>
     <!--
 
-    There exist several targets which are by default empty and which can be 
-    used for execution of your tasks. These targets are usually executed 
-    before and after some main targets. They are: 
+    There exist several targets which are by default empty and which can be
+    used for execution of your tasks. These targets are usually executed
+    before and after some main targets. They are:
 
       -pre-init:                 called before initialization of project properties
       -post-init:                called after initialization of project properties
@@ -40,19 +40,19 @@
             </obfuscate>
         </target>
 
-    For list of available properties check the imported 
-    nbproject/build-impl.xml file. 
+    For list of available properties check the imported
+    nbproject/build-impl.xml file.
 
 
     Another way to customize the build is by overriding existing main targets.
-    The targets of interest are: 
+    The targets of interest are:
 
       -init-macrodef-javac:     defines macro for javac compilation
       -init-macrodef-junit:     defines macro for junit execution
       -init-macrodef-debug:     defines macro for class debugging
       -init-macrodef-java:      defines macro for class execution
       -do-jar:                  JAR building
-      run:                      execution of project 
+      run:                      execution of project
       -javadoc-build:           Javadoc generation
       test-report:              JUnit report generation
 
@@ -64,10 +64,10 @@
             </exec>
         </target>
 
-    Notice that the overridden target depends on the jar target and not only on 
-    the compile target as the regular run target does. Again, for a list of available 
+    Notice that the overridden target depends on the jar target and not only on
+    the compile target as the regular run target does. Again, for a list of available
     properties which you can use, check the target you are overriding in the
-    nbproject/build-impl.xml file. 
+    nbproject/build-impl.xml file.
 
     -->
     <property name="sb.version" value="6.00" />
@@ -95,11 +95,6 @@
         <copy file="oStorybook.bat" todir="${dist.dir}" />
         <copy file="oStorybook.sh" todir="${dist.dir}" />
         <chmod file="${dist.dir}/oStorybook.sh" perm="ugo+rx"/>
-        <mkdir dir="${dist.dir}" />
-        <!--<mkdir dir="${dist.dir}/Assistant" />
-        <copy todir="${dist.dir}/Assistant" flatten="false">
-            <fileset dir="${basedir}/Assistant" />
-        </copy> -->
         <echo level="info" message="--- end of build-prepare"/>
     </target>
     <!-- ===Build ZIP file================================================ -->
@@ -211,7 +206,7 @@
         <delete file="${sb.macfile}.tar"/>
         <delete dir="${sb.distdir}/${jarbundler.name}.app"/>
         <echo level="info" message="--- end of build-macosx"/>
-    </target> 
+    </target>
     <!-- ===Build for Windows with NSIS==================================== -->
     <target name="build-windows" depends="jar, build-prepare, build-appzip">
         <echo level="info" message="--- start of build-windows"/>
@@ -240,10 +235,11 @@
             gzip -9 -n ${sb.debian.distdir}/usr/share/doc/ostorybook/changelog
             echo Copy application
             <!--cp -R ${basedir}/Assistant ${sb.debian.distdir}/usr/share/ostorybook/-->
+            mkdir ${sb.debian.distdir}/usr/share/ostorybook
             cp ${sb.distdir}/${sb.jar.name} ${sb.debian.distdir}/usr/share/ostorybook/${sb.jar.name}
             echo Modification for permissions
             find ${sb.debian.distdir}/usr -type d -exec chmod 755 {} +
-            chmod -R 755 ${sb.debian.distdir}/DEBIAN
+            chmod -R 755 ${sb.debian.distdir}/DEBIAN/usr/bin
             echo set the md5
             cd ${sb.debian.distdir}
             rm -f ./DEBIAN/md5sums
@@ -251,12 +247,13 @@
             echo build of Debian package
             dpkg-deb --build ${sb.debian.distdir} ${sb.distdir}/oStorybook-${sb.version}.deb
             echo Cleaning...
-            rm -r -f ${sb.debian.distdir}
+            <!--rm -r -f ${sb.debian.distdir}-->
             echo Build RPM package
             cd ${sb.distdir}
             alien -r ${sb.distdir}/oStorybook-${sb.version}.deb
             mv ${sb.distdir}/ostorybook-${sb.version}*.rpm oStorybook-${sb.version}.rpm
             lintian -i -I ${sb.distdir}/oStorybook-${sb.version}.deb
+            rm -r -f ${sb.debian.distdir}
         </echo>
         <echo level="info" message="Build for DEB and RPM:"/>
         <echo level="info" message="    sudo sh ${sb.linux.deployment.dir}/build-debian.sh"/>
@@ -297,13 +294,13 @@
     </target>
     <!-- ===Build all packages============================================= -->
     <target name="app-all"
-            depends="build-linux, build-appzip, build-macosx,
+            depends="build-pre-compile, build-linux, build-appzip, build-macosx,
                  build-windows, build-zipsrc, build-debian">
         <echo level="info" message="--- start of app-all"/>
         <copy file="Versions.txt" todir="${sb.distdir}" />
         <copy file="${basedir}/dist/oStorybook.jar" todir="${sb.distdir}" />
-        <!-- <exec executable="ls" failonerror="true"> 
-            <arg line=" -sh ${sb.distdir}"/> 
+        <!-- <exec executable="ls" failonerror="true">
+            <arg line=" -sh ${sb.distdir}"/>
         </exec> -->
         <echo level="info" message="--- end of app-all"/>
     </target>
@@ -312,33 +309,49 @@
         <!-- use of cloc package -->
         <echo level="info" message="--- start of statistics"/>
         <echo level="info" message="+++ Global statistics"/>
-        <exec executable="cloc" failonerror="true"> 
-            <arg line=" --progress-rate=0 src "/> 
-        </exec> 
+        <exec executable="cloc" failonerror="true">
+            <arg line=" --progress-rate=0 src "/>
+        </exec>
         <echo level="info" message="+++ oStorybook only statistics"/>
-        <exec executable="cloc" failonerror="true"> 
-            <arg line=" --progress-rate=0 src/storybook"/> 
-        </exec> 
+        <exec executable="cloc" failonerror="true">
+            <arg line=" --progress-rate=0 src/storybook"/>
+        </exec>
         <echo level="info" message="+++ assistant only statistics"/>
-        <exec executable="cloc" failonerror="true"> 
-            <arg line=" --progress-rate=0 src/assistant"/> 
-        </exec> 
+        <exec executable="cloc" failonerror="true">
+            <arg line=" --progress-rate=0 src/assistant"/>
+        </exec>
         <echo level="info" message="+++ i18n only statistics"/>
-        <exec executable="cloc" failonerror="true"> 
-            <arg line=" --progress-rate=0 src/i18n"/> 
-        </exec> 
+        <exec executable="cloc" failonerror="true">
+            <arg line=" --progress-rate=0 src/i18n"/>
+        </exec>
         <echo level="info" message="+++ resources only statistics"/>
-        <exec executable="cloc" failonerror="true"> 
-            <arg line=" --progress-rate=0 src/resources"/> 
-        </exec> 
+        <exec executable="cloc" failonerror="true">
+            <arg line=" --progress-rate=0 src/resources"/>
+        </exec>
         <echo level="info" message="+++ shef only statistics"/>
-        <exec executable="cloc" failonerror="true"> 
-            <arg line=" --progress-rate=0 src/api/shef"/> 
-        </exec> 
+        <exec executable="cloc" failonerror="true">
+            <arg line=" --progress-rate=0 src/api/shef"/>
+        </exec>
         <echo level="info" message="+++ all api statistics (shef included)"/>
-        <exec executable="cloc" failonerror="true"> 
-            <arg line=" --progress-rate=0 src/api"/> 
-        </exec> 
+        <exec executable="cloc" failonerror="true">
+            <arg line=" --progress-rate=0 src/api"/>
+        </exec>
         <echo level="info" message="--- end of statistics"/>
+    </target>
+    <!-- ===Pre compile==================================================== -->
+    <target name="build-pre-compile">
+        <echo level="info" message="--- start of -pre-compile"/>
+        <tstamp>
+            <format property="time.stamp" pattern="yyyy-MM-dd HH:mm:ss"/>
+        </tstamp>
+        <propertyfile file="src/buildinfo.properties">
+            <entry key="build.date" value="${time.stamp}"/>
+        </propertyfile>
+        <echo level="info" message="--- end of -pre-compile"/>
+    </target>
+    <target name="-post-compile">
+        <echo level="info" message="--- start of -post-compile"/>
+        <!-- <copy file="actions.xml" todir="${build.classes.dir}" /> -->
+        <echo level="info" message="--- end of -post-compile"/>
     </target>
 </project>

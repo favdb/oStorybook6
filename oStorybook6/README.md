@@ -1,7 +1,9 @@
 oStorybook
 
-Please check http://ostorybook.eu
-
+Please check http://ostorybook.eu for more
+---
+Please install or update Java (minimal version 8).
+---
 Which file to use?
 
 Linux:
