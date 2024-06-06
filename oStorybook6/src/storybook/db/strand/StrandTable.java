@@ -24,8 +24,8 @@ import storybook.ctrl.ActKey;
 import storybook.db.DB;
 import storybook.db.abs.AbsColumn;
 import static storybook.db.abs.AbsColumn.*;
-import storybook.db.abs.AbstractEntity;
 import storybook.db.abs.AbsTable;
+import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.ui.MainFrame;
 
@@ -48,8 +48,8 @@ public class StrandTable extends AbsTable {
 	@Override
 	protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
 		ActKey act = new ActKey(evt);
-		if (act.isUpdate()
-		   && (act.getType() == Book.TYPE.STRAND)) {
+		if ((act.isNew() || act.isUpdate() || act.isDelete())
+				&& (act.getType() == Book.TYPE.STRAND)) {
 			fillTable();
 		}
 	}

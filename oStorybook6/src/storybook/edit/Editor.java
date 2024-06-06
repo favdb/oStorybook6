@@ -69,17 +69,17 @@ import storybook.ui.panel.AbstractPanel;
  */
 public class Editor extends AbstractPanel {
 
-	private static final String TT = "Editor";
+	private static final String TT = "Editor.";
 
 	private static final String BT_ASSISTANT = "btAssistant",
-	   BT_EXTERNAL = "btExternal",
-	   BT_IDEA = "btIdea",
-	   BT_NEXT = "btNext",
-	   BT_PRIOR = "btPrior",
-	   BT_CENTER = "btCenter",
-	   BT_UPDATE = "btUpdate",
-	   BT_CANCEL = "btCancel",
-	   BT_OK = "btOk";
+			BT_EXTERNAL = "btExternal",
+			BT_IDEA = "btIdea",
+			BT_NEXT = "btNext",
+			BT_PRIOR = "btPrior",
+			BT_CENTER = "btCenter",
+			BT_UPDATE = "btUpdate",
+			BT_CANCEL = "btCancel",
+			BT_OK = "btOk";
 
 	public AbstractEntity entity;
 	public AbstractEditor panel;
@@ -135,35 +135,35 @@ public class Editor extends AbstractPanel {
 		lbTitle = new JLabel(entity.toString());
 		lbTitle.setFont(FontUtil.getBold(lbTitle.getFont()));
 		lbTitle.setForeground(ColorUtil.isDark(toolbar.getBackground())
-		   ? ColorUtil.lighter(Color.GRAY, 0.5)
-		   : ColorUtil.darker(Color.GRAY, 0.5));
+				? ColorUtil.lighter(Color.GRAY, 0.5)
+				: ColorUtil.darker(Color.GRAY, 0.5));
 		toolbar.add(lbTitle);
 
 		btEntityPrior = Ui.initButton(BT_PRIOR, "",
-		   ICONS.K.NAV_PREV, "", e -> setEntityPrior());
+				ICONS.K.NAV_PREV, "", e -> setEntityPrior());
 		toolbar.add(btEntityPrior);
 		btEntityNext = Ui.initButton(BT_NEXT, "",
-		   ICONS.K.NAV_NEXT, "", e -> setEntityNext());
+				ICONS.K.NAV_NEXT, "", e -> setEntityNext());
 		toolbar.add(btEntityNext);
 		setEntityNav();
 		toolbar.add(new JLabel(" "), MIG.PUSHX);
 
 		JButton center = Ui.initButton(BT_CENTER, "",
-		   ICONS.K.SCREEN_CENTER, "center", e -> {
-			   if (fromDialog != null) {
-				   fromDialog.setSize(PREF_SIZE);
-				   fromDialog.setLocationRelativeTo(mainFrame);
-			   }
-		   });
+				ICONS.K.SCREEN_CENTER, "center", e -> {
+					if (fromDialog != null) {
+						fromDialog.setSize(PREF_SIZE);
+						fromDialog.setLocationRelativeTo(mainFrame);
+					}
+				});
 		center.setMnemonic(KeyEvent.VK_C);
 		toolbar.add(center, MIG.RIGHT);
 
 		if (!(entity instanceof Idea)) {
 			toolbar.add(
-			   Ui.initButton(BT_IDEA, "",
-				  ICONS.K.ENT_IDEA, "foi.new",
-				  e -> mainFrame.showEditorAsDialog(new Idea())),
-			   MIG.RIGHT);
+					Ui.initButton(BT_IDEA, "",
+							ICONS.K.ENT_IDEA, "foi.new",
+							e -> mainFrame.showEditorAsDialog(new Idea())),
+					MIG.RIGHT);
 		}
 		return toolbar;
 	}
@@ -305,7 +305,7 @@ public class Editor extends AbstractPanel {
 		JPanel p = new JPanel(new MigLayout(MIG.get(MIG.FILL, MIG.HIDEMODE3)));
 		if (panel.getAssistant() != null) {
 			JButton btAssistant = Ui.initButton(BT_ASSISTANT, "assistant",
-			   ICONS.K.TARGET, "", e -> doAssistant());
+					ICONS.K.TARGET, "", e -> doAssistant());
 			if (objType == Book.TYPE.CHAPTER || objType == Book.TYPE.SCENE) {
 				btAssistant.setVisible(App.getAssistant().isExists(book, objType.toString()));
 			} else {
@@ -315,15 +315,15 @@ public class Editor extends AbstractPanel {
 		}
 		if (entity instanceof Idea) {
 			JButton btIdea = Ui.initButton(BT_IDEA, "idea.to_scene",
-			   ICONS.K.ENT_SCENE, "", (ActionEvent evt) -> {
-				   IdeaEdit pidea = (IdeaEdit) panel;
-				   pidea.toScene();
-			   });
+					ICONS.K.ENT_SCENE, "", (ActionEvent evt) -> {
+						IdeaEdit pidea = (IdeaEdit) panel;
+						pidea.toScene();
+					});
 			add(btIdea, MIG.get(MIG.SPAN, "split 4", MIG.RIGHT));
 		}
 		if (!(entity instanceof Endnote)) {
 			JButton btUpdate = Ui.initButton(BT_UPDATE, "editor.update",
-			   ICONS.K.F_SAVE, "", evt -> doUpdate());
+					ICONS.K.F_SAVE, "", evt -> doUpdate());
 			p.add(btUpdate);
 		}
 		p.add(Ui.initButton(BT_CANCEL, "cancel", ICONS.K.CANCEL, "", e -> doCancel()));
@@ -343,8 +343,8 @@ public class Editor extends AbstractPanel {
 
 	public void showError() {
 		JOptionPane.showMessageDialog(this, panel.msgError,
-		   I18N.getMsg(objType.toString()) + " " + I18N.getMsg("error"),
-		   JOptionPane.ERROR_MESSAGE);
+				I18N.getMsg(objType.toString()) + " " + I18N.getMsg("error"),
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void doAssistant() {
@@ -358,6 +358,7 @@ public class Editor extends AbstractPanel {
 		if (origin.equals(str)) {
 			return;
 		}
+		//LOG.trace(TT + "doAssistant result '" + str + "'");
 		entity.setAssistant(str);
 		panel.setAssistant(str);
 		panel.selectAssistantTab();
@@ -379,6 +380,7 @@ public class Editor extends AbstractPanel {
 	}
 
 	private void doOk() {
+		//LOG.trace(TT + "doOk()");
 		if (!panel.verifier()) {
 			showError();
 			return;

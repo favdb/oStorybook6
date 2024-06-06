@@ -199,7 +199,7 @@ public class AssistantDlg extends JDialog {
 		return null;
 	}
 
-	public int getComboboxValue(String name) {
+	public int getCbValue(String name) {
 		JComponent comp = findComponentByName(null, name);
 		if (comp == null || !(comp instanceof JComboBox)) {
 			return -1;

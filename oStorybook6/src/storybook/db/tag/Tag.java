@@ -18,9 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.db.tag;
 
 import org.w3c.dom.Node;
+import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.tools.xml.XmlKey;
 import storybook.tools.xml.XmlUtil;
+import storybook.ui.MainFrame;
 
 /**
  * @hibernate.subclass discriminator-value="0"
@@ -37,6 +39,14 @@ public class Tag extends AbsTag {
 		p.setCategory(XmlUtil.getString(node, XmlKey.XK.CATEGORY));
 		fromXmlEnd(node, p);
 		return p;
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Tag ne = new Tag();
+		doCopyTo(m, ne);
+		ne.setCategory(getCategory());
+		return ne;
 	}
 
 }

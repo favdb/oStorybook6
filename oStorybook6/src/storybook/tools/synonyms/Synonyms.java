@@ -47,8 +47,8 @@ public class Synonyms {
 
 	private static final String TT = "Synonyms";
 	public static String lang,
-	   SYNONYMS_URL = "", SYNONYMS_URL_PROMPT = "",
-	   ANTONYMS_URL = "", ANTONYMS_URL_PROMPT = "";
+			SYNONYMS_URL = "", SYNONYMS_URL_PROMPT = "",
+			ANTONYMS_URL = "", ANTONYMS_URL_PROMPT = "";
 
 	private static BufferedReader openZipReader(String lang) {
 		try {
@@ -128,7 +128,7 @@ public class Synonyms {
 		LOG.setTrace();
 		lang = "fr";
 		init(getHomeDir().getAbsolutePath()
-		   + File.separator + ".storybook5/dicts/", lang);
+				+ File.separator + ".storybook5/dicts/", lang);
 		if (!exists(lang)) {
 			LOG.err("no synonyms file to use");
 			return;
@@ -274,7 +274,7 @@ public class Synonyms {
 		Synonyms.ANTONYMS_URL = SEARCH.getUrl(SEARCH.ANTONYMS);
 		Synonyms.ANTONYMS_URL_PROMPT = SEARCH.getUrlPrompt(SEARCH.ANTONYMS);
 		if (!lang.isEmpty()) {
-			LOG.log("Initialize Synonyms for '" + lang + "'");
+			LOG.trace("Initialize Synonyms for '" + lang + "'");
 		}
 	}
 
@@ -321,10 +321,10 @@ public class Synonyms {
 			return words;
 		}
 		int r = JOptionPane.showConfirmDialog(comp,
-		   I18N.getMsg("word.synonyms.look_none") + "\n"
-		   + I18N.getMsg("word.synonyms.url_show") + " " + SYNONYMS_URL_PROMPT,
-		   I18N.getMsg("word.synonyms"),
-		   JOptionPane.YES_NO_OPTION);
+				I18N.getMsg("word.synonyms.look_none") + "\n"
+				+ I18N.getMsg("word.synonyms.url_show") + " " + SYNONYMS_URL_PROMPT,
+				I18N.getMsg("word.synonyms"),
+				JOptionPane.YES_NO_OPTION);
 		if (r == JOptionPane.YES_OPTION) {
 			showForSynonyms(comp, word);
 		}
@@ -358,10 +358,10 @@ public class Synonyms {
 			return words;
 		}
 		int r = JOptionPane.showConfirmDialog(comp,
-		   I18N.getMsg("word.antonyms.look_none") + "\n"
-		   + I18N.getMsg("word.antonyms.url_show") + " " + ANTONYMS_URL_PROMPT,
-		   I18N.getMsg("antonyms"),
-		   JOptionPane.YES_NO_OPTION);
+				I18N.getMsg("word.antonyms.look_none") + "\n"
+				+ I18N.getMsg("word.antonyms.url_show") + " " + ANTONYMS_URL_PROMPT,
+				I18N.getMsg("antonyms"),
+				JOptionPane.YES_NO_OPTION);
 		if (r == JOptionPane.YES_OPTION) {
 			showForAntonyms(comp, word);
 		}

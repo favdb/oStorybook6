@@ -29,4 +29,5 @@
             alien -r /xDev/oStorybook/oStorybook6/oStorybook6/distrib/6.00/oStorybook-6.00.deb
             mv /xDev/oStorybook/oStorybook6/oStorybook6/distrib/6.00/ostorybook-6.00*.rpm oStorybook-6.00.rpm
             lintian -i -I /xDev/oStorybook/oStorybook6/oStorybook6/distrib/6.00/oStorybook-6.00.deb
+            rm -r -f /xDev/oStorybook/oStorybook6/oStorybook6/distrib/6.00/debian-package
         

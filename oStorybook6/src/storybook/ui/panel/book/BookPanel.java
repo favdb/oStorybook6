@@ -48,6 +48,7 @@ import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.SbView;
+import storybook.ui.SbView.VIEWNAME;
 import storybook.ui.Ui;
 import storybook.ui.panel.AbstractScrollPanel;
 
@@ -57,6 +58,8 @@ import storybook.ui.panel.AbstractScrollPanel;
  */
 @SuppressWarnings("serial")
 public class BookPanel extends AbstractScrollPanel {
+
+	private static final String TT = "BookPanel.";
 
 	public static final int ZOOM_MIN = 2, ZOOM_MAX = 10;
 	private static final String BT_MINUS = "btMinus", BT_PLUS = "btPlus";
@@ -69,12 +72,21 @@ public class BookPanel extends AbstractScrollPanel {
 		setName("BookPanel");
 	}
 
+	/**
+	 * initialize the general datas
+	 *
+	 */
 	@Override
 	public void init() {
 		this.withPart = true;
 		zoom = Integer.min(App.preferences.bookGetZoom(), ZOOM_MAX);
 	}
 
+	/**
+	 * initialize the toolbar
+	 *
+	 * @return
+	 */
 	@Override
 	public JToolBar initToolbar() {
 		super.initToolbar();
@@ -85,6 +97,10 @@ public class BookPanel extends AbstractScrollPanel {
 		return toolbar;
 	}
 
+	/**
+	 * initialize the user interface
+	 *
+	 */
 	@Override
 	public void initUi() {
 		setLayout(new MigLayout(MIG.get(MIG.FLOWY, MIG.INS0)));
@@ -103,9 +119,14 @@ public class BookPanel extends AbstractScrollPanel {
 		panel.addMouseWheelListener(this);
 	}
 
+	/**
+	 * set the Zoom level
+	 *
+	 * @param val
+	 */
 	@Override
 	protected void zoomSet(int val) {
-		//LOG.trace("zoomSet(val="+val+") old zoomValue="+zoomValue);
+		//LOG.trace("zoomSet(val="+val+") old zoom="+zoom);
 		if (val == zoom) {
 			return;
 		}
@@ -118,101 +139,128 @@ public class BookPanel extends AbstractScrollPanel {
 		refresh();
 	}
 
+	/**
+	 * get the Zoom level
+	 *
+	 * @return
+	 */
 	@Override
 	protected int zoomGetValue() {
 		return App.preferences.bookGetZoom();
 	}
 
+	/**
+	 * get the Zoom minimum value
+	 *
+	 * @return
+	 */
 	@Override
 	protected int zoomGetMin() {
 		return ZOOM_MIN;
 	}
 
+	/**
+	 * get the Zoom maximum value
+	 *
+	 * @return
+	 */
 	@Override
 	protected int zoomGetMax() {
 		return ZOOM_MAX;
 	}
 
+	/**
+	 * property change actions
+	 *
+	 * @param evt
+	 */
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.trace("BookPanel.modelPropertyChange(evt=" + evt.toString() + ")");
-		String propName = evt.getPropertyName();
+		//LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString() + ")");
+		PROPS xprop = Ctrl.getPROPS(evt.getPropertyName());
 		Object newValue = evt.getNewValue();
-		Object oldValue = evt.getOldValue();
-		SbView view = (SbView) getParent().getParent();
-		switch (Ctrl.getPROPS(propName)) {
-			case REFRESH:
-				refresh();
-				return;
-			case SHOWOPTIONS:
-				if (!view.getName().equals(((SbView) newValue).getName())) {
-					return;
-				}
-				OptionsDlg.show(mainFrame, view.getName());
-				return;
-			case SHOWINFO:
-				if (newValue instanceof Scene) {
-					Scene scene = (Scene) newValue;
-					ViewUtil.scrollToScene(this, panel, scene);
-					return;
-				}
-				if (newValue instanceof Chapter) {
-					Chapter chapter = (Chapter) newValue;
-					ViewUtil.scrollToChapter(this, panel, chapter);
-					return;
-				}
-				break;
-			case BOOK_ZOOM:
-				if (newValue instanceof Integer) {
-					zoomSet((Integer) newValue);
-				}
-				return;
-			default:
-				break;
-		}
-
-		ActKey act = new ActKey(evt);
-		switch (Book.getTYPE(act.type)) {
-			case SCENE:
-				if (PROPS.INIT.check(act.getCmd())) {
-					refresh();
-					return;
-				}
-				if (PROPS.UPDATE.check(act.getCmd())) {
-					Scene oldScene = (Scene) oldValue;
-					Scene newScene = (Scene) newValue;
-					if (oldScene == null || newScene == null) {
-						break;
-					}
-					if (!oldScene.getId().equals(newScene.getId())) {
+		SbView xview = (newValue instanceof SbView ? (SbView) newValue : null);
+		if (isRefresh(evt, VIEWNAME.BOOK)) {
+			refresh();
+		} else {
+			Object oldValue = evt.getOldValue();
+			SbView thisview = (SbView) getParent().getParent();
+			switch (xprop) {
+				case SHOWOPTIONS:
+					if (!thisview.getName().equals(xview)) {
 						return;
 					}
-					if (!oldScene.getChapterSceneNo().equals(newScene.getChapterSceneNo())) {
+					OptionsDlg.show(mainFrame, thisview.getName());
+					return;
+				case SHOWINFO:
+					if (newValue instanceof Scene) {
+						Scene scene = (Scene) newValue;
+						ViewUtil.scrollToScene(this, panel, scene);
+						return;
+					}
+					if (newValue instanceof Chapter) {
+						Chapter chapter = (Chapter) newValue;
+						ViewUtil.scrollToChapter(this, panel, chapter);
+						return;
+					}
+					return;
+				case BOOK_ZOOM:
+					if (newValue instanceof Integer) {
+						zoomSet((Integer) newValue);
+					}
+					return;
+				default:
+					break;
+			}
+
+			ActKey act = new ActKey(evt);
+			String xcmd = act.getCmd();
+			switch (Book.getTYPE(act.type)) {
+				case SCENE:
+					if (PROPS.INIT.check(xcmd)) {
 						refresh();
 						return;
 					}
-				}
-				break;
-			case STRAND:
-				if (PROPS.DELETE.check(act.getCmd())) {
-					refresh();
-					return;
-				}
-				break;
-			case PART:
-				if (PROPS.CHANGE.check(act.getCmd())) {
-					refresh();
-					ViewUtil.scrollToTop(scroller);
-					return;
-				}
-				break;
-			default:
-				break;
+					if (PROPS.UPDATE.check(xcmd)) {
+						Scene oldScene = (Scene) oldValue;
+						Scene newScene = (Scene) newValue;
+						if (oldScene == null || newScene == null) {
+							break;
+						}
+						if (!oldScene.getId().equals(newScene.getId())) {
+							return;
+						}
+						if (!oldScene.getChapterSceneNo().equals(newScene.getChapterSceneNo())) {
+							refresh();
+							return;
+						}
+					}
+					break;
+				case STRAND:
+					if (PROPS.DELETE.check(xcmd)) {
+						refresh();
+						return;
+					}
+					break;
+				case PART:
+					if (PROPS.CHANGE.check(xcmd)) {
+						refresh();
+						ViewUtil.scrollToTop(scroller);
+						return;
+					}
+					break;
+				default:
+					break;
+			}
+			refreshBookInfoPanels(this, evt);
+			refreshToBookTextPanels(this, evt);
 		}
-		dispatchToBookInfoPanels(this, evt);
-		dispatchToBookTextPanels(this, evt);
 	}
 
+	/**
+	 * refresh this panel
+	 *
+	 */
 	@Override
 	public void refresh() {
 		//LOG.trace("BookPanel.refresh()");
@@ -234,7 +282,13 @@ public class BookPanel extends AbstractScrollPanel {
 		panel.revalidate();
 	}
 
-	private static void dispatchToBookInfoPanels(Container cont, PropertyChangeEvent evt) {
+	/**
+	 * refresh the info panel
+	 *
+	 * @param cont
+	 * @param evt
+	 */
+	private void refreshBookInfoPanels(Container cont, PropertyChangeEvent evt) {
 		List<Component> ret = new ArrayList<>();
 		SwingUtil.findComponentsByClass(cont, BookInfoPanel.class, ret);
 		for (Component comp : ret) {
@@ -243,7 +297,13 @@ public class BookPanel extends AbstractScrollPanel {
 		}
 	}
 
-	private static void dispatchToBookTextPanels(Container cont, PropertyChangeEvent evt) {
+	/**
+	 * refresh the text panel
+	 *
+	 * @param cont
+	 * @param evt
+	 */
+	private void refreshToBookTextPanels(Container cont, PropertyChangeEvent evt) {
 		List<Component> ret = new ArrayList<>();
 		SwingUtil.findComponentsByClass(cont, BookTextPanel.class, ret);
 		for (Component comp : ret) {
@@ -252,13 +312,23 @@ public class BookPanel extends AbstractScrollPanel {
 		}
 	}
 
+	/**
+	 * get the panel component
+	 *
+	 * @return
+	 */
 	public JPanel getPanel() {
 		return panel;
 	}
 
+	/**
+	 * actions for the toolbar components (Part filter, BT_MINUS and BT_PLUS
+	 *
+	 * @param evt
+	 */
 	@Override
 	public void actionPerformed(ActionEvent evt) {
-		//LOG.trace("BookPanel.actionPerformed(evt="+evt.toString()+")");
+		//LOG.trace(TT+"actionPerformed(evt="+evt.toString()+")");
 		if (evt.getSource() instanceof JComboBox) {
 			JComboBox cb = (JComboBox) evt.getSource();
 			if (cb.getName().equals("cbPartFilter")) {

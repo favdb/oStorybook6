@@ -61,11 +61,11 @@ import storybook.ui.panel.AbstractPanel;
  * @author favdb
  */
 public class MemosPanel extends AbstractPanel
-   implements ActionListener, FocusListener,
-   ListSelectionListener, HyperlinkListener,
-   MouseListener, ItemListener {
+		implements ActionListener, FocusListener,
+		ListSelectionListener, HyperlinkListener,
+		MouseListener, ItemListener {
 
-	private static final String TT = "MemosPanel";
+	private static final String TT = "MemosPanel.";
 	private ShefEditor shef;
 	private JList lsMemo = null;//liste des memos
 	private JButton btNew;// bouton nouveau
@@ -98,14 +98,14 @@ public class MemosPanel extends AbstractPanel
 
 	@Override
 	public void init() {
-		//LOG.printInfos(TT + ".init()");
+		//LOG.trace(TT+"init()");
 		this.withPart = false;
 		this.resetListener();
 	}
 
 	@Override
 	public void initUi() {
-		//LOG.printInfos(TT + ".initUi()");
+		//LOG.trace(TT+"initUi()");
 		setLayout(new MigLayout(MIG.get(MIG.WRAP, MIG.FILL, MIG.HIDEMODE3), "[20%][80%]", "[][grow][]"));
 		lsMemo = new JList<>();
 		lsMemo.setName(ACT.LS_MEMO.n());
@@ -142,22 +142,25 @@ public class MemosPanel extends AbstractPanel
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		//LOG.printInfos(TT + ".focusGained(e)");
+		//LOG.trace(TT+"focusGained(e)");
 		btNew.setEnabled(true);
 	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		//LOG.printInfos(TT + ".focusLost(e)");
+		//LOG.trace(TT+"focusLost(e)");
 		checkTextChanged();
 		btNew.setEnabled(false);
 	}
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.printInfos(TT + ".modelPropertyChange(evt=" + evt.toString() + ")");
-		Object newValue = evt.getNewValue();
+		//LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString() + ")");
 		String propName = evt.getPropertyName();
+		if ("SHOWINFO".equalsIgnoreCase(propName)) {
+			return;
+		}
+		Object newValue = evt.getNewValue();
 		switch (Ctrl.getPROPS(propName)) {
 			case REFRESH: {
 				View newView = (View) newValue;
@@ -195,7 +198,7 @@ public class MemosPanel extends AbstractPanel
 
 	@Override
 	public void actionPerformed(ActionEvent evt) {
-		//LOG.printInfos(TT + ".actionPerformed(evt=" + evt.toString() + ")");
+		//LOG.trace(TT+"actionPerformed(evt=" + evt.toString() + ")");
 		if (evt.getSource() instanceof JButton) {
 			Memo memo = currentMemo;
 			switch (getACT(((JButton) evt.getSource()).getName())) {
@@ -221,7 +224,7 @@ public class MemosPanel extends AbstractPanel
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		//LOG.printInfos(TT + ".valueChanged(e=" + e.toString() + ")");
+		//LOG.trace(TT+"valueChanged(e=" + e.toString() + ")");
 		checkTextChanged();
 		setMemo((Memo) lsMemo.getSelectedValue());
 	}
@@ -240,7 +243,7 @@ public class MemosPanel extends AbstractPanel
 
 	@SuppressWarnings({"unchecked", "unchecked", "unchecked", "unchecked"})
 	private void refreshListMemo() {
-		//LOG.printInfos(TT + ".refreshListMemo()");
+		//LOG.trace(TT+"refreshListMemo()");
 		//memorize selected Memo
 		Memo entitySelected;
 		entitySelected = (Memo) lsMemo.getSelectedValue();
@@ -265,7 +268,7 @@ public class MemosPanel extends AbstractPanel
 	}
 
 	private void setMemo(Memo memo) {
-		//LOG.printInfos(TT + ".setMemo(memo=" + LOG.printInfos(memo) + ")");
+		//LOG.trace(TT+"setMemo(memo=" + LOG.printInfos(memo) + ")");
 		if (memo == null) {
 			shef.setText("");
 			return;
@@ -284,7 +287,7 @@ public class MemosPanel extends AbstractPanel
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		//LOG.printInfos(TT + ".mouseClicked(e)");
+		//LOG.trace(TT+"mouseClicked(e)");
 		if (e.getClickCount() == 2) {
 			Memo memo = (Memo) lsMemo.getSelectedValue();
 			mainFrame.showEditorAsDialog(memo);
@@ -314,11 +317,11 @@ public class MemosPanel extends AbstractPanel
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		//LOG.printInfos(TT + ".itemStateChange(e=" + e.toString() + ")");
+		//LOG.trace(TT+"itemStateChange(e=" + e.toString() + ")");
 	}
 
 	private void checkTextChanged() {
-		//LOG.printInfos(TT + ".checkTextChange()");
+		//LOG.trace(TT+"checkTextChange()");
 		if (currentMemo == null) {
 			return;
 		}

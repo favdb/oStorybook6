@@ -8,145 +8,144 @@
  */
 package api.shef.dialogs;
 
+import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Frame;
-import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
 import javax.swing.text.JTextComponent;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import api.shef.tools.HtmlEntities;
-import storybook.App;
-import storybook.tools.swing.FontUtil;
+import storybook.ui.MIG;
 
 public class UnicodeDialog extends JDialog {
 
-	private static Icon icon = IconUtil.getIconSmall(ICONS.K.CHAR_UNICODE);
-	private static String title = I18N.getMsg("shef.unicode");
-	private static String desc = I18N.getMsg("shef.unicode_desc");
-	private Font plainFont = App.getInstance().fonts.defGet();
-	private Font rollFont = FontUtil.getBold(plainFont);
-	private MouseListener mouseHandler = new MouseHandler();
-	private ActionListener buttonHandler = new ButtonHandler();
-	private boolean insertEntity;
-	private JTextComponent editor;
+    private static Icon icon = IconUtil.getIconSmall(ICONS.K.CHAR_UNICODE);
+    private static String title = I18N.getMsg("shef.unicode"),
+	    desc = I18N.getMsg("shef.unicode_desc");
+    private final ActionListener buttonHandler = new ButtonHandler();
+    private boolean insertEntity;
+    private JTextComponent editor;
+    private static final int[] CODE_RANGES_START = {8592, 9632, 9985, 9728};
+    private static final int[] CODE_RANGES_END = {8703, 9727, 10175, 9923};
+    private static final String[] CODE_RANGES_NAMES = {
+	"Arrows", "Geometric", "Dingbats", "Symbols"
+    };
+    private JPanel charPanel;
+    private JComboBox cbType;
 
-	public UnicodeDialog(Frame parent, JTextComponent ed) {
-		super(parent, title);
-		editor = ed;
-		init();
+    public UnicodeDialog(Frame parent, JTextComponent ed) {
+	super(parent, title);
+	editor = ed;
+	init();
+    }
+
+    public UnicodeDialog(Dialog parent, JTextComponent ed) {
+	super(parent, title);
+	editor = ed;
+	init();
+    }
+
+    private void init() {
+	getContentPane().setLayout(new BorderLayout());
+
+	getContentPane().add(new HeaderPanel(title, "", icon), BorderLayout.NORTH);
+
+	getContentPane().add(initCharPanel(), BorderLayout.CENTER);
+
+	JButton close = new JButton(I18N.getMsg("shef.close"));
+	close.addActionListener((ActionEvent e) -> {
+	    setVisible(false);
+	});
+	JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+	bottomPanel.add(close);
+	getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+
+	pack();
+	setResizable(false);
+	this.getRootPane().setDefaultButton(close);
+    }
+
+    @SuppressWarnings("unchecked")
+    private JPanel initCharPanel() {
+	JPanel p = new JPanel(new MigLayout());
+	JPanel p1 = new JPanel(new MigLayout());
+	p1.add(new JLabel("bloc: "));
+	cbType = new JComboBox(CODE_RANGES_NAMES);
+	cbType.setSelectedIndex(0);
+	cbType.addActionListener(e -> loadCharPanel());
+	p1.add(cbType, MIG.get(MIG.GROW));
+	p.add(p1, MIG.SPAN);
+	charPanel = new JPanel(new MigLayout(MIG.WRAP + " 16"));
+	charPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	JScrollPane scroll = new JScrollPane(charPanel);
+	p.add(scroll);
+	loadCharPanel();
+	return p;
+    }
+
+    private void loadCharPanel() {
+	int n = cbType.getSelectedIndex();
+	charPanel.removeAll();
+	for (int i = CODE_RANGES_START[n]; i <= CODE_RANGES_END[n]; i++) {
+	    charPanel.add(inCharButton(i));
 	}
+	charPanel.revalidate();
+    }
 
-	public UnicodeDialog(Dialog parent, JTextComponent ed) {
-		super(parent, title);
-		editor = ed;
-		init();
-	}
+    private JButton inCharButton(int inchar) {
+	JButton bt = new JButton(Character.toString((char) inchar));
+	bt.setToolTipText("" + inchar);
+	bt.addActionListener(buttonHandler);
+	return bt;
+    }
 
-	private void init() {
-		JPanel headerPanel = new HeaderPanel(title, desc, icon);
-		JPanel charPanel = new JPanel(new GridLayout(8, 12, 2, 2));
-		charPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		for (int i = 160; i <= 255; i++) {
-			String ent = "&#" + i + ";"; //$NON-NLS-2$
-			JButton chLabel = new JButton(HtmlEntities.HTML32.unescape(ent));
-			chLabel.setFont(plainFont);
-			chLabel.setOpaque(true);
-			chLabel.setToolTipText(ent);
-			chLabel.setBackground(Color.white);
-			chLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			chLabel.setVerticalAlignment(SwingConstants.CENTER);
-			chLabel.addActionListener(buttonHandler);
-			chLabel.addMouseListener(mouseHandler);
-			chLabel.setMargin(new Insets(0, 0, 0, 0));
-			charPanel.add(chLabel);
+    public void setJTextComponent(JTextComponent ed) {
+	editor = ed;
+    }
+
+    public JTextComponent getJTextComponent() {
+	return editor;
+    }
+
+    private class ButtonHandler implements ActionListener {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	    JButton l = (JButton) e.getSource();
+	    if (editor != null) {
+		if (!editor.hasFocus()) {
+		    editor.requestFocusInWindow();
 		}
-
-		JButton close = new JButton(I18N.getMsg("shef.close"));
-		close.addActionListener((ActionEvent e) -> {
-			setVisible(false);
-		});
-		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		buttonPanel.add(close);
-		this.getRootPane().setDefaultButton(close);
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(headerPanel, BorderLayout.NORTH);
-		getContentPane().add(charPanel, BorderLayout.CENTER);
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-		pack();
-		setResizable(false);
+		editor.replaceSelection(l.getText());
+	    }
 	}
 
-	public void setJTextComponent(JTextComponent ed) {
-		editor = ed;
-	}
+    }
 
-	public JTextComponent getJTextComponent() {
-		return editor;
-	}
+    /**
+     * @return the insertEntity
+     */
+    public boolean isInsertEntity() {
+	return insertEntity;
+    }
 
-	private class MouseHandler extends MouseAdapter {
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			JButton l = (JButton) e.getComponent();
-			l.setFont(rollFont);
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			JButton l = (JButton) e.getComponent();
-			l.setFont(plainFont);
-		}
-	}
-
-	private class ButtonHandler implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JButton l = (JButton) e.getSource();
-			if (editor != null) {
-				if (!editor.hasFocus()) {
-					editor.requestFocusInWindow();
-				}
-				if (insertEntity) {
-					editor.replaceSelection(l.getToolTipText());
-				} else {
-					editor.replaceSelection(l.getText());
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * @return the insertEntity
-	 */
-	public boolean isInsertEntity() {
-		return insertEntity;
-	}
-
-	/**
-	 * @param insertEntity the insertEntity to set
-	 */
-	public void setInsertEntity(boolean insertEntity) {
-		this.insertEntity = insertEntity;
-	}
+    /**
+     * @param insertEntity the insertEntity to set
+     */
+    public void setInsertEntity(boolean insertEntity) {
+	this.insertEntity = insertEntity;
+    }
 
 }

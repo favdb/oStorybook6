@@ -89,6 +89,9 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 	public void modelPropertyChange(PropertyChangeEvent evt) {
 		//LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString() + ")");
 		String propName = evt.getPropertyName();
+		if ("SHOWINFO".equalsIgnoreCase(propName)) {
+			return;
+		}
 		Object newValue = evt.getNewValue();
 		if (newValue instanceof AbstractEntity) {
 			switch (ActKey.getType(evt)) {
@@ -147,7 +150,7 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 						scroller.getParent().repaint();
 						break;
 					case SHOWINFO:
-						refresh();
+						//refresh();
 						break;
 					case PRINT:
 						printAction();
@@ -186,9 +189,9 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 		HTMLEditorKit kit = new HTMLEditorKit();
 		StyleSheet styleSheet = kit.getStyleSheet();
 		String emRule = "em {"
-		   + " background-color: yellow;"
-		   + " font-style: normal;"
-		   + "}";
+				+ " background-color: yellow;"
+				+ " font-style: normal;"
+				+ "}";
 		styleSheet.addRule(emRule);
 		tpText.setEditorKitForContentType(Html.TYPE, kit);
 		tpText.setContentType(Html.TYPE);
@@ -207,14 +210,14 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 		pStrand = new JPanel(new MigLayout(MIG.INS1));
 		pStrand.add(new JLabel(I18N.getColonMsg("strand")));
 		cbStrand = Ui.initComboBox("cbStrand", "",
-		   (List) mainFrame.project.getList(Book.TYPE.STRAND),
-		   null, !EMPTY, ALL, this);
+				(List) mainFrame.project.getList(Book.TYPE.STRAND),
+				null, !EMPTY, ALL, this);
 		pStrand.add(cbStrand);
 		toolbar.add(pStrand);
 
 		ckReview = Ui.initCheckBox(null, "ckReview", "review",
-		   book.param.getParamLayout().getShowReview(), BNONE,
-		   e -> changeReview());
+				book.param.getParamLayout().getShowReview(), BNONE,
+				e -> changeReview());
 		ckReview.setVisible(!Review.find(mainFrame).isEmpty());
 		toolbar.add(ckReview);
 		toolbar.add(new JLabel(I18N.getColonMsg("toc")));
@@ -266,7 +269,7 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 			strand = (Strand) cbStrand.getSelectedItem();
 		}
 		buf.append(ExportBookToHtml.toPanel(mainFrame,
-		   strand, getCbPart(), ckReview.isSelected(), cbToc.getSelectedIndex()));
+				strand, getCbPart(), ckReview.isSelected(), cbToc.getSelectedIndex()));
 		buf.append(Html.P_EMPTY);
 		buf.append(Html.BODY_E);
 		buf.append(Html.HTML_E);

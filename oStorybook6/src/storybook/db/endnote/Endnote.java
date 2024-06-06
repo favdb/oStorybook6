@@ -151,9 +151,9 @@ public class Endnote extends AbstractEntity {
 	}
 
 	/**
-	 * compute default sort value beautify is: pp.cc.ss.ttttt where: - pp is part number, 99 if not -
- cc is chapter number, 99 if not - ss is scene number, mandatory - ttttt is text index of the
- endnote
+	 * compute default sort value beautify is: pp.cc.ss.ttttt where: - pp is
+	 * part number, 99 if not - cc is chapter number, 99 if not - ss is scene
+	 * number, mandatory - ttttt is text index of the endnote
 	 *
 	 * @param loc
 	 */
@@ -166,10 +166,10 @@ public class Endnote extends AbstractEntity {
 			}
 		}
 		this.sort = String.format("%02d.%02d.%03d.%05d",
-		   npart,
-		   nchapter,
-		   scene.getSceneno(),
-		   loc);
+				npart,
+				nchapter,
+				scene.getSceneno(),
+				loc);
 	}
 
 	@Override
@@ -212,10 +212,10 @@ public class Endnote extends AbstractEntity {
 	public String toXml() {
 		StringBuilder b = new StringBuilder(toXmlBeg());
 		b.append(XmlUtil.setAttribute(0, XK.TYPE, type))
-		   .append(XmlUtil.setAttribute(0, XK.NUMBER, number))
-		   .append(XmlUtil.setAttribute(0, XK.SCENE, scene))
-		   .append(XmlUtil.setAttribute(0, XK.SORT, sort))
-		   .append(">\n");
+				.append(XmlUtil.setAttribute(0, XK.NUMBER, number))
+				.append(XmlUtil.setAttribute(0, XK.SCENE, scene))
+				.append(XmlUtil.setAttribute(0, XK.SORT, sort))
+				.append(">\n");
 		b.append(toXmlEnd());
 		return b.toString();
 	}
@@ -285,8 +285,8 @@ public class Endnote extends AbstractEntity {
 		StringBuilder b = new StringBuilder();
 		String snumber = String.format("_%03d", id);
 		b.append(String.format("<a href=\"%s#innote%s\"", dir, snumber))
-		   .append(String.format(" name=\"endnote_%s\">", snumber))
-		   .append(String.format("%d. </a>", number));
+				.append(String.format(" name=\"endnote_%s\">", snumber))
+				.append(String.format("%d. </a>", number));
 		return b.toString();
 	}
 
@@ -406,7 +406,7 @@ public class Endnote extends AbstractEntity {
 	 * @return
 	 */
 	public static Endnote createEndnote(MainFrame mainFrame, TYPE type,
-	   Scene scene, ShefEditor htTexte) {
+			Scene scene, ShefEditor htTexte) {
 		int num = mainFrame.project.endnotes.getNextNumber();
 		Endnote en = new Endnote(type.ordinal(), scene, num);
 		en.setSort(htTexte.wysEditorGet().getWysEditor().getCaretPosition());
@@ -450,7 +450,8 @@ public class Endnote extends AbstractEntity {
 	}
 
 	/**
-	 * resort the Endnotes of the given type in the given Scene, not for Comments
+	 * resort the Endnotes of the given type in the given Scene, not for
+	 * Comments
 	 *
 	 * @param mainFrame
 	 * @param type
@@ -575,9 +576,9 @@ public class Endnote extends AbstractEntity {
 	 */
 	public static String linkFrom(String file, Endnote endnote) {
 		return linkFrom(file,
-		   endnote.getId(),
-		   endnote.getNumber(),
-		   endnote.getType());
+				endnote.getId(),
+				endnote.getNumber(),
+				endnote.getType());
 	}
 
 	/**
@@ -646,6 +647,17 @@ public class Endnote extends AbstractEntity {
 		ls.add(tableName + ",sort,String,256");
 		ls.add(tableName + ",scene_id,Integer,0");
 		return ls;
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Endnote ne = new Endnote();
+		doCopyTo(m, ne);
+		ne.setNumber(0);
+		ne.setScene(getScene());
+		ne.setSort(getSort());
+		ne.setType(getType());
+		return ne;
 	}
 
 }

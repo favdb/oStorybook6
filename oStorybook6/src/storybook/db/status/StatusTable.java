@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import storybook.ctrl.ActKey;
 import storybook.db.abs.AbsColumn;
-import storybook.db.abs.AbstractEntity;
 import storybook.db.abs.AbsTable;
+import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.tag.Tag;
 import storybook.ui.MainFrame;
@@ -56,8 +56,8 @@ public class StatusTable extends AbsTable {
 	@Override
 	protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
 		ActKey act = new ActKey(evt);
-		if (act.isUpdate()
-		   && (act.getType() == Book.TYPE.STATUS)) {
+		if ((act.isNew() || act.isUpdate() || act.isDelete())
+				&& (act.getType() == Book.TYPE.STATUS)) {
 			fillTable();
 		}
 	}

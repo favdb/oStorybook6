@@ -40,7 +40,6 @@ import storybook.db.chapter.Chapter;
 import storybook.db.scene.Scene;
 import storybook.exim.exporter.ExportInfoView;
 import storybook.project.Project;
-import storybook.tools.LOG;
 import storybook.tools.file.XEditorFile;
 import storybook.tools.html.Html;
 import storybook.tools.net.Net;
@@ -57,12 +56,11 @@ import storybook.ui.panel.AbstractPanel;
 @SuppressWarnings("serial")
 public class InfoPanel extends AbstractPanel implements HyperlinkListener {
 
-	private static final String TT = "InfoPanel";
+	private static final String TT = "InfoPanel.";
 
 	private AbstractEntity entity;
 	private Object last;
 	private JTextPane infoPane;
-	//private JCheckBox kInfoAll, kInfoFull;
 	private JButton btExternal;
 	private JComboBox cbDetailed;
 
@@ -73,47 +71,42 @@ public class InfoPanel extends AbstractPanel implements HyperlinkListener {
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.printInfos(TT + ".modelPropertyChange(evt=" + evt.toString());
+		//LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString());
 		String propName = evt.getPropertyName();
 		Object newValue = evt.getNewValue();
-		if (propName.toLowerCase().contains("update")) {
+		if (Ctrl.isUpdate(evt)) {
 			refreshInfo();
-		}
-		if (Ctrl.PROPS.EXPORT.check(propName)) {
+		} else if (Ctrl.PROPS.EXPORT.check(propName)) {
 			ExportInfoView export = new ExportInfoView(mainFrame);
 			export.exec(this);
-		}
-		if (Ctrl.PROPS.REFRESH.check(propName)) {
+		} else if (Ctrl.PROPS.INIT.check(propName)) {
+			return;
+		} else if (Ctrl.PROPS.REFRESH.check(propName)) {
 			View newView = (View) newValue;
 			View view = (View) getParent().getParent();
 			if (view == newView) {
 				refreshInfo();
 			}
-			return;
-		}
-		if (Ctrl.PROPS.SHOWINFO.check(propName)) {
+		} else if (Ctrl.PROPS.SHOWINFO.check(propName)) {
 			if (newValue == null) {
 				infoPane.setText("");
 				last = null;
-				return;
-			}
-			if (newValue instanceof AbstractEntity) {
+			} else if (newValue instanceof AbstractEntity) {
+				AbstractEntity en = (AbstractEntity) newValue;
+				if (en.equals(last)) {
+					return;
+				}
 				entity = (AbstractEntity) newValue;
 				if (entity.isTransient()) {
 					return;
 				}
 				last = entity;
 				refreshInfo();
-				return;
-			}
-			if (newValue instanceof Project) {
-				LOG.trace(TT + "modelPropertyChange() project");
+			} else if (newValue instanceof Project) {
 				last = mainFrame.getProject();
 				refreshInfo();
-				return;
 			}
-		}
-		if (newValue == null && propName.contains("DELETE")) {
+		} else if (newValue == null && Ctrl.isDelete(evt)) {
 			entity = null;
 			infoPane.setText("");
 		} else if (entity != null && newValue instanceof AbstractEntity) {
@@ -132,7 +125,7 @@ public class InfoPanel extends AbstractPanel implements HyperlinkListener {
 
 	@Override
 	public void initUi() {
-		//LOG.printInfos(TT + ".initUi()");
+		//LOG.trace(TT + "initUi()");
 		setLayout(new MigLayout(MIG.get(MIG.HIDEMODE3, MIG.WRAP, MIG.FILL, MIG.INS0)));
 		add(initToolbar(), MIG.GROWX);
 		infoPane = new JTextPane();
@@ -173,7 +166,7 @@ public class InfoPanel extends AbstractPanel implements HyperlinkListener {
 	}
 
 	private void refreshInfo() {
-		//LOG.printInfos(TT+".refreshInfo()");
+		//LOG.trace(TT+"refreshInfo()");
 		btExternal.setVisible(false);
 		if (last == null) {
 			infoPane.setText("");

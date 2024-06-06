@@ -49,26 +49,26 @@ import storybook.ui.MainFrame;
  */
 public class DOCX extends AbstractDoc {
 
-	private static final String TT = "DOCX";
+	private static final String TT = "DOCX.";
 	public static final String F_DOC = "word/document.xml",
-	   F_RELS = "word/_rels/document.xml.rels",
-	   F_STYLES = "word/styles.xml",
-	   HEADING = "heading",
-	   STYLE_ID = "w:styleId",
-	   W_BIDI = "w:bidi",
-	   W_BR = "w:br",
-	   W_HYPERLINK = "w:hyperlink",
-	   W_NUMID = "<w:numId w:val=\"",
-	   W_NUMPR = "w:numPr",
-	   W_P = "w:p",
-	   W_TYPE_PARA = "w:type=\"paragraph\"",
-	   W_PPR = "w:pPr",
-	   W_R = "w:r",
-	   W_RPR = "w:rPr",
-	   W_STYLE = "w:pStyle",
-	   W_T = "w:t",
-	   W_VAL = "w:val",
-	   W_VAL0 = "w:val=\"0\"";
+			F_RELS = "word/_rels/document.xml.rels",
+			F_STYLES = "word/styles.xml",
+			HEADING = "heading",
+			STYLE_ID = "w:styleId",
+			W_BIDI = "w:bidi",
+			W_BR = "w:br",
+			W_HYPERLINK = "w:hyperlink",
+			W_NUMID = "<w:numId w:val=\"",
+			W_NUMPR = "w:numPr",
+			W_P = "w:p",
+			W_TYPE_PARA = "w:type=\"paragraph\"",
+			W_PPR = "w:pPr",
+			W_R = "w:r",
+			W_RPR = "w:rPr",
+			W_STYLE = "w:pStyle",
+			W_T = "w:t",
+			W_VAL = "w:val",
+			W_VAL0 = "w:val=\"0\"";
 
 	private NodeList listRels;
 	private STYLE curStyle;
@@ -80,7 +80,7 @@ public class DOCX extends AbstractDoc {
 	private int liNum = 1;
 
 	public DOCX(File file) {
-		//LOG.log(TT + ".DOCX(file=" + (file == null ? "null" : file.getAbsolutePath()) + ")");
+		//LOG.log(TT + "(file=" + (file == null ? "null" : file.getAbsolutePath()) + ")");
 		super(file, F_DOC);
 	}
 
@@ -94,7 +94,7 @@ public class DOCX extends AbstractDoc {
 	 */
 	@Override
 	public boolean open() throws IOException, SAXException, ParserConfigurationException {
-		//LOG.log(TT + ".open()");
+		//LOG.log(TT + "open()");
 		super.open();
 		openRels();
 		return (entry != null);
@@ -108,7 +108,7 @@ public class DOCX extends AbstractDoc {
 	 */
 	@Override
 	public String getContentAsHtml(boolean withHead) {
-		//LOG.log(TT + ".getContentAsHtml(withHead=" + (withHead ? "true" : "false") + ")");
+		//LOG.log(TT + "getContentAsHtml(withHead=" + (withHead ? "true" : "false") + ")");
 		getAutomaticStyles(file);
 		NodeList nodes = zipXml.getNodelist(W_P);
 		if (nodes.getLength() < 1) {
@@ -118,7 +118,7 @@ public class DOCX extends AbstractDoc {
 		if (withHead) {
 			out.append(Html.HTML_B);
 			out.append(Html.intoTag("head", "<meta charset=\"UTF-8\">\n"))
-			   .append(Html.BODY_B);
+					.append(Html.BODY_B);
 		}
 		for (int i = 0; i < nodes.getLength(); i++) {
 			Element el = (Element) nodes.item(i);
@@ -133,7 +133,7 @@ public class DOCX extends AbstractDoc {
 	}
 
 	private String getParagraph(Node node) {
-		//LOG.trace(TT + ".getParagraph(node=" + node.getNodeName() + ")");
+		//LOG.trace(TT + "getParagraph(node=" + node.getNodeName() + ")");
 		StringBuilder b = new StringBuilder();
 		STYLE s = styleFind(styleGetP(node));
 		if (s != null && s.type.equals(HEADING)) {
@@ -165,7 +165,7 @@ public class DOCX extends AbstractDoc {
 	}
 
 	private String styleGetP(Node node) {
-		//LOG.trace(TT + ".styleGetP(node=" + node.getNodeName() + ")");
+		//LOG.trace(TT + "styleGetP(node=" + node.getNodeName() + ")");
 		NodeList c0 = ((Element) node).getElementsByTagName(W_PPR);
 		if (c0.getLength() < 1) {
 			return "";
@@ -182,7 +182,7 @@ public class DOCX extends AbstractDoc {
 	}
 
 	private String getTitle(Node node, STYLE style) {
-		//LOG.trace(TT + ".getTitle(node=" + node.getNodeName() + ", style=" + style.toTrace());
+		//LOG.trace(TT + "getTitle(node=" + node.getNodeName() + ", style=" + style.toTrace());
 		StringBuilder b = new StringBuilder();
 		b.append("<h").append(style.level.toString()).append(">");
 		b.append(node.getTextContent());
@@ -193,7 +193,7 @@ public class DOCX extends AbstractDoc {
 	private STYLE style = null;
 
 	private String getP(Node node) {
-		//LOG.trace(TT + ".getP(node=" + node.getNodeName() + ")");
+		//LOG.trace(TT + "getP(node=" + node.getNodeName() + ")");
 		StringBuilder b = new StringBuilder(Html.P_B);
 		NodeList nodes = node.getChildNodes();
 		for (int i = 0; i < nodes.getLength(); i++) {
@@ -229,7 +229,7 @@ public class DOCX extends AbstractDoc {
 	private int isList = 0;
 
 	private String getR(Node node) {
-		//LOG.trace(TT + ".getR(node="+node.getNodeName()+")");
+		//LOG.trace(TT + "getR(node="+node.getNodeName()+")");
 		StringBuilder b = new StringBuilder();
 		NodeList nodes = ((Element) node).getChildNodes();
 		STYLE s = new STYLE(Xml.nodeToString(node));
@@ -283,7 +283,7 @@ public class DOCX extends AbstractDoc {
 	}
 
 	private void openRels() {
-		//LOG.trace(TT + ".openRels()");
+		//LOG.trace(TT + "openRels()");
 		try {
 			ZipXml xml = new ZipXml(file);
 			if (xml.open(F_RELS) != null) {
@@ -296,7 +296,7 @@ public class DOCX extends AbstractDoc {
 	}
 
 	private String findRels(Node node) {
-		//LOG.trace(TT + ".findRels(node=" + node.getNodeName() + ")");
+		//LOG.trace(TT + "findRels(node=" + node.getNodeName() + ")");
 		if (listRels != null) {
 			String x = Xml.attributeGet(node, "r:id");
 			if (x.isEmpty()) {
@@ -316,7 +316,7 @@ public class DOCX extends AbstractDoc {
 
 	@Override
 	void getAutomaticStyles(File file) {
-		//LOG.log(TT + ".getAutomaticStyles(file=" + file.getAbsolutePath() + ")");
+		//LOG.log(TT + "getAutomaticStyles(file=" + file.getAbsolutePath() + ")");
 		styles = new ArrayList<>();
 		ZipXml xml = new ZipXml(file);
 		try {
@@ -357,7 +357,7 @@ public class DOCX extends AbstractDoc {
 	 */
 	@Override
 	public boolean createDoc(MainFrame mainFrame, File file, String str) {
-		//LOG.trace(TT + ".createDoc(mainFrame, file=" + file.getAbsolutePath() + ", str len=" + str.length() + ")");
+		//LOG.trace(TT + "createDoc(mainFrame, file=" + file.getAbsolutePath() + ", str len=" + str.length() + ")");
 		if (!file.exists()) {
 			copyModele(file);
 		}
@@ -412,32 +412,32 @@ public class DOCX extends AbstractDoc {
 	}
 
 	private void styleSetTitle(String title) {
-		//LOG.trace(TT + ".styleSetTitle(title=" + title + ")");
+		//LOG.trace(TT + "styleSetTitle(title=" + title + ")");
 		String sx = Xml.attributeGet(title, "w:outlineLvl w:val=\"");
 		String name = Xml.attributeGet(title, "w:styleId=\"");
 		styles.add(new STYLE(name, HEADING, (Integer.parseInt(sx)) + 1, ""));
 	}
 
 	private void writeSectPr() {
-		//LOG.trace(TT + ".writeSectPr()");
+		//LOG.trace(TT + "writeSectPr()");
 		Element sect = Xml.childCreate(doc, textNode, "w:sectPr");
 		Xml.childCreate(doc, sect, "w:type", "w:val=\"nextPage\"");
 		Xml.childCreate(doc, sect, "w:pgSz", "w:h=\"16838\"", "w:w=\"11906\"");
 		Xml.childCreate(doc, sect, "w:pgMar",
-		   "w:bottom=\"1134\"",
-		   "w:footer=\"0\"",
-		   "w:gutter=\"0\"",
-		   "w:header=\"0\"",
-		   "w:left=\"1134\"",
-		   "w:right=\"1134\"",
-		   "w:top=\"1134\"/");
+				"w:bottom=\"1134\"",
+				"w:footer=\"0\"",
+				"w:gutter=\"0\"",
+				"w:header=\"0\"",
+				"w:left=\"1134\"",
+				"w:right=\"1134\"",
+				"w:top=\"1134\"/");
 		Xml.childCreate(doc, sect, "w:pgNumType", "w:fmt=\"decimal\"");
 		Xml.childCreate(doc, sect, "w:formProt", "w:val=\"false\"");
 		Xml.childCreate(doc, sect, "w:textDirection", "w:val=\"lrTb\"");
 		Xml.childCreate(doc, sect, "w:docGrid",
-		   "w:charSpace=\"0\"",
-		   "w:linePitch=\"100\"",
-		   "w:type=\"default\"");
+				"w:charSpace=\"0\"",
+				"w:linePitch=\"100\"",
+				"w:type=\"default\"");
 	}
 
 	/**
@@ -450,7 +450,7 @@ public class DOCX extends AbstractDoc {
 	 * @throws IOException
 	 */
 	private void closeDoc(File file, Path tmpDir) throws TransformerConfigurationException, TransformerException, IOException {
-		//LOG.trace(TT + ".closeDoc(file=" + file.getAbsolutePath() + ", tmpDir=" + tmpDir.toString());
+		//LOG.trace(TT + "closeDoc(file=" + file.getAbsolutePath() + ", tmpDir=" + tmpDir.toString());
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(doc);
@@ -470,15 +470,17 @@ public class DOCX extends AbstractDoc {
 	 * @param el : the HTML element to write
 	 */
 	private void writeTitle(api.jsoup.nodes.Element el) {
-		//LOG.trace(TT + ".writeTitle(el=" + el.html() + ")");
+		//LOG.trace(TT + "writeTitle(el=\"" + el.html() + "\")");
+		String nodename = el.nodeName().toLowerCase();
+		if (!nodename.startsWith(("h"))) {
+			return;
+		}
+		int level = Integer.parseInt(nodename.substring(1));
 		Element p = Xml.childCreate(doc, textNode, W_P);
 		Element ppr = Xml.childCreate(doc, p, W_PPR);
 		Element pstyle = Xml.childCreate(doc, ppr, W_STYLE);
-		//Xml.createChild(doc, ppr, W_BIDI, W_VAL0);
 		Xml.childCreate(doc, ppr, "w:spacing", "w:before=\"240\"", "w:after=\"120\"");
-		//Xml.createChild(doc, ppr, "w:jc", "w:val=\"left\"");
 		Xml.childCreate(doc, ppr, W_RPR);
-		int level = Integer.parseInt(el.nodeName().substring(1));
 		STYLE s = STYLE.findStyle(styles, level);
 		if (s != null) {
 			pstyle.setAttribute("w:val", s.getName());
@@ -497,7 +499,7 @@ public class DOCX extends AbstractDoc {
 	 * @param el
 	 */
 	private void writeOL(api.jsoup.nodes.Element el) {
-		//LOG.trace(TT + ".writeOL(el=\"" + el.html().replace("\n", "") + "\")");
+		//LOG.trace(TT + "writeOL(el=\"" + el.html().replace("\n", "") + "\")");
 		Elements lis = el.getAllElements();
 		liNum = 1;
 		for (int i = 0; i < lis.size(); i++) {
@@ -512,7 +514,7 @@ public class DOCX extends AbstractDoc {
 	 * @param el
 	 */
 	private void writeUL(api.jsoup.nodes.Element el) {
-		//LOG.trace(TT + ".writeUL(element=\"" + el.html().replace("\n", "") + "\")");
+		//LOG.trace(TT + "writeUL(element=\"" + el.html().replace("\n", "") + "\")");
 		Elements lis = el.children();
 		for (int i = 0; i < lis.size(); i++) {
 			writeLI(lis.get(i), "ul");
@@ -527,7 +529,7 @@ public class DOCX extends AbstractDoc {
 	 * @return
 	 */
 	private void writeLI(api.jsoup.nodes.Element el, String type) {
-		//LOG.trace(TT + ".writeLI(element=\"" + el.html() + "\", type=" + type + ")");
+		//LOG.trace(TT + "writeLI(element=\"" + el.html() + "\", type=" + type + ")");
 		Element p = Xml.childCreate(doc, textNode, W_P);
 		Element ppr = Xml.childCreate(doc, p, W_PPR);
 		Xml.childCreate(doc, ppr, W_STYLE, "w:val=\"Normal\"");
@@ -552,7 +554,7 @@ public class DOCX extends AbstractDoc {
 	 * @param el
 	 */
 	private void writeP(Node toNode, api.jsoup.nodes.Element el) {
-		//LOG.trace(TT + ".writeP(toNode=" + toNode.getNodeName() + ", el=\"" + el.toString() + "\")");
+		//LOG.trace(TT + "writeP(toNode=" + toNode.getNodeName() + ", el=\"" + el.toString() + "\")");
 		Element p = Xml.childCreate(doc, toNode, W_P);
 		Element ppr = Xml.childCreate(doc, p, W_PPR);
 		curStyle = STYLE.findStyle(styles, "Normal");
@@ -581,7 +583,7 @@ public class DOCX extends AbstractDoc {
 	}
 
 	private void writeFragment(Element r, api.jsoup.nodes.Element node) {
-		//LOG.trace(TT + ".writeFragment(r, node=\"" + node.toString() + "\")");
+		//LOG.trace(TT + "writeFragment(r, node=\"" + node.toString() + "\")");
 		if (curStyle.bold || curStyle.italic || curStyle.underline) {
 			Element rpr = Xml.childCreate(doc, r, W_RPR);
 			if (curStyle.underline) {
@@ -607,7 +609,7 @@ public class DOCX extends AbstractDoc {
 	}
 
 	private void writeR(Element r, api.jsoup.nodes.Element node) {
-		//LOG.trace(TT + ".writeR(toNode=" + r.getNodeName() + ", el=" + node.toString() + ")");
+		//LOG.trace(TT + "writeR(toNode=" + r.getNodeName() + ", el=" + node.toString() + ")");
 		switch (node.nodeName()) {
 			case "br":
 				Xml.childCreate(doc, r, "w:br");
@@ -660,18 +662,17 @@ public class DOCX extends AbstractDoc {
 	}
 
 	private void writeLink(Element r, api.jsoup.nodes.Element el) {
-		//LOG.trace(TT + ".writeLink(r=" + r.getNodeName() + ", el=\"" + el.html() + "\")");
+		//LOG.trace(TT + "writeLink(r=" + r.getNodeName() + ", el=\"" + el.html() + "\")");
 		Element t = Xml.childCreate(doc, r, W_T);
 		String src = ((api.jsoup.nodes.Node) el).attr("href");
 		t.setTextContent(el.text() + " (" + src + ")");
 	}
 
 	private void writeImage(Element r, api.jsoup.nodes.Element el) {
-		//LOG.trace(TT + ".writeImage(r=" + r.getNodeName() + ", el=\"" + el.html() + "\")");
+		//LOG.trace(TT + "writeImage(r=" + r.getNodeName() + ", el=\"" + el.html() + "\")");
 		Element t = Xml.childCreate(doc, r, W_T);
 		String src = ((api.jsoup.nodes.Node) el).attr("src");
 		if (!src.isEmpty()) {
-			//if (src.contains(":")) src = src.substring(src.indexOf(':') + 1);
 			if (src.startsWith("file://")) {
 				src = src.replace("file://", "");
 			}

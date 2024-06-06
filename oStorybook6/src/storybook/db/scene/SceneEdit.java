@@ -54,7 +54,6 @@ import storybook.Const;
 import storybook.db.DB.DATA;
 import storybook.db.EntityCb;
 import storybook.db.EntityCbItem;
-import storybook.db.EntityUtil;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.book.Book.TYPE;
@@ -97,13 +96,13 @@ import static storybook.ui.Ui.*;
 public class SceneEdit extends AbstractEditor implements CaretListener, ItemListener {
 
 	private static final String TT = "EditScene",
-	   INITIALES = I18N.getMsg("duration.initiales"),
-	   BT_EXTERNAL = "btExternal",
-	   BT_IMPORT = "import",
-	   BT_STAGE = "btStage",
-	   RB_DATENONE = "date.none",
-	   RB_DATEFIX = "date.fixed",
-	   RB_DATEREL = "date.relative";
+			INITIALES = I18N.getMsg("duration.initiales"),
+			BT_EXTERNAL = "btExternal",
+			BT_IMPORT = "import",
+			BT_STAGE = "btStage",
+			RB_DATENONE = "date.none",
+			RB_DATEFIX = "date.fixed",
+			RB_DATEREL = "date.relative";
 
 	private JTextField tfNumber, tfDuration, fRelTime, xfile;
 	private JComboBox cbChapter, cbStrand, cbStage, cbRelScene, cbStatus, cbNarrator;
@@ -146,12 +145,13 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	@SuppressWarnings("unchecked")
 	public void initUpper() {
 		scene = (Scene) entity;
+		//LOG.trace(TT, "initUpper() name='" + entity.getName() + "'");
 		pUpper.setLayout(new MigLayout(MIG.get(MIG.INS1, MIG.WRAP, MIG.HIDEMODE2), "[][grow][]"));
-		if (scene.getId() == -1) {
+		if (scene.getId() == -1 && scene.getChapter() == null) {
 			scene.setChapter(mainFrame.lastChapterGet());
 		}
 		JPanel p1 = new JPanel(
-		   new MigLayout(MIG.get(MIG.INS1, MIG.WRAP, MIG.HIDEMODE3), "[][]"));
+				new MigLayout(MIG.get(MIG.INS1, MIG.WRAP, MIG.HIDEMODE3), "[][]"));
 		p1.add(initMainData());
 		//date and duration
 		p1.add(initDateInfo(), MIG.TOP);
@@ -167,7 +167,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 
 	private JPanel initMainData() {
 		JPanel p = new JPanel(
-		   new MigLayout(MIG.get(MIG.INS1, MIG.WRAP, MIG.HIDEMODE3), "[][grow]"));
+				new MigLayout(MIG.get(MIG.INS1, MIG.WRAP, MIG.HIDEMODE3), "[][grow]"));
 		//status
 		cbStatus = Ui.initStatus(p, scene.getStatus(), BMANDATORY);
 		//number
@@ -179,7 +179,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		}
 		//informative
 		ckInformative = Ui.initCheckBox(p, "ckInformative", "informative",
-		   scene.getInformative(), BNONE);
+				scene.getInformative(), BNONE);
 		ckInformative.setToolTipText(I18N.getMsg("informative.tip"));
 		//intensity
 		Ui.addLabel(p, "intensity", false, MANDATORY);
@@ -190,11 +190,11 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 			scene.setChapter(mainFrame.lastChapterGet());
 		}
 		cbChapter = Ui.getCB(p, this, TYPE.CHAPTER, scene.getChapter(),
-		   null, BNEW + BEMPTY);
+				null, BNEW + BEMPTY);
 		SwingUtil.setCBsize(cbChapter);
 		//strand
 		cbStrand = Ui.getCB(p, this, TYPE.STRAND, scene.getStrand(),
-		   null, BMANDATORY + BNEW + BEMPTY);
+				null, BMANDATORY + BNEW + BEMPTY);
 		if (scene.getStrand() == null) {
 			cbStrand.setSelectedIndex(1);
 		}
@@ -202,23 +202,23 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		//narrator
 		if (!mainFrame.project.getList(TYPE.PERSON).isEmpty()) {
 			cbNarrator = Ui.initCbEntities(p, this, "scene.narrator", TYPE.PERSON,
-			   scene.getNarrator(),
-			   null, BNEW + BEMPTY);
+					scene.getNarrator(),
+					null, BNEW + BEMPTY);
 		}
 		return p;
 	}
 
 	private JPanel initDateInfo() {
 		JPanel p3 = new JPanel(
-		   new MigLayout(MIG.get(MIG.INS1, MIG.GAP1, MIG.WRAP, MIG.HIDEMODE3), "[][grow]"));
+				new MigLayout(MIG.get(MIG.INS1, MIG.GAP1, MIG.WRAP, MIG.HIDEMODE3), "[][grow]"));
 		datePanel = initDatePanel();
 		p3.add(datePanel, MIG.get(MIG.SKIP + " 1", MIG.SPAN));
 		//if (book.info.scenarioGet()) {
 		JPanel px = new JPanel(new MigLayout(MIG.INS1));
 		if (App.getAssistant().isExists("scene")) {
 			cbStage = Ui.initCbStrings(px, this, "scenario.stage",
-			   Assistant.getListOf("scene", "stage"),
-			   scene.getScenariostage(), BEMPTY);
+					Assistant.getListOf("scene", "stage"),
+					scene.getScenariostage(), BEMPTY);
 			cbStage.setToolTipText(I18N.getMsg("scenario.stage_tips"));
 		}
 		p3.add(px, MIG.SPAN);
@@ -231,7 +231,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		JPanel gpDate = new JPanel(new MigLayout(MIG.get(MIG.HIDEMODE3, MIG.INS0)));
 		gpDate.setBorder(BorderFactory.createTitledBorder(I18N.getMsg("date")));
 		rbDatenone = Ui.initRadioButton(gpDate, RB_DATENONE, false, BNONE,
-		   MIG.get(MIG.SPAN, MIG.SPLIT + " 3"));
+				MIG.get(MIG.SPAN, MIG.SPLIT + " 3"));
 		rbAbs = Ui.initRadioButton(gpDate, RB_DATEFIX, false, BNONE);
 		rbRel = Ui.initRadioButton(gpDate, RB_DATEREL, false, BNONE, MIG.WRAP);
 		//fixed date
@@ -252,7 +252,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		}
 		fRelTime = Ui.initStringField(pRel, "scene.relativetime", 16, t, BNONE);
 		fRelTime.setToolTipText(I18N.getMsg("duration.format")
-		   + "\n" + I18N.getMsg("duration.use"));
+				+ "\n" + I18N.getMsg("duration.use"));
 
 		gpDate.add(pRel, MIG.SPAN);
 		ButtonGroup bg = new ButtonGroup();
@@ -328,17 +328,17 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 
 	private void initLinks() {
 		JPanel links = new JPanel(new MigLayout(MIG.get(MIG.FILL, MIG.WRAP),
-		   "[grow][grow][grow]"));
+				"[grow][grow][grow]"));
 		lPersons = Ui.initCkList(links, mainFrame, TYPE.PERSON,
-		   scene.getPersons(), null, BBORDER);
+				scene.getPersons(), null, BBORDER);
 		lLocations = Ui.initCkList(links, mainFrame, TYPE.LOCATION,
-		   scene.getLocations(), null, BBORDER);
+				scene.getLocations(), null, BBORDER);
 		lItems = Ui.initCkList(links, mainFrame, TYPE.ITEM,
-		   scene.getItems(), null, BBORDER);
+				scene.getItems(), null, BBORDER);
 		lPlots = Ui.initCkList(links, mainFrame, TYPE.PLOT,
-		   scene.getPlots(), null, BBORDER);
+				scene.getPlots(), null, BBORDER);
 		lStrands = Ui.initCkList(links, mainFrame, TYPE.STRAND,
-		   scene.getStrands(), null, BBORDER);
+				scene.getStrands(), null, BBORDER);
 		lStrands.removeEntity(scene.getStrand());
 		JScrollPane scroll = new JScrollPane(links);
 		tab1.add(scroll, I18N.getMsg("links"));
@@ -376,7 +376,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		//btExternal.setText(book.getParamEditor().getName());
 		btExternal.setIcon(xicon);
 		btExternal.setToolTipText(I18N.getMsg("xeditor.launching")
-		   + " " + book.getParam().getParamEditor().getName());
+				+ " " + book.getParam().getParamEditor().getName());
 		btExternal.addActionListener((ActionEvent evt) -> {
 			if (xfile.getText().isEmpty()) {
 				return;
@@ -432,7 +432,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 */
 	public String getText() {
 		return (book.info.markdownGet() ? mkTexte.getText()
-		   : Html.checkImages(mainFrame, shefEditor.getText()));
+				: Html.checkImages(mainFrame, shefEditor.getText()));
 	}
 
 	/**
@@ -456,9 +456,9 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 			int n = Integer.parseInt(tfNumber.getText());
 			Scene c = Scene.findNumber(scenes, n);
 			if (c != null
-			   && (cbChapter.getSelectedItem() != null && c.getChapter() != null
-			   && c.getChapter().equals(cbChapter.getSelectedItem()))
-			   && !Objects.equals(c.getId(), entity.getId())) {
+					&& (cbChapter.getSelectedItem() != null && c.getChapter() != null
+					&& c.getChapter().equals(cbChapter.getSelectedItem()))
+					&& !Objects.equals(c.getId(), entity.getId())) {
 				errorMsg(tfNumber, Const.ERROR_EXISTS);
 			}
 		}
@@ -645,13 +645,13 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 					I18N.getMsg("import.text.copy"),
 					I18N.getMsg("cancel")};
 				int ret = JOptionPane.showOptionDialog(this,
-				   I18N.getMsg("import.text.exists"),
-				   I18N.getMsg("import"),
-				   JOptionPane.YES_NO_CANCEL_OPTION,
-				   JOptionPane.PLAIN_MESSAGE,
-				   null,
-				   buttonTexts,
-				   null);
+						I18N.getMsg("import.text.exists"),
+						I18N.getMsg("import"),
+						JOptionPane.YES_NO_CANCEL_OPTION,
+						JOptionPane.PLAIN_MESSAGE,
+						null,
+						buttonTexts,
+						null);
 				switch (ret) {
 					case JOptionPane.YES_OPTION:
 						//simply replace
@@ -671,9 +671,9 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 			}
 		} else {
 			JOptionPane.showMessageDialog(this,
-			   I18N.getMsg("file.not.exist", xfile.getText()),
-			   I18N.getMsg("file.import"),
-			   JOptionPane.ERROR_MESSAGE);
+					I18N.getMsg("file.not.exist", xfile.getText()),
+					I18N.getMsg("file.import"),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -717,14 +717,14 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	@Override
 	public void tempSave() {
 		if (entity instanceof Scene) {
-			EntityUtil.copyEntityProperties(mainFrame, entity, scene);
+			//EntityUtil.copyEntityProperties(mainFrame, entity, scene);
 			if (book.info.scenarioGet()) {
 				scene.setSummary(mkTexte.getText());
 			} else {
 				scene.setSummary(shefEditor.getText());
 			}
 			TempUtil.write(mainFrame, entity);
-			EntityUtil.copyEntityProperties(mainFrame, scene, entity);
+			//EntityUtil.copyEntityProperties(mainFrame, scene, entity);
 		}
 	}
 

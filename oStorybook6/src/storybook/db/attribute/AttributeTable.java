@@ -18,10 +18,11 @@ package storybook.db.attribute;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
+import storybook.ctrl.ActKey;
 import storybook.db.DB;
 import storybook.db.abs.AbsColumn;
-import storybook.db.abs.AbstractEntity;
 import storybook.db.abs.AbsTable;
+import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.ui.MainFrame;
 
@@ -31,57 +32,65 @@ import storybook.ui.MainFrame;
  */
 public class AttributeTable extends AbsTable {
 
-	public AttributeTable(MainFrame main) {
-		super(main, Book.TYPE.ATTRIBUTE);
-	}
+    private static final String TT = "AttributeTable.";
 
-	@Override
-	public void init() {
-		this.withPart = false;
-	}
+    public AttributeTable(MainFrame main) {
+        super(main, Book.TYPE.ATTRIBUTE);
+    }
 
-	@Override
-	public void initUi() {
-		super.initUi();
-		this.toolbar.setVisible(false);
-	}
+    @Override
+    public void init() {
+        this.withPart = false;
+    }
 
-	@Override
-	protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
-		//no specific change
-	}
+    @Override
+    public void initUi() {
+        super.initUi();
+        this.toolbar.setVisible(false);
+    }
 
-	@Override
-	protected AbstractEntity getEntity(Long id) {
-		Attribute entity = (Attribute) mainFrame.project.get(Book.TYPE.STRAND, id);
-		return entity;
-	}
+    @Override
+    protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
+        //no specific change
+        ActKey act = new ActKey(evt);
+        if (act.isUpdate() || act.isDelete()) {
+            fillTable();
+            return;
+        }
+    }
 
-	@Override
-	public List<AbsColumn> getColumns(AbstractEntity entity) {
-		List<AbsColumn> cols = super.getColumns(entity);
+    @Override
+    protected AbstractEntity getEntity(Long id) {
+        //LOG.trace(TT + "getEntity(id=" + id.toString() + ")");
+        Attribute entity = (Attribute) mainFrame.project.get(Book.TYPE.ATTRIBUTE, id);
+        return entity;
+    }
 
-		cols.add(new AbsColumn(mainFrame, cols, DB.DATA.ATTRIBUTE_KEY));
-		cols.add(new AbsColumn(mainFrame, cols, DB.DATA.ATTRIBUTE_VALUE));
+    @Override
+    public List<AbsColumn> getColumns(AbstractEntity entity) {
+        List<AbsColumn> cols = super.getColumns(entity);
 
-		super.getColumnsEnd(cols, entity);
+        cols.add(new AbsColumn(mainFrame, cols, DB.DATA.ATTRIBUTE_KEY));
+        cols.add(new AbsColumn(mainFrame, cols, DB.DATA.ATTRIBUTE_VALUE));
 
-		return cols;
-	}
+        super.getColumnsEnd(cols, entity);
 
-	@Override
-	public List<Object> getRow(AbstractEntity entity) {
-		List<Object> cols = super.getRow(entity);
-		Attribute e = (Attribute) entity;
-		cols.add(e.getKey());
-		cols.add(e.getValue());
-		getRowEnd(cols, entity);
-		return (cols);
-	}
+        return cols;
+    }
 
-	@Override
-	public void updateRow(AbstractEntity entity) {
-		//nothing
-	}
+    @Override
+    public List<Object> getRow(AbstractEntity entity) {
+        List<Object> cols = super.getRow(entity);
+        Attribute e = (Attribute) entity;
+        cols.add(e.getKey());
+        cols.add(e.getValue());
+        getRowEnd(cols, entity);
+        return (cols);
+    }
+
+    @Override
+    public void updateRow(AbstractEntity entity) {
+        //nothing
+    }
 
 }

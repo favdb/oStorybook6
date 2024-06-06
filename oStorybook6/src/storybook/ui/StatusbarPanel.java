@@ -45,11 +45,11 @@ import storybook.ui.panel.AbstractPanel;
 public class StatusbarPanel extends AbstractPanel implements ActionListener {
 
 	private JTextField lbChapters,
-	   lbScenes,
-	   lbPersons,
-	   lbLocations,
-	   lbItems,
-	   lbWords;
+			lbScenes,
+			lbPersons,
+			lbLocations,
+			lbItems,
+			lbWords;
 	private JSPanelMemory memPanel;
 	private JPanel pPersons;
 	private JPanel pLocations;
@@ -65,7 +65,7 @@ public class StatusbarPanel extends AbstractPanel implements ActionListener {
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.trace(TT+".modelPropertyChange("+evt.toString()+")");
+		//LOG.trace(TT+"modelPropertyChange("+evt.toString()+")");
 		String propName = evt.getPropertyName();
 
 		if (PROPS.REFRESH.check(propName)) {
@@ -169,8 +169,8 @@ public class StatusbarPanel extends AbstractPanel implements ActionListener {
 		lbLocations.setText(Book.getNbLocations(mainFrame) + "");
 		lbItems.setText(Book.getNbItems(mainFrame) + "");
 		String strStat = String.format(" %,d (%,d) ",
-		   BookUtil.getNbWords(mainFrame.project),
-		   BookUtil.getNbChars(mainFrame.project));
+				BookUtil.getNbWords(mainFrame.project),
+				BookUtil.getNbChars(mainFrame.project));
 		lbWords.setText(strStat);
 		memPanel.repaint();
 		memPanel.setVisible(App.preferences.getBoolean(Pref.KEY.MEMORY) || App.isDev());

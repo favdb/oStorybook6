@@ -101,12 +101,12 @@ public class MessageDlg extends JDialog {
 	}
 
 	public static boolean show(Container comp,
-	   String msg, String title, boolean... options) {
+			String msg, String title, boolean... options) {
 		MessageDlg dlg = new MessageDlg((JFrame) null, msg, title);
 		Container p = comp;
 		while (p != null
-		   && !(p instanceof JFrame)
-		   && !(p instanceof JDialog)) {
+				&& !(p instanceof JFrame)
+				&& !(p instanceof JDialog)) {
 			if ((p instanceof JFrame) || (p instanceof JDialog)) {
 				if (p instanceof JFrame) {
 					dlg = new MessageDlg((JFrame) p, msg, title);
@@ -122,7 +122,7 @@ public class MessageDlg extends JDialog {
 		}
 		dlg.setLocationRelativeTo(comp);
 		dlg.setVisible(true);
-		return (!dlg.canceled);
+		return !dlg.canceled;
 	}
 
 }

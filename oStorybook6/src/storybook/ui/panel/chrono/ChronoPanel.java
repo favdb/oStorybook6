@@ -56,6 +56,7 @@ import storybook.db.scene.Scenes;
 import storybook.db.strand.Strand;
 import storybook.db.strand.StrandLabel;
 import storybook.dialog.OptionsDlg;
+import storybook.tools.LOG;
 import storybook.tools.ViewUtil;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.swing.LaF;
@@ -64,7 +65,7 @@ import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.js.JSLabelVertical;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
-import storybook.ui.MessageLabel;
+import storybook.tools.MessageLabel;
 import storybook.ui.SbView;
 import storybook.ui.SbView.VIEWNAME;
 import storybook.ui.panel.AbstractScrollPanel;
@@ -76,9 +77,9 @@ import storybook.ui.panel.EntityLinksPanel;
  */
 @SuppressWarnings("serial")
 public class ChronoPanel extends AbstractScrollPanel
-   implements Printable, MouseWheelListener, ItemListener, ChangeListener {
+		implements Printable, MouseWheelListener, ItemListener, ChangeListener {
 
-	private static final String TT = "ChronoPanel";
+	private static final String TT = "ChronoPanel.";
 
 	private final String CB_DIRECTION = "CbDirection", SL_ZOOM = "SlZoom";
 
@@ -121,7 +122,7 @@ public class ChronoPanel extends AbstractScrollPanel
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.printInfos(TT + ".modelPropertyChange(evt=" + evt.toString() + ")");
+		LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString() + ")");
 		Object oldValue = evt.getOldValue();
 		Object newValue = evt.getNewValue();
 		String propName = evt.getPropertyName();
@@ -202,8 +203,8 @@ public class ChronoPanel extends AbstractScrollPanel
 						// strand changed
 						if (newScene != null && oldScene != null) {
 							if (newScene.getStrand() != null
-							   && oldScene.getStrand() != null
-							   && !newScene.getStrand().getId().equals(oldScene.getStrand().getId())) {
+									&& oldScene.getStrand() != null
+									&& !newScene.getStrand().getId().equals(oldScene.getStrand().getId())) {
 								refresh();
 								return;
 							}

@@ -60,7 +60,7 @@ public class ExportInfoView extends AbstractExport {
 		writeText(Html.toHtml("file.info.creation", book.getCreation()));
 		writeText(Html.toHtml("file.info.maj", book.getMaj()));
 		String size = String.format("%,d %s (%,d %s)",
-		   words, I18N.getMsg("words"), textLength, I18N.getMsg("characters"));
+				words, I18N.getMsg("words"), textLength, I18N.getMsg("characters"));
 		writeText(Html.toHtml("book.title", book.getTitle()));
 		writeText(Html.toHtml("book.subtitle", book.getSubtitle()));
 		writeText(Html.toHtml("book.author", book.getAuthor()));
@@ -128,6 +128,9 @@ public class ExportInfoView extends AbstractExport {
 		this.infoPanel = infoPanel;
 		this.entity = infoPanel.getEntity();
 		// open the output file to write
+		if (entity == null) {
+			return false;
+		}
 		String fname = "info_" + I18N.getMsg(entity.getObjType().toString()) + "_" + entity.getName();
 		fname = IOUtil.filenameCleanup(fname);
 		if (openFile(fname, true)) {
@@ -145,8 +148,8 @@ public class ExportInfoView extends AbstractExport {
 		File file = new File(param.getDirectory());
 		if (!(file.exists() && file.isDirectory()) && askexists) {
 			JOptionPane.showMessageDialog(mainFrame,
-			   I18N.getMsg("export.dir.error"),
-			   I18N.getMsg("export"), 1);
+					I18N.getMsg("export.dir.error"),
+					I18N.getMsg("export"), 1);
 			return false;
 		}
 		if (!EXIM.askExists(infoPanel, param.getFileName())) {
@@ -156,7 +159,7 @@ public class ExportInfoView extends AbstractExport {
 			outStream = new BufferedWriter(new FileWriter(param.getFileName()));
 		} catch (IOException ex) {
 			ExceptionDlg.show(this.getClass().getSimpleName()
-			   + ".openFile(...) outStream error", ex);
+					+ ".openFile(...) outStream error", ex);
 			return (false);
 		}
 		isOpened = true;

@@ -48,17 +48,17 @@ public abstract class AbstractExport {
 
 	private static final String EXPORT_TITLE = "Export";
 	public static final String F_CSV = "csv",
-	   F_DOCX = "docx", F_ODT = "odt",
-	   F_HTML = "html",
-	   F_OSBK = "osbk",
-	   F_TXT = "txt",
-	   F_XML = "xml",
-	   F_ZXML = "zxml";
+			F_DOCX = "docx", F_ODT = "odt",
+			F_HTML = "html",
+			F_OSBK = "osbk",
+			F_TXT = "txt",
+			F_XML = "xml",
+			F_ZXML = "zxml";
 	public static boolean TOC_LINK = true,
-	   MULTI_CHAPTER = true,
-	   MULTI_SCENE = true,
-	   IS_NAV = true,
-	   IS_NAV_IMAGE = true;
+			MULTI_CHAPTER = true,
+			MULTI_SCENE = true,
+			IS_NAV = true,
+			IS_NAV_IMAGE = true;
 
 	public BookParamExport param;
 	public boolean isOpened;
@@ -75,7 +75,7 @@ public abstract class AbstractExport {
 		this.mainFrame = mainFrame;
 		book = mainFrame.getBook();
 		param = book.getParam().getParamExport();
-		param.refresh();
+		//param.refresh();
 		if (param.getDirectory() == null || param.getDirectory().isEmpty()) {
 			param.setDirectory(mainFrame.getProject().getPath() + File.separator + book.getTitle());
 		}
@@ -140,8 +140,8 @@ public abstract class AbstractExport {
 		//fdir = new File(dir);
 		if (!(fdir.exists() && fdir.isDirectory())) {
 			JOptionPane.showMessageDialog(mainFrame,
-			   I18N.getMsg("export.dir.error") + "\n" + fdir.getAbsolutePath(),
-			   I18N.getMsg("export"), 1);
+					I18N.getMsg("export.dir.error") + "\n" + fdir.getAbsolutePath(),
+					I18N.getMsg("export"), 1);
 			return false;
 		}
 		fdir = new File(dir + name + "." + param.getFormat());
@@ -150,10 +150,10 @@ public abstract class AbstractExport {
 		}
 		try {
 			outStream = new BufferedWriter(new OutputStreamWriter(
-			   new FileOutputStream(fdir.getAbsolutePath()), "UTF-8"));
+					new FileOutputStream(fdir.getAbsolutePath()), "UTF-8"));
 		} catch (IOException ex) {
 			ExceptionDlg.show(this.getClass().getSimpleName()
-			   + ".openFile(...) outStream error", ex);
+					+ ".openFile(...) outStream error", ex);
 			return (false);
 		}
 		switch (param.getFormat()) {
@@ -177,7 +177,7 @@ public abstract class AbstractExport {
 	public boolean setOutStream(String filename) {
 		try {
 			outStream = new BufferedWriter(new OutputStreamWriter(
-			   new FileOutputStream(param.getFileName()), "UTF-8"));
+					new FileOutputStream(param.getFileName()), "UTF-8"));
 			switch (param.getFormat()) {
 				case F_ZXML:
 				case F_XML:
@@ -194,7 +194,7 @@ public abstract class AbstractExport {
 			}
 		} catch (IOException ex) {
 			ExceptionDlg.show(this.getClass().getSimpleName()
-			   + ".setOutStream(filename=" + filename + ") error", ex);
+					+ ".setOutStream(filename=" + filename + ") error", ex);
 			return false;
 		}
 		return true;
@@ -212,7 +212,7 @@ public abstract class AbstractExport {
 			outStream.flush();
 		} catch (IOException ex) {
 			ExceptionDlg.show(this.getClass().getSimpleName()
-			   + ".write(str len=" + str.length() + ")", ex);
+					+ ".write(str len=" + str.length() + ")", ex);
 			ExceptionDlg.show(EXPORT_TITLE, ex);
 			return false;
 		}
@@ -387,8 +387,8 @@ public abstract class AbstractExport {
 			isOpened = false;
 			if (verbose) {
 				JOptionPane.showMessageDialog(mainFrame,
-				   I18N.getMsg("export.success", param.getFileName()),
-				   I18N.getMsg("export"), JOptionPane.INFORMATION_MESSAGE);
+						I18N.getMsg("export.success", param.getFileName()),
+						I18N.getMsg("export"), JOptionPane.INFORMATION_MESSAGE);
 			}
 		} catch (IOException ex) {
 			LOG.err(TT + ".closeFile(...)", ex);

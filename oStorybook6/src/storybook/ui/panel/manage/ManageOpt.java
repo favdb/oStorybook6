@@ -36,7 +36,7 @@ import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractOptions;
-import static storybook.ui.panel.manage.Manage.*;
+import static storybook.ui.panel.manage.ManagePanel.*;
 
 /**
  *
@@ -64,8 +64,8 @@ public class ManageOpt extends AbstractOptions {
 
 	@Override
 	public void init() {
-		setZoomMin(Manage.ZOOM_MIN);
-		setZoomMax(Manage.ZOOM_MAX);
+		setZoomMin(ManagePanel.ZOOM_MIN);
+		setZoomMax(ManagePanel.ZOOM_MAX);
 		try {
 			zoomValue = App.preferences.manageGetZoom();
 			columns = App.preferences.manageGetColumns();

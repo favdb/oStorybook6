@@ -32,6 +32,7 @@ import storybook.tools.ListUtil;
 import storybook.tools.Period;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
+import storybook.ui.MainFrame;
 
 public class Relation extends AbstractEntity {
 
@@ -300,11 +301,11 @@ public class Relation extends AbstractEntity {
 	@Override
 	public int hashCode() {
 		return hashPlus(super.hashCode(),
-		   startScene,
-		   endScene,
-		   persons,
-		   items,
-		   locations);
+				startScene,
+				endScene,
+				persons,
+				items,
+				locations);
 	}
 
 	public static Relation find(List<Relation> list, String str) {
@@ -342,6 +343,24 @@ public class Relation extends AbstractEntity {
 		ls.add(tableName + ",locations,Table.Location,0");
 		ls.add(tableName + ",items,Table.Item,0");
 		return (ls);
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Relation ne = new Relation();
+		doCopyTo(m, ne);
+		ne.setEndScene(getEndScene());
+		for (Item n : getItems()) {
+			ne.items.add(n);
+		}
+		for (Location n : getLocations()) {
+			ne.locations.add(n);
+		}
+		for (Person n : getPersons()) {
+			ne.persons.add(n);
+		}
+		ne.setStartScene(getStartScene());
+		return ne;
 	}
 
 }

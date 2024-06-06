@@ -44,94 +44,94 @@ import static storybook.ui.Ui.*;
  */
 public class ChapterEdit extends AbstractEditor {
 
-	private static final String TT = "EditChapter";
+    private static final String TT = "EditChapter";
 
-	private JComboBox cbPart;
-	private JTextField tfNumber;
-	private Objective objective;
+    private JComboBox cbPart;
+    private JTextField tfNumber;
+    private Objective objective;
 
-	public ChapterEdit(Editor m, AbstractEntity e) {
-		super(m, e, "111");
-		setName(TT);
-		initAll();
+    public ChapterEdit(Editor m, AbstractEntity e) {
+	super(m, e, "111");
+	setName(TT);
+	initAll();
+    }
+
+    @Override
+    public void initUpper() {
+	Chapter chapter = (Chapter) entity;
+	if (chapter.getId() == -1) {
+	    chapter.setPart(mainFrame.lastPartGet());
+	    chapter.setChapterno(0);
 	}
-
-	@Override
-	public void initUpper() {
-		Chapter chapter = (Chapter) entity;
-		if (chapter.getId() == -1) {
-			chapter.setPart(mainFrame.lastPartGet());
-			chapter.setChapterno(0);
-		}
-		JPanel pleft = new JPanel(new MigLayout(MIG.get(MIG.WRAP), "[][]"));
-		cbPart = Ui.initCbEntities(pleft, this, "part", Book.TYPE.PART, chapter.getPart(),
-		   null, BNEW + BEMPTY);
-		tfNumber = Ui.initIntegerField(pleft, "number", 5, chapter.getChapterno(), BMANDATORY);
-		if (chapter.getChapterno() < 1) {
-			tfNumber.setText("+");
-		}
-		pUpper.add(pleft, MIG.get(MIG.SPAN, MIG.SPLIT2, MIG.TOP, MIG.GROW));
-		objective = new Objective(entity, BookUtil.getNbChars(mainFrame.project, chapter));
-		pUpper.add(objective.getPanel(this), MIG.SPAN);
+	JPanel pleft = new JPanel(new MigLayout(MIG.get(MIG.WRAP), "[][]"));
+	cbPart = Ui.initCbEntities(pleft, this, "part", Book.TYPE.PART, chapter.getPart(),
+		null, BNEW + BEMPTY);
+	tfNumber = Ui.initIntegerField(pleft, "number", 5, chapter.getChapterno(), BMANDATORY);
+	if (chapter.getChapterno() < 1) {
+	    tfNumber.setText("+");
 	}
+	pUpper.add(pleft, MIG.get(MIG.SPAN, MIG.SPLIT2, MIG.TOP, MIG.GROW));
+	objective = new Objective(entity, BookUtil.getNbChars(mainFrame.project, chapter));
+	pUpper.add(objective.getPanel(this), MIG.SPAN);
+    }
 
-	@Override
-	public boolean verifier() {
-		JTextField tf = new JTextField();
-		resetError();
-		tfNumber.setBorder(tf.getBorder());
-		if (cbPart.getSelectedIndex() < 0) {
-			errorMsg(cbPart, Const.ERROR_MISSING);
-		}
-		List chapters = mainFrame.project.getList(Book.TYPE.CHAPTER);
-		if (tfNumber.getText().equals("+")) {
-			tfNumber.setText(Chapter.getNextNumber(chapters).toString());
-		} else if (tfNumber.getText().isEmpty()) {
-			errorMsg(tfNumber, Const.ERROR_MISSING);
-		} else if (!StringUtil.isNumeric(tfNumber.getText())) {
-			errorMsg(tfNumber, Const.ERROR_NOTNUMERIC);
-		} else {
-			int n = Integer.parseInt(tfNumber.getText());
-			Chapter c = Chapter.findNumber(chapters, n);
-			if (c != null && !Objects.equals(c.getId(), entity.getId())) {
-				errorMsg(tfNumber, Const.ERROR_EXISTS);
-			}
-		}
-		objective.check(this);
-		return (msgError.isEmpty());
+    @Override
+    public boolean verifier() {
+	JTextField tf = new JTextField();
+	resetError();
+	tfNumber.setBorder(tf.getBorder());
+	if (cbPart.getSelectedIndex() < 0) {
+	    errorMsg(cbPart, Const.ERROR_MISSING);
 	}
+	List chapters = mainFrame.project.getList(Book.TYPE.CHAPTER);
+	if (tfNumber.getText().equals("+")) {
+	    tfNumber.setText(Chapter.getNextNumber(chapters).toString());
+	} else if (tfNumber.getText().isEmpty()) {
+	    errorMsg(tfNumber, Const.ERROR_MISSING);
+	} else if (!StringUtil.isNumeric(tfNumber.getText())) {
+	    errorMsg(tfNumber, Const.ERROR_NOTNUMERIC);
+	} else {
+	    int n = Integer.parseInt(tfNumber.getText());
+	    Chapter c = Chapter.findNumber(chapters, n);
+	    if (c != null && !Objects.equals(c.getId(), entity.getId())) {
+		errorMsg(tfNumber, Const.ERROR_EXISTS);
+	    }
+	}
+	objective.check(this);
+	return (msgError.isEmpty());
+    }
 
-	@Override
-	public void apply() {
-		Chapter chapter = (Chapter) entity;
-		chapter.setTitle(tfName.getText());
-		if (cbPart.getSelectedIndex() >= 1) {
-			chapter.setPart((Part) cbPart.getSelectedItem());
-			mainFrame.lastPartSet((Part) cbPart.getSelectedItem());
-		} else {
-			chapter.setPart((Part) null);
-		}
-		if (tfNumber.getText().equals("+")) {
-			chapter.setChapterno(Chapter.getNextNumber(mainFrame.project.getList(Book.TYPE.CHAPTER)));
-		} else {
-			chapter.setChapterno(Integer.valueOf(tfNumber.getText()));
-		}
-		if (chapter.getId() == -1) {
-			chapter.setCreationTime(new Timestamp(System.currentTimeMillis()));
-		}
-		objective.apply(entity);
-		mainFrame.lastChapterSet(chapter);
-		super.apply();
+    @Override
+    public void apply() {
+	Chapter chapter = (Chapter) entity;
+	chapter.setTitle(tfName.getText());
+	if (cbPart.getSelectedIndex() >= 1) {
+	    chapter.setPart((Part) cbPart.getSelectedItem());
+	    mainFrame.lastPartSet((Part) cbPart.getSelectedItem());
+	} else {
+	    chapter.setPart((Part) null);
 	}
+	if (tfNumber.getText().equals("+")) {
+	    chapter.setChapterno(Chapter.getNextNumber(mainFrame.project.getList(Book.TYPE.CHAPTER)));
+	} else {
+	    chapter.setChapterno(Integer.valueOf(tfNumber.getText()));
+	}
+	if (chapter.getId() == -1) {
+	    chapter.setCreationTime(new Timestamp(System.currentTimeMillis()));
+	}
+	objective.apply(entity);
+	mainFrame.lastChapterSet(chapter);
+	super.apply();
+    }
 
-	@Override
-	public void modelPropertyChange(PropertyChangeEvent evt) {
-		// empty
-	}
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+	// empty
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// empty
-	}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+	// empty
+    }
 
 }

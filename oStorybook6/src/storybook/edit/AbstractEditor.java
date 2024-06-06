@@ -44,7 +44,6 @@ import resources.icons.IconUtil;
 import storybook.App;
 import storybook.Const;
 import storybook.Pref;
-import storybook.db.EntityUtil;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.category.Category;
@@ -79,7 +78,7 @@ import storybook.ui.panel.AbstractPanel;
  */
 public abstract class AbstractEditor extends AbstractPanel {
 
-	private static final String TT = "AbstractEditor";
+	private static final String TT = "AbstractEditor.";
 	private static final String DESCRIPTION = "description", NOTES = "notes";
 
 	public AbstractEntity entity;
@@ -131,7 +130,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 
 	@Override
 	public void initUi() {
-		//LOG.printInfos(TT+".initUi() name=" + entity.getName());
+		//LOG.trace(TT+"initUi() name=" + entity.getName());
 		setLayout(new MigLayout(MIG.get(MIG.WRAP, MIG.HIDEMODE3), "[][grow][]"));
 		add(MainMenu.getHiddenMenu(this), MIG.SPAN);
 		entity = TempUtil.restore(mainFrame, entity);
@@ -172,7 +171,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 	public void initHead() {
 		pHead = new JPanel(new MigLayout(MIG.FILL, "[][][grow][]"));
 		btDeploy = Ui.initButton("btDeploy", "", ICONS.K.DP_UP, "deploy",
-		   (arg0 -> setDeploy(!deploy)));
+				(arg0 -> setDeploy(!deploy)));
 		pHead.add(btDeploy);
 		JLabel lbName = new JLabel(I18N.getColonMsg("name"));
 		lbName.setFont(FontUtil.getBold(lbName.getFont()));
@@ -183,9 +182,9 @@ public abstract class AbstractEditor extends AbstractPanel {
 		SwingUtil.setAspect(tfName, aspect);
 		pHead.add(tfName, MIG.GROWX);
 		JButton bt = Ui.initButton("btAspect", "",
-		   ICONS.K.COLOR,
-		   "name.aspect",
-		   e -> changeAspect());
+				ICONS.K.COLOR,
+				"name.aspect",
+				e -> changeAspect());
 		pHead.add(bt);
 		add(pHead, MIG.get(MIG.SPAN, MIG.GROWX));
 	}
@@ -198,8 +197,8 @@ public abstract class AbstractEditor extends AbstractPanel {
 	}
 
 	/**
-	 * initialize the foot part of the editor (for description, notes, assistant) and buttons
-	 * (assistant, write, cancel, ok)
+	 * initialize the foot part of the editor (for description, notes,
+	 * assistant) and buttons (assistant, write, cancel, ok)
 	 */
 	public void initFoot() {
 		pFoot = new JPanel(new MigLayout());
@@ -231,7 +230,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 	 *
 	 */
 	public void initBottom() {
-		//LOG.printInfos(TT + ".initCommon()");
+		//LOG.trace(TT + "initCommon()");
 		JTabbedPane tab2 = tab1;
 		if (!bDesc || !bNotes) {
 			// second tabbed pane
@@ -280,7 +279,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 	 */
 	public void initDescription(JPanel panel, JTabbedPane tab) {
 		hDescription = Ui.initHtmlEditor(panel,
-		   DESCRIPTION, entity.getDescription(), tab, "");
+				DESCRIPTION, entity.getDescription(), tab, "");
 		hDescription.setBase(mainFrame.project.getPath());
 	}
 
@@ -292,7 +291,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 	 */
 	public void initNotes(JPanel panel, JTabbedPane tab) {
 		hNotes = Ui.initHtmlEditor(panel,
-		   NOTES, entity.getNotes(), tab, "");
+				NOTES, entity.getNotes(), tab, "");
 		hNotes.setBase(mainFrame.project.getPath());
 	}
 
@@ -303,7 +302,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 	 * @param tab
 	 */
 	public void initAssistant(JPanel panel, JTabbedPane tab) {
-		//App.printInfos(TT + ".initAssistant(panel, tab) for edit=" + this.getName());
+		//LOG.trace(TT + "initAssistant(panel, tab) for edit=" + this.getName());
 		if (!App.getAssistant().isExists(mainFrame.getBook(), entity.getObjType().toString())) {
 			return;
 		}
@@ -320,14 +319,14 @@ public abstract class AbstractEditor extends AbstractPanel {
 		panelAssistant = new JPanel(new MigLayout(MIG.FILL));
 		panelAssistant.add(scroller, MIG.get(MIG.GROW, MIG.SPAN, MIG.WRAP));
 		btAssistantErase = Ui.initButton("btAssistantErase",
-		   "clear", ICONS.K.CLEAR, "", evt -> clearAssistant());
+				"clear", ICONS.K.CLEAR, "", evt -> clearAssistant());
 		panelAssistant.add(btAssistantErase, MIG.get(MIG.NEWLINE, MIG.SPAN, MIG.SPLIT + " 4"));
 		panelAssistant.add(new JLabel(I18N.getColonMsg("assistant.transfer")));
 		btAssistantToDesc = Ui.initButton("btAssistantToDescription",
-		   "", ICONS.K.EDIT, "description", evt -> assistantTo(DESCRIPTION));
+				"", ICONS.K.EDIT, "description", evt -> assistantTo(DESCRIPTION));
 		panelAssistant.add(btAssistantToDesc);
 		btAssistantToNotes = Ui.initButton("btAssistantToNotes",
-		   "", ICONS.K.NOTE, "notes", evt -> assistantTo(NOTES));
+				"", ICONS.K.NOTE, "notes", evt -> assistantTo(NOTES));
 		panelAssistant.add(btAssistantToNotes);
 		setAssistantButton();
 		addField(panel, "assistant", MIG.TOP, panelAssistant, tab, BGROW);
@@ -357,7 +356,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 	 *
 	 */
 	public void setAssistantButton() {
-		//App.printInfos(TT + ".setAssistantButton()");
+		//LOG.trace(TT + "setAssistantButton()");
 		boolean a = tpAssistant.getText().isEmpty();
 		boolean b = false;
 		if (!a) {
@@ -542,16 +541,11 @@ public abstract class AbstractEditor extends AbstractPanel {
 	}
 
 	/**
-	 * write the data
+	 * write the datas
 	 *
 	 */
 	public void save() {
-		if (entity.getId() == -1L) {
-			ctrl.newEntity(entity);
-		} else {
-			ctrl.updateEntity(entity);
-		}
-		mainFrame.getBookController().infoSetTo(entity);
+		//LOG.trace(TT + "save()");
 		mainFrame.setUpdated();
 	}
 
@@ -566,10 +560,10 @@ public abstract class AbstractEditor extends AbstractPanel {
 			I18N.getMsg("discard.changes"),
 			I18N.getMsg("cancel")};
 		return JOptionPane.showOptionDialog(this,
-		   I18N.getMsg("save.or.discard.changes"),
-		   I18N.getMsg("save.changes.title"),
-		   JOptionPane.YES_NO_CANCEL_OPTION,
-		   JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+				I18N.getMsg("save.or.discard.changes"),
+				I18N.getMsg("save.changes.title"),
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 	}
 
 	/**
@@ -578,7 +572,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 	 * @return
 	 */
 	public int isModified() {
-		//App.printInfos(TT + ".isModified() entityHash=" + entityHash + ", hash=" + entity.hashCode());
+		//LOG.trace(TT + "isModified() entityHash=" + entityHash + ", hash=" + entity.hashCode());
 		if (entity.toText().hashCode() != entityHash) {
 			return askSave();
 		}
@@ -595,11 +589,11 @@ public abstract class AbstractEditor extends AbstractPanel {
 	}
 
 	/**
-	 * apply changes
+	 * apply changes, only get the datas
 	 *
 	 */
 	public void apply() {
-		//LOG.trace(TT + ".apply()");
+		//LOG.trace(TT + "apply()");
 		entity.setName(tfName.getText());
 		entity.setAspect(aspect);
 		if (common.charAt(0) != '0') {
@@ -607,6 +601,9 @@ public abstract class AbstractEditor extends AbstractPanel {
 		}
 		if (common.charAt(1) != '0') {
 			entity.setNotes(hNotes != null ? Html.checkImages(mainFrame, hNotes.getText()) : "");
+		}
+		if (common.charAt(2) != '0') {
+			// nothing, made by doAssistant()
 		}
 	}
 
@@ -660,7 +657,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 	 * @param cb
 	 */
 	public void actionEntity(String compName, JSCheckList cb) {
-		//LOG.printInfos(TT+".actionEntity(compName=" + compName + ", cb=" + cb.getName() + ")");
+		//LOG.trace(TT + "actionEntity(compName=" + compName + ", cb=" + cb.getName() + ")");
 		if (compName == null) {
 			return;
 		}
@@ -707,10 +704,10 @@ public abstract class AbstractEditor extends AbstractPanel {
 	public void tempSave() {
 		if (entity instanceof Scene) {
 			Scene scene = new Scene();
-			EntityUtil.copyEntityProperties(mainFrame, entity, scene);
+			// EntityUtil.copyEntityProperties(mainFrame, entity, scene);
 			scene.setSummary(msgError);
 			TempUtil.write(mainFrame, entity);
-			EntityUtil.copyEntityProperties(mainFrame, scene, entity);
+			//EntityUtil.copyEntityProperties(mainFrame, scene, entity);
 		}
 	}
 
@@ -744,12 +741,12 @@ public abstract class AbstractEditor extends AbstractPanel {
 	 * @param which
 	 */
 	private void assistantTo(String which) {
-		//App.printInfos(TT + ".assistantTo(which=" + which + ")");
+		//LOG.trace(TT + "assistantTo(which=" + which + ")");
 		String rep = tpAssistant.getText()
-		   .replace(Html.HTML_B, "")
-		   .replace(Html.HTML_E, "")
-		   .replace(Html.BODY_B, "")
-		   .replace(Html.BODY_E, "");
+				.replace(Html.HTML_B, "")
+				.replace(Html.HTML_E, "")
+				.replace(Html.BODY_B, "")
+				.replace(Html.BODY_E, "");
 		if (which.equals(DESCRIPTION)) {
 			String st = hDescription.getText() + Html.P_EMPTY + rep;
 			hDescription.setText(st);

@@ -74,12 +74,15 @@ public class ListUtil {
 	}
 
 	public static String join(String[] str) {
+		if (str == null) {
+			return "null";
+		}
 		StringBuilder b = new StringBuilder();
 		for (String s : str) {
 			if (!b.toString().isEmpty()) {
 				b.append(", ");
 			}
-			b.append(str);
+			b.append(s);
 		}
 		return b.toString();
 	}

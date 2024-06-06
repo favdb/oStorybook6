@@ -100,8 +100,6 @@
     <!-- ===Build ZIP file================================================ -->
     <target name="build-appzip" depends="jar, build-prepare" >
         <echo level="info" message="--- start of build-appzip"/>
-        <mkdir dir="${dist.dir}" />
-        <mkdir dir="${sb.distdir}" />
         <zip destfile="${sb.distzip}" basedir="${basedir}/dist" />
         <echo level="info" message="--- end of build-appzip"/>
     </target>

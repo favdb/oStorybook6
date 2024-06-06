@@ -31,9 +31,9 @@ public class ManageSceneTransfer extends TransferHandler {
 
 	private final DataFlavor sceneFlavor = DataFlavor.stringFlavor;
 	private ManageSceneDnd sourceScene;
-	private final Manage manage;
+	private final ManagePanel manage;
 
-	public ManageSceneTransfer(Manage manage) {
+	public ManageSceneTransfer(ManagePanel manage) {
 		this.manage = manage;
 	}
 

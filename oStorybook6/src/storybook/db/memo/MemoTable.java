@@ -19,8 +19,9 @@ package storybook.db.memo;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
-import storybook.db.abs.AbstractEntity;
+import storybook.ctrl.ActKey;
 import storybook.db.abs.AbsTable;
+import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.ui.MainFrame;
 
@@ -51,7 +52,14 @@ public class MemoTable extends AbsTable {
 
 	@Override
 	protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
-		//no specific change
+		ActKey act = new ActKey(evt);
+		if (isInit(act)) {
+			return;
+		}
+		if (Book.getTYPE(act.type) == Book.TYPE.MEMO
+				&& (act.isNew() || act.isUpdate() || act.isDelete())) {
+			fillTable();
+		}
 	}
 
 	@Override

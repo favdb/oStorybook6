@@ -300,4 +300,14 @@ public class Idea extends AbstractEntity {
 		return (ls);
 	}
 
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Idea ne = new Idea();
+		doCopyTo(m, ne);
+		ne.setCategory(getCategory());
+		ne.setStatus(getStatus());
+		ne.setUuid();
+		return ne;
+	}
+
 }

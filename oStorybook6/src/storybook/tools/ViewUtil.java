@@ -44,7 +44,7 @@ import storybook.ui.panel.book.BookScenePanel;
 import storybook.ui.panel.chrono.ChronoPanel;
 import storybook.ui.panel.chrono.ChronoScenePanel;
 import storybook.ui.panel.chrono.StrandDateLabel;
-import storybook.ui.panel.manage.Manage;
+import storybook.ui.panel.manage.ManagePanel;
 import storybook.ui.panel.manage.ManageChapter;
 import storybook.ui.panel.manage.ManageSceneDnd;
 
@@ -84,7 +84,7 @@ public class ViewUtil {
 	}
 
 	public static boolean scrollToChapter(AbstractPanel container, JPanel panel, Chapter chapter) {
-		if (container instanceof Manage) {
+		if (container instanceof ManagePanel) {
 			if (chapter == null) {
 				return false;
 			}
@@ -125,7 +125,7 @@ public class ViewUtil {
 				if (container instanceof ChronoPanel) {
 					rect = SwingUtilities.convertRectangle(scenePanel.getParent(), rect, panel);
 				}
-				if (container instanceof Manage) {
+				if (container instanceof ManagePanel) {
 					rect = SwingUtilities.convertRectangle(scenePanel.getParent(), rect, panel);
 				}
 				SwingUtil.expandRectangle(rect);
@@ -200,7 +200,7 @@ public class ViewUtil {
 		if (cont instanceof BookPanel) {
 			return findBookScenePanels(cont);
 		}
-		if (cont instanceof Manage) {
+		if (cont instanceof ManagePanel) {
 			return findManageScenePanels(cont);
 		}
 		return new ArrayList<>();

@@ -29,7 +29,6 @@ import storybook.db.part.Part;
 import storybook.db.scene.Scene;
 import storybook.project.Project;
 import storybook.tools.StringUtil;
-import storybook.tools.calendar.SbCalendar;
 import storybook.tools.xml.XmlUtil;
 import storybook.ui.MainFrame;
 
@@ -212,7 +211,8 @@ public class Book {
 	}
 
 	/**
-	 * KEY determining data associated with the Book like Title, Author, and so on
+	 * KEY determining data associated with the Book like Title, Author, and so
+	 * on
 	 */
 	public enum INFO {
 		ASSISTANT("Assistant"),//Boolean
@@ -480,7 +480,7 @@ public class Book {
 		info.reviewSet(val);
 	}
 
-	public static boolean isUseCalendar(Project project) {
+	/*public static boolean isUseCalendar(Project project) {
 		return project.book.param.getParamCalendar().getUse();
 	}
 
@@ -512,8 +512,7 @@ public class Book {
 		p.setDays(c.getListDays());
 		p.setMonths(c.getListMonths());
 		p.setStartDay(c.startday);
-	}
-
+	}*/
 	/**
 	 * get number of Strands
 	 *

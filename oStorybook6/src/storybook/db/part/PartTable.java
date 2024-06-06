@@ -57,10 +57,10 @@ public class PartTable extends AbsTable {
 	@Override
 	protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
 		ActKey act = new ActKey(evt);
-		if (act.isUpdate()
-		   && (act.getType() == Book.TYPE.PART
-		   || act.getType() == Book.TYPE.SCENE
-		   || act.getType() == Book.TYPE.CHAPTER)) {
+		if ((act.isNew() || act.isUpdate() || act.isDelete())
+				&& (act.getType() == Book.TYPE.PART
+				|| act.getType() == Book.TYPE.SCENE
+				|| act.getType() == Book.TYPE.CHAPTER)) {
 			fillTable();
 		}
 	}

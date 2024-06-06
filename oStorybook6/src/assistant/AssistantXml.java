@@ -382,6 +382,39 @@ public class AssistantXml {
 		}
 	}
 
+	public String findName(String type, String key) {
+		if (rootNode == null) {
+			return "";
+		}
+		NodeList nodes = rootNode.getElementsByTagName(type);
+		if (nodes.getLength() < 1) {
+			return "";
+		}
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Node nx = nodes.item(i);
+			if (nx == null || nx.getNodeName().equals("#text")) {
+				continue;
+			}
+			String name = getAttribute(nx, "name");
+			if (name != null && key.equalsIgnoreCase(name)) {
+				return ((Element) nodes.item(i)).getAttribute("title");
+			}
+		}
+		return "";
+	}
+
+	public String findComboboxName(String key) {
+		return findName("combobox", key);
+	}
+
+	public String findTextareaName(String key) {
+		return findName("textarea", key);
+	}
+
+	public String findTextfieldName(String key) {
+		return findName("textfield", key);
+	}
+
 	public static boolean isResourceExists(Class fromClass, String in) {
 		URL u = fromClass.getResource(in);
 		return u != null;

@@ -2,8 +2,19 @@ oStorybook
 ==========
 
 Versions :
+6.01: (01/09/2024)
+- corrections de bugs
+
+6.00d :correctif d'urgence
+6.00c :correctif d'urgence
+6.00b :correctif d'urgence
+6.00a :correctif d'urgence
 6.00: (21/04/2024)
+- suppression de l'API org.apache.commons.beanutils
+- extension de la table de caractères Unicode pour insertion
 - nouvelle structure sans utiliser le SGBD H2Database ni Hibernate
+- outils de narration
+
 5.61: (31/12/2023)
 - ajout de racourcis clavier pour SHEF (style paragraphe, listes)
 - ajout de l'export TeX/LaTeX

@@ -16,6 +16,7 @@
  */
 package storybook.exim.exporter.options;
 
+import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.Color;
 import java.awt.Insets;
@@ -29,11 +30,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import api.mig.swing.MigLayout;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import storybook.exim.exporter.ExportBookDlg;
 import storybook.db.book.BookParamExport;
+import storybook.exim.exporter.ExportBookDlg;
 import storybook.tools.file.EnvUtil;
 import storybook.ui.MIG;
 
@@ -43,129 +43,129 @@ import storybook.ui.MIG;
  */
 public class HTMLpanel extends JPanel implements ChangeListener {
 
-	private static final String TT = "HTMLpanel";
+    private static final String TT = "HTMLpanel";
 
-	private final ExportBookDlg dlgExport;
-	private JButton btCssFile;
-	private JTextField txCssFile;
-	public JCheckBox cbNav;
-	public JCheckBox cbNavImage;
-	private JCheckBox cbUseCss;
-	private JCheckBox ckChapterBreakPage;
-	private final BookParamExport paramExport;
+    private final ExportBookDlg dlgExport;
+    private JButton btCssFile;
+    private JTextField txCssFile;
+    public JCheckBox cbNav;
+    public JCheckBox cbNavImage;
+    private JCheckBox cbUseCss;
+    private JCheckBox ckChapterBreakPage;
+    private final BookParamExport paramExport;
 
-	public HTMLpanel(ExportBookDlg dlg) {
-		this.dlgExport = dlg;
-		paramExport = dlg.getParamExport();
-		initAll();
+    public HTMLpanel(ExportBookDlg dlg) {
+	this.dlgExport = dlg;
+	paramExport = dlg.getParamExport();
+	initAll();
+    }
+
+    private void initAll() {
+	init();
+	initUi();
+    }
+
+    private void init() {
+    }
+
+    private void initUi() {
+	//LOG.trace(TT + ".initUi() " + paramExport.toString());
+	setLayout(new MigLayout());
+	boolean htmlCss = !paramExport.getHtmlCss().isEmpty();
+	cbUseCss = new JCheckBox(I18N.getMsg("export.options.html.css"));
+	cbUseCss.setSelected(htmlCss);
+	cbUseCss.addItemListener(evt -> htmlUseCssChanged(evt));
+	add(cbUseCss, MIG.WRAP);
+
+	txCssFile = new JTextField(paramExport.getHtmlCss());
+	txCssFile.setColumns(32);
+	txCssFile.setEnabled(htmlCss);
+	add(txCssFile, MIG.SPLIT2);
+
+	btCssFile = new JButton();
+	btCssFile.setMargin(new Insets(0, 0, 0, 0));
+	btCssFile.setIcon(IconUtil.getIconSmall(ICONS.K.F_OPEN));
+	btCssFile.addActionListener(e -> ChooseCssFile());
+	btCssFile.setEnabled(htmlCss);
+	add(btCssFile, MIG.WRAP);
+
+	cbNav = new JCheckBox(I18N.getMsg("export.options.html.nav"));
+	cbNav.setSelected(paramExport.getHtmlNav());
+	cbNav.addChangeListener(this);
+	add(cbNav, MIG.WRAP);
+
+	add(new JLabel("     "), "split 2");
+
+	cbNavImage = new JCheckBox(I18N.getMsg("export.options.html.navimage"));
+	cbNavImage.setSelected(paramExport.getHtmlNavImage());
+	cbNavImage.setEnabled(cbNav.isSelected());
+	add(cbNavImage, MIG.WRAP);
+
+	ckChapterBreakPage = new JCheckBox(I18N.getMsg("export.chapter.break_page"));
+	ckChapterBreakPage.setSelected(paramExport.getHtmlChapterBreakPage());
+	add(ckChapterBreakPage, MIG.WRAP);
+    }
+
+    private void htmlUseCssChanged(ItemEvent evt) {
+	if (evt.getStateChange() == ItemEvent.SELECTED) {
+	    txCssFile.setEnabled(true);
+	    btCssFile.setEnabled(true);
+	} else {
+	    txCssFile.setEnabled(false);
+	    btCssFile.setEnabled(false);
 	}
+    }
 
-	private void initAll() {
-		init();
-		initUi();
+    private void ChooseCssFile() {
+	JFileChooser chooser = new JFileChooser(txCssFile.getText());
+	if (txCssFile.getText().isEmpty()) {
+	    chooser.setCurrentDirectory(new File(EnvUtil.getDefaultExportDir(dlgExport.getMainFrame())));
 	}
-
-	private void init() {
+	chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	chooser.setFileFilter(new CssFileFilter());
+	int i = chooser.showOpenDialog(this);
+	if (i != 0) {
+	    return;
 	}
+	File file = chooser.getSelectedFile();
+	txCssFile.setText(file.getAbsolutePath());
+	txCssFile.setBackground(Color.WHITE);
+    }
 
-	private void initUi() {
-		//LOG.trace(TT + ".initUi() " + paramExport.toString());
-		setLayout(new MigLayout());
-		boolean htmlCss = !paramExport.getHtmlCss().isEmpty();
-		cbUseCss = new JCheckBox(I18N.getMsg("export.options.html.css"));
-		cbUseCss.setSelected(htmlCss);
-		cbUseCss.addItemListener(evt -> htmlUseCssChanged(evt));
-		add(cbUseCss, MIG.WRAP);
-
-		txCssFile = new JTextField(paramExport.getHtmlCss());
-		txCssFile.setColumns(32);
-		txCssFile.setEnabled(htmlCss);
-		add(txCssFile, MIG.SPLIT2);
-
-		btCssFile = new JButton();
-		btCssFile.setMargin(new Insets(0, 0, 0, 0));
-		btCssFile.setIcon(IconUtil.getIconSmall(ICONS.K.F_OPEN));
-		btCssFile.addActionListener(e -> ChooseCssFile());
-		btCssFile.setEnabled(htmlCss);
-		add(btCssFile, MIG.WRAP);
-
-		cbNav = new JCheckBox(I18N.getMsg("export.options.html.nav"));
-		cbNav.setSelected(paramExport.getHtmlNav());
-		cbNav.addChangeListener(this);
-		add(cbNav, MIG.WRAP);
-
-		add(new JLabel("     "), "split 2");
-
-		cbNavImage = new JCheckBox(I18N.getMsg("export.options.html.navimage"));
-		cbNavImage.setSelected(paramExport.getHtmlNavImage());
-		cbNavImage.setEnabled(cbNav.isSelected());
-		add(cbNavImage, MIG.WRAP);
-
-		ckChapterBreakPage = new JCheckBox(I18N.getMsg("export.chapter.break_page"));
-		ckChapterBreakPage.setSelected(paramExport.getHtmlChapterBreakPage());
-		add(ckChapterBreakPage, MIG.WRAP);
+    public void apply(BookParamExport p) {
+	//LOG.trace(TT + ".apply(p)");
+	if (!cbUseCss.isSelected()) {
+	    txCssFile.setText("");
 	}
-
-	private void htmlUseCssChanged(ItemEvent evt) {
-		if (evt.getStateChange() == ItemEvent.SELECTED) {
-			txCssFile.setEnabled(true);
-			btCssFile.setEnabled(true);
-		} else {
-			txCssFile.setEnabled(false);
-			btCssFile.setEnabled(false);
-		}
+	p.setHtmlCss(txCssFile.getText());
+	p.setHtmlNav(cbNav.isSelected());
+	if (cbNav.isSelected()) {
+	    p.setHtmlNavImage(cbNavImage.isSelected());
+	} else {
+	    p.setHtmlNavImage(false);
 	}
+	p.setHtmlChapterBreakPage(ckChapterBreakPage.isSelected());
+    }
 
-	private void ChooseCssFile() {
-		JFileChooser chooser = new JFileChooser(txCssFile.getText());
-		if (txCssFile.getText().isEmpty()) {
-			chooser.setCurrentDirectory(new File(EnvUtil.getDefaultExportDir(dlgExport.getMainFrame())));
-		}
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		chooser.setFileFilter(new CssFileFilter());
-		int i = chooser.showOpenDialog(this);
-		if (i != 0) {
-			return;
-		}
-		File file = chooser.getSelectedFile();
-		txCssFile.setText(file.getAbsolutePath());
-		txCssFile.setBackground(Color.WHITE);
-	}
+    @Override
+    public void stateChanged(ChangeEvent e) {
+	cbNavImage.setEnabled(cbNav.isSelected());
+    }
 
-	public void apply(BookParamExport p) {
-		//LOG.trace(TT + ".apply(p)");
-		if (!cbUseCss.isSelected()) {
-			txCssFile.setText("");
-		}
-		p.setHtmlCss(txCssFile.getText());
-		p.setHtmlNav(cbNav.isSelected());
-		if (cbNav.isSelected()) {
-			p.setHtmlNavImage(cbNavImage.isSelected());
-		} else {
-			p.setHtmlNavImage(false);
-		}
-		p.setHtmlChapterBreakPage(ckChapterBreakPage.isSelected());
+    public class CssFileFilter extends javax.swing.filechooser.FileFilter {
+
+	@Override
+	public boolean accept(File file) {
+	    if (file.isDirectory()) {
+		return true;
+	    }
+	    String filename = file.getName();
+	    return filename.endsWith(".css");
 	}
 
 	@Override
-	public void stateChanged(ChangeEvent e) {
-		cbNavImage.setEnabled(cbNav.isSelected());
+	public String getDescription() {
+	    return "CSS Files (*.css)";
 	}
-
-	public class CssFileFilter extends javax.swing.filechooser.FileFilter {
-
-		@Override
-		public boolean accept(File file) {
-			if (file.isDirectory()) {
-				return true;
-			}
-			String filename = file.getName();
-			return filename.endsWith(".css");
-		}
-
-		@Override
-		public String getDescription() {
-			return "CSS Files (*.css)";
-		}
-	}
+    }
 }

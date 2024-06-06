@@ -24,8 +24,8 @@ import javax.swing.JToolBar;
 import storybook.ctrl.ActKey;
 import storybook.db.DB;
 import storybook.db.abs.AbsColumn;
-import storybook.db.abs.AbstractEntity;
 import storybook.db.abs.AbsTable;
+import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.category.Categorys;
 import storybook.ui.MainFrame;
@@ -73,8 +73,8 @@ public class PlotTable extends AbsTable {
 	@Override
 	protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
 		ActKey act = new ActKey(evt);
-		if (act.isUpdate()
-		   && (act.getType() == Book.TYPE.PLOT)) {
+		if ((act.isNew() || act.isUpdate() || act.isDelete())
+				&& (act.getType() == Book.TYPE.PLOT)) {
 			fillTable();
 		}
 	}

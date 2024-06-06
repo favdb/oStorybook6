@@ -52,9 +52,9 @@ import storybook.ui.panel.AbstractPanel;
  */
 public class Storymap extends AbstractPanel implements ItemListener {
 
-	private static final String TT = "Storymap",
-	   CB_TYPE = "cbType", CB_ZOOM = "cbZoom",
-	   CK_HORIZONTAL = "ckHorizontal", CK_TITLE = "ckTitle";
+	private static final String TT = "Storymap.",
+			CB_TYPE = "cbType", CB_ZOOM = "cbZoom",
+			CK_HORIZONTAL = "ckHorizontal", CK_TITLE = "ckTitle";
 
 	public Map<String, String> labelMap;
 	public Map<String, Icon> iconMap;
@@ -92,15 +92,15 @@ public class Storymap extends AbstractPanel implements ItemListener {
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.trace(TT+".modelPropertyChange(evt=" + evt.toString() + ")");
-		String str = evt.getPropertyName();
+		//LOG.trace(TT+"modelPropertyChange(evt=" + evt.toString() + ")");
+		String propName = evt.getPropertyName();
+		if (propName == null || "SHOWINFO".equalsIgnoreCase(propName)) {
+			return;
+		}
 		View newView;
 		View oldView;
 		try {
-			if (str == null) {
-				return;
-			}
-			switch (Ctrl.getPROPS(str)) {
+			switch (Ctrl.getPROPS(propName)) {
 				case REFRESH:
 					newView = (View) evt.getNewValue();
 					oldView = (View) getParent().getParent();
@@ -123,9 +123,9 @@ public class Storymap extends AbstractPanel implements ItemListener {
 					}
 					return;
 				default:
-					if ((str.startsWith("Update"))
-					   || (str.startsWith("Delete"))
-					   || (str.startsWith("New"))) {
+					if ((propName.startsWith("Update"))
+							|| (propName.startsWith("Delete"))
+							|| (propName.startsWith("New"))) {
 						refresh();
 					}
 					break;
@@ -135,8 +135,8 @@ public class Storymap extends AbstractPanel implements ItemListener {
 				case SCENE:
 				case STRAND:
 					if (Ctrl.PROPS.NEW.check(act.getCmd())
-					   || Ctrl.PROPS.UPDATE.check(act.getCmd())
-					   || Ctrl.PROPS.DELETE.check(act.getCmd())) {
+							|| Ctrl.PROPS.UPDATE.check(act.getCmd())
+							|| Ctrl.PROPS.DELETE.check(act.getCmd())) {
 						refresh();
 					}
 					break;
@@ -144,7 +144,7 @@ public class Storymap extends AbstractPanel implements ItemListener {
 					break;
 			}
 		} catch (Exception exc) {
-			LOG.err(TT + ".modelPropertyChange(" + evt.toString() + ")", exc);
+			LOG.err(TT + "modelPropertyChange(" + evt.toString() + ")", exc);
 		}
 	}
 

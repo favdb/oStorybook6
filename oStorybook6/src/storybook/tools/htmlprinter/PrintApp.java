@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2024 FaVdB
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a fileCopy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package storybook.tools.htmlprinter;
 
 import java.awt.BorderLayout;
@@ -31,70 +47,70 @@ import javax.swing.text.html.HTMLEditorKit;
 public class PrintApp extends JFrame {
 
 	public static String htmlString = "<html>\n"
-	   + "<head>\n"
-	   + "</head>\n"
-	   + "\n"
-	   + "<body>\n"
-	   + "<h1>Press F2 to see Print Preview of the HTML page.</h1>\n"
-	   + "<p>This HTML content example was written to provide print preview and print of any JEditorPane/JTextPane content no matter what EditorKit is set.</p>\n"
-	   + "<p>To illustrate the feature HTMLEditorKit was used.</p>\n"
-	   + "<h2>Repeating content to fill the page and show how table is separated between pages.</h2>\n"
-	   + "<p>This HTML content example was written to provide print preview and print of any JEditorPane/JTextPane content no matter what EditorKit is set.</p>\n"
-	   + "<p>To illustrate the feature HTMLEditorKit was used.</p>\n"
-	   + "<h2>Repeating content to fill the page and show how table is separated between pages.</h2>\n"
-	   + "<p>This HTML content example was written to provide print preview and print of any JEditorPane/JTextPane content no matter what EditorKit is set.</p>\n"
-	   + "<p>To illustrate the feature HTMLEditorKit was used.</p>\n"
-	   + "<h2>Repeating content to fill the page and show how table is separated between pages.</h2>\n"
-	   + "<p>This HTML content example was written to provide print preview and print of any JEditorPane/JTextPane content no matter what EditorKit is set.</p>\n"
-	   + "<table cellspacing=\"0\" border=\"1\" width=\"70%\" cellpadding=\"3\">\n"
-	   + "<tr>\n"
-	   + "<th>\n"
-	   + "<p>Monday <input type='submit' value='Button'> <input value='TextField'> </p>\n"
-	   + "</th>\n"
-	   + "<th>\n"
-	   + "<p>Tuesday</p>\n"
-	   + "</th>\n"
-	   + "<th>\n"
-	   + "<p>Wednesday</p>\n"
-	   + "</th>\n"
-	   + "</tr>\n"
-	   + "<tr>\n"
-	   + "<td width=\"70%\">\n"
-	   + "<p>Row 1, Cell 1 </p>\n"
-	   + " <table align=\"left\">\n"
-	   + "  <tr><td>inner 1:1</td><td>inner 1:2</td></tr>\n"
-	   + "  <tr><td>inner 2:1</td><td>inner 2:2</td></tr>\n"
-	   + " </table>\n"
-	   + "<p>Inner table cell's paragraph must be very long to illustrate text flow and multiple lines filling.</p>\n"
-	   + "</td>\n"
-	   + "<td>\n"
-	   + "<p><font size=\"+1\">Row 1, Cell 2</p></font>\n"
-	   + "</td>\n"
-	   + "<td>\n"
-	   + "<p>Row 1, Cell 3</p>\n"
-	   + "<p>Row 1, Cell 3</p>\n"
-	   + "<p>Row 1, Cell 3</p>\n"
-	   + "<p>Row 1, Cell 3</p>\n"
-	   + "</td>\n"
-	   + "</tr>\n"
-	   + "<tr>\n"
-	   + "<td>\n"
-	   + "<p>Row 2, Cell 1</p>\n"
-	   + "</td>\n"
-	   + "<td>\n"
-	   + "<p>Row 2, Cell 2</p>\n"
-	   + "</td>\n"
-	   + "<td>\n"
-	   + "<p>Row 2, Cell 3</p>\n"
-	   + "</td>\n"
-	   + "</tr>\n"
-	   + "</table>\n"
-	   + "<h2>The text after table</h2>\n"
-	   + "<p>An additional text to surround table with content.</p>\n"
-	   + "<p>&nbsp;</p>\n"
-	   + "\n"
-	   + "</body>\n"
-	   + "</html>";
+			+ "<head>\n"
+			+ "</head>\n"
+			+ "\n"
+			+ "<body>\n"
+			+ "<h1>Press F2 to see Print Preview of the HTML page.</h1>\n"
+			+ "<p>This HTML content example was written to provide print preview and print of any JEditorPane/JTextPane content no matter what EditorKit is set.</p>\n"
+			+ "<p>To illustrate the feature HTMLEditorKit was used.</p>\n"
+			+ "<h2>Repeating content to fill the page and show how table is separated between pages.</h2>\n"
+			+ "<p>This HTML content example was written to provide print preview and print of any JEditorPane/JTextPane content no matter what EditorKit is set.</p>\n"
+			+ "<p>To illustrate the feature HTMLEditorKit was used.</p>\n"
+			+ "<h2>Repeating content to fill the page and show how table is separated between pages.</h2>\n"
+			+ "<p>This HTML content example was written to provide print preview and print of any JEditorPane/JTextPane content no matter what EditorKit is set.</p>\n"
+			+ "<p>To illustrate the feature HTMLEditorKit was used.</p>\n"
+			+ "<h2>Repeating content to fill the page and show how table is separated between pages.</h2>\n"
+			+ "<p>This HTML content example was written to provide print preview and print of any JEditorPane/JTextPane content no matter what EditorKit is set.</p>\n"
+			+ "<table cellspacing=\"0\" border=\"1\" width=\"70%\" cellpadding=\"3\">\n"
+			+ "<tr>\n"
+			+ "<th>\n"
+			+ "<p>Monday <input type='submit' value='Button'> <input value='TextField'> </p>\n"
+			+ "</th>\n"
+			+ "<th>\n"
+			+ "<p>Tuesday</p>\n"
+			+ "</th>\n"
+			+ "<th>\n"
+			+ "<p>Wednesday</p>\n"
+			+ "</th>\n"
+			+ "</tr>\n"
+			+ "<tr>\n"
+			+ "<td width=\"70%\">\n"
+			+ "<p>Row 1, Cell 1 </p>\n"
+			+ " <table align=\"left\">\n"
+			+ "  <tr><td>inner 1:1</td><td>inner 1:2</td></tr>\n"
+			+ "  <tr><td>inner 2:1</td><td>inner 2:2</td></tr>\n"
+			+ " </table>\n"
+			+ "<p>Inner table cell's paragraph must be very long to illustrate text flow and multiple lines filling.</p>\n"
+			+ "</td>\n"
+			+ "<td>\n"
+			+ "<p><font size=\"+1\">Row 1, Cell 2</p></font>\n"
+			+ "</td>\n"
+			+ "<td>\n"
+			+ "<p>Row 1, Cell 3</p>\n"
+			+ "<p>Row 1, Cell 3</p>\n"
+			+ "<p>Row 1, Cell 3</p>\n"
+			+ "<p>Row 1, Cell 3</p>\n"
+			+ "</td>\n"
+			+ "</tr>\n"
+			+ "<tr>\n"
+			+ "<td>\n"
+			+ "<p>Row 2, Cell 1</p>\n"
+			+ "</td>\n"
+			+ "<td>\n"
+			+ "<p>Row 2, Cell 2</p>\n"
+			+ "</td>\n"
+			+ "<td>\n"
+			+ "<p>Row 2, Cell 3</p>\n"
+			+ "</td>\n"
+			+ "</tr>\n"
+			+ "</table>\n"
+			+ "<h2>The text after table</h2>\n"
+			+ "<p>An additional text to surround table with content.</p>\n"
+			+ "<p>&nbsp;</p>\n"
+			+ "\n"
+			+ "</body>\n"
+			+ "</html>";
 	JEditorPane editor = new JEditorPane();
 	//JTextArea editorSource = new JTextArea();
 	JButton btnPreview = new JButton("Print Preview");
@@ -156,7 +172,7 @@ public class PrintApp extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				EditorPanePrinter pnl = new EditorPanePrinter(editor,
-				   new Paper(), new Insets(18, 18, 18, 18));
+						new Paper(), new Insets(18, 18, 18, 18));
 				pnl.print();
 			}
 		};
@@ -181,7 +197,7 @@ public class PrintApp extends JFrame {
 		while (vParent != null) {
 			int i = vParent.getViewIndex(v.getStartOffset(), Position.Bias.Forward);
 			Shape alloc = vParent.getChildAllocation(i,
-			   new Rectangle(0, 0, Short.MAX_VALUE, Short.MAX_VALUE));
+					new Rectangle(0, 0, Short.MAX_VALUE, Short.MAX_VALUE));
 			x += alloc.getBounds().x;
 			y += alloc.getBounds().y;
 
@@ -189,7 +205,7 @@ public class PrintApp extends JFrame {
 		}
 
 		return new Rectangle(x, y,
-		   (int) v.getPreferredSpan(View.X_AXIS), (int) v.getPreferredSpan(View.Y_AXIS));
+				(int) v.getPreferredSpan(View.X_AXIS), (int) v.getPreferredSpan(View.Y_AXIS));
 	}
 
 	public int getOffset(BoxView source, int axis, int childIndex) {
@@ -198,8 +214,8 @@ public class PrintApp extends JFrame {
 			m.setAccessible(true);
 			return ((Number) m.invoke(source, new Object[]{axis, childIndex})).intValue();
 		} catch (IllegalAccessException
-		   | IllegalArgumentException | NoSuchMethodException
-		   | SecurityException | InvocationTargetException e) {
+				| IllegalArgumentException | NoSuchMethodException
+				| SecurityException | InvocationTargetException e) {
 			e.printStackTrace(System.err);
 		}
 
@@ -212,7 +228,7 @@ public class PrintApp extends JFrame {
 			m.setAccessible(true);
 			return ((Number) m.invoke(source)).shortValue();
 		} catch (IllegalAccessException | IllegalArgumentException
-		   | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+				| NoSuchMethodException | SecurityException | InvocationTargetException e) {
 			e.printStackTrace(System.err);
 		}
 
@@ -225,7 +241,7 @@ public class PrintApp extends JFrame {
 			m.setAccessible(true);
 			return ((Number) m.invoke(source)).shortValue();
 		} catch (IllegalAccessException | IllegalArgumentException
-		   | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+				| NoSuchMethodException | SecurityException | InvocationTargetException e) {
 			e.printStackTrace(System.err);
 		}
 

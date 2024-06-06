@@ -92,11 +92,11 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 	}
 
 	private static final String TT = "EpisodePanel",
-	   BT_STRAND = "new.strand",
-	   BT_EPISODE = "episode.add",
-	   BT_RENUMBER = "episode.renumber",
-	   CK_TITLE = "ckTitle",
-	   BT_EXIT = "btExit", BT_IDEA = "btIdea", BT_SCREEN = "btScreen";
+			BT_STRAND = "new.strand",
+			BT_EPISODE = "episode.add",
+			BT_RENUMBER = "episode.renumber",
+			CK_TITLE = "ckTitle",
+			BT_EXIT = "btExit", BT_IDEA = "btIdea", BT_SCREEN = "btScreen";
 
 	private static final int ZOOM_MIN = 1, ZOOM_MAX = 10;
 
@@ -219,13 +219,13 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 		JPanel tb1 = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP1)));
 		tb1.setOpaque(false);
 		tb1.add(SwingUtil.createButton("", ICONS.K.ADD, "episode.add", false,
-		   evt -> episodeCreate()));
+				evt -> episodeCreate()));
 		btRenumber = SwingUtil.createButton("", ICONS.K.SORT, "episode.renumber", false,
-		   evt -> episodeRenum());
+				evt -> episodeRenum());
 		btRenumber.setEnabled(false);
 		tb1.add(btRenumber);
 		tb1.add(Ui.initButton(BT_STRAND, "", ICONS.K.ENT_STRAND, "new.strand",
-		   evt -> strandCreate()));
+				evt -> strandCreate()));
 		tb1.add(new JLabel(I18N.getColonMsg("table.row")));
 		JSlider slider = new JSlider(JSlider.HORIZONTAL, ZOOM_MIN, ZOOM_MAX, zoom);
 		slider.setToolTipText(I18N.getMsg("table.row_height"));
@@ -252,15 +252,15 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 		tb.setBorder(BorderFactory.createEmptyBorder());
 		// idea
 		tb.add(Ui.initButton(BT_IDEA, "", ICONS.K.ENT_IDEA,
-		   "foi.new", e -> mainFrame.showEditorAsDialog(new Idea())));
+				"foi.new", e -> mainFrame.showEditorAsDialog(new Idea())));
 		tb.add(new JSeparator(), MIG.GROWX);
 		//sortie du mode typist
 		btScreen = Ui.initButton(BT_SCREEN, "", ICONS.K.SCREEN_NORMAL,
-		   "screen.normal", e -> returnToMainFrame());
+				"screen.normal", e -> returnToMainFrame());
 		tb.add(btScreen, MIG.RIGHT);
 		// exit
 		tb.add(Ui.initButton(BT_EXIT, "", ICONS.K.EXIT,
-		   "file.exit", e -> doExit()));
+				"file.exit", e -> doExit()));
 		return tb;
 	}
 
@@ -310,7 +310,7 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 	 */
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.trace(TT + ".modelPropertyChange(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString() + ")");
 		Ctrl.PROPS prop = Ctrl.getPROPS(evt.getPropertyName());
 		ActKey act = new ActKey(evt);
 		switch (prop) {
@@ -397,7 +397,7 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 			int n = r + 1;
 			Integer nr = (Integer) episodeTable.getValueAt(r, 0);
 			if (!episodeTable.isArrayContains(rows, r)
-			   && !episodeTable.isArrayContains(rows, r + 1)) {
+					&& !episodeTable.isArrayContains(rows, r + 1)) {
 				JMenuItem it = new JMenuItem(nr.toString());
 				it.addActionListener(evt -> moveAfter(n - 1));
 				jm.add(it);
@@ -491,7 +491,7 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 	private String getDescription(int row) {
 		StringBuilder b = new StringBuilder();
 		b.append(getKeyValue(I18N.getMsg(NCOL.PLOT.getName()),
-		   getStringValue(row, NCOL.PLOT.ordinal())));
+				getStringValue(row, NCOL.PLOT.ordinal())));
 		for (int c = 0; c < strands.size(); c++) {
 			String s = (String) episodeTable.getValueAt(row, c + NCOL.PLOT.ordinal());
 			if (s != null && !s.isEmpty()) {
@@ -1011,7 +1011,7 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 				col = tb.getColumnCount() - 1;
 			}
 			if (col >= tb.getColumnCount() || row >= tb.getRowCount()
-			   || col < 0 || row < 0) {
+					|| col < 0 || row < 0) {
 				return;
 			}
 			panel.getEpisodeTable().selectCell(row, col);
@@ -1030,8 +1030,8 @@ public class EpisodePanel extends AbstractPanel implements ChangeListener, Mouse
 		public void actionPerformed(ActionEvent e) {
 			ep.save();
 			TablePrinter.pr(ep.getMainFrame(),
-			   ep.getEpisodeTable(),
-			   ep.getMainFrame().getBook().getTitle(), "");
+					ep.getEpisodeTable(),
+					ep.getMainFrame().getBook().getTitle(), "");
 			ep.refresh();
 		}
 	}

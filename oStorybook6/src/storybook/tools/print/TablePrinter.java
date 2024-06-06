@@ -50,8 +50,7 @@ import storybook.ui.MIG;
 
 /**
  * from https://www.docs4dev.com/docs/en/java/java8/tutorials/uiswing-misc-printtable.html <br>
- * Basic features of {@code JTable} printing. Allows the user to configure a couple of options and
- * print a table.
+ * Basic features of {@code JTable} printing. Allows the user to configure a couple of options and print a table.
  *
  * @author Shannon Hickey
  */
@@ -83,8 +82,8 @@ public class TablePrinter extends JFrame {
 		this.parent = mainFrame;
 		this.table = table;
 		this.title = table.getName().startsWith("!")
-		   ? table.getName().substring(1)
-		   : I18N.getMsg(table.getName().toLowerCase().replace("table", "") + "s");
+				? table.getName().substring(1)
+				: I18N.getMsg(table.getName().toLowerCase().replace("table", "") + "s");
 		this.header = header;
 		this.footer = footer;
 		init();
@@ -130,26 +129,26 @@ public class TablePrinter extends JFrame {
 	private void printTable() {
 		try {
 			boolean complete = table.print(JTable.PrintMode.FIT_WIDTH,
-			   new MessageFormat(header),
-			   new MessageFormat(footer),
-			   true, null, true, null);
+					new MessageFormat(header),
+					new MessageFormat(footer),
+					true, null, true, null);
 			if (complete) {
 				JOptionPane.showMessageDialog(this,
-				   I18N.getMsg("print.ok"),
-				   I18N.getMsg("print"),
-				   JOptionPane.INFORMATION_MESSAGE);
+						I18N.getMsg("print.ok"),
+						I18N.getMsg("print"),
+						JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				JOptionPane.showMessageDialog(this,
-				   I18N.getMsg("print.cancelled"),
-				   I18N.getMsg("print"),
-				   JOptionPane.INFORMATION_MESSAGE);
+						I18N.getMsg("print.canceled"),
+						I18N.getMsg("print"),
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 		} catch (PrinterException ex) {
 			LOG.err("Printing error", ex);
 			JOptionPane.showMessageDialog(this,
-			   I18N.getMsg("print.error", ex.getLocalizedMessage()),
-			   I18N.getMsg("print"),
-			   JOptionPane.ERROR_MESSAGE);
+					I18N.getMsg("print.error", ex.getLocalizedMessage()),
+					I18N.getMsg("print"),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

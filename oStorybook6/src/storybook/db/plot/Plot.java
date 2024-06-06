@@ -204,4 +204,12 @@ public class Plot extends AbstractEntity {
 		return (ls);
 	}
 
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Plot ne = new Plot();
+		doCopyTo(m, ne);
+		ne.setCategory(getCategory());
+		return ne;
+	}
+
 }

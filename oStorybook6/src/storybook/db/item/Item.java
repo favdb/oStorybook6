@@ -18,10 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.db.item;
 
 import org.w3c.dom.Node;
+import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.tag.AbsTag;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
+import storybook.ui.MainFrame;
 
 public class Item extends AbsTag {
 
@@ -35,6 +37,14 @@ public class Item extends AbsTag {
 		p.setCategory(XmlUtil.getString(node, XK.CATEGORY));
 		fromXmlEnd(node, p);
 		return (p);
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Item ne = new Item();
+		doCopyTo(m, ne);
+		ne.setCategory(getCategory());
+		return ne;
 	}
 
 }

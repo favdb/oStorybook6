@@ -48,17 +48,17 @@ import storybook.ui.panel.AbstractPanel;
 @SuppressWarnings("serial")
 public class ManageChapter extends AbstractPanel implements MouseListener, IRefreshable {
 
-	public Manage manage;
+	public ManagePanel manage;
 	private Chapter chapter;
 	private ManageSceneTransfer sceneTransferHandler;
 	private int prefWidth;
 
-	public ManageChapter(Manage manage) {
+	public ManageChapter(ManagePanel manage) {
 		super(manage.mainFrame);
 		this.manage = manage;
 	}
 
-	public ManageChapter(Manage manage, Chapter chapter) {
+	public ManageChapter(ManagePanel manage, Chapter chapter) {
 		this(manage);
 		this.chapter = chapter;
 		initAll();

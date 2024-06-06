@@ -33,6 +33,7 @@ import storybook.tools.TextUtil;
 import storybook.tools.html.Html;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
+import storybook.ui.MainFrame;
 
 @SuppressWarnings("serial")
 public class Chapter extends AbstractEntity {
@@ -67,9 +68,9 @@ public class Chapter extends AbstractEntity {
 	}
 
 	public Chapter(Part part, Integer chapterno, String title,
-	   String description, String notes,
-	   Timestamp creationTime, Timestamp objectiveTime,
-	   Timestamp doneTime, Integer objectiveChars) {
+			String description, String notes,
+			Timestamp creationTime, Timestamp objectiveTime,
+			Timestamp doneTime, Integer objectiveChars) {
 		this();
 		this.part = part;
 		this.chapterno = chapterno;
@@ -366,12 +367,12 @@ public class Chapter extends AbstractEntity {
 	@Override
 	public int hashCode() {
 		return hashPlus(super.hashCode(),
-		   part,
-		   chapterno,
-		   creationTime,
-		   objectiveChars,
-		   objectiveTime,
-		   doneTime);
+				part,
+				chapterno,
+				creationTime,
+				objectiveChars,
+				objectiveTime,
+				doneTime);
 	}
 
 	@Override
@@ -428,6 +429,15 @@ public class Chapter extends AbstractEntity {
 	 */
 	public String getIdent() {
 		return String.format("C%03d", getId());
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Chapter ne = new Chapter();
+		doCopyTo(m, ne);
+		ne.setChapterno(0);
+		ne.setPart(getPart());
+		return ne;
 	}
 
 }

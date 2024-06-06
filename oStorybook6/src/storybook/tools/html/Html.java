@@ -1297,7 +1297,7 @@ public class Html {
 		if (!html.contains("src=\"file:")) {
 			return html;
 		}
-		LOG.trace("changing links");
+		//LOG.trace("changing links");
 		Document doc = Jsoup.parse(html);
 		Elements links = doc.select("img[src]");
 		for (Element link : links) {

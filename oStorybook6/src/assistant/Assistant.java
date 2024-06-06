@@ -34,6 +34,9 @@ import storybook.tools.xml.Xml;
 public class Assistant {
 
 	private static final String TT = "Assistant";
+	private static boolean bClassic;
+	private static boolean bFreytag;
+	private static boolean bVogler;
 
 	/**
 	 * field types
@@ -125,6 +128,33 @@ public class Assistant {
 	public static void init(File xmlFile) {
 		//LOG.trace(TT + ".init(xmlFile='" + (xmlFile == null ? "null" : xmlFile.getAbsolutePath()) + "')");
 		xml = new AssistantXml(xmlFile);
+		setClassic();
+		setFreytag();
+		setVogler();
+	}
+
+	public static void setClassic() {
+		bClassic = !xml.findName("combobox", "three").isEmpty();
+	}
+
+	public static boolean hasClassic() {
+		return bClassic;
+	}
+
+	public static void setFreytag() {
+		bFreytag = !xml.findName("combobox", "freytag").isEmpty();
+	}
+
+	public static boolean hasFreytag() {
+		return bFreytag;
+	}
+
+	public static void setVogler() {
+		bVogler = !xml.findName("combobox", "vogler").isEmpty();
+	}
+
+	public static boolean hasVogler() {
+		return bVogler;
 	}
 
 	/**
@@ -138,8 +168,7 @@ public class Assistant {
 	}
 
 	/**
-	 * convert the Assistant values in HTML to a text String (removes the HTML tags and carriage
-	 * return)
+	 * convert the Assistant values in HTML to a text String (removes the HTML tags and carriage return)
 	 *
 	 * @param values
 	 * @return

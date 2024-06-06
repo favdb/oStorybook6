@@ -27,6 +27,7 @@ import storybook.db.scene.Scene;
 import storybook.db.strand.Strand;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
+import storybook.ui.MainFrame;
 
 /**
  *
@@ -179,6 +180,17 @@ public class Episode extends AbstractEntity {
 		p.setSceneId(XmlUtil.getLong(node, XK.SCENE));
 		fromXmlEnd(node, p);
 		return p;
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Episode ne = new Episode();
+		doCopyTo(m, ne);
+		ne.setNumber(m.project.episodes.getCount() + 1);
+		ne.setChapter(getChapter());
+		ne.setScene(getScene());
+		ne.setStrand(getStrand());
+		return ne;
 	}
 
 }

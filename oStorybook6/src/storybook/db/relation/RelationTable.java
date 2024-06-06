@@ -53,12 +53,12 @@ public class RelationTable extends AbsTable {
 	@Override
 	protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
 		ActKey act = new ActKey(evt);
-		if (act.isUpdate()
-		   && (act.getType() == Book.TYPE.RELATION
-		   || act.getType() == Book.TYPE.ITEM
-		   || act.getType() == Book.TYPE.LOCATION
-		   || act.getType() == Book.TYPE.PERSON
-		   || act.getType() == Book.TYPE.SCENE)) {
+		if ((act.isNew() || act.isUpdate() || act.isDelete())
+				&& (act.getType() == Book.TYPE.RELATION
+				|| act.getType() == Book.TYPE.ITEM
+				|| act.getType() == Book.TYPE.LOCATION
+				|| act.getType() == Book.TYPE.PERSON
+				|| act.getType() == Book.TYPE.SCENE)) {
 			fillTable();
 		}
 	}

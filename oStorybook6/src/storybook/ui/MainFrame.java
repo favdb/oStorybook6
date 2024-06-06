@@ -97,7 +97,6 @@ import storybook.model.Model;
 import storybook.project.Project;
 import storybook.tools.DockUtil;
 import storybook.tools.LOG;
-import storybook.tools.calendar.SbCalendar;
 import storybook.tools.file.EnvUtil;
 import storybook.tools.file.IOUtil;
 import storybook.tools.file.TempUtil;
@@ -124,9 +123,9 @@ public class MainFrame extends JFrame implements IPaintable {
 	private static final String TT = "MainFrame.";
 
 	public final static int SCREEN_WIDTH = 1000,
-	   SCREEN_HEIGHT = 700,
-	   SCREEN_X = 100,
-	   SCREEN_Y = 100;
+			SCREEN_HEIGHT = 700,
+			SCREEN_X = 100,
+			SCREEN_Y = 100;
 
 	private Model model;
 	private Ctrl ctrl;
@@ -146,7 +145,7 @@ public class MainFrame extends JFrame implements IPaintable {
 	public boolean showAllParts = false;
 	private TypistPanel typistScene;
 	private TypistScenario typistScenario;
-	private SbCalendar calendar;
+	//private SbCalendar calendar;
 	public boolean isTypist = false, isEpisode = false, isScenario = false;
 	public JFrame fullFrame;
 	private Book book;
@@ -182,7 +181,7 @@ public class MainFrame extends JFrame implements IPaintable {
 	@Override
 	public void init() {
 		//LOG.printInfos(TT+"init()");
-		calendar = new SbCalendar();
+		//todo calendar = new SbCalendar();
 		viewFactory = new SbViewFactory(this);
 		mainActions = new MainActions(this);
 		mainActions.init();
@@ -250,8 +249,8 @@ public class MainFrame extends JFrame implements IPaintable {
 			ShefEditor.setSpelling("none");
 		}
 		setLayout(
-		   new MigLayout(MIG.get(MIG.FLOWY, MIG.FILL, MIG.INS0, MIG.GAP0, MIG.HIDEMODE2),
-			  "", "[grow]"));
+				new MigLayout(MIG.get(MIG.FLOWY, MIG.FILL, MIG.INS0, MIG.GAP0, MIG.HIDEMODE2),
+						"", "[grow]"));
 		setIconImage(IconUtil.getIconImage("icon"));
 		App.fonts.reset();
 		setFont(App.fonts.defGet());
@@ -340,7 +339,7 @@ public class MainFrame extends JFrame implements IPaintable {
 	 */
 	public void typistSet() {
 		if (project.isOK()
-		   && App.preferences.typistGet()) {
+				&& App.preferences.typistGet()) {
 			typistActivate();
 		}
 	}
@@ -460,6 +459,9 @@ public class MainFrame extends JFrame implements IPaintable {
 		SbView attributesListView = getView(VIEWNAME.ATTRIBUTESLIST);
 		SbView bookView = getView(VIEWNAME.BOOK);
 		SbView chronoView = getView(VIEWNAME.CHRONO);
+		SbView storyClassicView = getView(VIEWNAME.STORY_THREE);
+		SbView storyFreytagView = getView(VIEWNAME.STORY_FREYTAG);
+		SbView storyVoglerView = getView(VIEWNAME.STORY_VOGLER);
 		SbView timelineView = getView(VIEWNAME.TIMELINE);
 		SbView infoView = getView(VIEWNAME.INFO);
 		SbView manageView = getView(VIEWNAME.MANAGE);
@@ -490,6 +492,7 @@ public class MainFrame extends JFrame implements IPaintable {
 			//les vues
 			attributesListView,
 			chronoView,
+			storyClassicView, storyFreytagView, storyVoglerView,
 			timelineView,
 			bookView,
 			manageView,
@@ -538,6 +541,9 @@ public class MainFrame extends JFrame implements IPaintable {
 		//close all views
 		attributesListView.close();
 		chronoView.close();
+		storyClassicView.close();
+		storyFreytagView.close();
+		storyVoglerView.close();
 		timelineView.close();
 		infoView.restoreFocus();
 		manageView.close();
@@ -848,9 +854,9 @@ public class MainFrame extends JFrame implements IPaintable {
 			}
 			if (App.preferences.getBoolean(Pref.KEY.CONFIRM_EXIT, true)) {
 				int r = JOptionPane.showConfirmDialog(getThis(),
-				   I18N.getMsg("ask.close"),
-				   I18N.getMsg("close"),
-				   JOptionPane.YES_NO_OPTION);
+						I18N.getMsg("ask.close"),
+						I18N.getMsg("close"),
+						JOptionPane.YES_NO_OPTION);
 				if (r == JOptionPane.NO_OPTION || r == JOptionPane.CLOSED_OPTION) {
 					return;
 				}
@@ -1009,6 +1015,7 @@ public class MainFrame extends JFrame implements IPaintable {
 	 * set frame status to be modified
 	 */
 	public void setUpdated() {
+		//LOG.trace(TT + "setUpdated()");
 		setUpdated(true);
 	}
 
@@ -1018,7 +1025,7 @@ public class MainFrame extends JFrame implements IPaintable {
 	 * @param b
 	 */
 	public void setUpdated(boolean b) {
-		//LOG.printInfos(TT + "setUpdated(b=" + (b ? "true" : "false") + ")");
+		//LOG.trace(TT + "setUpdated(b=" + (b ? "true" : "false") + ")");
 		modified = b;
 		setTitle();
 	}
@@ -1147,17 +1154,17 @@ public class MainFrame extends JFrame implements IPaintable {
 	public void fileRename() {
 		//App.printInfos("MainAction.fileRename()");
 		String m = JOptionPane.showInputDialog(this,
-		   I18N.getMsg("project.rename.new.name"),
-		   I18N.getMsg("project.rename"),
-		   QUESTION_MESSAGE);
+				I18N.getMsg("project.rename.new.name"),
+				I18N.getMsg("project.rename"),
+				QUESTION_MESSAGE);
 		if (m != null && !m.isEmpty()) {
 			m = getProject().getPath() + File.separator + m + ".osbk";
 			File outFile = new File(m);
 			if (outFile.exists()) {
 				int ret = JOptionPane.showConfirmDialog(this,
-				   I18N.getMsg("file.exists", m),
-				   I18N.getMsg("file.save.overwrite.title"),
-				   JOptionPane.YES_NO_OPTION);
+						I18N.getMsg("file.exists", m),
+						I18N.getMsg("file.save.overwrite.title"),
+						JOptionPane.YES_NO_OPTION);
 				if (ret == JOptionPane.NO_OPTION) {
 					return;
 				}
@@ -1334,11 +1341,11 @@ public class MainFrame extends JFrame implements IPaintable {
 				I18N.getMsg("ignore")
 			};
 			int n = JOptionPane.showOptionDialog(this,
-			   I18N.getMsg("close.confirm"),
-			   I18N.getMsg("close"),
-			   JOptionPane.YES_NO_OPTION,
-			   JOptionPane.QUESTION_MESSAGE,
-			   null, choix, choix[0]);
+					I18N.getMsg("close.confirm"),
+					I18N.getMsg("close"),
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE,
+					null, choix, choix[0]);
 			if (n == 0) {
 				return 0;
 			}
@@ -1482,7 +1489,9 @@ public class MainFrame extends JFrame implements IPaintable {
 	 * @return true if dialog was canceled
 	 */
 	public boolean showEditorAsDialog(AbstractEntity entity, JButton... bt) {
-		//LOG.printInfos(TT + "showEditorAsDialog(entity=" + LOG.printInfos(entity) + (bt == null ? "" : ", upon bt") + ")");
+		/*LOG.trace(TT + "showEditorAsDialog(entity=" + LOG.trace(entity)
+				+ (bt == null ? "" : ", upon bt")
+				+ ")");*/
 		JDialog dlg;
 		if (isTypist) {
 			dlg = new JDialog(getFullFrame(), true);
@@ -1520,12 +1529,11 @@ public class MainFrame extends JFrame implements IPaintable {
 		dlg.setVisible(true);
 		TempUtil.remove(this, entity, true);
 		SwingUtil.saveDlgPosition(dlg, entity);
-		//modified = !editor.canceled;
 		return editor.canceled;
 	}
 
 	public void showXeditor(AbstractEntity entity) {
-		//App.printInfos("EditSceneXeditorAction.actionPerformed(...) entity=" + entity.toString());
+		//LOG.trace(TT + "actionPerformed(...) entity=" + entity.toString());
 		String name = XEditorFile.getFilePath(this, (Scene) entity);
 		if (name == null || name.isEmpty()) {
 			name = XEditorFile.getDefaultFilePath(this, entity.getName());
@@ -1570,10 +1578,10 @@ public class MainFrame extends JFrame implements IPaintable {
 		}
 		File file = new File(backupFilename + ".backup");
 		if (file.exists() && isManual
-		   && JOptionPane.showConfirmDialog(this,
-			  I18N.getMsg("file.backup_askreplace", file.getAbsolutePath()),
-			  I18N.getMsg("backup"),
-			  JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
+				&& JOptionPane.showConfirmDialog(this,
+						I18N.getMsg("file.backup_askreplace", file.getAbsolutePath()),
+						I18N.getMsg("backup"),
+						JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
 			return;
 		}
 		project.doBackup(backupFilename, App.preferences.backupGetIncrement());
@@ -1608,7 +1616,7 @@ public class MainFrame extends JFrame implements IPaintable {
 	 * @param entity
 	 */
 	public void newEntity(AbstractEntity entity) {
-		//LOG.printInfos(TT+"newEntity(" + entity.getClass().getName() + ")");
+		//LOG.tace(TT+"newEntity(" + entity.getClass().getName() + ")");
 		showEditorAsDialog(entity);
 	}
 
@@ -1619,16 +1627,16 @@ public class MainFrame extends JFrame implements IPaintable {
 		String name;
 		while (true) {
 			name = JOptionPane.showInputDialog(this,
-			   I18N.getColonMsg("enter.name"),
-			   I18N.getMsg("docking.save.layout"),
-			   JOptionPane.PLAIN_MESSAGE);
+					I18N.getColonMsg("enter.name"),
+					I18N.getMsg("docking.save.layout"),
+					JOptionPane.PLAIN_MESSAGE);
 			File f = new File(EnvUtil.getPrefDir().getAbsolutePath()
-			   + File.separator + name + ".layout");
+					+ File.separator + name + ".layout");
 			if (f.exists()) {
 				int ret = JOptionPane.showConfirmDialog(this,
-				   I18N.getMsg("warning") + ":" + I18N.getMsg("docking.save.layout.exists"),
-				   I18N.getMsg("docking.layout"),
-				   JOptionPane.YES_NO_OPTION);
+						I18N.getMsg("warning") + ":" + I18N.getMsg("docking.save.layout.exists"),
+						I18N.getMsg("docking.layout"),
+						JOptionPane.YES_NO_OPTION);
 				switch (ret) {
 					case JOptionPane.OK_OPTION:
 						break;
@@ -1661,8 +1669,8 @@ public class MainFrame extends JFrame implements IPaintable {
 		//odd: the Object param of getContents is not currently used
 		Transferable contents = clipboard.getContents(null);
 		boolean hasTransferableText
-		   = (contents != null)
-		   && contents.isDataFlavorSupported(DataFlavor.stringFlavor);
+				= (contents != null)
+				&& contents.isDataFlavorSupported(DataFlavor.stringFlavor);
 		if (hasTransferableText) {
 			try {
 				result = (String) contents.getTransferData(DataFlavor.stringFlavor);

@@ -213,21 +213,30 @@ public class Status extends AbstractEntity {
 	public static JMenu getMenu(MainFrame mainFrame, Scene scene) {
 		JMenu mn = new JMenu(I18N.getMsg("status"));
 		mn.add(MainMenu.initMenuItem(ICONS.K.STATUS_OUTLINE,
-		   "status.outline", "status.outline", ' ', "status.outline",
-		   e -> mainFrame.project.scenes.changeStatus(mainFrame, scene, 0)));
+				"status.outline", "status.outline", ' ', "status.outline",
+				e -> mainFrame.project.scenes.changeStatus(mainFrame, scene, 0)));
 		mn.add(MainMenu.initMenuItem(ICONS.K.STATUS_DRAFT,
-		   "status.draft", "status.outline", ' ', "status.draft",
-		   e -> mainFrame.project.scenes.changeStatus(mainFrame, scene, 1)));
+				"status.draft", "status.outline", ' ', "status.draft",
+				e -> mainFrame.project.scenes.changeStatus(mainFrame, scene, 1)));
 		mn.add(MainMenu.initMenuItem(ICONS.K.STATUS_EDIT1,
-		   "status.edit1", "status.outline", ' ', "status.edit1",
-		   e -> mainFrame.project.scenes.changeStatus(mainFrame, scene, 2)));
+				"status.edit1", "status.outline", ' ', "status.edit1",
+				e -> mainFrame.project.scenes.changeStatus(mainFrame, scene, 2)));
 		mn.add(MainMenu.initMenuItem(ICONS.K.STATUS_EDIT2,
-		   "status.edit2", "status.outline", ' ', "status.edit2",
-		   e -> mainFrame.project.scenes.changeStatus(mainFrame, scene, 3)));
+				"status.edit2", "status.outline", ' ', "status.edit2",
+				e -> mainFrame.project.scenes.changeStatus(mainFrame, scene, 3)));
 		mn.add(MainMenu.initMenuItem(ICONS.K.STATUS_DONE,
-		   "status.done", "status.outline", ' ', "status.done",
-		   e -> mainFrame.project.scenes.changeStatus(mainFrame, scene, 4)));
+				"status.done", "status.outline", ' ', "status.done",
+				e -> mainFrame.project.scenes.changeStatus(mainFrame, scene, 4)));
 		return mn;
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Status ne = new Status();
+		doCopyTo(m, ne);
+		ne.setIcone(getIcone());
+		ne.setSup(getSup());
+		return ne;
 	}
 
 }

@@ -61,7 +61,7 @@ import storybook.tools.swing.PrintUtil;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
-import storybook.ui.MessageLabel;
+import storybook.tools.MessageLabel;
 import storybook.ui.SbView;
 import static storybook.ui.panel.AbstractPanel.setMinMax;
 import storybook.ui.panel.AbstractScrollPanel;
@@ -71,7 +71,7 @@ import storybook.ui.panel.AbstractScrollPanel;
  * @author favdb
  */
 public class Chrono extends AbstractScrollPanel
-   implements Printable, MouseWheelListener, ItemListener, ChangeListener {
+		implements Printable, MouseWheelListener, ItemListener, ChangeListener {
 
 	private static final String TT = "ChronoPanel";
 
@@ -207,10 +207,10 @@ public class Chrono extends AbstractScrollPanel
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.printInfos(TT + ".modelPropertyChange(evt=" + evt.toString() + ")");
+		//LOG.trace(TT+"modelPropertyChange(evt=" + evt.toString() + ")");
+		String propName = evt.getPropertyName();
 		Object oldValue = evt.getOldValue();
 		Object newValue = evt.getNewValue();
-		String propName = evt.getPropertyName();
 		SbView view = (SbView) getParent().getParent();
 		switch (Ctrl.getPROPS(propName)) {
 			case REFRESH:
@@ -280,8 +280,8 @@ public class Chrono extends AbstractScrollPanel
 						Scene oldScene = (Scene) oldValue;
 						// strand changed
 						if (newScene.getStrand() != null
-						   && oldScene.getStrand() != null
-						   && !newScene.getStrand().getId().equals(oldScene.getStrand().getId())) {
+								&& oldScene.getStrand() != null
+								&& !newScene.getStrand().getId().equals(oldScene.getStrand().getId())) {
 							refresh();
 							return;
 						}

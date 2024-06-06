@@ -31,6 +31,7 @@ import storybook.db.book.Book;
 import storybook.tools.xml.XmlKey;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
+import storybook.ui.MainFrame;
 
 public class Attribute extends AbstractEntity {
 
@@ -48,6 +49,9 @@ public class Attribute extends AbstractEntity {
 		try {
 			this.key = rs.getString("key");
 			this.value = rs.getString("value");
+			if (this.name.isEmpty()) {
+				this.name = this.key + " > " + this.value;
+			}
 		} catch (SQLException ex) {
 			//empty
 		}
@@ -57,6 +61,9 @@ public class Attribute extends AbstractEntity {
 		this();
 		this.key = key;
 		this.value = value;
+		if (this.name.isEmpty()) {
+			this.name = this.key + " > " + this.value;
+		}
 	}
 
 	public String getKey() {
@@ -104,6 +111,9 @@ public class Attribute extends AbstractEntity {
 		fromXmlBeg(node, p);
 		p.setKey(XmlUtil.getString(node, XmlKey.XK.KEY));
 		p.setValue(XmlUtil.getString(node, XmlKey.XK.VALUE));
+		if (p.getName().isEmpty()) {
+			p.setName(p.getKey() + " > " + p.getValue());
+		}
 		fromXmlEnd(node, p);
 		return p;
 	}
@@ -170,6 +180,15 @@ public class Attribute extends AbstractEntity {
 		ls.add(tableName + ",key,String,256");
 		ls.add(tableName + ",value,String,2048");
 		return (ls);
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Attribute ne = new Attribute();
+		doCopyTo(m, ne);
+		ne.setKey(this.getKey());
+		ne.setValue(this.getValue());
+		return ne;
 	}
 
 }

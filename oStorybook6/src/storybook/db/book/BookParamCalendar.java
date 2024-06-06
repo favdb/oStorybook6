@@ -18,8 +18,6 @@ This file is part of oStorybook.
  */
 package storybook.db.book;
 
-import storybook.tools.calendar.SbCalendar;
-
 /**
  *
  * @author FaVdB
@@ -27,9 +25,9 @@ import storybook.tools.calendar.SbCalendar;
 public class BookParamCalendar extends BookParamAbstract {
 
 	//TODO calendar
+	//private SbCalendar calendar;
 	public final static boolean CALENDAR_DEFAULT_USE = false;
 	private boolean calendarUse = false;
-	private SbCalendar calendar;
 	private boolean use = false;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
@@ -66,15 +64,14 @@ public class BookParamCalendar extends BookParamAbstract {
 		return (calendarUse);
 	}
 
-	public SbCalendar getCalendar() {
+	/*public SbCalendar getCalendar() {
 		return calendar;
 	}
 
 	public void setCalendar(SbCalendar sbc) {
 		calendar = sbc;
 		//todo
-	}
-
+	}*/
 	@Override
 	public int hash() {
 		return toString().hashCode();
@@ -84,11 +81,10 @@ public class BookParamCalendar extends BookParamAbstract {
 	public void refresh() {
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return calendar.toString();
-	}
-
+	}*/
 	public void setUse(boolean value) {
 		this.use = value;
 	}

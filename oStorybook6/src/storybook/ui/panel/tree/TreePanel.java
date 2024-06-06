@@ -99,20 +99,20 @@ import storybook.ui.panel.AbstractPanel;
  */
 @SuppressWarnings("serial")
 public class TreePanel extends AbstractPanel implements
-   TreeExpansionListener, TreeSelectionListener, MouseListener, ActionListener {
+		TreeExpansionListener, TreeSelectionListener, MouseListener, ActionListener {
 
-	private static final String TT = "TreePanel";
+	private static final String TT = "TreePanel.";
 
 	private Tree tree;
 	private JScrollPane scroller;
 	private DefaultMutableTreeNode topNode;
 	private EntityNode partsNode, strandsNode, personsByCategoryNode,
-	   personsByGendersNode, locationsNode, itemsNode, tagsNode,
-	   plotsNode, ideasNode, memosNode;
+			personsByGendersNode, locationsNode, itemsNode, tagsNode,
+			plotsNode, ideasNode, memosNode;
 	private JCheckBoxMenuItem mnuPart,
-	   mnuChapter, mnuStrand, mnuPerson,
-	   mnuLocation, mnuItem, mnuTag,
-	   mnuPlot, mnuIdea;
+			mnuChapter, mnuStrand, mnuPerson, mnuByGender,
+			mnuLocation, mnuItem, mnuTag,
+			mnuPlot, mnuIdea;
 	private List<JCheckBoxMenuItem> mnuList;
 	private JMenuItem mnuOptions;
 
@@ -122,7 +122,12 @@ public class TreePanel extends AbstractPanel implements
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.trace(TT + ".modelPropertyChange(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString() + ")");
+		String propName = evt.getPropertyName();
+		if (propName == null
+				|| "SHOWINFO".equalsIgnoreCase(propName)) {
+			return;
+		}
 		Object oldValue = evt.getOldValue();
 		Object newValue = evt.getNewValue();
 		switch (Ctrl.getPROPS(evt)) {
@@ -216,8 +221,12 @@ public class TreePanel extends AbstractPanel implements
 		mnuList.add(mnuChapter);
 		mnuStrand = initMenuItem("strand", str.charAt(2) == '1');
 		mnuList.add(mnuStrand);
-		mnuPerson = initMenuItem("person", str.charAt(3) == '1');
+		mnuPerson = initMenuItem("tree.persons.by.category", str.charAt(3) == '1');
+		mnuPerson.setIcon(IconUtil.getIconSmall(ICONS.getIconKey("ent_person")));
 		mnuList.add(mnuPerson);
+		mnuByGender = initMenuItem("tree.persons.by.gender", str.charAt(3) == '1');
+		mnuByGender.setIcon(IconUtil.getIconSmall(ICONS.getIconKey("ent_person")));
+		mnuList.add(mnuByGender);
 		mnuLocation = initMenuItem("location", str.charAt(4) == '1');
 		mnuList.add(mnuLocation);
 		mnuItem = initMenuItem("item", str.charAt(5) == '1');
@@ -271,19 +280,19 @@ public class TreePanel extends AbstractPanel implements
 		JPanel p2 = new JPanel(new MigLayout(MIG.get(MIG.FILLX)));
 		p2.setOpaque(false);
 		IconButton btShowAll = new IconButton("btShowAll",
-		   ICONS.K.SHOW_ALL, "tree.show.all", getShowAllAction());
+				ICONS.K.SHOW_ALL, "tree.show.all", getShowAllAction());
 		btShowAll.setControlButton();
 		p2.add(btShowAll, MIG.RIGHT);
 		IconButton btShowNone = new IconButton("btShowNone",
-		   ICONS.K.SHOW_NONE, "tree.show.none", getShowNoneAction());
+				ICONS.K.SHOW_NONE, "tree.show.none", getShowNoneAction());
 		btShowNone.setControlButton();
 		p2.add(btShowNone);
 		IconButton btExpand = new IconButton("btExpand",
-		   ICONS.K.EXPAND, "tree.expand.all", getExpandAction());
+				ICONS.K.EXPAND, "tree.expand.all", getExpandAction());
 		btExpand.setControlButton();
 		p2.add(btExpand);
 		IconButton btCollapse = new IconButton("btCollapse",
-		   ICONS.K.SHOW_COLLAPSE, "tree.collapse.all", getCollapseAction());
+				ICONS.K.SHOW_COLLAPSE, "tree.collapse.all", getCollapseAction());
 		btCollapse.setControlButton();
 		p2.add(btCollapse);
 		p.add(p2, MIG.get(MIG.TOP, MIG.RIGHT));
@@ -309,6 +318,8 @@ public class TreePanel extends AbstractPanel implements
 			personsByCategoryNode = new EntityNode("tree.persons.by.category", new Person());
 			topNode.add(personsByCategoryNode);
 			personsRefreshByCategory();
+		}
+		if (mnuByGender.isSelected()) {
 			personsByGendersNode = new EntityNode("tree.persons.by.gender", new Gender());
 			topNode.add(personsByGendersNode);
 			personsRefreshByGender();
@@ -351,6 +362,7 @@ public class TreePanel extends AbstractPanel implements
 		str += mnuChapter.isSelected() ? "1" : "0";
 		str += mnuStrand.isSelected() ? "1" : "0";
 		str += mnuPerson.isSelected() ? "1" : "0";
+		str += mnuByGender.isSelected() ? "1" : "0";
 		str += mnuLocation.isSelected() ? "1" : "0";
 		str += mnuItem.isSelected() ? "1" : "0";
 		str += mnuTag.isSelected() ? "1" : "0";
@@ -374,7 +386,7 @@ public class TreePanel extends AbstractPanel implements
 	}
 
 	private DefaultMutableTreeNode partCreateNode(Map<Part, DefaultMutableTreeNode> partMap,
-	   Part part, DefaultMutableTreeNode root) {
+			Part part, DefaultMutableTreeNode root) {
 		DefaultMutableTreeNode node = partMap.get(part);
 		if (node == null) {
 			DefaultMutableTreeNode supernode = root;
@@ -428,7 +440,7 @@ public class TreePanel extends AbstractPanel implements
 	}
 
 	private DefaultMutableTreeNode personsGetByCategoryNodeOwner(
-	   Map<Category, DefaultMutableTreeNode> categoryMap, Category category) {
+			Map<Category, DefaultMutableTreeNode> categoryMap, Category category) {
 		DefaultMutableTreeNode categoryNode = categoryMap.get(category);
 		if (categoryNode == null) {
 			categoryNode = new DefaultMutableTreeNode(category);
@@ -501,8 +513,8 @@ public class TreePanel extends AbstractPanel implements
 	}
 
 	private DefaultMutableTreeNode locationInsert(Location location,
-	   DefaultMutableTreeNode cityNode,
-	   Map<Location, DefaultMutableTreeNode> sites) {
+			DefaultMutableTreeNode cityNode,
+			Map<Location, DefaultMutableTreeNode> sites) {
 		// already inserted
 		if (sites.get(location) != null) {
 			return sites.get(location);

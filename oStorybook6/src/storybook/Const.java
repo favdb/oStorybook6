@@ -1,6 +1,6 @@
 /*
  STORYBOOK: Open Source software for novelists and authors.
- Copyright (C) 2008 - 2012 Martin Mustun
+ Copyright (C) 2008 - 2012 Martin Mustun, 2013-2024 FaVdB
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class Const {
 		VERSION_MINOR("00"),
 		VERSION(VERSION_MAJOR + "." + VERSION_MINOR),
 		//replace alpha by empty string for a stable release
-		VERSION_ALPHA("a"),
+		VERSION_ALPHA("c"),
 		RELEASE_DATE("2024-04-21"),
 		COPYRIGHT_YEAR("2012-2024"),
 		COPYRIGHT_COMPANY("The oStorybook Team"),
@@ -91,14 +91,14 @@ public class Const {
 	/* generic values */
 	public static final boolean IGNORE = true;
 	public static final String FONT_DEFAULT = "Dialog,plain,12",
-	   FONT_BOOK = "Sans,plain,12",
-	   FONT_EDITOR = "Serif,plain,12",
-	   FONT_MONO = "Monospace,plain,12";
+			FONT_BOOK = "Sans,plain,12",
+			FONT_EDITOR = "Serif,plain,12",
+			FONT_MONO = "Monospace,plain,12";
 	public static final String ERROR_MISSING = "error.missing",
-	   ERROR_EXCEED = "error.exceed",
-	   ERROR_EXISTS = "error.exists",
-	   ERROR_NOTNUMERIC = "error.notnumeric",
-	   ERROR_WRONG = "error.wrong";
+			ERROR_EXCEED = "error.exceed",
+			ERROR_EXISTS = "error.exists",
+			ERROR_NOTNUMERIC = "error.notnumeric",
+			ERROR_WRONG = "error.wrong";
 	public static final String SCENE_SEPARATOR = ".oOo.";
 
 	public static enum Language {
@@ -287,15 +287,15 @@ public class Const {
 		String url = Net.getI18nUrl(Net.KEY.HOME);
 		StringBuilder b = new StringBuilder(Html.HTML_B);
 		b.append("<body ").append(Html.fontToHtml(App.getInstance().fonts.defGet())).append(">")
-		   .append(Html.intoP(I18N.getMsg("about.gpl.intro")))
-		   .append(Html.intoP(I18N.getMsg("about.gpl.copyright") + Const.STORYBOOK.COPYRIGHT_YEAR))
-		   .append(Html.intoP(I18N.getMsg("about.gpl.homepage")))
-		   .append(Html.intoP(Html.intoA("homeSite", url, url)))
-		   .append(Html.intoP(I18N.getMsg("about.gpl.distribution")))
-		   .append(Html.intoP(I18N.getMsg("about.gpl.gpl")))
-		   .append(Html.intoP(I18N.getMsg("about.gpl.license")))
-		   .append(Html.BODY_E)
-		   .append(Html.HTML_E);
+				.append(Html.intoP(I18N.getMsg("about.gpl.intro")))
+				.append(Html.intoP(I18N.getMsg("about.gpl.copyright") + Const.STORYBOOK.COPYRIGHT_YEAR))
+				.append(Html.intoP(I18N.getMsg("about.gpl.homepage")))
+				.append(Html.intoP(Html.intoA("homeSite", url, url)))
+				.append(Html.intoP(I18N.getMsg("about.gpl.distribution")))
+				.append(Html.intoP(I18N.getMsg("about.gpl.gpl")))
+				.append(Html.intoP(I18N.getMsg("about.gpl.license")))
+				.append(Html.BODY_E)
+				.append(Html.HTML_E);
 		return b.toString();
 	}
 

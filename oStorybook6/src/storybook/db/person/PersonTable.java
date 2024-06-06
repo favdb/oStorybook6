@@ -24,8 +24,8 @@ import storybook.ctrl.ActKey;
 import storybook.db.DB;
 import storybook.db.abs.AbsColumn;
 import static storybook.db.abs.AbsColumn.*;
-import storybook.db.abs.AbstractEntity;
 import storybook.db.abs.AbsTable;
+import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.category.Category;
 import storybook.db.gender.Gender;
@@ -56,8 +56,8 @@ public class PersonTable extends AbsTable {
 	@Override
 	protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
 		ActKey act = new ActKey(evt);
-		if (act.isUpdate()
-		   && (act.getType() == Book.TYPE.PERSON)) {
+		if ((act.isNew() || act.isUpdate() || act.isDelete())
+				&& (act.getType() == Book.TYPE.PERSON)) {
 			fillTable();
 		}
 	}
@@ -141,25 +141,25 @@ public class PersonTable extends AbsTable {
 		List<AbsColumn> cols = super.getColumns(entity);
 
 		cols.add(new AbsColumn(mainFrame, cols,
-		   DB.DATA.PERSON_FIRSTNAME));
+				DB.DATA.PERSON_FIRSTNAME));
 		cols.add(new AbsColumn(mainFrame, cols,
-		   DB.DATA.PERSON_LASTNAME));
+				DB.DATA.PERSON_LASTNAME));
 		cols.add(new AbsColumn(mainFrame, cols,
-		   DB.DATA.ABBREVIATION, AL_CENTER));
+				DB.DATA.ABBREVIATION, AL_CENTER));
 		cols.add(new AbsColumn(mainFrame, cols,
-		   DB.DATA.PERSON_GENDER, TCR_GENDER, AL_CENTER));
+				DB.DATA.PERSON_GENDER, TCR_GENDER, AL_CENTER));
 		cols.add(new AbsColumn(mainFrame, cols,
-		   DB.DATA.CATEGORY, TCR_CATEGORY, AL_CENTER));
+				DB.DATA.CATEGORY, TCR_CATEGORY, AL_CENTER));
 		cols.add(new AbsColumn(mainFrame, cols,
-		   DB.DATA.PERSON_BIRTHDAY, TCR_DATE));
+				DB.DATA.PERSON_BIRTHDAY, TCR_DATE));
 		cols.add(new AbsColumn(mainFrame, cols,
-		   DB.DATA.PERSON_DEATH, TCR_DATE, TCR_HIDE));
+				DB.DATA.PERSON_DEATH, TCR_DATE, TCR_HIDE));
 		cols.add(new AbsColumn(mainFrame, cols,
-		   DB.DATA.PERSON_OCCUPATION, TCR_HIDE));
+				DB.DATA.PERSON_OCCUPATION, TCR_HIDE));
 		cols.add(new AbsColumn(mainFrame, cols,
-		   DB.DATA.PERSON_COLOR, TCR_COLOR, AL_CENTER));
+				DB.DATA.PERSON_COLOR, TCR_COLOR, AL_CENTER));
 		cols.add(new AbsColumn(mainFrame, cols,
-		   DB.DATA.ATTRIBUTES, TCR_HIDE, TCR_ENTITIES, AL_CENTER));
+				DB.DATA.ATTRIBUTES, TCR_HIDE, TCR_ENTITIES, AL_CENTER));
 
 		this.getColumnsEnd(cols, entity);
 		return cols;

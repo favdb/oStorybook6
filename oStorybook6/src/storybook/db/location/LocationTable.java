@@ -23,8 +23,8 @@ import storybook.ctrl.ActKey;
 import storybook.db.DB;
 import storybook.db.abs.AbsColumn;
 import static storybook.db.abs.AbsColumn.*;
-import storybook.db.abs.AbstractEntity;
 import storybook.db.abs.AbsTable;
+import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.ui.MainFrame;
 
@@ -53,8 +53,11 @@ public class LocationTable extends AbsTable {
 	protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
 		//LOG.printInfos("LocationTable...changeLocal(evt="+evt.toString()+")");
 		ActKey act = new ActKey(evt);
-		if (act.isUpdate()
-		   && (act.getType() == Book.TYPE.LOCATION)) {
+		if (isInit(act)) {
+			return;
+		}
+		if (Book.getTYPE(act.type) == Book.TYPE.LOCATION
+				&& (act.isNew() || act.isUpdate() || act.isDelete())) {
 			fillTable();
 		}
 	}

@@ -14,37 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package storybook.ui;
+package storybook.tools;
 
-import java.awt.Color;
 import i18n.I18N;
-import storybook.tools.swing.js.JSLabel;
+import java.awt.Color;
+import javax.swing.JLabel;
 
 /**
  *
  * @author favdb
  */
-public class MessageLabel extends JSLabel {
+public class MessageLabel extends JLabel {
 
-	public MessageLabel(String key, int level) {
-		setText(I18N.getMsg(key));
-		// level 0 simple message
-		if (level == 1) {
-			// ok level, set foreground to green
-			setForeground(Color.GREEN);
-		}
-		if (level == 2) {
-			//warning level, set background to orange
-			setBackground(Color.ORANGE);
-		}
-		if (level == 3) {
-			//error level, set foreground to white and background to red
-			setBackground(Color.RED);
-			setForeground(Color.WHITE);
-		}
-		if (level > 0) {
-			setOpaque(true);
-		}
+    public MessageLabel(String key, int level) {
+	setText(I18N.getMsg(key));
+	switch (level) {
+	    case 0://simple message
+		break;
+	    case 1://ok level, set foreground to green
+		setForeground(Color.GREEN);
+		break;
+	    case 2://warning level, set background to orange
+		setBackground(Color.ORANGE);
+		break;
+	    case 3://error level, set foreground to white and background to red
+		setBackground(Color.RED);
+		setForeground(Color.WHITE);
+		break;
+	    default:
+		break;
 	}
+	if (level > 0) {
+	    setOpaque(true);
+	}
+    }
 
 }

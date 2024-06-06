@@ -17,11 +17,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.ui;
 
+import api.infonode.docking.View;
 import java.awt.Component;
 import java.util.Objects;
 import javax.swing.Icon;
 import javax.swing.JComponent;
-import api.infonode.docking.View;
 
 /**
  * @author martin
@@ -38,6 +38,9 @@ public class SbView extends View {
 		CHRONONEW("ViewChronoNew"),
 		INFO("ViewInfo"),
 		TIMELINE("ViewTimeline"),
+		STORY_THREE("ViewClassic"),
+		STORY_FREYTAG("ViewFreytag"),
+		STORY_VOGLER("ViewVogler"),
 		MANAGE("ViewManage"),
 		MEMORIA("ViewMemoria"),
 		//NAVIGATION("ViewNavigation"),

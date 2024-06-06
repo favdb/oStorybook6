@@ -1,6 +1,6 @@
 /**
  * code from https://github.com/furstenheim/copy-down
- * 
+ *
  * The MIT License (MIT)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,34 +20,35 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * 
+ *
  */
 package api.copydown;
 
 public class Options {
+
     final String br;
     final String hr;
     final String emDelimiter;
     final String strongDelimiter;
     final HeadingStyle headingStyle;
     final String bulletListMaker;
-    final CodeBlockStyle codeBlockStyle;
+    final CopyDown.BlockStyle codeBlockStyle;
     final LinkStyle linkStyle;
     final LinkReferenceStyle linkReferenceStyle;
     final String fence;
 
     public Options(String br, String hr, String emDelimiter, String strongDelimiter,
-            HeadingStyle headingStyle, String bulletListMaker, CodeBlockStyle codeBlockStyle,
-            LinkStyle linkStyle, LinkReferenceStyle linkReferenceStyle, String fence) {
-        this.br = br;
-        this.hr = hr;
-        this.emDelimiter = emDelimiter;
-        this.strongDelimiter = strongDelimiter;
-        this.headingStyle = headingStyle;
-        this.bulletListMaker = bulletListMaker;
-        this.codeBlockStyle = codeBlockStyle;
-        this.linkStyle = linkStyle;
-        this.linkReferenceStyle = linkReferenceStyle;
-        this.fence = fence;
+	    HeadingStyle headingStyle, String bulletListMaker, CopyDown.BlockStyle codeBlockStyle,
+	    LinkStyle linkStyle, LinkReferenceStyle linkReferenceStyle, String fence) {
+	this.br = br;
+	this.hr = hr;
+	this.emDelimiter = emDelimiter;
+	this.strongDelimiter = strongDelimiter;
+	this.headingStyle = headingStyle;
+	this.bulletListMaker = bulletListMaker;
+	this.codeBlockStyle = codeBlockStyle;
+	this.linkStyle = linkStyle;
+	this.linkReferenceStyle = linkReferenceStyle;
+	this.fence = fence;
     }
 }

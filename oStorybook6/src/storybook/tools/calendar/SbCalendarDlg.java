@@ -19,17 +19,14 @@ package storybook.tools.calendar;
 import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.event.ActionEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.text.NumberFormat;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.text.NumberFormatter;
-import org.apache.commons.beanutils.BeanUtils;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import storybook.db.book.Book;
 import storybook.dialog.AbsDialog;
 import storybook.project.PropertiesDlg;
 import storybook.tools.LOG;
@@ -60,12 +57,6 @@ public class SbCalendarDlg extends AbsDialog {
 	private SbCalendar calendar;
 	private JFormattedTextField tfYearDays;
 
-	public SbCalendarDlg(PropertiesDlg parent) {
-		super(parent.getMainFrame());
-		calendar = Book.getCalendar(mainFrame.project);
-		initAll();
-	}
-
 	public SbCalendarDlg(PropertiesDlg parent, SbCalendar c) {
 		super(parent.getMainFrame());
 		calendar = c;
@@ -80,7 +71,6 @@ public class SbCalendarDlg extends AbsDialog {
 	@Override
 	public void initUi() {
 		super.initUi();
-		//String split2 = "split 2";
 		setLayout(new MigLayout(MIG.WRAP, "[]", ""));
 		setTitle(I18N.getMsg("calendar"));
 		this.setIconImage(IconUtil.getIconImageSmall(ICONS.K.VW_CHRONO));
@@ -111,8 +101,8 @@ public class SbCalendarDlg extends AbsDialog {
 			dlg.setVisible(true);
 			if (!dlg.isCanceled()) {
 				try {
-					BeanUtils.copyProperties(calendar.months, dlg.lsDays);
-				} catch (IllegalAccessException | InvocationTargetException ex) {
+					//todo save the days
+				} catch (Exception ex) {
 					LOG.err("unable to copy calendar", ex);
 					return;
 				}
@@ -129,8 +119,8 @@ public class SbCalendarDlg extends AbsDialog {
 			dlg.setVisible(true);
 			if (!dlg.isCanceled()) {
 				try {
-					BeanUtils.copyProperties(calendar.months, dlg.getMonths());
-				} catch (IllegalAccessException | InvocationTargetException ex) {
+					//todo save the month
+				} catch (Exception ex) {
 					LOG.err("unable to copy calendar", ex);
 					return;
 				}
@@ -207,14 +197,13 @@ public class SbCalendarDlg extends AbsDialog {
 	}
 
 	private void applySettings() {
-		//App.trace("SbCalendarDlg.setSettings()");
+		//LOG.trace(TT+"setSettings()");
 		calendar.setUse(true);
 		calendar.yeardays = Integer.parseInt(tfYearDays.getText());
 		calendar.startday = Integer.parseInt(tfStartDay.getText());
 		calendar.hours = Integer.parseInt(tfHours.getText());
 		calendar.minutes = Integer.parseInt(tfMinutes.getText());
 		calendar.seconds = Integer.parseInt(tfSeconds.getText());
-		Book.storeCalendar(mainFrame.project, calendar);
 		canceled = false;
 		dispose();
 	}

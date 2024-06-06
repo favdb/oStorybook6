@@ -38,6 +38,7 @@ import storybook.tools.ListUtil;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
+import storybook.ui.MainFrame;
 
 /**
  * @hibernate.class table="PERSON"
@@ -65,9 +66,9 @@ public class Person extends AbstractEntity {
 	}
 
 	public Person(Gender gender, String firstname, String lastname,
-	   String abbreviation, Date birthday, Date dayofdeath,
-	   String occupation, String description, Integer color, String notes,
-	   Category category, List<Attribute> attributes) {
+			String abbreviation, Date birthday, Date dayofdeath,
+			String occupation, String description, Integer color, String notes,
+			Category category, List<Attribute> attributes) {
 		this();
 		this.gender = gender;
 		this.firstname = firstname;
@@ -184,13 +185,13 @@ public class Person extends AbstractEntity {
 
 	public String getHTMLColor() {
 		return "<span style=\""
-		   + "background-color:" + ColorUtil.getHTML(getJColor())
-		   + ";"
-		   + "color:" + ColorUtil.getHTML(getJColor())
-		   + ";\">"
-		   + "&#x25ae;&#x25ae;"
-		   + "</span> "
-		   + ColorUtil.getHTML(getJColor());
+				+ "background-color:" + ColorUtil.getHTML(getJColor())
+				+ ";"
+				+ "color:" + ColorUtil.getHTML(getJColor())
+				+ ";\">"
+				+ "&#x25ae;&#x25ae;"
+				+ "</span> "
+				+ ColorUtil.getHTML(getJColor());
 	}
 
 	public void setColor(Integer color) {
@@ -496,17 +497,17 @@ public class Person extends AbstractEntity {
 	@Override
 	public int hashCode() {
 		return hashPlus(super.hashCode(),
-		   abbreviation,
-		   firstname,
-		   lastname,
-		   gender,
-		   birthday,
-		   dayofdeath,
-		   color,
-		   category,
-		   categories,
-		   occupation,
-		   attributes);
+				abbreviation,
+				firstname,
+				lastname,
+				gender,
+				birthday,
+				dayofdeath,
+				color,
+				category,
+				categories,
+				occupation,
+				attributes);
 	}
 
 	@Override
@@ -571,6 +572,27 @@ public class Person extends AbstractEntity {
 		ls.add(tableName + ",categories,Table.Category,0");
 		ls.add(tableName + ",attributes,Table.Attribute,0");
 		return (ls);
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Person ne = new Person();
+		doCopyTo(m, ne);
+		for (Attribute n : getAttributes()) {
+			ne.attributes.add(n);
+		}
+		ne.setBirthday(getBirthday());
+		for (Category n : getCategories()) {
+			ne.categories.add(n);
+		}
+		ne.setCategory(getCategory());
+		ne.setColor(getColor());
+		ne.setDayofdeath(getDayofdeath());
+		ne.setFirstname(getFirstname());
+		ne.setGender(getGender());
+		ne.setLastname(getLastname());
+		ne.setOccupation(getOccupation());
+		return ne;
 	}
 
 }

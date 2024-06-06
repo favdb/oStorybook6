@@ -38,6 +38,7 @@ import storybook.tools.swing.ColorIcon;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
+import storybook.ui.MainFrame;
 
 public class Event extends AbstractEntity {
 
@@ -205,13 +206,13 @@ public class Event extends AbstractEntity {
 
 	public String getHTMLColor() {
 		return "<span style=\""
-		   + "background-color:" + ColorUtil.getHTML(getJColor())
-		   + ";"
-		   + "color:" + ColorUtil.getHTML(getJColor())
-		   + ";\">"
-		   + "&#x25ae;&#x25ae;"
-		   + "</span> "
-		   + ColorUtil.getHTML(getJColor());
+				+ "background-color:" + ColorUtil.getHTML(getJColor())
+				+ ";"
+				+ "color:" + ColorUtil.getHTML(getJColor())
+				+ ";\">"
+				+ "&#x25ae;&#x25ae;"
+				+ "</span> "
+				+ ColorUtil.getHTML(getJColor());
 	}
 
 	public ColorIcon getColorIcon() {
@@ -249,11 +250,11 @@ public class Event extends AbstractEntity {
 	@Override
 	public int hashCode() {
 		return hashPlus(super.hashCode(),
-		   category,
-		   color,
-		   duration,
-		   eventTime,
-		   timeStep);
+				category,
+				color,
+				duration,
+				eventTime,
+				timeStep);
 	}
 
 	@Override
@@ -377,6 +378,19 @@ public class Event extends AbstractEntity {
 		ls.add(tableName + ",category,String,255");
 		ls.add(tableName + ",color,Integer,0");
 		return (ls);
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Event ne = new Event();
+		doCopyTo(m, ne);
+		ne.setCategory(getCategory());
+		ne.setColor(getColor());
+		ne.setDuration(getDuration());
+		ne.setEventTime(getEventTime());
+		ne.setTimeStep(getTimeStep());
+		//ne.setTitle(getTitle());
+		return ne;
 	}
 
 }

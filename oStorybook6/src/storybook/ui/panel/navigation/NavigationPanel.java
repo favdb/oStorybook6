@@ -37,10 +37,10 @@ import resources.icons.ICONS;
 import resources.icons.IconButton;
 import storybook.action.ScrollToStrandDateAction;
 import storybook.ctrl.Ctrl;
+import storybook.db.EntityUtil;
 import storybook.db.book.Book;
 import storybook.db.chapter.Chapter;
 import storybook.db.strand.Strand;
-import storybook.db.EntityUtil;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.js.JSLabel;
 import storybook.tools.swing.js.JSPanelViewsRadioButton;
@@ -57,9 +57,9 @@ import storybook.ui.panel.chrono.ChronoPanel;
  *
  */
 @SuppressWarnings("serial")
-public class Navigation extends AbstractPanel implements ItemListener {
+public class NavigationPanel extends AbstractPanel implements ItemListener {
 
-	private static final String TT = "Navigation";
+	private static final String TT = "Navigation.";
 
 	private JTabbedPane tabbedPane;
 	private JComboBox chapterCombo;
@@ -68,15 +68,18 @@ public class Navigation extends AbstractPanel implements ItemListener {
 	private JSLabel lbWarning;
 	private JComboBox dateCombo;
 
-	public Navigation(MainFrame mainFrame) {
+	public NavigationPanel(MainFrame mainFrame) {
 		super(mainFrame);
 	}
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		//LOG.trace(TT+".modelPropertyChange("+evt.toString()+")");
-		Object newValue = evt.getNewValue();
+		//LOG.trace(TT+"modelPropertyChange("+evt.toString()+")");
 		String propName = evt.getPropertyName();
+		if ("SHOWINFO".equalsIgnoreCase(propName)) {
+			return;
+		}
+		Object newValue = evt.getNewValue();
 		if (Ctrl.PROPS.REFRESH.check(propName)) {
 			View newView = (View) newValue;
 			View view = (View) getParent().getParent();
@@ -121,9 +124,9 @@ public class Navigation extends AbstractPanel implements ItemListener {
 	private JPanel initFindChapter() {
 		//LOG.trace(TT+".initFindChapter()");
 		JPanel p = new JPanel(
-		   new MigLayout(MIG.get(MIG.FLOWX, MIG.WRAP + " 2"),
-			  "[]10[grow]10[]",
-			  "[]10[]10[]"));
+				new MigLayout(MIG.get(MIG.FLOWX, MIG.WRAP + " 2"),
+						"[]10[grow]10[]",
+						"[]10[]10[]"));
 		JPanel px = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP1)));
 		px.add(new JSLabel(I18N.getColonMsg("chapter")));
 		chapterCombo = new JComboBox();
@@ -172,7 +175,7 @@ public class Navigation extends AbstractPanel implements ItemListener {
 	private JPanel initFindDate() {
 		//LOG.trace(TT+".initFindDate()");
 		JPanel p = new JPanel(
-		   new MigLayout(MIG.get(MIG.FLOWX, MIG.WRAP + " 2", MIG.HIDEMODE3)));
+				new MigLayout(MIG.get(MIG.FLOWX, MIG.WRAP + " 2", MIG.HIDEMODE3)));
 		JPanel px = new JPanel(new MigLayout());
 		px.add(new JSLabel(I18N.getColonMsg("strand")), MIG.RIGHT);
 		strandCombo = new JComboBox();
@@ -262,7 +265,7 @@ public class Navigation extends AbstractPanel implements ItemListener {
 			delay += 100;
 		}
 		ScrollToStrandDateAction action = new ScrollToStrandDateAction(
-		   container, panel, strand, date, lbWarning);
+				container, panel, strand, date, lbWarning);
 		Timer timer = new Timer(delay, action);
 		timer.setRepeats(false);
 		timer.start();

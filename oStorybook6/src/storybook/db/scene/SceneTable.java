@@ -64,7 +64,7 @@ import static storybook.ui.Ui.*;
  */
 public class SceneTable extends AbsTable implements ActionListener {
 
-	private static final String TT = "SceneTable";
+	private static final String TT = "SceneTable.";
 
 	private JPanel pStrand;
 	private JPanel pNarrator;
@@ -103,7 +103,7 @@ public class SceneTable extends AbsTable implements ActionListener {
 	@SuppressWarnings({"unchecked"})
 	@Override
 	public List<AbstractEntity> getAllEntities() {
-		//LOG.printInfos(TT + ".getAllEntities()");
+		//LOG.trace(TT + "getAllEntities()");
 		int fStatus = cbStatus.getSelectedIndex();
 		Part fPart = null;
 		if (cbPartFilter != null && cbPartFilter.getSelectedIndex() > 0) {
@@ -136,7 +136,7 @@ public class SceneTable extends AbsTable implements ActionListener {
 			}
 			if (cbStrand.getSelectedIndex() > 0) {
 				if (fStrand != null && !fStrand.equals(s.getStrand())
-				   && (s.getStrands() != null && !s.getStrands().contains(fStrand))) {
+						&& (s.getStrands() != null && !s.getStrands().contains(fStrand))) {
 					b = false;
 				}
 			}
@@ -150,7 +150,7 @@ public class SceneTable extends AbsTable implements ActionListener {
 	@Override
 	@SuppressWarnings("unchecked")
 	public JToolBar initToolbar() {
-		//LOG.printInfos(TT + ".initToolbar(withPart=" + (withPart ? "true" : "false") + ")");
+		//LOG.trace(TT + "initToolbar(withPart=" + (withPart ? "true" : "false") + ")");
 		super.initToolbar();
 		toolbar.add(new JLabel(I18N.getColonMsg("status")));
 		cbStatus = initCbStatus();
@@ -205,10 +205,10 @@ public class SceneTable extends AbsTable implements ActionListener {
 		JToolBar footer = super.initFooter();
 		if (mainFrame.getBook().isXeditorUse()) {
 			btExternal = Ui.initButton(BT_EXTERNAL, "", ICONS.K.LIBREOFFICE,
-			   "", e -> sendSetExternal(table.getSelectedRow()));
+					"", e -> sendSetExternal(table.getSelectedRow()));
 			//btExternal.setText(book.getParamEditor().getName());
 			btExternal.setToolTipText(I18N.getMsg("xeditor.launching")
-			   + " " + book.getParam().getParamEditor().getName());
+					+ " " + book.getParam().getParamEditor().getName());
 			btExternal.setEnabled(false);
 			footer.add(btExternal);
 		}
@@ -228,7 +228,7 @@ public class SceneTable extends AbsTable implements ActionListener {
 
 	@Override
 	public synchronized void actionPerformed(ActionEvent e) {
-		//LOG.printInfos(TT + ".actionPerformed(" + e.toString() + ")");
+		//LOG.trace(TT + "actionPerformed(" + e.toString() + ")");
 		if (e.getSource() instanceof JComboBox) {
 			fillTable();
 			return;
@@ -238,7 +238,7 @@ public class SceneTable extends AbsTable implements ActionListener {
 
 	@Override
 	protected void modelPropertyChangeLocal(PropertyChangeEvent evt) {
-		//LOG.trace(TT + ".modelPropertyChangeLocal(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + "modelPropertyChangeLocal(evt=" + evt.toString() + ")");
 		String propName = evt.getPropertyName();
 		Ctrl.PROPS prop = Ctrl.getPROPS(evt.getPropertyName());
 		Object newValue = evt.getNewValue();
@@ -247,9 +247,8 @@ public class SceneTable extends AbsTable implements ActionListener {
 			if (isInit(act)) {
 				return;
 			}
-			if ("UPDATE".equals(act.getCmd())) {
+			if (act.isNew() | act.isUpdate() || act.isDelete()) {
 				fillTable();
-				return;
 			}
 			switch (Book.getTYPE(act.type)) {
 				case PART:
@@ -433,8 +432,8 @@ public class SceneTable extends AbsTable implements ActionListener {
 		if (scene != null) {
 			ExportToPhpBB.getScene(mainFrame, scene);
 			JOptionPane.showMessageDialog(mainFrame,
-			   I18N.getMsg("copied.title"),
-			   I18N.getMsg(scene.getObjType().toString()), 1);
+					I18N.getMsg("copied.title"),
+					I18N.getMsg(scene.getObjType().toString()), 1);
 		}
 	}
 

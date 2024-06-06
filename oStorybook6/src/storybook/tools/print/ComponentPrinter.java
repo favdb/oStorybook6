@@ -58,23 +58,23 @@ public class ComponentPrinter {
 			if (pj.printDialog()) {
 				pj.print();
 				JOptionPane.showMessageDialog(mainFrame,
-				   I18N.getMsg("print.ok"),
-				   I18N.getMsg("print"),
-				   JOptionPane.INFORMATION_MESSAGE);
+						I18N.getMsg("print.ok"),
+						I18N.getMsg("print"),
+						JOptionPane.INFORMATION_MESSAGE);
 				return;
 			}
 		} catch (PrinterException ex) {
 			LOG.err("Printing error", ex);
 			JOptionPane.showMessageDialog(mainFrame,
-			   I18N.getMsg("print.error", ex.getMessage()),
-			   I18N.getMsg("print"),
-			   JOptionPane.ERROR_MESSAGE);
+					I18N.getMsg("print.error", ex.getMessage()),
+					I18N.getMsg("print"),
+					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		JOptionPane.showMessageDialog(mainFrame,
-		   I18N.getMsg("print.cancelled"),
-		   I18N.getMsg("print"),
-		   JOptionPane.INFORMATION_MESSAGE);
+				I18N.getMsg("print.canceled"),
+				I18N.getMsg("print"),
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	static public void pr(MainFrame mainFrame, Component comp, String header, String footer) {
@@ -97,14 +97,14 @@ public class ComponentPrinter {
 			}
 			Dimension dim = comp.getSize();
 			double cHeight = dim.getHeight(),
-			   cWidth = dim.getWidth(),
-			   pHeight = format.getImageableHeight(),
-			   pWidth = format.getImageableWidth(),
-			   pXStart = format.getImageableX(),
-			   pYStart = format.getImageableY(),
-			   xRatio = pWidth / cWidth,
-			   yRatio = pHeight / cHeight,
-			   ratio = Math.min(xRatio, yRatio);
+					cWidth = dim.getWidth(),
+					pHeight = format.getImageableHeight(),
+					pWidth = format.getImageableWidth(),
+					pXStart = format.getImageableX(),
+					pYStart = format.getImageableY(),
+					xRatio = pWidth / cWidth,
+					yRatio = pHeight / cHeight,
+					ratio = Math.min(xRatio, yRatio);
 			Graphics2D g2 = (Graphics2D) g;
 			g2.translate(pXStart, pYStart);
 			g2.scale(ratio, ratio);

@@ -65,7 +65,7 @@ public class ManageScene extends AbstractScenePanel
 	}
 	public TYPE type = TYPE.SCENE;
 	public Border borderDefault;
-	public Manage manage;
+	public ManagePanel manage;
 	public ManageChapter manageChapter;
 	private StatusButton btStatus;
 	private StrandButton btStrand;

@@ -99,13 +99,13 @@ public class Scene extends AbstractEntity {
 	//scenario
 	public String scenario_pitch = "";
 	public Integer scenario_moment = 0,
-	   //0=NONE, 1=DAY, 2=AT DAWN, 3=MORNING, 4=MIDDAY,
-	   //5=AFTERNOON, 6=SUNSET, 7=NIGHT, 8=EVENING, 9=LATER
-	   scenario_loc = 0, //0=NONE,1=INT.,2=EXT.
-	   scenario_start = 0, //0=NONE,1=CUT,2=FADE IN
-	   scenario_end = 0, //0=NONE,1=CUT,2=FADE OUT,3=DISSOLVE TO
-	   scenario_stage = 0 //0=none, else the index number of the stage
-	   ;
+			//0=NONE, 1=DAY, 2=AT DAWN, 3=MORNING, 4=MIDDAY,
+			//5=AFTERNOON, 6=SUNSET, 7=NIGHT, 8=EVENING, 9=LATER
+			scenario_loc = 0, //0=NONE,1=INT.,2=EXT.
+			scenario_start = 0, //0=NONE,1=CUT,2=FADE IN
+			scenario_end = 0, //0=NONE,1=CUT,2=FADE OUT,3=DISSOLVE TO
+			scenario_stage = 0 //0=none, else the index number of the stage
+			;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public Scene() {
@@ -153,9 +153,9 @@ public class Scene extends AbstractEntity {
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public Scene(Chapter chapter, Strand strand, Integer number, Timestamp date,
-	   String title, String summary, Integer status, String duration,
-	   Integer relativeDateDifference, Long relativesceneid,
-	   String notes, Boolean informative, String odf) {
+			String title, String summary, Integer status, String duration,
+			Integer relativeDateDifference, Long relativesceneid,
+			String notes, Boolean informative, String odf) {
 		this();
 		setName(title);
 		setChapter(chapter);
@@ -590,10 +590,10 @@ public class Scene extends AbstractEntity {
 			this.summary = null;
 		} else {
 			this.summary = str
-			   .replace("<html>", "").replace("</html>", "")
-			   .replace("<head>", "").replace("</head>", "")
-			   .replace("<body>", "").replace("</body>", "")
-			   .replaceAll("<style.*type=\"text/css.*</style>", "");
+					.replace("<html>", "").replace("</html>", "")
+					.replace("<head>", "").replace("</head>", "")
+					.replace("<body>", "").replace("</body>", "")
+					.replaceAll("<style.*type=\"text/css.*</style>", "");
 		}
 	}
 
@@ -1249,15 +1249,15 @@ public class Scene extends AbstractEntity {
 			b.append(getInfo(detailed, DATA.SCENE_NARRATOR, getNarrator()));
 		}
 		if (App.getAssistant().isExists("scene")
-		   && (!getScenariostage().isEmpty() || detailed > 1)) {
+				&& (!getScenariostage().isEmpty() || detailed > 1)) {
 			b.append(getInfo(detailed, DATA.SCENARIO_STAGE, getScenariostage()));
 		}
 		//scenario
 		if (!getScenario_pitch().isEmpty()
-		   || getScenario_loc() != 0
-		   || getScenario_moment() != 0
-		   || getScenario_start() != 0
-		   || getScenario_end() != 0) {
+				|| getScenario_loc() != 0
+				|| getScenario_moment() != 0
+				|| getScenario_start() != 0
+				|| getScenario_end() != 0) {
 			StringBuilder bx = new StringBuilder();
 			bx.append(Html.TABLE_B).append(Html.TR_B);
 			bx.append(getInfo(detailed, DATA.SCENARIO_PITCH, getScenario_pitch()));
@@ -1288,7 +1288,7 @@ public class Scene extends AbstractEntity {
 			str = getClean(getRelativesceneid()) + " ";
 			if (!dx.toText().isEmpty()) {
 				str = str + Html.intoB(I18N.getMsg("scene.relativetime")) + " "
-				   + dx.toText(I18N.getMsg("duration.initiales"));
+						+ dx.toText(I18N.getMsg("duration.initiales"));
 			}
 		}
 		b.append(getInfo(detailed, "scene.relative", str));
@@ -1320,7 +1320,7 @@ public class Scene extends AbstractEntity {
 		b.append(XmlUtil.setAttribute(0, XK.STRAND, getStrand()));
 		b.append(XmlUtil.setAttribute(0, XK.NARRATOR, getNarrator()));
 		String x = getScenario_stage().toString() + getScenario_pitch() + getScenario_loc().toString()
-		   + getScenario_moment() + getScenario_end().toString();
+				+ getScenario_moment() + getScenario_end().toString();
 		x = x.replace("0", "");
 		if (!x.isEmpty()) {
 			b.append(XmlUtil.setAttribute(8, XK.STAGE, getScenario_stage()));
@@ -1440,29 +1440,29 @@ public class Scene extends AbstractEntity {
 	@Override
 	public int hashCode() {
 		return hashPlus(super.hashCode(),
-		   sceneno,
-		   status,
-		   intensity,
-		   chapter,
-		   strand,
-		   strands,
-		   informative,
-		   narrator,
-		   persons,
-		   items,
-		   locations,
-		   plots,
-		   scenets,
-		   relativesceneid,
-		   relativetime,
-		   scenario_start,
-		   scenario_end,
-		   scenario_loc,
-		   scenario_moment,
-		   scenario_stage,
-		   scenario_pitch,
-		   summary,
-		   odf);
+				sceneno,
+				status,
+				intensity,
+				chapter,
+				strand,
+				strands,
+				informative,
+				narrator,
+				persons,
+				items,
+				locations,
+				plots,
+				scenets,
+				relativesceneid,
+				relativetime,
+				scenario_start,
+				scenario_end,
+				scenario_loc,
+				scenario_moment,
+				scenario_stage,
+				scenario_pitch,
+				summary,
+				odf);
 	}
 
 	@Override
@@ -1690,6 +1690,52 @@ public class Scene extends AbstractEntity {
 	public void changeHtmlLinks(String path) {
 		super.changeHtmlLinks(path);
 		setSummary(Html.changeLinks(path, getSummary()));
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		//LOG.trace("Scene.copyTo(m)");
+		Scene ne = new Scene();
+		doCopyTo(m, ne);
+		ne.setSceneno(-1);
+		ne.setChapter(getChapter());
+		ne.setDate(getDate());
+		ne.setDuration(getDuration());
+		ne.setInformative(getInformative());
+		ne.setIntensity(getIntensity());
+		for (Item n : getItems()) {
+			ne.items.add(n);
+		}
+		for (Location n : getLocations()) {
+			ne.locations.add(n);
+		}
+		for (Person n : getPersons()) {
+			ne.persons.add(n);
+		}
+		for (Plot n : getPlots()) {
+			ne.plots.add(n);
+		}
+		for (Strand n : getStrands()) {
+			ne.strands.add(n);
+		}
+		ne.setNarrator(getNarrator());
+		ne.setOdf(getOdf());
+		ne.setRelativeDateDifference(getRelativeDateDifference());
+		ne.setRelativesceneid(getRelativesceneid());
+		ne.setScenario_end(getScenario_end());
+		ne.setScenario_loc(getScenario_loc());
+		ne.setScenario_moment(getScenario_moment());
+		ne.setScenario_pitch(getScenario_pitch());
+		ne.setScenario_stage(getScenario_stage());
+		ne.setScenario_start(getScenario_start());
+		ne.setScenestate(getScenestate());
+		ne.setScenets(getScenets());
+		ne.setStrand(getStrand());
+		ne.setSummary(getSummary());
+		for (Tag n : getTags()) {
+			ne.tags.add(n);
+		}
+		return ne;
 	}
 
 }
