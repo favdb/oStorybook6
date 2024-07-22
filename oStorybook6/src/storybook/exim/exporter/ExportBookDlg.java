@@ -42,6 +42,7 @@ import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
+import static storybook.ui.SbView.VIEWNAME.READING;
 import storybook.ui.Ui;
 
 /**
@@ -255,6 +256,7 @@ public class ExportBookDlg extends AbsDialog {
 	BOOK.apply(paramExport);
 	if (!origin.equals(paramExport.toString())) {
 	    mainFrame.setUpdated();
+	    mainFrame.getBookModel().fireAgain(mainFrame.getView(READING));
 	}
 	doExport();
 	dispose();
@@ -276,7 +278,7 @@ public class ExportBookDlg extends AbsDialog {
 	mainFrame.fileSave(true);
 	switch (sel) {
 	    case "html":
-		return ExportBookToHtml.toFile(mainFrame);
+		return ExportBookToHtml.toFile(mainFrame, HTML.isAdvanced());
 	    case "docx":
 		return ExportBookToDoc.createDocx(mainFrame);
 	    case "odt":

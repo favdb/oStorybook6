@@ -44,7 +44,7 @@ public class SbView extends View {
 		MANAGE("ViewManage"),
 		MEMORIA("ViewMemoria"),
 		//NAVIGATION("ViewNavigation"),
-		PLAN("ViewPlan"),
+		PLANNING("ViewPlanning"),
 		READING("ViewReading"),
 		SCENARIO("ViewScenario"),
 		STORYBOARD("ViewStoryboard"),

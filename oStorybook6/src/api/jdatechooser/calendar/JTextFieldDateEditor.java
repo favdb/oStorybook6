@@ -41,9 +41,10 @@ import javax.swing.event.CaretListener;
 import javax.swing.text.MaskFormatter;
 
 /**
- * JTextFieldDateEditor is the default editor used by JDateChooser. It is a formatted text field, that colores valid
- * dates green/black and invalid dates red. The date format patten and mask can be set manually. If not set, the MEDIUM
- * pattern of a SimpleDateFormat with regards to the actual locale is used.
+ * JTextFieldDateEditor is the default editor used by JDateChooser. It is a formatted text field,
+ * that colores valid dates green/black and invalid dates red. The date format patten and mask can
+ * be set manually. If not set, the MEDIUM pattern of a SimpleDateFormat with regards to the actual
+ * locale is used.
  *
  * @author Kai Toedter
  * @version $LastChangedRevision: 97 $
@@ -77,6 +78,7 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
 	this(true, datePattern, maskPattern, placeholder);
     }
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public JTextFieldDateEditor(boolean showMask, String datePattern, String maskPattern,
 	    char placeholder) {
 	dateFormatter = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.MEDIUM);
@@ -217,8 +219,8 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
     }
 
     /**
-     * After any user input, the value of the textfield is proofed. Depending on being a valid date, the value is
-     * colored green or red.
+     * After any user input, the value of the textfield is proofed. Depending on being a valid date,
+     * the value is colored green or red.
      *
      * @param event the caret event
      */
@@ -292,9 +294,9 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
     }
 
     /**
-     * Creates a mask from a date pattern. This is a very simple (and incomplete) implementation thet works only with
-     * numbers. A date pattern of "MM/dd/yy" will result in the mask "##/##/##". Probably you want to override this
-     * method if it does not fit your needs.
+     * Creates a mask from a date pattern. This is a very simple (and incomplete) implementation
+     * thet works only with numbers. A date pattern of "MM/dd/yy" will result in the mask
+     * "##/##/##". Probably you want to override this method if it does not fit your needs.
      *
      * @param datePattern the date pattern
      * @return the mask
@@ -349,7 +351,8 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
     }
 
     /**
-     * Returns the preferred size. If a date pattern is set, it is the size the date pattern would take.
+     * Returns the preferred size. If a date pattern is set, it is the size the date pattern would
+     * take.
      */
     @Override
     public Dimension getPreferredSize() {
@@ -370,8 +373,8 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
     }
 
     /**
-     * Enables and disabled the compoment.It also fixes the background bug 4991597 and sets the background explicitely
-     * to a TextField.inactiveBackground.
+     * Enables and disabled the compoment.It also fixes the background bug 4991597 and sets the
+     * background explicitely to a TextField.inactiveBackground.
      *
      * @param b
      */

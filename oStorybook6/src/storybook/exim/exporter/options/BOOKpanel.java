@@ -67,7 +67,7 @@ public class BOOKpanel extends JPanel implements ChangeListener {
 		add(rbOneFile, MIG.SKIP + " 1");
 
 		rbMultiChapter = new JRadioButton(I18N.getMsg("export.book.htmloption.multichapter"));
-		rbMultiChapter.setSelected(paramExport.getHtmlMultiChapter());
+		rbMultiChapter.setSelected(paramExport.isMultiChapter());
 		rbMultiChapter.addChangeListener(this);
 		bg1.add(rbMultiChapter);
 		add(rbMultiChapter, MIG.get(MIG.SKIP + " 1", MIG.SPLIT2));
@@ -78,7 +78,7 @@ public class BOOKpanel extends JPanel implements ChangeListener {
 		add(ckChapterBooktitle);
 
 		rbMultiScene = new JRadioButton(I18N.getMsg("export.book.htmloption.multiscene"));
-		rbMultiScene.setSelected(paramExport.getHtmlMultiScene());
+		rbMultiScene.setSelected(paramExport.isMultiScene());
 		rbMultiScene.addChangeListener(this);
 		bg1.add(rbMultiScene);
 		add(rbMultiScene, MIG.SKIP + " 1");
@@ -96,8 +96,8 @@ public class BOOKpanel extends JPanel implements ChangeListener {
 
 	public void apply(BookParamExport p) {
 		//LOG.trace(TT + ".apply(p)");
-		p.setHtmlMultiChapter(rbMultiChapter.isSelected());
-		p.setHtmlMultiScene(rbMultiScene.isSelected());
+		p.setMultiChapter(rbMultiChapter.isSelected());
+		p.setMultiScene(rbMultiScene.isSelected());
 		int x = 0;
 		if (rbSuppress.isSelected()) {
 			x = 1;

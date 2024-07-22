@@ -38,449 +38,448 @@ import storybook.ui.MainFrame;
  */
 public class Book {
 
-	private static final String TT = "Book.";
-	public final Project project;
-	public BookInfo info;
-	public BookParam param;
-	private int sceneDateInit;
+    private static final String TT = "Book.";
+    public final Project project;
+    public BookInfo info;
+    public BookParam param;
+    private int sceneDateInit;
 
-	public Book(Project project) {
-		this.project = project;
-		info = new BookInfo(this);
-		param = new BookParam(this);
+    public Book(Project project) {
+	this.project = project;
+	info = new BookInfo(this);
+	param = new BookParam(this);
+    }
+
+    public void load() {
+	//LOG.printInfos(TT + "load() " + (project.rootNode == null ? "rootNode null" : project.getFilename()));
+	if (project.rootNode != null) {
+	    info.init();
+	    param.init();
 	}
+    }
 
-	public void load() {
-		//LOG.printInfos(TT + "load() " + (project.rootNode == null ? "rootNode null" : project.getFilename()));
-		if (project.rootNode != null) {
-			info.init();
-			param.init();
-		}
-	}
+    public int nbParts() {
+	return project.parts.getList().size();
+    }
 
-	public int nbParts() {
-		return project.parts.getList().size();
-	}
-
-	@SuppressWarnings("unchecked")
-	public int nbChapters(Part... part) {
-		int nb = 0;
-		for (Object obj : project.chapters.getList()) {
-			Chapter chapter = (Chapter) obj;
-			if (chapter.hasPart()) {
-				if (part != null && part.equals(chapter.getPart())) {
-					nb++;
-				} else {
-					nb++;
-				}
-			}
-		}
-		return nb;
-	}
-
-	@SuppressWarnings("unchecked")
-	public int nbScenes() {
-		int nb = 0;
-		for (Object obj : project.scenes.getList()) {
-			Scene scene = (Scene) obj;
-			if (!scene.getInformative()) {
-				nb++;
-			}
-		}
-		return nb;
-	}
-
-	public void setSceneDateInit(int value) {
-		this.sceneDateInit = value;
-	}
-
-	public int getSceneDateInit() {
-		return sceneDateInit;
-	}
-
-	/**
-	 * datas for identitying the type of DB object
-	 */
-	public enum TYPE {
-		INTERNAL,// internal data may be String, Boolean, Integer or Bytes
-		ATTRIBUTE,// Person Attribute (in development)
-		CATEGORY,
-		CHAPTER,
-		ENDNOTE,
-		EPISODE,
-		EVENT,
-		GENDER,
-		IDEA,
-		IDEABOX,
-		ITEM,
-		//ITEMLINK,
-		LOCATION,
-		MEMO,
-		PART,
-		PERSON,
-		PLOT,
-		RELATION,
-		SCENE,
-		STRAND,
-		TAG,
-		TAGLINK,
-		// these are plurials
-		INTERNALS,
-		ATTRIBUTES,
-		CATEGORIES,
-		CHAPTERS,
-		ENDNOTES,
-		EPISODES,
-		EVENTS,
-		GENDERS,
-		IDEAS,
-		ITEMS,
-		ITEMLINKS,
-		LOCATIONS,
-		MEMOS,
-		PARTS,
-		PERSONS,
-		PLOTS,
-		RELATIONS,
-		SCENES,
-		STRANDS,
-		TAGS,
-		TAGLINKS,
-		//not realy entities
-		SCENARIO,
-		SCENARIOS,
-		STATUS,
-		ALL,// all types for selection purpose
-		NONE;
-
-		private TYPE() {
-		}
-
-		@Override
-		public String toString() {
-			return this.name().toLowerCase();
-		}
-
-		public boolean compare(String str) {
-			return this.name().toLowerCase().equals(str.toLowerCase());
-		}
-
-		public boolean isPart() {
-			return this.name().equals("PART");
-		}
-
-		public boolean isChapter() {
-			return this.name().equals("CHAPTER");
-		}
-
-		public boolean isScene() {
-			return this.name().equals("SCENE");
-		}
-	}
-
-	public static TYPE getTYPE(PropertyChangeEvent evt) {
-		String prop = evt.getPropertyName();
-		if (prop.contains("_")) {
-			String v[] = prop.split("_");
-			return (getTYPE(v[0]));
-		}
-		return (TYPE.NONE);
-
-	}
-
-	public static TYPE getTYPE(AbstractEntity entity) {
-		if (entity == null) {
-			return (TYPE.NONE);
-		}
-		return entity.getObjType();
-	}
-
-	public static TYPE getTYPE(String str) {
-		if (str != null && !str.isEmpty()) {
-			for (TYPE id : TYPE.values()) {
-				if (id.compare(str)) {
-					return (id);
-				}
-			}
-		}
-		return (TYPE.NONE);
-	}
-
-	public static Icon getIcon(TYPE type) {
-		return IconUtil.getIconSmall("ent_" + type.toString());
-	}
-
-	/**
-	 * KEY determining data associated with the Book like Title, Author, and so
-	 * on
-	 */
-	public enum INFO {
-		ASSISTANT("Assistant"),//Boolean
-		AUTHOR("Author"),// String
-		BLURB("Blurb"),// String
-		COPYRIGHT("Copyright"),// String
-		CREATION("creation"),// String date formated
-		UPDATE("update"),// String date formated
-		MARKDOWN("Markdown"),// Boolean
-		NOTES("Notes"),// String
-		DEDICATION("Dedication"),// String
-		SCENARIO("Scenario"),// Boolean
-		SUBTITLE("SubTitle"),// String
-		TITLE("Title"),// String
-		UUID("UUID"),// String
-		ISBN("ISBN"),// String
-		LANG("Language"),// String
-		DB_VERSION("dbversion"),// String
-		NATURE("Nature"),// Integer
-		REVIEW("Review"),// boolean
-		NONE("none");
-		final private String text;
-
-		private INFO(String text) {
-			this.text = text;
-		}
-
-		@Override
-		public String toString() {
-			return text.toLowerCase();
-		}
-	}
-
-	/**
-	 * Specific parameters for the Book
-	 */
-	public enum PARAM {
-		BACKUP_AUTO,// Boolean
-		BACKUP_DIR,// String
-		BACKUP_INCREMENT,// Integer
-		CALENDAR_DAYS,// String
-		CALENDAR_HOURS,// Integer
-		CALENDAR_MONTHS,// Integer
-		CALENDAR_STARTDAY,// Integer
-		CALENDAR_USE,// Boolean
-		CALENDAR_YEARDAYS,// Integer
-		EDITOR_EXTENSION,// String
-		EDITOR_MODLESS,// Boolean
-		EDITOR_NAME,// String
-		EDITOR_TEMPLATE,// String
-		EDITOR_USE,// Boolean
-		EPUB_COVER,// String
-		EPUB_COVER_NOTEXT,// Boolean
-		EXPORT,
-		EXPORT_DIR,// String
-		EXPORT_FORMAT,// String
-		IMAGE_DIR,// String
-		IMPORT_DIRECTORY,// String
-		IMPORT_FILE,// String
-		LAYOUT_BOOK,// String
-		LAYOUT_SCENE_SEPARATOR,// String
-		LAYOUT_SHOW_REVIEW,// Boolean
-		SCENE_DATE_INIT,// Integer
-		NONE;
-
-		@Override
-		public String toString() {
-			return name().toLowerCase();
-		}
-	}
-
-	/**
-	 * check if a key exists in KEY or PARAM
-	 *
-	 * @param key
-	 * @return
-	 */
-	public static boolean checkKey(String key) {
-		for (INFO k : INFO.values()) {
-			if (key.equals(k.toString())) {
-				return true;
-			}
-		}
-		for (PARAM k : PARAM.values()) {
-			if (key.equals(k.toString())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static int checkInteger(int value, int min, int max) {
-		if (value < min) {
-			return min;
-		} else if (value > max) {
-			return max;
+    @SuppressWarnings("unchecked")
+    public int nbChapters(Part... part) {
+	int nb = 0;
+	for (Object obj : project.chapters.getList()) {
+	    Chapter chapter = (Chapter) obj;
+	    if (chapter.hasPart()) {
+		if (part != null && part.equals(chapter.getPart())) {
+		    nb++;
 		} else {
-			return value;
+		    nb++;
 		}
+	    }
+	}
+	return nb;
+    }
+
+    @SuppressWarnings("unchecked")
+    public int nbScenes() {
+	int nb = 0;
+	for (Object obj : project.scenes.getList()) {
+	    Scene scene = (Scene) obj;
+	    if (!scene.getInformative()) {
+		nb++;
+	    }
+	}
+	return nb;
+    }
+
+    public void setSceneDateInit(int value) {
+	this.sceneDateInit = value;
+    }
+
+    public int getSceneDateInit() {
+	return sceneDateInit;
+    }
+
+    /**
+     * datas for identitying the type of DB object
+     */
+    public enum TYPE {
+	INTERNAL,// internal data may be String, Boolean, Integer or Bytes
+	ATTRIBUTE,// Person Attribute (in development)
+	CATEGORY,
+	CHAPTER,
+	ENDNOTE,
+	EPISODE,
+	EVENT,
+	GENDER,
+	IDEA,
+	IDEABOX,
+	ITEM,
+	//ITEMLINK,
+	LOCATION,
+	MEMO,
+	PART,
+	PERSON,
+	PLOT,
+	RELATION,
+	SCENE,
+	STRAND,
+	TAG,
+	TAGLINK,
+	// these are plurials
+	INTERNALS,
+	ATTRIBUTES,
+	CATEGORIES,
+	CHAPTERS,
+	ENDNOTES,
+	EPISODES,
+	EVENTS,
+	GENDERS,
+	IDEAS,
+	ITEMS,
+	ITEMLINKS,
+	LOCATIONS,
+	MEMOS,
+	PARTS,
+	PERSONS,
+	PLOTS,
+	RELATIONS,
+	SCENES,
+	STRANDS,
+	TAGS,
+	TAGLINKS,
+	//not realy entities
+	SCENARIO,
+	SCENARIOS,
+	STATUS,
+	ALL,// all types for selection purpose
+	NONE;
+
+	private TYPE() {
 	}
 
-	///////////////////////////////////
-	public String getString(Element el, String key) {
-		return el.getAttribute(key.toLowerCase());
+	@Override
+	public String toString() {
+	    return this.name().toLowerCase();
 	}
 
-	public String getString(Element el, PARAM key) {
-		return el.getAttribute(key.toString());
+	public boolean compare(String str) {
+	    return this.name().toLowerCase().equals(str.toLowerCase());
 	}
 
-	public boolean getBoolean(Element el, PARAM key) {
-		return el.getAttribute(key.toString()).equals("1");
+	public boolean isPart() {
+	    return this.name().equals("PART");
 	}
 
-	public Integer getInteger(Element el, PARAM key) {
-		String r = el.getAttribute(key.toString());
-		if (StringUtil.isNumeric(r)) {
-			return Integer.valueOf(r);
+	public boolean isChapter() {
+	    return this.name().equals("CHAPTER");
+	}
+
+	public boolean isScene() {
+	    return this.name().equals("SCENE");
+	}
+    }
+
+    public static TYPE getTYPE(PropertyChangeEvent evt) {
+	String prop = evt.getPropertyName();
+	if (prop.contains("_")) {
+	    String v[] = prop.split("_");
+	    return (getTYPE(v[0]));
+	}
+	return (TYPE.NONE);
+
+    }
+
+    public static TYPE getTYPE(AbstractEntity entity) {
+	if (entity == null) {
+	    return (TYPE.NONE);
+	}
+	return entity.getObjType();
+    }
+
+    public static TYPE getTYPE(String str) {
+	if (str != null && !str.isEmpty()) {
+	    for (TYPE id : TYPE.values()) {
+		if (id.compare(str)) {
+		    return (id);
 		}
-		return -1;
+	    }
+	}
+	return (TYPE.NONE);
+    }
+
+    public static Icon getIcon(TYPE type) {
+	return IconUtil.getIconSmall("ent_" + type.toString());
+    }
+
+    /**
+     * KEY determining data associated with the Book like Title, Author, and so on
+     */
+    public enum INFO {
+	ASSISTANT("Assistant"),//Boolean
+	AUTHOR("Author"),// String
+	BLURB("Blurb"),// String
+	COPYRIGHT("Copyright"),// String
+	CREATION("creation"),// String date formated
+	UPDATE("update"),// String date formated
+	MARKDOWN("Markdown"),// Boolean
+	NOTES("Notes"),// String
+	DEDICATION("Dedication"),// String
+	SCENARIO("Scenario"),// Boolean
+	SUBTITLE("SubTitle"),// String
+	TITLE("Title"),// String
+	UUID("UUID"),// String
+	ISBN("ISBN"),// String
+	LANG("Language"),// String
+	DB_VERSION("dbversion"),// String
+	NATURE("Nature"),// Integer
+	REVIEW("Review"),// boolean
+	NONE("none");
+	final private String text;
+
+	private INFO(String text) {
+	    this.text = text;
 	}
 
-	public void setString(Element el, PARAM key, String value) {
-		el.setAttribute(key.toString(), value);
+	@Override
+	public String toString() {
+	    return text.toLowerCase();
 	}
+    }
 
-	public void setBoolean(Element el, PARAM key, boolean value) {
-		el.setAttribute(key.toString(), (value ? "1" : "0"));
+    /**
+     * Specific parameters for the Book
+     */
+    public enum PARAM {
+	BACKUP_AUTO,// Boolean
+	BACKUP_DIR,// String
+	BACKUP_INCREMENT,// Integer
+	CALENDAR_DAYS,// String
+	CALENDAR_HOURS,// Integer
+	CALENDAR_MONTHS,// Integer
+	CALENDAR_STARTDAY,// Integer
+	CALENDAR_USE,// Boolean
+	CALENDAR_YEARDAYS,// Integer
+	EDITOR_EXTENSION,// String
+	EDITOR_MODLESS,// Boolean
+	EDITOR_NAME,// String
+	EDITOR_TEMPLATE,// String
+	EDITOR_USE,// Boolean
+	EPUB_COVER,// String
+	EPUB_COVER_NOTEXT,// Boolean
+	EXPORT,
+	EXPORT_DIR,// String
+	EXPORT_FORMAT,// String
+	IMAGE_DIR,// String
+	IMPORT_DIRECTORY,// String
+	IMPORT_FILE,// String
+	LAYOUT_BOOK,// String
+	LAYOUT_SCENE_SEPARATOR,// String
+	LAYOUT_SHOW_REVIEW,// Boolean
+	SCENE_DATE_INIT,// Integer
+	NONE;
+
+	@Override
+	public String toString() {
+	    return name().toLowerCase();
 	}
+    }
 
-	public void setInteger(Element el, PARAM key, Integer value) {
-		el.setAttribute(key.toString(), value.toString());
+    /**
+     * check if a key exists in KEY or PARAM
+     *
+     * @param key
+     * @return
+     */
+    public static boolean checkKey(String key) {
+	for (INFO k : INFO.values()) {
+	    if (key.equals(k.toString())) {
+		return true;
+	    }
 	}
-	///////////////////////////////////
-
-	public void setCreation() {
-		info.setCreation();
+	for (PARAM k : PARAM.values()) {
+	    if (key.equals(k.toString())) {
+		return true;
+	    }
 	}
+	return false;
+    }
 
-	public void setCreation(String val) {
-		info.creationSet(val);
+    public static int checkInteger(int value, int min, int max) {
+	if (value < min) {
+	    return min;
+	} else if (value > max) {
+	    return max;
+	} else {
+	    return value;
 	}
+    }
 
-	public String getCreation() {
-		return (info.creationGet());
+    ///////////////////////////////////
+    public String getString(Element el, String key) {
+	return el.getAttribute(key.toLowerCase());
+    }
+
+    public String getString(Element el, PARAM key) {
+	return el.getAttribute(key.toString());
+    }
+
+    public boolean getBoolean(Element el, PARAM key) {
+	return el.getAttribute(key.toString()).equals("1");
+    }
+
+    public Integer getInteger(Element el, PARAM key) {
+	String r = el.getAttribute(key.toString());
+	if (StringUtil.isNumeric(r)) {
+	    return Integer.valueOf(r);
 	}
+	return -1;
+    }
 
-	public void setMaj() {
-		info.majSet();
-	}
+    public void setString(Element el, PARAM key, String value) {
+	el.setAttribute(key.toString(), value);
+    }
 
-	public String getMaj() {
-		return info.majGet();
-	}
+    public void setBoolean(Element el, PARAM key, boolean value) {
+	el.setAttribute(key.toString(), (value ? "1" : "0"));
+    }
 
-	public Date getMajDate() {
-		return info.majDateGet();
-	}
+    public void setInteger(Element el, PARAM key, Integer value) {
+	el.setAttribute(key.toString(), value.toString());
+    }
+    ///////////////////////////////////
 
-	public void setMaj(String c) {
-		info.majSet(c);
-	}
+    public void setCreation() {
+	info.setCreation();
+    }
 
-	public String getTitle() {
-		return (info.titleGet());
-	}
+    public void setCreation(String val) {
+	info.creationSet(val);
+    }
 
-	public void setTitle(String value) {
-		info.titleSet(value);
-	}
+    public String getCreation() {
+	return (info.creationGet());
+    }
 
-	public String getSubtitle() {
-		return (info.subtitleGet());
-	}
+    public void setMaj() {
+	info.majSet();
+    }
 
-	public void setSubtitle(String value) {
-		info.subtitleSet(value);
-	}
+    public String getMaj() {
+	return info.majGet();
+    }
 
-	public String getAuthor() {
-		return (info.authorGet());
-	}
+    public Date getMajDate() {
+	return info.majDateGet();
+    }
 
-	public void setAuthor(String value) {
-		info.authorSet(value);
-	}
+    public void setMaj(String c) {
+	info.majSet(c);
+    }
 
-	public String getCopyright() {
-		return (info.copyrightGet());
-	}
+    public String getTitle() {
+	return info.titleGet();
+    }
 
-	public void setCopyright(String value) {
-		info.copyrightSet(value);
-	}
+    public void setTitle(String value) {
+	info.titleSet(value);
+    }
 
-	public String getBlurb() {
-		return (info.blurbGet());
-	}
+    public String getSubtitle() {
+	return (info.subtitleGet());
+    }
 
-	public void setBlurb(String value) {
-		info.blurbSet(value);
-	}
+    public void setSubtitle(String value) {
+	info.subtitleSet(value);
+    }
 
-	public String getNotes() {
-		return info.notesGet();
-	}
+    public String getAuthor() {
+	return (info.authorGet());
+    }
 
-	public void setNotes(String val) {
-		info.notesSet(val);
-	}
+    public void setAuthor(String value) {
+	info.authorSet(value);
+    }
 
-	public String getDedication() {
-		return info.dedicationGet();
-	}
+    public String getCopyright() {
+	return (info.copyrightGet());
+    }
 
-	public void setDedication(String val) {
-		info.dedicationSet(val);
-	}
+    public void setCopyright(String value) {
+	info.copyrightSet(value);
+    }
 
-	public boolean getMarkdown() {
-		return info.markdownGet();
-	}
+    public String getBlurb() {
+	return (info.blurbGet());
+    }
 
-	public void setMarkdown(boolean val) {
-		info.markdownSet(val);
-	}
+    public void setBlurb(String value) {
+	info.blurbSet(value);
+    }
 
-	public boolean getScenario() {
-		return info.scenarioGet();
-	}
+    public String getNotes() {
+	return info.notesGet();
+    }
 
-	public void setScenario(boolean val) {
-		info.scenarioSet(val);
-	}
+    public void setNotes(String val) {
+	info.notesSet(val);
+    }
 
-	public String getISBN() {
-		return info.isbnGet();
-	}
+    public String getDedication() {
+	return info.dedicationGet();
+    }
 
-	public void setISBN(String val) {
-		info.isbnSet(val);
-	}
+    public void setDedication(String val) {
+	info.dedicationSet(val);
+    }
 
-	public String getUUID() {
-		return info.uuidGet();
-	}
+    public boolean getMarkdown() {
+	return info.markdownGet();
+    }
 
-	public void setUUID(String str) {
-		info.uuidSet(str);
-	}
+    public void setMarkdown(boolean val) {
+	info.markdownSet(val);
+    }
 
-	public String getLanguage() {
-		return info.languageGet();
-	}
+    public boolean getScenario() {
+	return info.scenarioGet();
+    }
 
-	public void setLanguage(String str) {
-		info.languageSet(str);
-	}
+    public void setScenario(boolean val) {
+	info.scenarioSet(val);
+    }
 
-	public boolean getReview() {
-		return info.reviewGet();
-	}
+    public String getISBN() {
+	return info.isbnGet();
+    }
 
-	public void setReview(boolean val) {
-		info.reviewSet(val);
-	}
+    public void setISBN(String val) {
+	info.isbnSet(val);
+    }
 
-	/*public static boolean isUseCalendar(Project project) {
+    public String getUUID() {
+	return info.uuidGet();
+    }
+
+    public void setUUID(String str) {
+	info.uuidSet(str);
+    }
+
+    public String getLanguage() {
+	return info.languageGet();
+    }
+
+    public void setLanguage(String str) {
+	info.languageSet(str);
+    }
+
+    public boolean getReview() {
+	return info.reviewGet();
+    }
+
+    public void setReview(boolean val) {
+	info.reviewSet(val);
+    }
+
+    /*public static boolean isUseCalendar(Project project) {
 		return project.book.param.getParamCalendar().getUse();
 	}
 
@@ -513,172 +512,177 @@ public class Book {
 		p.setMonths(c.getListMonths());
 		p.setStartDay(c.startday);
 	}*/
-	/**
-	 * get number of Strands
-	 *
-	 * @param m
-	 * @return
-	 */
-	public static int getNbStrands(MainFrame m) {
-		return m.project.strands.getList().size();
-	}
+    /**
+     * get number of Strands
+     *
+     * @param m
+     * @return
+     */
+    public static int getNbStrands(MainFrame m) {
+	return m.project.strands.getList().size();
+    }
 
-	/**
-	 * get number of Parts
-	 *
-	 * @param m
-	 * @return
-	 */
-	public static int getNbParts(MainFrame m) {
-		return m.project.parts.getList().size();
-	}
+    /**
+     * get number of Parts
+     *
+     * @param m
+     * @return
+     */
+    public static int getNbParts(MainFrame m) {
+	return m.project.parts.getList().size();
+    }
 
-	/**
-	 * get nummber of Chapters
-	 *
-	 * @param m
-	 * @return
-	 */
-	public static int getNbChapters(MainFrame m) {
-		return m.project.chapters.getList().size();
-	}
+    /**
+     * get nummber of Chapters
+     *
+     * @param m
+     * @return
+     */
+    public static int getNbChapters(MainFrame m) {
+	return m.project.chapters.getList().size();
+    }
 
-	/**
-	 * get number of Scenes
-	 *
-	 * @param m
-	 * @return
-	 */
-	public static int getNbScenes(MainFrame m) {
-		return m.project.scenes.getList().size();
-	}
+    /**
+     * get number of Scenes
+     *
+     * @param m
+     * @return
+     */
+    public static int getNbScenes(MainFrame m) {
+	return m.project.scenes.getList().size();
+    }
 
-	/**
-	 * get number of Scenes in the given Chapter
-	 *
-	 * @param mainFrame
-	 * @param chapter
-	 * @return
-	 */
-	public static int getNbScenesInChapter(MainFrame mainFrame, Chapter chapter) {
-		if (chapter == null) {
-			return (0);
-		}
-		return mainFrame.project.scenes.find(chapter).size();
+    /**
+     * get number of Scenes in the given Chapter
+     *
+     * @param mainFrame
+     * @param chapter
+     * @return
+     */
+    public static int getNbScenesInChapter(MainFrame mainFrame, Chapter chapter) {
+	if (chapter == null) {
+	    return (0);
 	}
+	return mainFrame.project.scenes.find(chapter).size();
+    }
 
-	/**
-	 * get number of Persons
-	 *
-	 * @param mainFrame
-	 * @return
-	 */
-	public static int getNbPersons(MainFrame mainFrame) {
-		return mainFrame.project.getList(TYPE.PERSON).size();
-	}
+    /**
+     * get number of Persons
+     *
+     * @param mainFrame
+     * @return
+     */
+    public static int getNbPersons(MainFrame mainFrame) {
+	return mainFrame.project.getList(TYPE.PERSON).size();
+    }
 
-	/**
-	 * get number of Locations
-	 *
-	 * @param mainFrame
-	 * @return
-	 */
-	public static int getNbLocations(MainFrame mainFrame) {
-		return mainFrame.project.getList(TYPE.LOCATION).size();
-	}
+    /**
+     * get number of Locations
+     *
+     * @param mainFrame
+     * @return
+     */
+    public static int getNbLocations(MainFrame mainFrame) {
+	return mainFrame.project.getList(TYPE.LOCATION).size();
+    }
 
-	/**
-	 * get number of Items
-	 *
-	 * @param mainFrame
-	 * @return
-	 */
-	public static int getNbItems(MainFrame mainFrame) {
-		return mainFrame.project.getList(TYPE.ITEM).size();
-	}
+    /**
+     * get number of Items
+     *
+     * @param mainFrame
+     * @return
+     */
+    public static int getNbItems(MainFrame mainFrame) {
+	return mainFrame.project.getList(TYPE.ITEM).size();
+    }
 
-	/**
-	 * get the param for backup
-	 *
-	 * @return
-	 */
-	public BookParamBackup getParamBackup() {
-		return param.getParamBackup();
-	}
+    /**
+     * get the param for backup
+     *
+     * @return
+     */
+    public BookParamBackup getParamBackup() {
+	return param.getParamBackup();
+    }
 
-	/**
-	 * get the param
-	 *
-	 * @return
-	 */
-	public BookParam getParam() {
-		return param;
-	}
+    /**
+     * get the param
+     *
+     * @return
+     */
+    public BookParam getParam() {
+	return param;
+    }
 
-	/**
-	 * is using an external editor (like MSWord or LibreOffice Writer)
-	 *
-	 * @return
-	 */
-	public boolean isXeditorUse() {
-		return param.getParamEditor().getUse();
-	}
+    /**
+     * is using an external editor (like MSWord or LibreOffice Writer)
+     *
+     * @return
+     */
+    public boolean isXeditorUse() {
+	return param.getParamEditor().getUse();
+    }
 
-	/**
-	 * get all existing types of Entity
-	 *
-	 * @return
-	 */
-	public static List<Book.TYPE> getTypes() {
-		List<Book.TYPE> list = new ArrayList<>();
-		list.add(Book.TYPE.ATTRIBUTE);
-		list.add(Book.TYPE.CHAPTER);
-		list.add(Book.TYPE.CATEGORY);
-		list.add(Book.TYPE.ENDNOTE);
-		list.add(Book.TYPE.EVENT);
-		list.add(Book.TYPE.GENDER);
-		list.add(Book.TYPE.IDEA);
-		list.add(Book.TYPE.INTERNAL);
-		list.add(Book.TYPE.ITEM);
-		//list.add(Book.TYPE.ITEMLINK);
-		list.add(Book.TYPE.LOCATION);
-		list.add(Book.TYPE.MEMO);
-		list.add(Book.TYPE.PART);
-		list.add(Book.TYPE.PERSON);
-		list.add(Book.TYPE.PLOT);
-		list.add(Book.TYPE.RELATION);
-		list.add(Book.TYPE.SCENE);
-		list.add(Book.TYPE.STRAND);
-		list.add(Book.TYPE.TAG);
-		//list.add(Book.TYPE.TAGLINK);
-		return list;
-	}
+    /**
+     * get all existing types of Entity
+     *
+     * @return
+     */
+    public static List<Book.TYPE> getTypes() {
+	List<Book.TYPE> list = new ArrayList<>();
+	list.add(Book.TYPE.ATTRIBUTE);
+	list.add(Book.TYPE.CHAPTER);
+	list.add(Book.TYPE.CATEGORY);
+	list.add(Book.TYPE.ENDNOTE);
+	list.add(Book.TYPE.EVENT);
+	list.add(Book.TYPE.GENDER);
+	list.add(Book.TYPE.IDEA);
+	list.add(Book.TYPE.INTERNAL);
+	list.add(Book.TYPE.ITEM);
+	//list.add(Book.TYPE.ITEMLINK);
+	list.add(Book.TYPE.LOCATION);
+	list.add(Book.TYPE.MEMO);
+	list.add(Book.TYPE.PART);
+	list.add(Book.TYPE.PERSON);
+	list.add(Book.TYPE.PLOT);
+	list.add(Book.TYPE.RELATION);
+	list.add(Book.TYPE.SCENE);
+	list.add(Book.TYPE.STRAND);
+	list.add(Book.TYPE.TAG);
+	//list.add(Book.TYPE.TAGLINK);
+	return list;
+    }
 
-	public static String setChildText(INFO key, String text) {
-		return setChildText(key.toString(), text);
-	}
+    public static String setChildText(INFO key, String text) {
+	return setChildText(key.toString(), text);
+    }
 
-	public static String setChildText(PARAM key, String text) {
-		return setChildText(key.toString(), text);
-	}
+    public static String setChildText(PARAM key, String text) {
+	return setChildText(key.toString(), text);
+    }
 
-	public static String setChildText(String key, String text) {
-		if (text == null || text.isEmpty()) {
-			return "";
-		}
-		return "<" + key + ">" + text + "</" + key + ">\n";
+    public static String setChildText(String key, String text) {
+	if (text == null || text.isEmpty()) {
+	    return "";
 	}
+	return "<" + key + ">" + text + "</" + key + ">\n";
+    }
 
-	public static String getText(Element node, INFO key) {
-		return getText(node, key.toString());
-	}
+    public static String getText(Element node, INFO key) {
+	return getText(node, key.toString());
+    }
 
-	public static String getText(Element node, PARAM key) {
-		return getText(node, key.toString());
-	}
+    public static String getText(Element node, PARAM key) {
+	return getText(node, key.toString());
+    }
 
-	public static String getText(Element node, String key) {
-		return XmlUtil.getText(node, key);
-	}
+    public static String getText(Element node, String key) {
+	return XmlUtil.getText(node, key);
+    }
+
+    @Override
+    public int hashCode() {
+	return (info.toXml() + param.toXml()).hashCode();
+    }
 
 }

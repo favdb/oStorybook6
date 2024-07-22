@@ -18,7 +18,7 @@ public class ProgressCircleUI extends BasicProgressBarUI {
 
 	private static final double BAR_THICKNESS = 0.25;
 	private double barThickness = BAR_THICKNESS;
-	private Color backColor = null;
+	private Color backColor = null, fbColor = null;
 
 	@Override
 	public Dimension getPreferredSize(JComponent c) {
@@ -106,7 +106,7 @@ public class ProgressCircleUI extends BasicProgressBarUI {
 		double ir = or * (1.0 - barThickness);
 		Shape inner = new Ellipse2D.Double(cx - ir, cy - ir, ir * 2, ir * 2);
 		Shape outer = new Arc2D.Double(
-				cx - or, cy - or, sz, sz, 90 - degree, degree, Arc2D.PIE);
+			cx - or, cy - or, sz, sz, 90 - degree, degree, Arc2D.PIE);
 		Area area = new Area(outer);
 		area.subtract(new Area(inner));
 		g2.fill(area);

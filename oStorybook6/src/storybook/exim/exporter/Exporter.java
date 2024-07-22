@@ -100,7 +100,7 @@ public class Exporter {
 				MemoriaPanel memoria = (MemoriaPanel) view.getComponent();
 				EXIM.exporter(mainFrame, memoria.getPanelToExport());
 				break;
-			case PLAN:
+			case PLANNING:
 				break;
 			case TREE:
 				break;
@@ -122,7 +122,7 @@ public class Exporter {
 			case EPISODES:
 			case INFO:
 			case MEMORIA:
-			case PLAN:
+			case PLANNING:
 			case TREE:
 				return (true);
 			default:

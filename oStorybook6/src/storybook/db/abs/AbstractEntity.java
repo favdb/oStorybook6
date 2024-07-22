@@ -1023,4 +1023,18 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
 	setNotes(Html.changeLinks(path, getNotes()));
     }
 
+    public int getLevel() {
+	String z = getName();
+	if (getName().contains("@")) {
+	    String xz[] = getName().split("@");
+	    if (xz.length > 1) {
+		z = xz[1];
+	    }
+	}
+	if (!z.contains("\\.")) {
+	    return z.replaceAll("[^.]", "").length();
+	}
+	return 0;
+    }
+
 }

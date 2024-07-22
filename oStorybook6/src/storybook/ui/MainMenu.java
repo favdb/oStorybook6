@@ -53,6 +53,7 @@ import storybook.Pref;
 import storybook.db.attribute.Attribute;
 import storybook.db.book.Book;
 import storybook.db.category.Category;
+import storybook.db.challenge.ChallengeDlg;
 import storybook.db.chapter.Chapter;
 import storybook.db.chapter.ChaptersCreateDlg;
 import storybook.db.chapter.ChaptersOrderDlg;
@@ -1123,8 +1124,10 @@ public class MainMenu implements MouseListener {
 	//LOG.printInfos(TT+"initMenuTools()");
 	menuTools = initMenu("tools");
 
-	//toolsChallenge = initScMenuItem("challenge", evt -> ChallengeDlg.show(mainFrame));
-	//menuTools.add(toolsChallenge);
+	toolsChallenge = initScMenuItem("challenge", evt -> ChallengeDlg.show(mainFrame));
+	if (App.isDev()) {
+	    menuTools.add(toolsChallenge);
+	}
 	toolsTypist = initMenuItem("typist", evt -> {
 	    if (mainFrame.isEpisode) {
 		mainFrame.episodeActivate();
@@ -1309,7 +1312,7 @@ public class MainMenu implements MouseListener {
 	menuView.add(new JPopupMenu.Separator());
 
 	toolsPlan = initMenuItem(K.VW_PLAN, "view.plan", "",
-		evt -> mainFrame.showAndFocus(VIEWNAME.PLAN));
+		evt -> mainFrame.showAndFocus(VIEWNAME.PLANNING));
 	menuView.add(toolsPlan);
 
 	vueTree = initMenuItem(K.VW_TREE, "tree", "", ' ', "tree",

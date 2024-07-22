@@ -24,93 +24,93 @@ package storybook.db.book;
  */
 public class BookParamCalendar extends BookParamAbstract {
 
+    //TODO calendar
+    //private SbCalendar calendar;
+    public final static boolean CALENDAR_DEFAULT_USE = false;
+    private boolean calendarUse = false;
+    private boolean use = false;
+
+    @SuppressWarnings("OverridableMethodCallInConstructor")
+    public BookParamCalendar(BookParam param) {
+	super(param, "calendar");
+	if (param.book.project.rootNode != null) {
+	    node = getNodeElement("calendar");
+	}
+	init();
+    }
+
+    @Override
+    protected void init() {
+	if (node != null) {
+	    //TODO calendar
+	}
+    }
+
+    @Override
+    public String toXml() {
 	//TODO calendar
-	//private SbCalendar calendar;
-	public final static boolean CALENDAR_DEFAULT_USE = false;
-	private boolean calendarUse = false;
-	private boolean use = false;
+	return "";
+    }
 
-	@SuppressWarnings("OverridableMethodCallInConstructor")
-	public BookParamCalendar(BookParam param) {
-		super(param, "calendar");
-		if (param.book.project.rootNode != null) {
-			node = getNodeElement("calendar");
-		}
-		init();
-	}
+    public void setCalendarUse(boolean x) {
+	calendarUse = x;
+    }
 
-	@Override
-	protected void init() {
-		if (node != null) {
-			//todo
-		}
-	}
+    public boolean getCalendarUse() {
+	return (calendarUse);
+    }
 
-	@Override
-	public String toXml() {
-		//todo
-		return "";
-	}
+    public boolean isUseCalendar() {
+	return (calendarUse);
+    }
 
-	public void setCalendarUse(boolean x) {
-		calendarUse = x;
-	}
-
-	public boolean getCalendarUse() {
-		return (calendarUse);
-	}
-
-	public boolean isUseCalendar() {
-		return (calendarUse);
-	}
-
-	/*public SbCalendar getCalendar() {
+    //TODO calendar
+    /*public SbCalendar getCalendar() {
 		return calendar;
 	}
 
 	public void setCalendar(SbCalendar sbc) {
 		calendar = sbc;
-		//todo
 	}*/
-	@Override
-	public int hash() {
-		return toString().hashCode();
-	}
+    @Override
+    public int hash() {
+	return toString().hashCode();
+    }
 
-	@Override
-	public void refresh() {
-	}
+    @Override
+    public void refresh() {
+    }
 
-	/*@Override
+    /*@Override
 	public String toString() {
 		return calendar.toString();
 	}*/
-	public void setUse(boolean value) {
-		this.use = value;
-	}
+    public void setUse(boolean value) {
+	this.use = value;
+    }
 
-	public boolean getUse() {
-		return this.use;
-	}
+    public boolean getUse() {
+	return this.use;
+    }
 
-	void setYeardays(int yeardays) {
-		throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-	}
+    void setYeardays(int yeardays) {
+	throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
-	void setHours(String listHours) {
-		throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-	}
+    void setHours(String listHours) {
+	throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
-	void setDays(String listDays) {
-		throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-	}
+    void setDays(String listDays) {
+	throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
-	void setMonths(String listMonths) {
-		throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-	}
+    void setMonths(String listMonths) {
+	throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
-	void setStartDay(int startday) {
-		throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-	}
+    void setStartDay(int startday) {
+	throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }

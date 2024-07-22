@@ -122,7 +122,7 @@ public class Parts extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Part r1, Part r2)
-		   -> r1.getName().compareTo(r2.getName()));
+			-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -165,7 +165,7 @@ public class Parts extends AbsEntitys {
 	public List<Part> getRoots() {
 		List<Part> ls = new ArrayList<>();
 		for (Part p : parts) {
-			if (p.hasSuperpart() && !ls.contains(p.getSuperpart())) {
+			if (!p.hasSuperpart() && !ls.contains(p.getSuperpart())) {
 				ls.add(p);
 			}
 		}

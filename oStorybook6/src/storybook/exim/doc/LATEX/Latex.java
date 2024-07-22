@@ -24,214 +24,213 @@ import storybook.ui.MainFrame;
  */
 public class Latex {
 
-	private static final String TT = "Latex";
+    private static final String TT = "Latex";
 
-	/**
-	 * Creates Latex instance and runs its
-	 *
-	 * @param args command line arguments
-	 */
-	public static void main(String[] args) {
-		Latex latex = new Latex();
-		latex.processCmdLineArgs(args);
-		if (latex.getInputFile().isEmpty()) {
-			System.err.println("Input file not specified.");
-			return;
-		}
-		File f = new File(latex.getInputFile());
-		if (!f.exists()) {
-			System.err.println("Input file not exists.");
-			return;
-		}
-		if (latex.getOutputFile().isEmpty()) {
-			System.err.println("Output file not specified.");
-			return;
-		}
-		f = new File(latex.getOutputFile());
-		if (f.exists()) {
-			System.out.println("Output file exists, replacing it.");
-			f.delete();
-		}
-		latex.execMain();
+    /**
+     * Creates Latex instance and runs its
+     *
+     * @param args command line arguments
+     */
+    public static void main(String[] args) {
+	Latex latex = new Latex();
+	latex.processCmdLineArgs(args);
+	if (latex.getInputFile().isEmpty()) {
+	    System.err.println("Input file not specified.");
+	    return;
 	}
-
-	/**
-	 * create a Latex document file for the whole book
-	 *
-	 * @param mainFrame
-	 * @param file
-	 * @param text
-	 * @return
-	 */
-	public static boolean createDoc(MainFrame mainFrame, File file, String text) {
-		try {
-			ParserHandler handler = new ParserHandler(file, null);
-			new Parser(text
-					.replace("«", "&laquo;").replace("»", "&raquo;")
-					.replace("“", "&ldquo;").replace("”", "&rdquo;"), handler).parse();
-			return true;
-		} catch (Exception ex) {
-			LOG.err(TT + ".createDoc error", ex);
-		}
-		return false;
+	File f = new File(latex.getInputFile());
+	if (!f.exists()) {
+	    System.err.println("Input file not exists.");
+	    return;
 	}
-
-	/**
-	 * Latex class
-	 */
-	public Latex() {
+	if (latex.getOutputFile().isEmpty()) {
+	    System.err.println("Output file not specified.");
+	    return;
 	}
-
-	/**
-	 * execute the main conversion
-	 *
-	 */
-	public void execMain() {
-		try {
-			File inf = new File(getInputFile());
-			File ouf = new File(getOutputFile());
-			// TODO: check files exist & have write permissions
-			ParserHandler handler = new ParserHandler(ouf, this);
-			new Parser(inf, handler).parse();
-		} catch (Exception e) {
-			e.printStackTrace(System.err);
-			System.exit(-1);
-		}
+	f = new File(latex.getOutputFile());
+	if (f.exists()) {
+	    System.out.println("Output file exists, replacing it.");
+	    f.delete();
 	}
+	latex.execMain();
+    }
 
-	private String inputFile = "",
-			outputFile = "",
-			configFile = "config.xml",
-			cssFile = "";
-
-	/**
-	 * Processes command line arguments.
-	 * <ul>
-	 * <li>-input &lt;fileName&gt;</li>
-	 * <li>-output &lt;fileName&gt;</li>
-	 * <li>-config &lt;fileName&gt;</li>
-	 * <li>-css &lt;fileName&gt;</li>
-	 * </ul>
-	 *
-	 * @param args command line arguments
-	 */
-	public void processCmdLineArgs(String[] args) {
-		for (int i = 0; i < args.length; ++i) {
-			switch (args[i]) {
-				case "--input":
-				case "-i":
-					if (i < (args.length - 1)) {
-						inputFile = args[i + 1];
-						++i;
-					}
-					break;
-				case "--output":
-				case "-o":
-					if (i < (args.length - 1)) {
-						outputFile = args[i + 1];
-						++i;
-					}
-					break;
-				case "--config":
-				case "-c":
-					if (i < (args.length - 1)) {
-						configFile = args[i + 1];
-						++i;
-					}
-					break;
-				case "--css":
-					if (i < (args.length - 1)) {
-						cssFile = args[i + 1];
-						++i;
-					}
-					break;
-			}
-		}
+    /**
+     * create a Latex document file for the whole book
+     *
+     * @param mainFrame
+     * @param file
+     * @param text
+     * @return
+     */
+    public static boolean createDoc(MainFrame mainFrame, File file, String text) {
+	try {
+	    ParserHandler handler = new ParserHandler(file, null);
+	    new Parser(text
+		    .replace("«", "&laquo;").replace("»", "&raquo;")
+		    .replace("“", "&ldquo;").replace("”", "&rdquo;"), handler).parse();
+	    return true;
+	} catch (Exception ex) {
+	    LOG.err(TT + ".createDoc error", ex);
 	}
+	return false;
+    }
 
-	/**
-	 * get the input file name
-	 *
-	 * @return
-	 */
-	public String getInputFile() {
-		return inputFile;
-	}
+    /**
+     * Latex class
+     */
+    public Latex() {
+    }
 
-	/**
-	 * set the input file name
-	 *
-	 * @param inputFile
-	 */
-	public void setInputFile(String inputFile) {
-		this.inputFile = inputFile;
+    /**
+     * execute the main conversion
+     */
+    public void execMain() {
+	try {
+	    File inf = new File(getInputFile());
+	    File ouf = new File(getOutputFile());
+	    // TODO: check files exist & have write permissions
+	    ParserHandler handler = new ParserHandler(ouf, this);
+	    new Parser(inf, handler).parse();
+	} catch (Exception e) {
+	    e.printStackTrace(System.err);
+	    System.exit(-1);
 	}
+    }
 
-	/**
-	 * get the output file name
-	 *
-	 * @return
-	 */
-	public String getOutputFile() {
-		return outputFile;
-	}
+    private String inputFile = "",
+	    outputFile = "",
+	    configFile = "config.xml",
+	    cssFile = "";
 
-	/**
-	 * set the output file name
-	 *
-	 * @param outputFile
-	 */
-	public void setOutputFile(String outputFile) {
-		this.outputFile = outputFile;
+    /**
+     * Processes command line arguments.
+     * <ul>
+     * <li>-input &lt;fileName&gt;</li>
+     * <li>-output &lt;fileName&gt;</li>
+     * <li>-config &lt;fileName&gt;</li>
+     * <li>-css &lt;fileName&gt;</li>
+     * </ul>
+     *
+     * @param args command line arguments
+     */
+    public void processCmdLineArgs(String[] args) {
+	for (int i = 0; i < args.length; ++i) {
+	    switch (args[i]) {
+		case "--input":
+		case "-i":
+		    if (i < (args.length - 1)) {
+			inputFile = args[i + 1];
+			++i;
+		    }
+		    break;
+		case "--output":
+		case "-o":
+		    if (i < (args.length - 1)) {
+			outputFile = args[i + 1];
+			++i;
+		    }
+		    break;
+		case "--config":
+		case "-c":
+		    if (i < (args.length - 1)) {
+			configFile = args[i + 1];
+			++i;
+		    }
+		    break;
+		case "--css":
+		    if (i < (args.length - 1)) {
+			cssFile = args[i + 1];
+			++i;
+		    }
+		    break;
+	    }
 	}
+    }
 
-	/**
-	 * get the configuration file name
-	 *
-	 * @return
-	 */
-	public String getConfigFile() {
-		return configFile;
-	}
+    /**
+     * get the input file name
+     *
+     * @return
+     */
+    public String getInputFile() {
+	return inputFile;
+    }
 
-	/**
-	 * set the configuration file name
-	 *
-	 * @param configFile
-	 */
-	public void setConfigFile(String configFile) {
-		this.configFile = configFile;
-	}
+    /**
+     * set the input file name
+     *
+     * @param inputFile
+     */
+    public void setInputFile(String inputFile) {
+	this.inputFile = inputFile;
+    }
 
-	/**
-	 * get the CSS file name
-	 *
-	 * @return
-	 */
-	public String getCssFile() {
-		return cssFile;
-	}
+    /**
+     * get the output file name
+     *
+     * @return
+     */
+    public String getOutputFile() {
+	return outputFile;
+    }
 
-	/**
-	 * set the CSS file name
-	 *
-	 * @param cssFile
-	 */
-	public void setCssFile(String cssFile) {
-		this.cssFile = cssFile;
-	}
+    /**
+     * set the output file name
+     *
+     * @param outputFile
+     */
+    public void setOutputFile(String outputFile) {
+	this.outputFile = outputFile;
+    }
 
-	/**
-	 * check if configuration file (config.xml) exists
-	 *
-	 * @return
-	 */
-	public boolean configExists() {
-		if (configFile.isEmpty()) {
-			return false;
-		}
-		File f = new File(configFile);
-		return f.exists();
+    /**
+     * get the configuration file name
+     *
+     * @return
+     */
+    public String getConfigFile() {
+	return configFile;
+    }
+
+    /**
+     * set the configuration file name
+     *
+     * @param configFile
+     */
+    public void setConfigFile(String configFile) {
+	this.configFile = configFile;
+    }
+
+    /**
+     * get the CSS file name
+     *
+     * @return
+     */
+    public String getCssFile() {
+	return cssFile;
+    }
+
+    /**
+     * set the CSS file name
+     *
+     * @param cssFile
+     */
+    public void setCssFile(String cssFile) {
+	this.cssFile = cssFile;
+    }
+
+    /**
+     * check if configuration file (config.xml) exists
+     *
+     * @return
+     */
+    public boolean configExists() {
+	if (configFile.isEmpty()) {
+	    return false;
 	}
+	File f = new File(configFile);
+	return f.exists();
+    }
 
 }

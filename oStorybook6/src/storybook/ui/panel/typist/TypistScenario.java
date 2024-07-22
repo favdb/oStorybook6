@@ -45,7 +45,7 @@ import storybook.db.book.Book;
 import storybook.db.idea.Idea;
 import storybook.db.location.Location;
 import storybook.db.person.Person;
-import storybook.db.scene.ScenarioEdit;
+import storybook.db.scene.ScenarioPanel;
 import storybook.db.scene.Scene;
 import storybook.db.scene.SceneStateCbModel;
 import storybook.db.scene.SceneStateLCR;
@@ -83,7 +83,7 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 	private JComboBox cbStage, cbScenes, cbStatus;
 	private JTextField tfName = new JTextField();
 	private Markdown mdEdit = new Markdown("ScenarioPanel");
-	private ScenarioEdit scenario;
+	private ScenarioPanel scenario;
 	private JSCheckList listPersons;
 	private boolean leftPanelHide = false, rightPanelHide = false;
 
@@ -248,7 +248,7 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 		head.add(new JLabel(I18N.getColonMsg("assistant.stage")), MIG.get(MIG.SPAN, "split 3"));
 		head.add(cbStage, MIG.SPLIT2);
 		head.add(Ui.initButton(CMD.BT_STAGE.toString(), "", ICONS.K.HELP, "assistant.stage.help", this));
-		scenario = new ScenarioEdit(this);
+		scenario = new ScenarioPanel(this);
 		head.add(scenario, MIG.SPAN);
 		return head;
 	}

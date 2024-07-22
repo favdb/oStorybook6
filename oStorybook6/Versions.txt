@@ -3,6 +3,8 @@ oStorybook
 
 Versions :
 6.01: (01/09/2024)
+- ajout de la fonction Challenge
+- remplacement (en français) du terme "Les grandes lignes" par "Ébauche"
 - corrections de bugs
 
 6.00d :correctif d'urgence

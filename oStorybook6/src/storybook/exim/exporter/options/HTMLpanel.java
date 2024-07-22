@@ -48,10 +48,7 @@ public class HTMLpanel extends JPanel implements ChangeListener {
     private final ExportBookDlg dlgExport;
     private JButton btCssFile;
     private JTextField txCssFile;
-    public JCheckBox cbNav;
-    public JCheckBox cbNavImage;
-    private JCheckBox cbUseCss;
-    private JCheckBox ckChapterBreakPage;
+    public JCheckBox cbNav, cbNavImage, cbUseCss, ckChapterBreakPage, ckAdvanced;
     private final BookParamExport paramExport;
 
     public HTMLpanel(ExportBookDlg dlg) {
@@ -104,6 +101,9 @@ public class HTMLpanel extends JPanel implements ChangeListener {
 	ckChapterBreakPage = new JCheckBox(I18N.getMsg("export.chapter.break_page"));
 	ckChapterBreakPage.setSelected(paramExport.getHtmlChapterBreakPage());
 	add(ckChapterBreakPage, MIG.WRAP);
+	ckAdvanced = new JCheckBox(I18N.getMsg("export.book.htmladvanced"));
+	ckAdvanced.setSelected(paramExport.getHtmlAdvanced());
+	add(ckAdvanced, MIG.WRAP);
     }
 
     private void htmlUseCssChanged(ItemEvent evt) {
@@ -145,11 +145,16 @@ public class HTMLpanel extends JPanel implements ChangeListener {
 	    p.setHtmlNavImage(false);
 	}
 	p.setHtmlChapterBreakPage(ckChapterBreakPage.isSelected());
+	p.setHtmlAdvanced(ckAdvanced.isSelected());
     }
 
     @Override
     public void stateChanged(ChangeEvent e) {
 	cbNavImage.setEnabled(cbNav.isSelected());
+    }
+
+    public boolean isAdvanced() {
+	return (ckAdvanced == null ? false : ckAdvanced.isSelected());
     }
 
     public class CssFileFilter extends javax.swing.filechooser.FileFilter {

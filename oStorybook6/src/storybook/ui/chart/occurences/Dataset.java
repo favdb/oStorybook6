@@ -44,12 +44,12 @@ public class Dataset {
 	public DatasetItem getItem(String id) {
 		if (items != null) {
 			for (DatasetItem item : items) {
-				if (item.id.equals(id)) {
+				if (item.name.equals(id)) {
 					return item;
 				}
 				if (item.subItems != null) {
 					for (DatasetItem subItem : item.subItems) {
-						if (subItem.id.equals(id)) {
+						if (subItem.name.equals(id)) {
 							return subItem;
 						}
 					}

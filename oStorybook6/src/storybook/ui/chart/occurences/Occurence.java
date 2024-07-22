@@ -87,8 +87,8 @@ public class Occurence extends JPanel {
 		dataset.marginB = this.getHeight();
 		String maxStr = "";
 		for (DatasetItem item : dataset.items) {
-			if (maxStr.length() < item.id.length()) {
-				maxStr = item.id;
+			if (maxStr.length() < item.name.length()) {
+				maxStr = item.name;
 			}
 		}
 		maxStr += "W";
@@ -219,7 +219,7 @@ public class Occurence extends JPanel {
 			x = x * (-1);
 		}
 		int y = (dataset.intervalY / 2)
-		   + (dataset.getIdIndex(item.id) * dataset.intervalY)
+		   + (dataset.getIdIndex(item.name) * dataset.intervalY)
 		   + gap - (g.getFont().getSize() / 3) - hauteur;
 		long largeur = (((dataset.areaWidth / amplitude) * (fin - debut)));
 		x += dataset.marginL;
@@ -298,7 +298,7 @@ public class Occurence extends JPanel {
 		}
 		Graphics2D g2d = (Graphics2D) g;
 		for (DatasetItem item : dataset.items) {
-			int i = dataset.getIdIndex(item.id);
+			int i = dataset.getIdIndex(item.name);
 			int x = dataset.marginL + (i * dataset.intervalX) + gapX;
 			int largeur = (gapX * 2);
 			int j = (int) (item.value / dataset.intervalValue);
@@ -310,7 +310,7 @@ public class Occurence extends JPanel {
 			g.setFont(nf);
 			int x1 = (x + (gapX)) + (g.getFont().getSize() / 2);
 			int y1 = (int) (dataset.marginB - g.getFont().getSize());
-			SwingUtil.drawRotatedString(item.id, g2d, (float) x1, (float) y1, item.color);
+			SwingUtil.drawRotatedString(item.name, g2d, (float) x1, (float) y1, item.color);
 			g.setFont(of);
 		}
 
@@ -319,13 +319,13 @@ public class Occurence extends JPanel {
 	private void createListId() {
 		dataset.idList = new ArrayList<>();
 		for (DatasetItem item : dataset.items) {
-			if (dataset.getIdIndex(item.id) == -1) {
-				dataset.idList.add(item.id);
+			if (dataset.getIdIndex(item.name) == -1) {
+				dataset.idList.add(item.name);
 			}
 			if (item.subItems != null) {
 				for (DatasetItem subItem : item.subItems) {
-					if (dataset.getIdIndex(subItem.id) == -1) {
-						dataset.idList.add(subItem.id);
+					if (dataset.getIdIndex(subItem.name) == -1) {
+						dataset.idList.add(subItem.name);
 					}
 				}
 			}

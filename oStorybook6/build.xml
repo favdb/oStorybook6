@@ -70,7 +70,7 @@
     nbproject/build-impl.xml file.
 
     -->
-    <property name="sb.version" value="6.00" />
+    <property name="sb.version" value="6.01" />
     <property name="sb.distdir" value="${basedir}/distrib/${sb.version}" />
     <property name="sb.distzip" value="${sb.distdir}/oStorybook-${sb.version}.zip" />
     <property name="sb.file.name" value="oStorybook" />

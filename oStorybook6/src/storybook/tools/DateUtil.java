@@ -23,6 +23,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -59,6 +61,10 @@ public class DateUtil {
 	public static Date forHour(Date ds) {
 		ds = DateUtil.setMinutes(ds, 0);
 		return ds;
+	}
+
+	public static int daysFrom(Timestamp initDate) {
+		return ((Long) ChronoUnit.DAYS.between(initDate.toInstant(), Instant.now())).intValue();
 	}
 
 	private DateUtil() {
@@ -200,9 +206,9 @@ public class DateUtil {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		return cal.get(Calendar.HOUR_OF_DAY) == 0
-		   && cal.get(Calendar.MINUTE) == 0
-		   && cal.get(Calendar.SECOND) == 0
-		   && cal.get(Calendar.MILLISECOND) == 0;
+			&& cal.get(Calendar.MINUTE) == 0
+			&& cal.get(Calendar.SECOND) == 0
+			&& cal.get(Calendar.MILLISECOND) == 0;
 	}
 
 	public static Date getZeroTimeDate(Date date) {
@@ -216,7 +222,7 @@ public class DateUtil {
 	}
 
 	public static int daysBetween(Date d1, Date d2) {
-		LOG.trace(TT + "daysBetween(d1=" + d1.toString() + ", d2=" + d2.toString() + ")");
+		//LOG.trace(TT + "daysBetween(d1=" + d1.toString() + ", d2=" + d2.toString() + ")");
 		return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
 	}
 
@@ -295,9 +301,9 @@ public class DateUtil {
 		Date d = null;
 		try {
 			SimpleDateFormat formatter
-			   = new SimpleDateFormat(
-				  App.preferences.getString(Pref.KEY.DATEFORMAT)
-				  + " HH:mm:ss");
+				= new SimpleDateFormat(
+					App.preferences.getString(Pref.KEY.DATEFORMAT)
+					+ " HH:mm:ss");
 			ParsePosition pos = new ParsePosition(0);
 			d = formatter.parse(str, pos);
 		} catch (RuntimeException e) {
@@ -368,6 +374,9 @@ public class DateUtil {
 	 * @return : the String formatted date
 	 */
 	public static String simpleDateToString(Date date) {
+		if (date == null) {
+			return "null";
+		}
 		SimpleDateFormat formatter = new SimpleDateFormat(App.preferences.getString(Pref.KEY.DATEFORMAT));
 		return formatter.format(date);
 	}

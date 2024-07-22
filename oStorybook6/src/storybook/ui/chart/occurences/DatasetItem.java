@@ -30,15 +30,14 @@ import storybook.tools.swing.ColorUtil;
 public class DatasetItem {
 
 	private static final String TT = "DatasetItem.";
-	String id;
-	public Date debut;
-	public Date fin;
-	long value;
-	Color color;
-	List<DatasetItem> subItems;
+	public String name;
+	public Date debut, fin;
+	public Long value;
+	public Color color;
+	public List<DatasetItem> subItems;
 
-	public DatasetItem(String id, Date debut, Date fin, Color color) {
-		this.id = id;
+	public DatasetItem(String name, Date debut, Date fin, Color color) {
+		this.name = name;
 		this.debut = debut;
 		this.fin = fin;
 		this.color = color;
@@ -46,8 +45,8 @@ public class DatasetItem {
 		//LOG.trace(TT + "(" + toString() + ")");
 	}
 
-	public DatasetItem(String id, long v, Color c) {
-		this.id = id;
+	public DatasetItem(String name, long v, Color c) {
+		this.name = name;
 		this.value = v;
 		this.color = c;
 		this.subItems = null;
@@ -58,11 +57,11 @@ public class DatasetItem {
 	}
 
 	public void setValue(int value) {
-		this.value = value;
+		this.value = Long.valueOf(value);
 	}
 
-	public String getId() {
-		return (id);
+	public String getName() {
+		return name;
 	}
 
 	public Iterable<DatasetItem> getSubItems() {
@@ -70,10 +69,11 @@ public class DatasetItem {
 	}
 
 	public String toString() {
-		return (id
-		   + ", " + DateUtil.simpleDateToString(debut)
-		   + ", " + DateUtil.simpleDateToString(fin)
-		   + ", " + ColorUtil.toHexString(color));
+		return (name
+			+ ", value=" + (value == null ? "null" : value.toString())
+			+ ", debut=" + DateUtil.simpleDateToString(debut)
+			+ ", fin=" + DateUtil.simpleDateToString(fin)
+			+ ", color=" + ColorUtil.toHexString(color));
 	}
 
 }

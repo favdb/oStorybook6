@@ -455,8 +455,8 @@ public class ExportTable extends AbstractExport {
 		b.append(stringAttribute(13, "csvcomma", param.getCsvComma()));
 		b.append(stringAttribute(0, "csvquote", param.getCsvQuote()));
 		b.append(stringAttribute(13, "txttab", param.getTxtSeparator()));
-		b.append(stringAttribute(13, "htmlmultichapter", paramBook.getHtmlMultiChapter()));
-		b.append(stringAttribute(0, "htmlmultiscene", paramBook.getHtmlMultiScene()));
+		b.append(stringAttribute(13, "htmlmultichapter", paramBook.isMultiChapter()));
+		b.append(stringAttribute(0, "htmlmultiscene", paramBook.isMultiScene()));
 		b.append(stringAttribute(0, "htmlnav", paramBook.getHtmlNav()));
 		b.append(stringAttribute(0, "htmlnavimage", paramBook.getHtmlNavImage()));
 		b.append(stringAttribute(0, "htmlcss", paramBook.getHtmlCss()));

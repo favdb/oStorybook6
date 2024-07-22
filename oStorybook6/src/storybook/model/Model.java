@@ -478,7 +478,7 @@ public class Model extends AbstractModel {
      * @param view
      */
     public void setExport(SbView view) {
-	//todo
+	//TODO set export the given SbView
     }
 
     /**

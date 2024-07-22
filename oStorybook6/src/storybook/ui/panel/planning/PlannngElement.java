@@ -4,12 +4,22 @@ import storybook.db.chapter.Chapter;
 import storybook.db.part.Part;
 import storybook.db.scene.Scene;
 
-public class PlanningElement {
+public class PlannngElement {
 
 	Object element;
 	int size;
 	int maxSize;
 	int words;
+	int chars;
+
+	public PlannngElement() {
+		// empty
+	}
+
+	@SuppressWarnings("OverridableMethodCallInConstructor")
+	public PlannngElement(Object obj) {
+		setElement(obj);
+	}
 
 	public Object getElement() {
 		return element;

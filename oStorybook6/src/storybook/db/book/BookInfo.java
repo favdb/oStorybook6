@@ -37,350 +37,350 @@ import static storybook.tools.xml.XmlUtil.*;
  */
 public class BookInfo {
 
-	private static final String TT = "BookInfo.";
+    private static final String TT = "BookInfo.";
 
-	private Book book;
-	public String creation = "",
-	   maj = "",
-	   title = "",
-	   subtitle = "",
-	   author = "",
-	   copyright = "",
-	   UUID = "",
-	   ISBN = "",
-	   language = "",
-	   blurb = "",
-	   notes = "",
-	   dedication = "",
-	   assistant = "",
-	   assistantValue = "";
-	private boolean scenario = false,
-	   markdown = false,
-	   calendarUse = false,
-	   review = false;
-	private Status status;
-	private Integer nature = 0;
-	private Element elInfo;
-	private String dbVersion;
+    private Book book;
+    public String creation = "",
+	    maj = "",
+	    title = "",
+	    subtitle = "",
+	    author = "",
+	    copyright = "",
+	    UUID = "",
+	    ISBN = "",
+	    language = "",
+	    blurb = "",
+	    notes = "",
+	    dedication = "",
+	    assistant = "",
+	    assistantValue = "";
+    private boolean scenario = false,
+	    markdown = false,
+	    calendarUse = false,
+	    review = false;
+    private Status status;
+    private Integer nature = 0;
+    private Element elInfo;
+    private String dbVersion;
 
-	@SuppressWarnings("OverridableMethodCallInConstructor")
-	public BookInfo(Book book) {
-		this.book = book;
+    @SuppressWarnings("OverridableMethodCallInConstructor")
+    public BookInfo(Book book) {
+	this.book = book;
+    }
+
+    @SuppressWarnings("OverridableMethodCallInConstructor")
+    public BookInfo(Book book, String name) {
+	this(book);
+	titleSet(name);
+    }
+
+    public String getString(Element el, INFO key) {
+	return el.getAttribute(key.toString());
+    }
+
+    public boolean getBoolean(Element el, INFO key) {
+	return el.getAttribute(key.toString()).equals("1");
+    }
+
+    public Integer getInteger(Element el, INFO key) {
+	String r = el.getAttribute(key.toString());
+	if (StringUtil.isNumeric(r)) {
+	    return Integer.valueOf(r);
 	}
+	return -1;
+    }
 
-	@SuppressWarnings("OverridableMethodCallInConstructor")
-	public BookInfo(Book book, String name) {
-		this(book);
-		titleSet(name);
-	}
+    public void setString(INFO key, String value) {
+	elInfo.setAttribute(key.toString(), value);
+    }
 
-	public String getString(Element el, INFO key) {
-		return el.getAttribute(key.toString());
-	}
+    public void setBoolean(INFO key, boolean value) {
+	elInfo.setAttribute(key.toString(), (value ? "1" : "0"));
+    }
 
-	public boolean getBoolean(Element el, INFO key) {
-		return el.getAttribute(key.toString()).equals("1");
-	}
+    public void setInteger(INFO key, Integer value) {
+	elInfo.setAttribute(key.toString(), value.toString());
+    }
 
-	public Integer getInteger(Element el, INFO key) {
-		String r = el.getAttribute(key.toString());
-		if (StringUtil.isNumeric(r)) {
-			return Integer.valueOf(r);
-		}
-		return -1;
+    public void init() {
+	//LOG.trace(TT + "init() " + (book.project.rootNode == null ? "rootNode null" : book.project.getFilename()));
+	NodeList nodes = book.project.rootNode.getElementsByTagName("info");
+	if (nodes.getLength() > 0) {
+	    elInfo = (Element) nodes.item(0);
+	} else {
+	    elInfo = null;
 	}
+	if (elInfo != null) {
+	    creationSet(getString(elInfo, INFO.CREATION));
+	    majSet(getString(elInfo, INFO.UPDATE));
+	    titleSet(getString(elInfo, INFO.TITLE));
+	    subtitleSet(getString(elInfo, INFO.SUBTITLE));
+	    authorSet(getString(elInfo, INFO.AUTHOR));
+	    copyrightSet(getString(elInfo, INFO.COPYRIGHT));
+	    isbnSet(getString(elInfo, INFO.ISBN));
+	    uuidSet(getString(elInfo, INFO.UUID));
+	    languageSet(getString(elInfo, INFO.LANG));
+	    natureSet(getInteger(elInfo, INFO.NATURE));
+	    reviewSet(getBoolean(elInfo, INFO.REVIEW));
+	    scenarioSet(getBoolean(elInfo, INFO.SCENARIO));
+	    markdownSet(getBoolean(elInfo, INFO.MARKDOWN));
+	    blurbSet(Book.getText(elInfo, INFO.BLURB));
+	    notesSet(Book.getText(elInfo, INFO.NOTES));
+	    dedicationSet(Book.getText(elInfo, INFO.DEDICATION));
+	    assistantSet(Book.getText(elInfo, INFO.ASSISTANT));
+	}
+    }
 
-	public void setString(INFO key, String value) {
-		elInfo.setAttribute(key.toString(), value);
-	}
+    public String toXml() {
+	//LOG.trace(TT + ".toXml()");
+	StringBuilder b = new StringBuilder("    <info ");
+	b.append(setAttribute(0, INFO.CREATION.toString(), creationGet()));
+	b.append(setAttribute(0, INFO.UPDATE.toString(), majGet()));
+	b.append(setAttribute(8, INFO.UUID.toString(), uuidGet()));
+	b.append(setAttribute(8, INFO.ISBN.toString(), isbnGet()));
+	b.append(setAttribute(8, INFO.LANG.toString(), languageGet()));
+	b.append(setAttribute(8, INFO.TITLE.toString(), titleGet()));
+	b.append(setAttribute(8, INFO.SUBTITLE.toString(), subtitleGet()));
+	b.append(setAttribute(8, INFO.AUTHOR.toString(), authorGet()));
+	b.append(setAttribute(8, INFO.COPYRIGHT.toString(), copyrightGet()));
+	b.append(setAttribute(8, INFO.REVIEW.toString(), reviewGet() ? "1" : "0"));
+	b.append(setAttribute(0, INFO.SCENARIO.toString(), scenarioGet() ? "1" : "0"));
+	b.append(setAttribute(0, INFO.MARKDOWN.toString(), markdownGet() ? "1" : "0"));
+	b.append(setAttribute(0, INFO.NATURE.toString(), natureGet() + ""));
+	b.append(">\n");
+	b.append(Book.setChildText(INFO.BLURB, blurbGet()));
+	b.append(Book.setChildText(INFO.NOTES, notesGet()));
+	b.append(Book.setChildText(INFO.DEDICATION, dedicationGet()));
+	b.append(Book.setChildText(INFO.ASSISTANT, assistantGet()));
+	b.append("    </info>\n");
+	return b.toString();
+    }
 
-	public void setBoolean(INFO key, boolean value) {
-		elInfo.setAttribute(key.toString(), (value ? "1" : "0"));
-	}
+    public void setCreation() {
+	creation = SbDate.getToDay().getDateTimeToString();
+    }
 
-	public void setInteger(INFO key, Integer value) {
-		elInfo.setAttribute(key.toString(), value.toString());
+    public void creationSet(String c) {
+	if (c.isEmpty()) {
+	    setCreation();
+	} else {
+	    creation = c;
 	}
+    }
 
-	public void init() {
-		//LOG.trace(TT + "init() " + (book.project.rootNode == null ? "rootNode null" : book.project.getFilename()));
-		NodeList nodes = book.project.rootNode.getElementsByTagName("info");
-		if (nodes.getLength() > 0) {
-			elInfo = (Element) nodes.item(0);
-		} else {
-			elInfo = null;
-		}
-		if (elInfo != null) {
-			creationSet(getString(elInfo, INFO.CREATION));
-			majSet(getString(elInfo, INFO.UPDATE));
-			titleSet(getString(elInfo, INFO.TITLE));
-			subtitleSet(getString(elInfo, INFO.SUBTITLE));
-			authorSet(getString(elInfo, INFO.AUTHOR));
-			copyrightSet(getString(elInfo, INFO.COPYRIGHT));
-			isbnSet(getString(elInfo, INFO.ISBN));
-			uuidSet(getString(elInfo, INFO.UUID));
-			languageSet(getString(elInfo, INFO.LANG));
-			natureSet(getInteger(elInfo, INFO.NATURE));
-			reviewSet(getBoolean(elInfo, INFO.REVIEW));
-			scenarioSet(getBoolean(elInfo, INFO.SCENARIO));
-			markdownSet(getBoolean(elInfo, INFO.MARKDOWN));
-			blurbSet(Book.getText(elInfo, INFO.BLURB));
-			notesSet(Book.getText(elInfo, INFO.NOTES));
-			dedicationSet(Book.getText(elInfo, INFO.DEDICATION));
-			assistantSet(Book.getText(elInfo, INFO.ASSISTANT));
-		}
-	}
+    public String creationGet() {
+	return (creation);
+    }
 
-	public String toXml() {
-		//LOG.trace(TT + ".toXml()");
-		StringBuilder b = new StringBuilder("    <info ");
-		b.append(setAttribute(0, INFO.CREATION.toString(), creationGet()));
-		b.append(setAttribute(0, INFO.UPDATE.toString(), majGet()));
-		b.append(setAttribute(8, INFO.UUID.toString(), uuidGet()));
-		b.append(setAttribute(8, INFO.ISBN.toString(), isbnGet()));
-		b.append(setAttribute(8, INFO.LANG.toString(), languageGet()));
-		b.append(setAttribute(8, INFO.TITLE.toString(), titleGet()));
-		b.append(setAttribute(8, INFO.SUBTITLE.toString(), subtitleGet()));
-		b.append(setAttribute(8, INFO.AUTHOR.toString(), authorGet()));
-		b.append(setAttribute(8, INFO.COPYRIGHT.toString(), copyrightGet()));
-		b.append(setAttribute(8, INFO.REVIEW.toString(), reviewGet() ? "1" : "0"));
-		b.append(setAttribute(0, INFO.SCENARIO.toString(), scenarioGet() ? "1" : "0"));
-		b.append(setAttribute(0, INFO.MARKDOWN.toString(), markdownGet() ? "1" : "0"));
-		b.append(setAttribute(0, INFO.NATURE.toString(), natureGet() + ""));
-		b.append(">\n");
-		b.append(Book.setChildText(INFO.BLURB, blurbGet()));
-		b.append(Book.setChildText(INFO.NOTES, notesGet()));
-		b.append(Book.setChildText(INFO.DEDICATION, dedicationGet()));
-		b.append(Book.setChildText(INFO.ASSISTANT, assistantGet()));
-		b.append("    </info>\n");
-		return b.toString();
-	}
+    public Date creationDateGet() {
+	return oneDate(creation);
+    }
 
-	public void setCreation() {
-		creation = SbDate.getToDay().getDateTimeToString();
-	}
+    public void majSet() {
+	maj = SbDate.getToDay().getDateTimeToString();
+    }
 
-	public void creationSet(String c) {
-		if (c.isEmpty()) {
-			setCreation();
-		} else {
-			creation = c;
-		}
+    public void majSet(String c) {
+	if (c.isEmpty()) {
+	    BookInfo.this.majSet();
 	}
+	maj = c;
+    }
 
-	public String creationGet() {
-		return (creation);
-	}
+    public String majGet() {
+	return (maj);
+    }
 
-	public Date creationDateGet() {
-		return oneDate(creation);
-	}
+    public Date majDateGet() {
+	return oneDate(maj);
+    }
 
-	public void majSet() {
-		maj = SbDate.getToDay().getDateTimeToString();
+    public Date oneDate(String str) {
+	SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
+	String dateStr = str;
+	if (str == null || str.isEmpty()) {
+	    dateStr = format.format(new Date());
 	}
+	Date date = new Date();
+	try {
+	    date = format.parse(dateStr);
+	} catch (ParseException e) {
+	}
+	return date;
+    }
 
-	public void majSet(String c) {
-		if (c.isEmpty()) {
-			BookInfo.this.majSet();
-		}
-		maj = c;
-	}
+    public void titleSet(String s) {
+	title = s;
+    }
 
-	public String majGet() {
-		return (maj);
-	}
+    public String titleGet() {
+	return title;
+    }
 
-	public Date majDateGet() {
-		return oneDate(maj);
-	}
+    public void subtitleSet(String s) {
+	subtitle = s;
+    }
 
-	public Date oneDate(String str) {
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
-		String dateStr = str;
-		if (str == null || str.isEmpty()) {
-			dateStr = format.format(new Date());
-		}
-		Date date = new Date();
-		try {
-			date = format.parse(dateStr);
-		} catch (ParseException e) {
-		}
-		return date;
-	}
+    public String subtitleGet() {
+	return (subtitle == null ? "" : subtitle);
+    }
 
-	public void titleSet(String s) {
-		title = s;
-	}
+    public void authorSet(String s) {
+	author = s;
+    }
 
-	public String titleGet() {
-		return (title);
-	}
+    public String authorGet() {
+	return (author == null ? "" : author);
+    }
 
-	public void subtitleSet(String s) {
-		subtitle = s;
-	}
+    public void copyrightSet(String x) {
+	copyright = x;
+    }
 
-	public String subtitleGet() {
-		return (subtitle == null ? "" : subtitle);
-	}
+    public String copyrightGet() {
+	return (copyright == null ? "" : copyright);
+    }
 
-	public void authorSet(String s) {
-		author = s;
-	}
+    public void blurbSet(String s) {
+	blurb = s;
+    }
 
-	public String authorGet() {
-		return (author == null ? "" : author);
-	}
+    public String blurbGet() {
+	return blurb;
+    }
 
-	public void copyrightSet(String x) {
-		copyright = x;
-	}
+    public void scenarioSet(boolean val) {
+	scenario = val;
+    }
 
-	public String copyrightGet() {
-		return (copyright == null ? "" : copyright);
-	}
+    public boolean scenarioGet() {
+	return scenario;
+    }
 
-	public void blurbSet(String s) {
-		blurb = s;
-	}
+    public void isbnSet(String s) {
+	ISBN = s;
+    }
 
-	public String blurbGet() {
-		return blurb;
-	}
+    public String isbnGet() {
+	return ISBN;
+    }
 
-	public void scenarioSet(boolean val) {
-		scenario = val;
-	}
+    public void uuidSet(String s) {
+	UUID = s;
+    }
 
-	public boolean scenarioGet() {
-		return scenario;
-	}
+    public String uuidGet() {
+	return UUID;
+    }
 
-	public void isbnSet(String s) {
-		ISBN = s;
-	}
+    public void languageSet(String s) {
+	language = s;
+    }
 
-	public String isbnGet() {
-		return ISBN;
+    public String languageGet() {
+	String x = language;
+	if (x.isEmpty()) {
+	    x = I18N.getCountryLanguage(Locale.getDefault()).substring(0, 2);
 	}
+	return (x);
+    }
 
-	public void uuidSet(String s) {
-		UUID = s;
-	}
+    public void markdownSet(boolean x) {
+	markdown = x;
+    }
 
-	public String uuidGet() {
-		return UUID;
-	}
+    public boolean markdownGet() {
+	return (markdown);
+    }
 
-	public void languageSet(String s) {
-		language = s;
-	}
+    public boolean isMarkdown() {
+	return (markdown);
+    }
 
-	public String languageGet() {
-		String x = language;
-		if (x.isEmpty()) {
-			x = I18N.getCountryLanguage(Locale.getDefault()).substring(0, 2);
-		}
-		return (x);
-	}
+    public void reviewSet(boolean value) {
+	review = value;
+    }
 
-	public void markdownSet(boolean x) {
-		markdown = x;
-	}
+    public boolean reviewGet() {
+	return review;
+    }
 
-	public boolean markdownGet() {
-		return (markdown);
-	}
+    public void notesSet(String s) {
+	notes = s;
+    }
 
-	public boolean isMarkdown() {
-		return (markdown);
-	}
+    public String notesGet() {
+	return notes;
+    }
 
-	public void reviewSet(boolean value) {
-		review = value;
-	}
+    public void dedicationSet(String s) {
+	dedication = s;
+    }
 
-	public boolean reviewGet() {
-		return review;
-	}
+    public String dedicationGet() {
+	return dedication;
+    }
 
-	public void notesSet(String s) {
-		notes = s;
-	}
+    public void assistantSet(String s) {
+	assistant = s;
+    }
 
-	public String notesGet() {
-		return notes;
-	}
+    public String assistantGet() {
+	return assistant;
+    }
 
-	public void dedicationSet(String s) {
-		dedication = s;
-	}
+    public String dbVersionGet() {
+	return dbVersion;
+    }
 
-	public String dedicationGet() {
-		return dedication;
-	}
+    public void dbVersionSet(String value) {
+	this.dbVersion = value;
+    }
 
-	public void assistantSet(String s) {
-		assistant = s;
-	}
+    /**
+     * get nature of project:<br>
+     * <ul>
+     * <li>0=Other or undefined:</li>
+     * <li>1=Long Novel (more than 90000 words):90000</li>
+     * <li>2=Novel (more than 40000 words):40000</li>
+     * <li>3=Short Novel (more than 17500 words):17500</li>
+     * <li>4=Novela (more than 7500 words):7500</li>
+     * <li>5=Short Novela (less than 7500 words):</li>
+     * </ul>
+     *
+     * @return
+     */
+    public int natureGet() {
+	return this.nature;
+    }
 
-	public String assistantGet() {
-		return assistant;
-	}
+    /**
+     * set the project nature
+     *
+     * @param nature
+     */
+    public void natureSet(int nature) {
+	this.nature = Book.checkInteger(nature, 0, 5);
+    }
 
-	public String dbVersionGet() {
-		return dbVersion;
+    public static String isDataOK(String titre, String soustitre, String auteur, String droits) {
+	String rc = "";
+	String tolong = " " + I18N.getMsg("err.value.too.long");
+	if (titre.isEmpty()) {
+	    rc += I18N.getMsg("book.title") + " " + I18N.getMsg("error.missing") + "\n";
+	} else if (titre.length() > 128) {
+	    rc += I18N.getColonMsg("book.title") + tolong + "\n";
 	}
-
-	public void dbVersionSet(String value) {
-		this.dbVersion = value;
+	if (soustitre.length() > 256) {
+	    rc += I18N.getColonMsg("book.subtitle") + tolong + "\n";
 	}
-
-	/**
-	 * get nature of project:<br>
-	 * <ul>
-	 * <li>0=Other or undefined:</li>
-	 * <li>1=Long Novel (more than 90000 words):90000</li>
-	 * <li>2=Novel (more than 40000 words):40000</li>
-	 * <li>3=Short Novel (more than 17500 words):17500</li>
-	 * <li>4=Novela (more than 7500 words):7500</li>
-	 * <li>5=Short Novela (less than 7500 words):</li>
-	 * </ul>
-	 *
-	 * @return
-	 */
-	public int natureGet() {
-		return this.nature;
+	if (auteur.length() > 256) {
+	    rc += I18N.getColonMsg("book.author") + tolong + "\n";
 	}
-
-	/**
-	 * set the project nature
-	 *
-	 * @param nature
-	 */
-	public void natureSet(int nature) {
-		this.nature = Book.checkInteger(nature, 0, 5);
+	if (droits.length() > 256) {
+	    rc += I18N.getColonMsg("book.copyright") + tolong + "\n";
 	}
-
-	public static String isDataOK(String titre, String soustitre, String auteur, String droits) {
-		String rc = "";
-		String tolong = " " + I18N.getMsg("err.value.too.long");
-		if (titre.isEmpty()) {
-			rc += I18N.getMsg("book.title") + " " + I18N.getMsg("error.missing") + "\n";
-		} else if (titre.length() > 128) {
-			rc += I18N.getColonMsg("book.title") + tolong + "\n";
-		}
-		if (soustitre.length() > 256) {
-			rc += I18N.getColonMsg("book.subtitle") + tolong + "\n";
-		}
-		if (auteur.length() > 256) {
-			rc += I18N.getColonMsg("book.author") + tolong + "\n";
-		}
-		if (droits.length() > 256) {
-			rc += I18N.getColonMsg("book.copyright") + tolong + "\n";
-		}
-		return (rc);
-	}
+	return (rc);
+    }
 
 }
