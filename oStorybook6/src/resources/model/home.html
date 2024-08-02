@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .banner {
+            width: 100%;
+            height: 115px;
+            background-image: url('banner.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 15%;
+            border: 1px solid #000;
+        }
+
+        .main-content {
+            width: 85%;
+            border: 1px solid #000;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner"></div>
+    <div class="content">
+        <div class="sidebar">
+            <iframe src="summary.html"></iframe>
+        </div>
+        <div class="main-content">
+            <iframe name="mc" src="cover.html"></iframe>
+        </div>
+    </div>
+</body>
+</html>

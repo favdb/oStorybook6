@@ -3,6 +3,7 @@ oStorybook
 
 Versions :
 6.01: (01/09/2024)
+- export HTML pour site Web
 - ajout de la fonction Challenge
 - remplacement (en français) du terme "Les grandes lignes" par "Ébauche"
 - corrections de bugs

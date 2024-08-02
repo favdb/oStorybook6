@@ -19,7 +19,7 @@ package storybook.db.book;
 import java.util.ArrayList;
 import java.util.List;
 import storybook.Const;
-import static storybook.exim.exporter.AbstractExport.stringAttribute;
+import static storybook.exim.exporter.AbstractExport.*;
 import storybook.tools.ListUtil;
 import static storybook.tools.xml.XmlUtil.*;
 
@@ -65,7 +65,7 @@ public class BookParamLayout extends BookParamAbstract {
 	}
 
 	public boolean getChapterDateLocation() {
-		return (chapterDateLocation);
+		return chapterDateLocation;
 	}
 
 	public void setChapterDateLocation(boolean d) {
@@ -73,7 +73,7 @@ public class BookParamLayout extends BookParamAbstract {
 	}
 
 	public boolean getChapterDescription() {
-		return (chapterDescription);
+		return chapterDescription;
 	}
 
 	public void setChapterDescription(boolean d) {
@@ -81,7 +81,7 @@ public class BookParamLayout extends BookParamAbstract {
 	}
 
 	public boolean getChapterNumber() {
-		return (chapterNumber);
+		return chapterNumber;
 	}
 
 	public void setChapterNumber(boolean d) {
@@ -89,7 +89,7 @@ public class BookParamLayout extends BookParamAbstract {
 	}
 
 	public boolean getChapterRoman() {
-		return (chapterRoman);
+		return chapterRoman;
 	}
 
 	public void setChapterRoman(boolean d) {
@@ -97,7 +97,7 @@ public class BookParamLayout extends BookParamAbstract {
 	}
 
 	public boolean getChapterTitle() {
-		return (chapterTitle);
+		return chapterTitle;
 	}
 
 	public void setChapterTitle(boolean d) {
@@ -105,7 +105,7 @@ public class BookParamLayout extends BookParamAbstract {
 	}
 
 	public boolean getPartTitle() {
-		return (partTitle);
+		return partTitle;
 	}
 
 	public void setPartTitle(boolean d) {
@@ -113,7 +113,7 @@ public class BookParamLayout extends BookParamAbstract {
 	}
 
 	public boolean getSceneDidascalie() {
-		return (sceneDidascalie);
+		return sceneDidascalie;
 	}
 
 	public void setSceneDidascalie(boolean d) {
@@ -121,7 +121,7 @@ public class BookParamLayout extends BookParamAbstract {
 	}
 
 	public boolean getSceneSeparator() {
-		return (sceneSeparator);
+		return sceneSeparator;
 	}
 
 	public void setSceneSeparator(boolean d) {
@@ -132,7 +132,7 @@ public class BookParamLayout extends BookParamAbstract {
 		if (sceneSeparatorValue.isEmpty()) {
 			return Const.SCENE_SEPARATOR;
 		}
-		return (sceneSeparatorValue);
+		return sceneSeparatorValue;
 	}
 
 	public void setSceneSeparatorValue(String value) {

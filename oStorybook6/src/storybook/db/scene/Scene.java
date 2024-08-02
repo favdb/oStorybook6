@@ -1341,7 +1341,7 @@ public class Scene extends AbstractEntity {
 	}
 	b.append(XmlUtil.setAttribute(8, XK.FILE, getOdf()));
 	b.append(">\n");
-	b.append(toXmlMeta(2, XK.TEXT, this.getSummary(), true));
+	b.append(setXmlChild(2, XK.TEXT, this.getSummary(), true));
 	b.append(toXmlEnd());
 	return (b.toString());
     }

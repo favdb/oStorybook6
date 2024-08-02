@@ -1,0 +1,29 @@
+/* default css for oStorybook*/
+body {
+    font-family:sans-serif;
+}
+h1 {
+    margin-top:5pt;
+    margin-bottom:1pt;
+}
+h2 {
+    margin-top:5pt;
+    margin-bottom:1pt;
+}
+h3 {
+    margin-top:3pt;
+    margin-bottom:1pt;
+}
+h4 {
+    margin-top:3pt;
+    margin-bottom:1pt;
+}
+h5 {
+    margin-top:3pt;
+    margin-bottom:1pt;
+}
+h6 {
+    margin-top:3pt;
+    margin-bottom:1pt;
+}
+

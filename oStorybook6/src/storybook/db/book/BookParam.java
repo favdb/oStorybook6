@@ -34,6 +34,7 @@ public class BookParam {
 	private BookParamLayout paramLayout;
 	public final Book book;
 	private Element elInfo;
+	private BookParamWeb paramWeb;
 
 	public BookParam(Book book) {
 		this.book = book;
@@ -97,26 +98,38 @@ public class BookParam {
 	}
 
 	public void init() {
-		//LOG.trace(TT + "init() " + (book.project.rootNode == null ? "rootNode null" : book.project.getFilename()));
+		//LOG.trace(TT + "init()");
 		paramBackup = new BookParamBackup(this);
 		paramEditor = new BookParamEditor(this);
 		paramExport = new BookParamExport(this);
 		paramImport = new BookParamImport(this);
 		paramLayout = new BookParamLayout(this);
+		paramWeb = new BookParamWeb(this);
 		//TODO calendar
 		//paramCalendar.init();
 	}
 
 	public String toXml() {
-		//LOG.trace(TT + ".toXml()");
+		//LOG.trace(TT + "toXml()");
 		StringBuilder b = new StringBuilder("    <param>\n");
 		b.append(paramBackup.toXml());
 		b.append(paramEditor.toXml());
 		b.append(paramExport.toXml());
 		b.append(paramImport.toXml());
 		b.append(paramLayout.toXml());
+		b.append(paramWeb.toXml());
+		//TODO calendar
+		//b.append(paramCalendar.toXml());
 		b.append("    </param>\n");
 		return b.toString();
+	}
+
+	public BookParamWeb getParamWeb() {
+		return paramWeb;
+	}
+
+	public void setParamWeb(BookParamWeb web) {
+		this.paramWeb = web;
 	}
 
 }

@@ -106,11 +106,11 @@ public class Strand extends AbstractEntity {
 
 	public String getHTMLColor() {
 		return "<span style=\""
-				+ "background-color:" + ColorUtil.getHTML(getJColor()) + ";"
-				+ "color:" + ColorUtil.getHTML(getJColor()) + ";\">"
-				+ "&#x25ae;&#x25ae;"
-				+ "</span> " //+ ColorUtil.getHTML(getJColor())
-				;
+			+ "background-color:" + ColorUtil.getHTML(getJColor()) + ";"
+			+ "color:" + ColorUtil.getHTML(getJColor()) + ";\">"
+			+ "&#x25ae;&#x25ae;"
+			+ "</span> " //+ ColorUtil.getHTML(getJColor())
+			;
 	}
 
 	public ColorIcon getColorIcon() {
@@ -223,7 +223,7 @@ public class Strand extends AbstractEntity {
 		b.append(">\n");
 		b.append(toXmlEnd());
 		if (!getNotes().isEmpty()) {
-			b.append(toXmlMeta(2, "notes", getNotes(), false));
+			b.append(XmlUtil.setChild(2, "notes", getNotes(), false));
 		}
 		return b.toString();
 	}
@@ -257,9 +257,9 @@ public class Strand extends AbstractEntity {
 	@Override
 	public int hashCode() {
 		return hashPlus(super.hashCode(),
-				abbreviation,
-				color,
-				sort);
+			abbreviation,
+			color,
+			sort);
 	}
 
 	@Override
