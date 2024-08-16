@@ -140,6 +140,7 @@ public class JDateChooser extends JPanel implements ActionListener,
 	 * @param dateEditor the dateEditor to be used used to display the date. if null, a
 	 * JTextFieldDateEditor is used.
 	 */
+	@SuppressWarnings({"LeakingThisInConstructor", "OverridableMethodCallInConstructor"})
 	public JDateChooser(JCalendar jcal, Date date, String dateFormatString,
 		IDateEditor dateEditor) {
 		setName("JDateChooser");

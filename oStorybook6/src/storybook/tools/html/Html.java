@@ -1134,8 +1134,8 @@ public class Html {
      * @param value
      * @return
      */
-    public static String toHtml(String key, Integer value) {
-	return toHtml(key, value.toString());
+    public static String keyToHtml(String key, Integer value) {
+	return keyToHtml(key, value.toString());
     }
 
     /**
@@ -1145,8 +1145,8 @@ public class Html {
      * @param value
      * @return
      */
-    public static String toHtml(String key, boolean value) {
-	return toHtml(key, (I18N.getMsg(value ? "yes" : "no")));
+    public static String keyToHtml(String key, boolean value) {
+	return keyToHtml(key, (I18N.getMsg(value ? "yes" : "no")));
     }
 
     /**
@@ -1156,7 +1156,7 @@ public class Html {
      * @param value
      * @return
      */
-    public static String toHtml(String key, String value) {
+    public static String keyToHtml(String key, String value) {
 	StringBuilder b = new StringBuilder();
 	b.append(TR_B);
 	b.append("<td valign=\"top\">")

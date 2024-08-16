@@ -985,24 +985,24 @@ public class Project {
 	public String getInfo(boolean detailed) {
 		StringBuilder buf = new StringBuilder();
 		if (detailed) {
-			buf.append(Html.toHtml("date.creation", book.getCreation()));
-			buf.append(Html.toHtml("date.maj", book.getMaj()));
+			buf.append(Html.keyToHtml("date.creation", book.getCreation()));
+			buf.append(Html.keyToHtml("date.maj", book.getMaj()));
 		}
-		buf.append(Html.toHtml("book.title", book.getTitle()));
-		buf.append(Html.toHtml("book.subtitle", book.getSubtitle()));
-		buf.append(Html.toHtml("book.author", book.getAuthor()));
-		buf.append(Html.toHtml("book.copyright", book.getCopyright()));
+		buf.append(Html.keyToHtml("book.title", book.getTitle()));
+		buf.append(Html.keyToHtml("book.subtitle", book.getSubtitle()));
+		buf.append(Html.keyToHtml("book.author", book.getAuthor()));
+		buf.append(Html.keyToHtml("book.copyright", book.getCopyright()));
 		if (detailed) {
-			buf.append(Html.toHtml("book.blurb", book.getBlurb()));
-			buf.append(Html.toHtml("book.dedication", book.getDedication()));
-			buf.append(Html.toHtml("notes", book.getNotes()));
-			buf.append(Html.toHtml("book.UUID", book.getUUID()));
-			buf.append(Html.toHtml("book.ISBN", book.getISBN()));
-			buf.append(Html.toHtml("assistant", Assistant.toHtml(book.info.assistantGet())));
-			buf.append(Html.toHtml("scenario", book.getScenario()));
-			buf.append(Html.toHtml("markdown", book.getMarkdown()));
-			buf.append(Html.toHtml("review", book.getReview()));
-			buf.append(Html.toHtml("language", book.getLanguage()));
+			buf.append(Html.keyToHtml("book.blurb", book.getBlurb()));
+			buf.append(Html.keyToHtml("book.dedication", book.getDedication()));
+			buf.append(Html.keyToHtml("notes", book.getNotes()));
+			buf.append(Html.keyToHtml("book.UUID", book.getUUID()));
+			buf.append(Html.keyToHtml("book.ISBN", book.getISBN()));
+			buf.append(Html.keyToHtml("assistant", Assistant.toHtml(book.info.assistantGet())));
+			buf.append(Html.keyToHtml("scenario", book.getScenario()));
+			buf.append(Html.keyToHtml("markdown", book.getMarkdown()));
+			buf.append(Html.keyToHtml("review", book.getReview()));
+			buf.append(Html.keyToHtml("language", book.getLanguage()));
 		}
 		return buf.toString();
 	}
@@ -1046,24 +1046,24 @@ public class Project {
 		String size = String.format("%,d %s (%,d %s) => %d %s",
 			words, I18N.getMsg("words"), textLength, I18N.getMsg("characters"),
 			words / 480, I18N.getMsg("pages"));//nb de pages sur la base de 480 mots par page
-		b.append(Html.toHtml("file.info.text.length", size));
-		b.append(Html.toHtml("title", book.getTitle()));
-		b.append(Html.toHtml("author", book.getAuthor()));
-		b.append(Html.toHtml("copyright", book.getCopyright()));
-		b.append(Html.toHtml("strands", strands.getCount()));
-		b.append(Html.toHtml("parts", parts.getCount()));
-		b.append(Html.toHtml("chapters", chapters.getCount()));
-		b.append(Html.toHtml("scenes", scenes.getCount()));
-		b.append(Html.toHtml("persons", persons.getCount()));
-		b.append(Html.toHtml("locations", locations.getCount()));
-		b.append(Html.toHtml("items", items.getCount()));
-		b.append(Html.toHtml("plots", plots.getCount()));
-		b.append(Html.toHtml("tags", tags.getCount()));
-		b.append(Html.toHtml("endnotes", endnotes.getCount()));
-		b.append(Html.toHtml("events", events.getCount()));
-		b.append(Html.toHtml("episodes", episodes.getCount()));
-		b.append(Html.toHtml("ideas", ideas.getCount()));
-		b.append(Html.toHtml("memos", memos.getCount()));
+		b.append(Html.keyToHtml("file.info.text.length", size));
+		b.append(Html.keyToHtml("title", book.getTitle()));
+		b.append(Html.keyToHtml("author", book.getAuthor()));
+		b.append(Html.keyToHtml("copyright", book.getCopyright()));
+		b.append(Html.keyToHtml("strands", strands.getCount()));
+		b.append(Html.keyToHtml("parts", parts.getCount()));
+		b.append(Html.keyToHtml("chapters", chapters.getCount()));
+		b.append(Html.keyToHtml("scenes", scenes.getCount()));
+		b.append(Html.keyToHtml("persons", persons.getCount()));
+		b.append(Html.keyToHtml("locations", locations.getCount()));
+		b.append(Html.keyToHtml("items", items.getCount()));
+		b.append(Html.keyToHtml("plots", plots.getCount()));
+		b.append(Html.keyToHtml("tags", tags.getCount()));
+		b.append(Html.keyToHtml("endnotes", endnotes.getCount()));
+		b.append(Html.keyToHtml("events", events.getCount()));
+		b.append(Html.keyToHtml("episodes", episodes.getCount()));
+		b.append(Html.keyToHtml("ideas", ideas.getCount()));
+		b.append(Html.keyToHtml("memos", memos.getCount()));
 		if (!html) {
 			String str = b.toString()
 				.replace("<tr>", "").replace("</tr>\n", "@")

@@ -59,7 +59,6 @@ import storybook.tools.clip.Clip;
 import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
 import storybook.tools.html.HtmlHome;
-import storybook.tools.swing.ColorUtil;
 import storybook.ui.MainFrame;
 
 /**
@@ -81,7 +80,7 @@ public class ExportBookToHtml extends AbstractExport {
 	private List<Endnote> endnotes;
 	private StringBuilder buffer = new StringBuilder();
 	private boolean bSeparator, tocLink = false, toFile = false,
-		review = false, advanced = false, withExternal = false;
+		review = false, withExternal = false;
 	private String sceneSeparator = Const.SCENE_SEPARATOR, imageDir;
 	private Chapter lastChapter;
 	private BookParamLayout layout;
@@ -111,7 +110,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @param m: MainFrame
 	 */
 	public ExportBookToHtml(MainFrame m) {
-		super(m, "html");
+		super(m, F_HTML);
 		init();
 	}
 
@@ -140,15 +139,14 @@ public class ExportBookToHtml extends AbstractExport {
 		withExternal = false;
 	}
 
-	public void setAdvanced(boolean adv) {
-		advanced = adv;
-	}
-
-	public void setHtmlParam(boolean mChapter, boolean mScene, boolean mNav) {
+	public void initParam(String p) {
+		while (p.length() < 3) {
+			p += "0";
+		}
 		param.setFormat(F_HTML);
-		param.setMultiChapter(mChapter);
-		param.setMultiScene(mScene);
-		param.setHtmlNav(mNav);
+		param.setMultiChapter(p.charAt(0) == '1');
+		param.setMultiScene(p.charAt(1) == '1');
+		param.setHtmlNav(p.charAt(2) == '1');
 	}
 
 	/**
@@ -162,7 +160,6 @@ public class ExportBookToHtml extends AbstractExport {
 	public static boolean toFile(MainFrame mainFrame, boolean adv) {
 		//LOG.trace(TT + "toFile(mainFrame)");
 		ExportBookToHtml exp = new ExportBookToHtml(mainFrame);
-		exp.setAdvanced(adv);
 		exp.withExternal = true;
 		boolean rc = exp.writeFile();
 		if (adv) {
@@ -180,7 +177,7 @@ public class ExportBookToHtml extends AbstractExport {
 			}
 			createHome(exp);
 			createSummary(exp, adv);
-			createCover(exp, adv);
+			createCover(exp);
 		}
 		return rc;
 	}
@@ -216,7 +213,6 @@ public class ExportBookToHtml extends AbstractExport {
 	}
 
 	public static String getCssSummary(BookParamWeb web) {
-		String color = ColorUtil.toHexString(web.getSummary().getColor());
 		StringBuilder b = new StringBuilder("<style>\n");
 		b.append("body {\n   font-family: sans-serif; font-size: 100%;\n}\n");
 		for (int i = 0; i < 6; i++) {
@@ -237,7 +233,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @param exp
 	 * @param adv
 	 */
-	private static void createCover(ExportBookToHtml exp, boolean adv) {
+	private static void createCover(ExportBookToHtml exp) {
 		StringBuilder html = new StringBuilder();
 		html.append(Html.DOCTYPE)
 			.append(Html.HTML_B_LANG)
@@ -282,7 +278,7 @@ public class ExportBookToHtml extends AbstractExport {
 		exp.tocLink = false;
 		exp.review = false;
 		exp.onlyPart = null;
-		exp.setHtmlParam(false, false, false);
+		exp.initParam("000");
 		StringBuilder buf = new StringBuilder();
 		buf.append(Html.DOCTYPE);
 		buf.append(Html.HTML_B);
@@ -302,7 +298,7 @@ public class ExportBookToHtml extends AbstractExport {
 	}
 
 	/**
-	 * get the list<String> of pages for printing
+	 * get the list of pages for printing
 	 *
 	 * @param mainFrame
 	 * @return
@@ -313,7 +309,7 @@ public class ExportBookToHtml extends AbstractExport {
 		exp.tocLink = false;
 		exp.review = false;
 		exp.onlyPart = null;
-		exp.setHtmlParam(false, false, false);
+		exp.initParam("000");
 		Book bk = mainFrame.getBook();
 		List<String> ls = new ArrayList<>();
 		ls.add(exp.bookGetTitle(false));
@@ -364,7 +360,7 @@ public class ExportBookToHtml extends AbstractExport {
 		ExportBookToHtml exp = new ExportBookToHtml(mainFrame);
 		exp.tocLink = false;
 		exp.onlyPart = onlyPart;
-		exp.setHtmlParam(false, false, false);
+		exp.initParam("000");
 		exp.param.setHighlight(Html.EM_LEFTASIS);
 		try {
 			String strText = exp.getString()
@@ -395,7 +391,7 @@ public class ExportBookToHtml extends AbstractExport {
 				+ ")");*/
 		ExportBookToHtml exp = new ExportBookToHtml(mainFrame);
 		exp.strand = strand;
-		exp.setHtmlParam(false, false, false);
+		exp.initParam("000");
 		exp.tocLink = true;
 		exp.review = review;
 		exp.onlyPart = onlyPart;
@@ -614,8 +610,9 @@ public class ExportBookToHtml extends AbstractExport {
 		+ ", adv=" + (adv ? "true" : "false") + ")");*/
 		if (layout.getPartTitle() && (level == 0 || level == 1)) {
 			return tocTo(1, part.getIdent(), part.getName(), adv);
+		} else {
+			return "";
 		}
-		return "";
 	}
 
 	public String titlePart(Part part) {
@@ -637,15 +634,20 @@ public class ExportBookToHtml extends AbstractExport {
 	 */
 	public String tocChapter(Part part, Chapter chapter, int level, boolean adv) {
 		//LOG.trace(TT + "tocChapter(" + "part=" + LOG.trace(part)
-		//+ ", chapter=" + LOG.trace(chapter) + ", level=" + level + ")");
+		//	+ ", chapter=" + LOG.trace(chapter) + ", level=" + level + ")");
 		int n = level;
-		/*if (layout.getPartTitle()) {
+		if (layout.getPartTitle()) {
 			n++;
-		}*/
+		}
 		StringBuilder b = new StringBuilder();
 		if (layout.getChapterTitle()) {
 			if (param.isMultiScene()) {
-				b.append(tocTo(n, mainFrame.project.scenes.findFirst(chapter).getIdent(), chapterGetTitle(chapter), adv));
+				Scene s = mainFrame.project.scenes.findFirst(chapter);
+				if (s != null) {
+					b.append(tocTo(n, s.getIdent(), chapterGetTitle(chapter), adv));
+				} else {
+					b.append(Html.intoH(n, chapterGetTitle(chapter), "color: gray;"));
+				}
 			} else {
 				b.append(tocTo(n, chapter.getIdent(), chapterGetTitle(chapter), adv));
 			}
@@ -653,7 +655,7 @@ public class ExportBookToHtml extends AbstractExport {
 			b.append(tocTo(n, "", chapterGetTitle(chapter), adv));
 		}
 		for (Scene scene : mainFrame.project.scenes.findBy(chapter)) {
-			b.append(tocScene(n, scene, adv));
+			b.append(tocScene(scene, adv));
 		}
 		return b.toString();
 	}
@@ -662,23 +664,22 @@ public class ExportBookToHtml extends AbstractExport {
 	 * get the Scene table of content
 	 *
 	 * @param scene
-	 * @param level
 	 * @param adv: true for advanced
 	 * @return
 	 */
-	private String tocScene(int startlevel, Scene scene, boolean adv) {
+	private String tocScene(Scene scene, boolean adv) {
 		/*LOG.trace(TT + "tocScene(scene=" + LOG.trace(scene) + ", level=" + level
 		+ ", adv=" + (adv ? "true" : "false") + ")");*/
 		if (!param.isMultiScene() && !layout.getSceneTitle()) {
 			return "";
 		}
-		int n = startlevel + 1;
-		/*if (layout.getPartTitle() && mainFrame.project.parts.getCount() > 1) {
+		int n = 1;
+		if (layout.getPartTitle() && mainFrame.project.parts.getCount() > 1) {
 			n++;
 		}
 		if (layout.getChapterTitle()) {
 			n++;
-		}*/
+		}
 		String href = scene.getIdent();
 		if (param.isMulti()) {
 			StringBuilder b = new StringBuilder();
@@ -692,10 +693,10 @@ public class ExportBookToHtml extends AbstractExport {
 				book.getTitle() + "-" + scene.getIdent() + ".html" + "#" + scene.getIdent(),
 				EXIM.getTitle(scene.getName()),
 				(adv ? "target=\"mc\"" : "")));
-			return (adv ? Html.intoH(n + scene.getLevel(), b.toString()) : b.toString());
+			return (adv ? Html.intoH(n/* + scene.getLevel()*/, b.toString()) : b.toString());
 		}
 		if (sceneIsOK(scene)) {
-			return tocTo(n + scene.getLevel(), scene.getIdent(), scene.getName(), adv);
+			return tocTo(n/* + scene.getLevel()*/, scene.getIdent(), scene.getName(), adv);
 		}
 		return "";
 	}
@@ -793,7 +794,9 @@ public class ExportBookToHtml extends AbstractExport {
 		return buffer.toString();
 	}
 
-	/* ******** get Chapter ****** */
+	/* *************************** */
+ /* ******** get Chapter ****** */
+ /* *************************** */
 	/**
 	 * get the begining Chapter context, open the file if it's needed
 	 *
@@ -819,8 +822,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 */
 	private String chapterGetContent(Chapter chapter) {
 		//LOG.trace(TT + ".chapterGet(chapter=" + App.traceEntity(chapter) + ")");
-		StringBuilder b = new StringBuilder();
-		b.append(chapterGetBegin(chapter));
+		StringBuilder b = new StringBuilder(chapterGetBegin(chapter));
 		int lev = 1;
 		if (layout.getPartTitle()) {
 			lev++;
@@ -1095,7 +1097,7 @@ public class ExportBookToHtml extends AbstractExport {
 			}
 			if (!scene.getChapter().equals(lastChapter) && layout.getChapterTitle()) {
 				lastChapter = scene.getChapter();
-				sb.append(titleOf(n, lastChapter.getIdent(), getTitle(lastChapter.getName())));
+				//sb.append(titleOf(n, lastChapter.getIdent(), getTitle(lastChapter.getName())));
 			}
 			String bx = titleOf(n + 1, scene.getIdent(), getTitle(scene.getName()));
 			sb.append(bx);
@@ -1355,7 +1357,7 @@ public class ExportBookToHtml extends AbstractExport {
 	}
 
 	/**
-	 * get a link to a Chapter
+	 * get a link to a Chapter for the nav bar
 	 *
 	 * @param chapter
 	 * @param img
@@ -1460,7 +1462,7 @@ public class ExportBookToHtml extends AbstractExport {
 			//openFile(partGetFilename(part).replace(Html.EXT, ""), true);
 			//buffer = new StringBuilder();
 		}
-		return "";
+		return partGetTitle(part);
 	}
 
 	/**
@@ -1469,17 +1471,14 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @param part
 	 */
 	private String partGetContent(Part part) {
-		StringBuilder b = new StringBuilder();
-		b.append(partGetBegin(part));
-		b.append(partGetTitle(part));
-		buffer.append(partGetTitle(part));
+		buffer.append(partGetBegin(part));
 		for (Chapter chapter : chapters) {
 			if (chapter.hasPart() && chapter.getPart().equals(part)) {
 				chapterGetContent(chapter);
 			}
 		}
-		b.append(partGetEnd());
-		return b.toString();
+		buffer.append(partGetEnd());
+		return buffer.toString();
 	}
 
 	/**
@@ -1493,16 +1492,6 @@ public class ExportBookToHtml extends AbstractExport {
 	}
 
 	/**
-	 * get the file name for aa Ident
-	 *
-	 * @param ident
-	 * @return
-	 */
-	private String fileGetName(String ident) {
-		return String.format("%s-%s.html", book.getTitle(), ident);
-	}
-
-	/**
 	 * get title of a Part
 	 *
 	 * @param part
@@ -1510,23 +1499,25 @@ public class ExportBookToHtml extends AbstractExport {
 	 */
 	public String partGetTitle(Part part) {
 		//App.trace(TT + "getPartTitle("+part.getName()+")");
-		String buf = "";
 		if (layout.getPartTitle()) {
-			buf = Html.intoH(1, part.getName());
+			String s = getTitle(part.getName());
+			if (!s.isEmpty()) {
+				return titleOf(1, part.getIdent(), getTitle(part.getName()));
+			}
 		}
-		return buf;
+		return "";
 	}
 
 	/**
 	 * copy an image from resources to the export directory
 	 *
 	 * @param img: image source name without extent
-	 * @param dir: the export directory
+	 * @param outdir: the export directory
 	 */
-	private void copyImage(String img, String dir) {
-		File fdir = new File(dir);
+	private void copyImage(String img, String outdir) {
+		File fdir = new File(outdir);
 		fdir.mkdirs();
-		File out = new File(dir + File.separator + img + ".png");
+		File out = new File(outdir + File.separator + img + ".png");
 		if (out.exists()) {
 			return;
 
@@ -1535,7 +1526,7 @@ public class ExportBookToHtml extends AbstractExport {
 		String path = "png/" + img.toLowerCase().replace(".", "/") + ".png";
 		InputStream resource = x.getResourceAsStream(path);
 		if (resource == null) {
-			LOG.err(TT + ".copyImage(img=" + img + ", dir=" + dir + ")" + "unable to found " + path);
+			LOG.err(TT + ".copyImage(img=" + img + ", dir=" + outdir + ")" + "unable to found " + path);
 			return;
 		}
 		try {
@@ -1552,6 +1543,13 @@ public class ExportBookToHtml extends AbstractExport {
 		}
 	}
 
+	/**
+	 * get the text for an external
+	 *
+	 * @param scene
+	 * @param isMulti
+	 * @return
+	 */
 	public String getTextExternal(Scene scene, boolean isMulti) {
 		String txt = scene.getSummary();
 		if (scene.getOdf() != null && !scene.getOdf().isEmpty()) {
@@ -1570,6 +1568,9 @@ public class ExportBookToHtml extends AbstractExport {
 		return txt;
 	}
 
+	/**
+	 * write the end of the file
+	 */
 	private void writeFileEnd() {
 		buffer.append(Html.BODY_E);
 		buffer.append(Html.HTML_E);

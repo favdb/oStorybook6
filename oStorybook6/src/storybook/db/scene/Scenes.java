@@ -78,7 +78,11 @@ public class Scenes extends AbsEntitys {
 			entity.setId(getLast() + 1);
 			scenes.add((Scene) entity);
 		} else {
-			scenes.set(getIdx(entity.getId()), (Scene) entity);
+			try {
+				scenes.set(getIdx(entity.getId()), (Scene) entity);
+			} catch (Exception ex) {
+				LOG.err(TT + "save(entity) error", ex);
+			}
 		}
 	}
 
@@ -142,7 +146,7 @@ public class Scenes extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Scene r1, Scene r2)
-		   -> r1.getName().compareTo(r2.getName()));
+			-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -190,7 +194,7 @@ public class Scenes extends AbsEntitys {
 		List<Scene> list = new ArrayList<>();
 		for (Scene p : scenes) {
 			if ((chapter == null && !p.hasChapter())
-			   || (chapter != null && p.hasChapter() && chapter.equals(p.getChapter()))) {
+				|| (chapter != null && p.hasChapter() && chapter.equals(p.getChapter()))) {
 				list.add(p);
 			}
 		}
@@ -502,7 +506,7 @@ public class Scenes extends AbsEntitys {
 			}
 		} catch (Exception e) {
 			ExceptionDlg.show(TT
-			   + ".renumber(mainFrame, chapter=" + LOG.trace(chapter) + ") Exception", e);
+				+ ".renumber(mainFrame, chapter=" + LOG.trace(chapter) + ") Exception", e);
 		}
 	}
 
@@ -582,9 +586,9 @@ public class Scenes extends AbsEntitys {
 			if (chapter != null) {
 				@SuppressWarnings("null")
 				String snum = String.format("%02d%02d%02d0",
-				   (chapter.hasPart() ? chapter.getPart().getNumber() : 0),
-				   chapter.getChapterno(),
-				   number + 1);
+					(chapter.hasPart() ? chapter.getPart().getNumber() : 0),
+					chapter.getChapterno(),
+					number + 1);
 				return Integer.parseInt(snum);
 			}
 			return (number + 1) * 10;
@@ -670,7 +674,7 @@ public class Scenes extends AbsEntitys {
 		List<Scene> ls = find(chapter);
 		if (!ls.isEmpty()) {
 			Collections.sort(ls, (Scene r1, Scene r2)
-			   -> r1.getCCSS().compareTo(r2.getCCSS()));
+				-> r1.getCCSS().compareTo(r2.getCCSS()));
 			return (ls.get(0));
 		}
 		return null;
@@ -680,7 +684,7 @@ public class Scenes extends AbsEntitys {
 		List<Date> ls = new ArrayList<>();
 		for (Scene p : scenes) {
 			if ((p.getStrand().equals(strand) || p.getStrands().contains(strand))
-			   && (p.hasDate() && !ls.contains(p.getDate()))) {
+				&& (p.hasDate() && !ls.contains(p.getDate()))) {
 				ls.add(p.getDate());
 
 			}

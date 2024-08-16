@@ -63,7 +63,7 @@ public class AppFont {
 	 * @param font
 	 */
 	public void defSet(Font font) {
-		//LOG.trace("App.fontSetDefault(font="+(font!=null?font.toString():"null")+")");
+		//LOG.trace("App.defSet(font="+(font!=null?font.toString():"null")+")");
 		if (font == null) {
 			JMenu e = new JMenu();
 			def = e.getFont();

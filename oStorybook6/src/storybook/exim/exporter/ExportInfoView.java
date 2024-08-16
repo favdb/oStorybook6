@@ -56,39 +56,39 @@ public class ExportInfoView extends AbstractExport {
 		int textLength = BookUtil.getNbChars(mainFrame.project);
 		int words = BookUtil.getNbWords(mainFrame.project);
 		writeText(Html.TABLE_B);
-		writeText(Html.toHtml("file.info.filename", file.toString()));
-		writeText(Html.toHtml("file.info.creation", book.getCreation()));
-		writeText(Html.toHtml("file.info.maj", book.getMaj()));
+		writeText(Html.keyToHtml("file.info.filename", file.toString()));
+		writeText(Html.keyToHtml("file.info.creation", book.getCreation()));
+		writeText(Html.keyToHtml("file.info.maj", book.getMaj()));
 		String size = String.format("%,d %s (%,d %s)",
 				words, I18N.getMsg("words"), textLength, I18N.getMsg("characters"));
-		writeText(Html.toHtml("book.title", book.getTitle()));
-		writeText(Html.toHtml("book.subtitle", book.getSubtitle()));
-		writeText(Html.toHtml("book.author", book.getAuthor()));
-		writeText(Html.toHtml("book.copyright", book.getCopyright()));
-		writeText(Html.toHtml("book.blurb", book.getBlurb()));
+		writeText(Html.keyToHtml("book.title", book.getTitle()));
+		writeText(Html.keyToHtml("book.subtitle", book.getSubtitle()));
+		writeText(Html.keyToHtml("book.author", book.getAuthor()));
+		writeText(Html.keyToHtml("book.copyright", book.getCopyright()));
+		writeText(Html.keyToHtml("book.blurb", book.getBlurb()));
 		if (!book.getUUID().isEmpty()) {
-			writeText(Html.toHtml("book.UUID", book.getUUID()));
+			writeText(Html.keyToHtml("book.UUID", book.getUUID()));
 		}
 		if (!book.getISBN().isEmpty()) {
-			writeText(Html.toHtml("book.ISBN", book.getISBN()));
+			writeText(Html.keyToHtml("book.ISBN", book.getISBN()));
 		}
-		writeText(Html.toHtml("file.info.text.length", size));
-		writeText(Html.toHtml("strands", count(Book.TYPE.STRAND)));
-		writeText(Html.toHtml("parts", count(Book.TYPE.PART)));
-		writeText(Html.toHtml("chapters", count(Book.TYPE.CHAPTER)));
-		writeText(Html.toHtml("scenes", count(Book.TYPE.SCENE)));
-		writeText(Html.toHtml("persons", count(Book.TYPE.PERSON)));
-		writeText(Html.toHtml("locations", count(Book.TYPE.LOCATION)));
-		writeText(Html.toHtml("items", count(Book.TYPE.ITEM)));
-		writeText(Html.toHtml("tags", count(Book.TYPE.TAG)));
-		writeText(Html.toHtml("endnotes", count(Book.TYPE.ENDNOTE)));
-		writeText(Html.toHtml("events", count(Book.TYPE.EVENT)));
-		writeText(Html.toHtml("ideas", count(Book.TYPE.IDEA)));
-		writeText(Html.toHtml("memos", count(Book.TYPE.MEMO)));
-		writeText(Html.toHtml("notes", book.getNotes()));
+		writeText(Html.keyToHtml("file.info.text.length", size));
+		writeText(Html.keyToHtml("strands", count(Book.TYPE.STRAND)));
+		writeText(Html.keyToHtml("parts", count(Book.TYPE.PART)));
+		writeText(Html.keyToHtml("chapters", count(Book.TYPE.CHAPTER)));
+		writeText(Html.keyToHtml("scenes", count(Book.TYPE.SCENE)));
+		writeText(Html.keyToHtml("persons", count(Book.TYPE.PERSON)));
+		writeText(Html.keyToHtml("locations", count(Book.TYPE.LOCATION)));
+		writeText(Html.keyToHtml("items", count(Book.TYPE.ITEM)));
+		writeText(Html.keyToHtml("tags", count(Book.TYPE.TAG)));
+		writeText(Html.keyToHtml("endnotes", count(Book.TYPE.ENDNOTE)));
+		writeText(Html.keyToHtml("events", count(Book.TYPE.EVENT)));
+		writeText(Html.keyToHtml("ideas", count(Book.TYPE.IDEA)));
+		writeText(Html.keyToHtml("memos", count(Book.TYPE.MEMO)));
+		writeText(Html.keyToHtml("notes", book.getNotes()));
 		if (!book.info.assistantGet().isEmpty()) {
 			String str = Assistant.toHtml(book.info.assistantGet());
-			writeText(Html.toHtml("assistant", str));
+			writeText(Html.keyToHtml("assistant", str));
 		}
 		writeText(Html.TABLE_E);
 	}
