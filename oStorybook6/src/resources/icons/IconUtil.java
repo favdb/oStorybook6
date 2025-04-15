@@ -148,6 +148,9 @@ public class IconUtil {
 
 	public static Icon getIcon(String key) {
 		String path = DIR + key.toLowerCase().replace(".", "/") + ".png";
+		if (path.endsWith(".gif.png")) {
+			path = DIR + key.toLowerCase().replace(".", "/");
+		}
 		if (key.endsWith(".jpg") || key.endsWith(".jpeg") || key.endsWith(".gif")) {
 			path = DIR + key.toLowerCase();
 		}
@@ -220,7 +223,7 @@ public class IconUtil {
 
 	public static Icon getJpegIcon(String subpath, String key) {
 		String path = subpath + "/" + key.toLowerCase().replace(".", "/") + ".jpeg";
-		return getJpeg(path, defSize * 4);
+		return getJpeg(path, defSize * 3);
 	}
 
 	public static Icon getJpegIcon(String key) {

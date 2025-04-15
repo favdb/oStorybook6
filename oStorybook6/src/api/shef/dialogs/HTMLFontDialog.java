@@ -26,12 +26,12 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import storybook.tools.swing.js.JSLabel;
 
 /**
  * Font selection dialog
@@ -45,7 +45,7 @@ public class HTMLFontDialog extends HTMLOptionDialog {
 	private static String desc = I18N.getMsg("shef.font_desc");
 	private static final Integer SIZES[] = {8, 10, 12, 14, 18, 24, 36};
 	private JPanel jContentPane = null;
-	private JSLabel fontLabel = null;
+	private JLabel fontLabel = null;
 	private JComboBox fontCombo = null;
 	private JComboBox sizeCombo = null;
 	private JPanel stylePanel = null;
@@ -53,7 +53,7 @@ public class HTMLFontDialog extends HTMLOptionDialog {
 	private JCheckBox italicCB = null;
 	private JCheckBox ulCB = null;
 	private JPanel previewPanel = null;
-	private JSLabel previewLabel = null;
+	private JLabel previewLabel = null;
 	private JPanel spacerPanel = null;
 	private String text = "";
 
@@ -82,7 +82,7 @@ public class HTMLFontDialog extends HTMLOptionDialog {
 	/**
 	 * le texte est-il en gras?
 	 *
-	 * @return: true si oui
+	 * @return
 	 */
 	public boolean isBold() {
 		return boldCB.isSelected();
@@ -91,7 +91,7 @@ public class HTMLFontDialog extends HTMLOptionDialog {
 	/**
 	 * le texte est-il en italique
 	 *
-	 * @return: true si oui
+	 * @return : true si oui
 	 */
 	public boolean isItalic() {
 		return italicCB.isSelected();
@@ -139,7 +139,7 @@ public class HTMLFontDialog extends HTMLOptionDialog {
 	/**
 	 * changer le nom de la font
 	 *
-	 * @param b : true si oui
+	 * @param fn
 	 */
 	public void setFontName(String fn) {
 		fontCombo.setSelectedItem(fn);
@@ -251,7 +251,7 @@ public class HTMLFontDialog extends HTMLOptionDialog {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
-			fontLabel = new JSLabel();
+			fontLabel = new JLabel();
 			fontLabel.setText(I18N.getMsg("shef.font"));
 			jContentPane = new JPanel(new GridBagLayout());
 			jContentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -388,7 +388,7 @@ public class HTMLFontDialog extends HTMLOptionDialog {
 	 */
 	private JPanel getPreviewPanel() {
 		if (previewPanel == null) {
-			previewLabel = new JSLabel();
+			previewLabel = new JLabel();
 			previewLabel.setText("AaBbYyZz");
 			JPanel spacer = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			spacer.setBackground(Color.WHITE);

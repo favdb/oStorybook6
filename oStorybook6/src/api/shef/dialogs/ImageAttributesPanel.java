@@ -8,6 +8,8 @@
  */
 package api.shef.dialogs;
 
+import api.shef.actions.TextEditPopupManager;
+import api.shef.tools.SwingUtil;
 import i18n.I18N;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -18,26 +20,24 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import api.shef.actions.TextEditPopupManager;
-import api.shef.tools.SwingUtil;
 import storybook.App;
 import storybook.Pref;
-import storybook.tools.swing.js.JSLabel;
 
 public class ImageAttributesPanel extends HTMLAttributeEditorPanel {
 
 	private static final String ALT = "alt", SHEIGHT = "height", SWIDTH = "width", SRC = "src",
-	   HSPACE = "hspace", VSPACE = "vspace", BORDER = "border", ALIGN = "align";
+			HSPACE = "hspace", VSPACE = "vspace", BORDER = "border", ALIGN = "align";
 
 	private static final String ALIGNMENTS[] = {"top", "middle", "bottom", "left", "right"};
 
-	private JSLabel imgUrlLB = null;
+	private JLabel imgUrlLB = null;
 	private JCheckBox altTextCK = null;
 	private JCheckBox widthCK = null;
 	private JCheckBox heightCK = null;
@@ -220,7 +220,7 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel {
 	 */
 	private void initialize() {
 		setLayout(new GridBagLayout());
-		imgUrlLB = new JSLabel(I18N.getMsg("shef.image_url"));
+		imgUrlLB = new JLabel(I18N.getMsg("shef.image_url"));
 		add(imgUrlLB, new GBC("0,0, anchor W, ins 0 0 5 5"));
 		add(getImgUrlTF(), new GBC("0,1,wx 1.0, width 1, anchor W, ins 0 0 5 0"));
 		JButton btFile = new JButton(IconUtil.getIconSmall(ICONS.K.F_OPEN));

@@ -112,9 +112,9 @@ public class PersonEdit extends AbstractEditor implements ActionListener {
 		p.add(btColor);
 		Ui.addField(panel1, "color", "", p, null, BMANDATORY);
 		cbGender = Ui.initCbEntities(panel1, this, "gender", Book.TYPE.GENDER,
-		   person.getGender(), null, BMANDATORY + BNEW);
+				person.getGender(), null, BMANDATORY + BNEW);
 		cbCategory = Ui.initCbEntities(panel1, this, "category", Book.TYPE.CATEGORY,
-		   person.getCategory(), null, BMANDATORY + BNEW);
+				person.getCategory(), null, BMANDATORY + BNEW);
 		// preparation pour le changement de gestion des catégories multiples
 		/*JPanel pc = new JPanel(new MigLayout());
 		tfCategories = new JLabel(Category.listToString(person.getCategories()));
@@ -135,7 +135,7 @@ public class PersonEdit extends AbstractEditor implements ActionListener {
 		   mainFrame.project.relations.find(entity), tab1, BNONE);*/
 		// attributs
 		lAttributes = Ui.initCkList(this, mainFrame, Book.TYPE.ATTRIBUTE,
-		   person.getAttributes(), tab1, BNONE);
+				person.getAttributes(), tab1, BNONE);
 	}
 
 	private void doAutoAbbr() {
@@ -190,10 +190,10 @@ public class PersonEdit extends AbstractEditor implements ActionListener {
 		person.setGender((Gender) cbGender.getSelectedItem());
 		if (cbCategory.getSelectedIndex() != -1) {
 			person.setCategory(
-			   (Category) cbCategory.getSelectedItem());
+					(Category) cbCategory.getSelectedItem());
 		} else {
 			person.setCategory(
-			   (Category) mainFrame.project.getList(Book.TYPE.CATEGORY).get(0));
+					(Category) mainFrame.project.getList(Book.TYPE.CATEGORY).get(0));
 		}
 		person.setBirthday(dBirth.getDate());
 		person.setDayofdeath(dDeath.getDate());
@@ -244,7 +244,7 @@ public class PersonEdit extends AbstractEditor implements ActionListener {
 	private void changeColor() {
 		LOG.trace("changeColor()");
 		Color color = JColorChooser.showDialog(this, I18N.getMsg("color.choose"),
-		   ((Person) entity).getJColor());
+				((Person) entity).getJColor());
 		btColor.setBackground(color);
 	}
 

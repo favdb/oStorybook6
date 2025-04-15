@@ -174,7 +174,7 @@ public class IdeaxFrm extends JFrame implements ListSelectionListener, TableMode
 		table.setName("ideabox");
 		table.addMouseListener(new IdeaxMouseAdapter());
 		table.getSelectionModel().addListSelectionListener(this);
-		AbsTable.loadTableDesign(table, columns, tableModel);
+		AbsTable.tableDesignLoad(table, columns, tableModel);
 		table.addKeyListener(new IdeaxFrmKeyListener());
 		AbstractAction actEnter = new AbstractAction() {
 			@Override
@@ -454,8 +454,8 @@ public class IdeaxFrm extends JFrame implements ListSelectionListener, TableMode
 		int index = ideax.findUUID(idea.getUuid());
 		if (index == -1) {
 			MessageDlg msg = new MessageDlg(mainFrame,
-			   I18N.getMsg("ideabox.not_find"),
-			   I18N.getMsg("ideabox")
+					I18N.getMsg("ideabox.not_find"),
+					I18N.getMsg("ideabox")
 			);
 			msg.hideCancel();
 			msg.setVisible(true);
@@ -491,8 +491,8 @@ public class IdeaxFrm extends JFrame implements ListSelectionListener, TableMode
 		}
 		if (ideax.findUUID(idea.getUuid()) != -1) {
 			MessageDlg msg = new MessageDlg(mainFrame,
-			   I18N.getMsg("ideabox.copy_unable"),
-			   I18N.getMsg("ideabox")
+					I18N.getMsg("ideabox.copy_unable"),
+					I18N.getMsg("ideabox")
 			);
 			msg.hideCancel();
 			msg.setVisible(true);
@@ -638,7 +638,7 @@ public class IdeaxFrm extends JFrame implements ListSelectionListener, TableMode
 		public void windowClosing(WindowEvent evt) {
 			//LOG.trace("IdeaxDlgWindowAdaptor.windowClosing(evt=" + evt.toString() + ")");
 			param.saveFrm(instance);
-			AbsTable.saveTableDesign(table);
+			AbsTable.tableDesignSave(table);
 		}
 	}
 

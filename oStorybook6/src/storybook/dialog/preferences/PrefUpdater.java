@@ -21,11 +21,11 @@ import i18n.I18N;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import storybook.App;
 import storybook.Pref;
 import storybook.tools.swing.FontUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.panel.AbstractPanel;
 
 /**
@@ -35,7 +35,7 @@ import storybook.ui.panel.AbstractPanel;
 public class PrefUpdater extends AbstractPanel {
 
 	private static final String PREF_UPDATER = "preferences.updater.";
-	private JSLabel lbUpdater;
+	private JLabel lbUpdater;
 	private JRadioButton rbUpdaterNever;
 	private JRadioButton rbUpdaterYear;
 	private JRadioButton rbUpdaterAuto;
@@ -56,8 +56,8 @@ public class PrefUpdater extends AbstractPanel {
 	@Override
 	public void initUi() {
 		setLayout(new MigLayout("wrap", "[][]"));
-		lbUpdater = new JSLabel(I18N.getMsg("help.update"));
-		lbUpdater.setFont(FontUtil.getBold(App.getInstance().fonts.defGet()));
+		lbUpdater = new JLabel(I18N.getMsg("help.update"));
+		lbUpdater.setFont(FontUtil.getBold(App.fonts.defGet()));
 		add(lbUpdater, "span");
 		rbUpdaterNever = new JRadioButton(I18N.getMsg(PREF_UPDATER + "never"));
 		add(rbUpdaterNever, "skip 1");

@@ -15,6 +15,8 @@
  */
 package api.shef.dialogs;
 
+import api.shef.actions.TextEditPopupManager;
+import i18n.I18N;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -37,6 +39,7 @@ import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -49,9 +52,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-import api.shef.actions.TextEditPopupManager;
-import i18n.I18N;
-import storybook.tools.swing.js.JSLabel;
 
 /**
  * A find and replace dialog for JTextComponents
@@ -99,7 +99,7 @@ public class TextFinderDialog extends JDialog {
 		JPanel pf = new JPanel();
 		pf.setLayout(new DialogLayout(20, 5));
 		pf.setBorder(new EmptyBorder(8, 5, 8, 0));
-		pf.add(new JSLabel(I18N.getMsg("shef.find_what")));
+		pf.add(new JLabel(I18N.getMsg("shef.find_what")));
 		txtFind1 = new JTextField();
 		docFind = txtFind1.getDocument();
 		pf.add(txtFind1);
@@ -153,12 +153,12 @@ public class TextFinderDialog extends JDialog {
 		JPanel pc = new JPanel();
 		pc.setLayout(new DialogLayout(20, 5));
 		pc.setBorder(new EmptyBorder(8, 5, 8, 0));
-		pc.add(new JSLabel(I18N.getMsg("shef.find_what")));
+		pc.add(new JLabel(I18N.getMsg("shef.find_what")));
 		txtFind2 = new JTextField();
 		txtFind2.setDocument(docFind);
 		pc.add(txtFind2);
 		popupManager.registerJTextComponent(txtFind2);
-		pc.add(new JSLabel(I18N.getMsg("shef.replace")));
+		pc.add(new JLabel(I18N.getMsg("shef.replace")));
 		JTextField txtReplace = new JTextField();
 		docReplace = txtReplace.getDocument();
 		pc.add(txtReplace);
@@ -397,6 +397,7 @@ public class TextFinderDialog extends JDialog {
 		protected int m_divider = -1;
 		protected int m_hGap = 10;
 		protected int m_vGap = 5;
+		@SuppressWarnings("UseOfObsoleteCollectionType")
 		protected Vector m_v = new Vector();
 
 		public DialogLayout() {
@@ -446,7 +447,7 @@ public class TextFinderDialog extends JDialog {
 					h + insets.top + insets.bottom);
 		}
 
-		protected Dimension preferredLayoutSize(Vector v, int type) {
+		protected Dimension preferredLayoutSize(@SuppressWarnings("UseOfObsoleteCollectionType") Vector v, int type) {
 			int w = 0;
 			int h = 0;
 			switch (type) {
@@ -511,7 +512,7 @@ public class TextFinderDialog extends JDialog {
 			m_v.removeAllElements();
 		}
 
-		protected int layoutComponents(Vector v, int type, int x, int y, int w) {
+		protected int layoutComponents(@SuppressWarnings("UseOfObsoleteCollectionType") Vector v, int type, int x, int y, int w) {
 			switch (type) {
 				case COMP_TWO_COL:
 					int divider = getDivider(v);
@@ -566,7 +567,7 @@ public class TextFinderDialog extends JDialog {
 			return m_divider;
 		}
 
-		protected int getDivider(Vector v) {
+		protected int getDivider(@SuppressWarnings("UseOfObsoleteCollectionType") Vector v) {
 			if (m_divider > 0) {
 				return m_divider;
 			}

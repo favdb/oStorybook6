@@ -24,13 +24,13 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
 import storybook.App;
 import storybook.Pref;
 import storybook.tools.file.IOUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.panel.AbstractPanel;
 
@@ -47,8 +47,8 @@ public class PrefBackup extends AbstractPanel {
 	private JCheckBox ckBackupClose;
 	private JTextField tfBackupDir;
 	private JCheckBox ckBackupIncrement;
-	private JSLabel lbBackupDir;
-	private JSLabel lbAuto;
+	private JLabel lbBackupDir;
+	private JLabel lbAuto;
 
 	public PrefBackup(PreferencesDlg dlg) {
 		super(dlg.getMainFrame());
@@ -64,7 +64,7 @@ public class PrefBackup extends AbstractPanel {
 	@Override
 	public void initUi() {
 		setLayout(new MigLayout(MIG.WRAP, "[][]"));
-		lbBackupDir = new JSLabel(I18N.getMsg(BACKUP_PREF + "dir"));
+		lbBackupDir = new JLabel(I18N.getMsg(BACKUP_PREF + "dir"));
 		add(lbBackupDir, MIG.SPAN);
 		tfBackupDir = new JTextField();
 		tfBackupDir.setText(pref.getString(Pref.KEY.BACKUP_DIR, ""));
@@ -84,7 +84,7 @@ public class PrefBackup extends AbstractPanel {
 		ckBackupIncrement = new JCheckBox(I18N.getMsg(BACKUP_PREF + "increment"));
 		ckBackupIncrement.setSelected(pref.getBoolean(Pref.KEY.BACKUP_INCREMENT, false));
 		add(ckBackupIncrement, MIG.SPAN);
-		lbAuto = new JSLabel(I18N.getColonMsg(BACKUP_PREF + "auto"));
+		lbAuto = new JLabel(I18N.getColonMsg(BACKUP_PREF + "auto"));
 		add(lbAuto);
 		ckBackupOpen = new JCheckBox(I18N.getMsg(BACKUP_PREF + "auto.open"));
 		ckBackupOpen.setSelected(pref.getBoolean(Pref.KEY.BACKUP_OPEN, false));

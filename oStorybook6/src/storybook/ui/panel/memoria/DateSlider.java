@@ -23,18 +23,19 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import javax.swing.JLabel;
 import javax.swing.JSlider;
-import storybook.tools.swing.js.JSLabel;
 
 public class DateSlider extends JSlider implements ComponentListener {
 
 	private List<Date> dates = new ArrayList<>();
 	@SuppressWarnings("unchecked")
-	private final Hashtable<Integer, JSLabel> labelTable = new Hashtable();
+	private final Hashtable<Integer, JLabel> labelTable = new Hashtable();
 	private int startDateIndex = 0;
 	private int numberOfTickers = 1;
 	private int value = -1;
 
+	@SuppressWarnings("LeakingThisInConstructor")
 	public DateSlider(int paramInt) {
 		super(paramInt);
 		addComponentListener(this);
@@ -80,8 +81,8 @@ public class DateSlider extends JSlider implements ComponentListener {
 		int i = -1;
 		while (localEnumeration.hasMoreElements()) {
 			int j = ((Integer) localEnumeration.nextElement());
-			JSLabel localJSLabel = (JSLabel) localDictionary.get(j);
-			if (localJSLabel.getText().compareTo(paramDate.toString()) == 0) {
+			JLabel localJLabel = (JLabel) localDictionary.get(j);
+			if (localJLabel.getText().compareTo(paramDate.toString()) == 0) {
 				i = j;
 				break;
 			}
@@ -128,7 +129,7 @@ public class DateSlider extends JSlider implements ComponentListener {
 		}
 		int j = 0;
 		for (Date localDate : this.dates.subList(this.startDateIndex, i)) {
-			this.labelTable.put(j, new JSLabel(localDate.toString()));
+			this.labelTable.put(j, new JLabel(localDate.toString()));
 			j++;
 		}
 		setMinimum(0);

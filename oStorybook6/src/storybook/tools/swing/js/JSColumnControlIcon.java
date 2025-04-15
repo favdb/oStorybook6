@@ -27,6 +27,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.Icon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.plaf.UIResource;
 
 /**
@@ -38,8 +39,7 @@ import javax.swing.plaf.UIResource;
  */
 public class JSColumnControlIcon implements Icon, UIResource {
 
-	private int width = 10;
-	private int height = 10;
+	private final int width = 10, height = 10;
 
 	/**
 	 * TO DO: need to support small, medium, large
@@ -84,7 +84,7 @@ public class JSColumnControlIcon implements Icon, UIResource {
 	public static void main(String args[]) {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JSLabel label = new JSLabel(new JSColumnControlIcon());
+		JLabel label = new JLabel(new JSColumnControlIcon());
 		frame.getContentPane().add(BorderLayout.CENTER, label);
 		frame.pack();
 		frame.setLocationRelativeTo(null);

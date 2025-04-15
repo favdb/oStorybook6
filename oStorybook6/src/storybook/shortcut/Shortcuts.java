@@ -100,7 +100,7 @@ public class Shortcuts {
 				userKeyFile.createNewFile();
 			} catch (IOException e) {
 				LOG.err(TT + ".init() create user shortcuts file error"
-				   + " Error: \n" + e.getLocalizedMessage());
+						+ " Error: \n" + e.getLocalizedMessage());
 			}
 		}
 		try {
@@ -128,7 +128,7 @@ public class Shortcuts {
 				int t = Integer.parseInt(msg.replace("heading", ""));
 				String key = getKeyBinding("heading").replace("H", msg.replace("heading", ""));
 				return I18N.getMsg("shortcut.i.heading") + " " + t
-				   + " (" + key.replace(" ", "+") + ")";
+						+ " (" + key.replace(" ", "+") + ")";
 			} else {
 				return I18N.getMsg("shortcut.i." + msg) + " (" + str.replace(" ", "+") + ")";
 			}
@@ -185,9 +185,9 @@ public class Shortcuts {
 			rc = rc.replace("ctrl", I18N.getMsg("shortcut.0.ctrl"));
 		}
 		rc = rc.replace("ENTER", I18N.getMsg("shortcut.0.enter"))
-		   .replace("SPACE", I18N.getMsg("shortcut.0.space"))
-		   .replace("DELETE", I18N.getMsg("shortcut.0.delete"))
-		   .replace("INSERT", I18N.getMsg("shortcut.0.insert"));
+				.replace("SPACE", I18N.getMsg("shortcut.0.space"))
+				.replace("DELETE", I18N.getMsg("shortcut.0.delete"))
+				.replace("INSERT", I18N.getMsg("shortcut.0.insert"));
 		return rc;
 	}
 
@@ -280,7 +280,7 @@ public class Shortcuts {
 			if (sl.startsWith("heading") && key.startsWith("heading")) {
 				int t = Integer.parseInt(key.replace("heading", ""));
 				return KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD0 + t,
-				   KeyEvent.ALT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
+						KeyEvent.ALT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
 			}
 			if (sl.startsWith(key)) {
 				return getKey(getKeyBinding(key));
@@ -300,18 +300,18 @@ public class Shortcuts {
 		int modifier = KeyUtil.getModifier(key);
 		if (!key.startsWith("!")) {
 			if (key.endsWith("[F1]") || key.endsWith("[F2]")
-			   || key.endsWith("[F3]") || key.endsWith("[F4]")
-			   || key.endsWith("[F5]") || key.endsWith("[F6]")
-			   || key.endsWith("[F7]") || key.endsWith("[F8]")
-			   || key.endsWith("[F9]") || key.endsWith("[F10]")
-			   || key.endsWith("[F11]") || key.endsWith("[F12]")) {
+					|| key.endsWith("[F3]") || key.endsWith("[F4]")
+					|| key.endsWith("[F5]") || key.endsWith("[F6]")
+					|| key.endsWith("[F7]") || key.endsWith("[F8]")
+					|| key.endsWith("[F9]") || key.endsWith("[F10]")
+					|| key.endsWith("[F11]") || key.endsWith("[F12]")) {
 
 				int i = Integer.parseInt(key
-				   .replace("[F", "")
-				   .replace("]", "")
-				   .replace("alt", "")
-				   .replace("ctrl", "")
-				   .replace("shift", "").trim());
+						.replace("[F", "")
+						.replace("]", "")
+						.replace("alt", "")
+						.replace("ctrl", "")
+						.replace("shift", "").trim());
 				return KeyStroke.getKeyStroke(KeyEvent.VK_F1 + i - 1, modifier);
 			} else if (key.endsWith("[+]")) {
 				return KeyStroke.getKeyStroke(KeyEvent.VK_ADD, modifier);
@@ -323,8 +323,8 @@ public class Shortcuts {
 				return KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, modifier);
 			}
 			if (key.endsWith("[1]") || key.endsWith("[2]")
-			   || key.endsWith("[3]") || key.endsWith("[4]")
-			   || key.endsWith("[5]") || key.endsWith("[6]")) {
+					|| key.endsWith("[3]") || key.endsWith("[4]")
+					|| key.endsWith("[5]") || key.endsWith("[6]")) {
 				String kk = key.substring(key.lastIndexOf(" ") + 1);
 				int i = Integer.parseInt(kk.replace("[", "").replace("]", ""));
 				return KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD0 + i, modifier);

@@ -8,16 +8,16 @@
  */
 package api.shef.dialogs;
 
+import api.shef.tools.SwingUtil;
 import i18n.I18N;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.util.Hashtable;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import api.shef.tools.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 
 public class ListAttributesPanel extends HTMLAttributeEditorPanel {
 
@@ -38,7 +38,7 @@ public class ListAttributesPanel extends HTMLAttributeEditorPanel {
 		I18N.getMsg("shef.solid_circle"),
 		I18N.getMsg("shef.solid_square"), I18N.getMsg("shef.open_circle")
 	};
-	private JSLabel typeLabel = null;
+	private JLabel typeLabel = null;
 	private JComboBox typeCombo = null;
 	private JComboBox styleCombo = null;
 	private JSpinner startAtField = null;
@@ -49,11 +49,12 @@ public class ListAttributesPanel extends HTMLAttributeEditorPanel {
 	 * This method initializes
 	 *
 	 */
+	@SuppressWarnings("UseOfObsoleteCollectionType")
 	public ListAttributesPanel() {
 		this(new Hashtable());
 	}
 
-	public ListAttributesPanel(Hashtable ht) {
+	public ListAttributesPanel(@SuppressWarnings("UseOfObsoleteCollectionType") Hashtable ht) {
 		super();
 		initialize();
 		setAttributes(ht);
@@ -110,7 +111,7 @@ public class ListAttributesPanel extends HTMLAttributeEditorPanel {
 	 *
 	 */
 	private void initialize() {
-		typeLabel = new JSLabel();
+		typeLabel = new JLabel();
 		typeLabel.setText(I18N.getMsg("shef.list_type"));
 		setLayout(new GridBagLayout());
 		setSize(new java.awt.Dimension(234, 159));

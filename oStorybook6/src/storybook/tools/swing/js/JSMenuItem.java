@@ -38,7 +38,7 @@ public class JSMenuItem extends JMenuItem {
 			setIcon(IconUtil.getIconSmall(icon));
 		}
 		addActionListener(action);
-		setFont(App.getInstance().fonts.defGet());
+		setFont(App.fonts.defGet());
 	}
 
 	public JSMenuItem(AbstractEntity entity, ICONS.K icon, ActionListener action) {
@@ -47,7 +47,7 @@ public class JSMenuItem extends JMenuItem {
 		setText(entity.getName());
 		setIcon(entity.getIcon());
 		addActionListener(action);
-		setFont(App.getInstance().fonts.defGet());
+		setFont(App.fonts.defGet());
 	}
 
 }

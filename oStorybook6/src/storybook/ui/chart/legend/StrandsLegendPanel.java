@@ -21,7 +21,6 @@ import java.util.List;
 import javax.swing.JLabel;
 import storybook.db.strand.Strand;
 import storybook.tools.swing.ColorUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MainFrame;
 
 public class StrandsLegendPanel extends AbstractLegendPanel {
@@ -37,7 +36,7 @@ public class StrandsLegendPanel extends AbstractLegendPanel {
 		setOpaque(false);
 		add(new JLabel(I18N.getMsg("report.caption.strands")));
 		for (Strand strand : (List<Strand>) mainFrame.project.strands.findOrderBySort()) {
-			JSLabel label = new JSLabel("    ", 0);
+			JLabel label = new JLabel("    ", 0);
 			label.setToolTipText(strand.getName());
 			//label.setPreferredSize(new Dimension(100, 20));
 			label.setBackground(ColorUtil.darker(strand.getJColor(), 0.05D));

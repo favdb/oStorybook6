@@ -12,13 +12,13 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import storybook.ctrl.ActKey;
 import storybook.ctrl.Ctrl;
 import storybook.db.book.Book;
 import storybook.db.strand.Strand;
 import storybook.tools.LOG;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractPanel;
 
@@ -66,7 +66,7 @@ public class StrandPanel extends AbstractPanel implements ItemListener {
 			cb.setName(Long.toString(id));
 			cb.setOpaque(false);
 			cb.addItemListener(this);
-			add(new JSLabel(strand.getColorIcon()), "split 2");
+			add(new JLabel(strand.getColorIcon()), "split 2");
 			add(cb);
 		}
 		JButton btAll = new JButton(getSelectAllAction());

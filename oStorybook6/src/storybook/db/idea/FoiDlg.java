@@ -17,14 +17,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.db.idea;
 
-import storybook.dialog.AbsDialog;
+import api.mig.swing.MigLayout;
+import api.shef.ShefEditor;
 import i18n.I18N;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
-import api.mig.swing.MigLayout;
+import javax.swing.JLabel;
 import resources.icons.IconUtil;
-import api.shef.ShefEditor;
-import storybook.tools.swing.js.JSLabel;
+import storybook.dialog.AbsDialog;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 
@@ -53,7 +53,7 @@ public class FoiDlg extends AbsDialog {
 		setLayout(new MigLayout(MIG.get(MIG.WRAP, MIG.FILL), "", ""));
 		setTitle(I18N.getMsg("foi.title"));
 		setIconImage(IconUtil.getIconImageSmall("bulb"));
-		JSLabel lbTitle = new JSLabel(I18N.getColonMsg("foi.new"));
+		JLabel lbTitle = new JLabel(I18N.getColonMsg("foi.new"));
 		ideaEditor = new ShefEditor("", "lang_all, disallow, colored");
 		// layout
 		add(lbTitle);

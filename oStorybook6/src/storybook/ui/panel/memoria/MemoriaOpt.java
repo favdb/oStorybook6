@@ -22,9 +22,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import storybook.App;
 import storybook.Pref;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractOptions;
 
@@ -52,7 +52,7 @@ public class MemoriaOpt extends AbstractOptions implements ActionListener {
 	public void initUi() {
 		setLayout(new MigLayout("wrap,fill"));
 		// balloon or tree layout
-		add(new JSLabel(I18N.getColonMsg("graph.presentation")));
+		add(new JLabel(I18N.getColonMsg("graph.presentation")));
 		cbLayout = new JComboBox();
 		cbLayout.addItem(I18N.getMsg("memoria.layout.balloon"));
 		cbLayout.addItem(I18N.getMsg("memoria.layout.spring"));

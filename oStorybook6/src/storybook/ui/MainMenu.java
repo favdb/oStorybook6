@@ -84,6 +84,7 @@ import storybook.dialog.RenameDlg;
 import storybook.dialog.ReplaceDlg;
 import storybook.dialog.SearchDlg;
 import storybook.dialog.ToolBarDlg;
+import storybook.dialog.cover.Cover;
 import storybook.dialog.preferences.PreferencesDlg;
 import storybook.exim.exporter.ExportBookDlg;
 import storybook.exim.exporter.ExportBookToHtml;
@@ -91,7 +92,6 @@ import storybook.exim.exporter.ExportDlg;
 import storybook.exim.exporter.ExportStoryboard;
 import storybook.ideabox.IdeaxFrm;
 import storybook.project.Project;
-import storybook.project.PropEpubCover;
 import storybook.project.PropertiesDlg;
 import storybook.shortcut.Shortcuts;
 import storybook.shortcut.ShortcutsDlg;
@@ -104,7 +104,7 @@ import storybook.tools.net.Net;
 import storybook.tools.net.Updater;
 import storybook.tools.spell.SpellDlg;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.splash.WaitingSplash;
+import storybook.tools.swing.splash.Waiting;
 import storybook.ui.SbView.VIEWNAME;
 
 /**
@@ -113,35 +113,35 @@ import storybook.ui.SbView.VIEWNAME;
  */
 public class MainMenu implements MouseListener {
 
-	private static final String TT = "MainMenu";
+	private static final String TT = "MainMenu.";
 
 	private final MainFrame mainFrame;
 	public boolean testFunction = false;
 
 	public JToolBar toolBar;
 	public JButton btFileNew, btFileOpen, btFileSave,
-		btIdea, btMemo,
-		btNewChapter, btNewGender, btNewItem, btNewLocation,
-		btNewPart, btNewPerson, btNewRelation, btNewScene, btNewStrand,
-		btNewTag,
-		btTabChapter, btTabGender, btTabIdea, btTabItem,// btTabItemlink,
-		btTabLocation, btTabMemo, btTabPart, btTabPerson, btTabRelation,
-		btTabScene, btTabStrand, btTabTag,// btTabTaglink,
-		btViewBook, btViewChrono, btViewManage, btViewMemoria,
-		btViewReading, btViewStoryboard, btViewTypist;
+			btIdea, btMemo,
+			btNewChapter, btNewGender, btNewItem, btNewLocation,
+			btNewPart, btNewPerson, btNewRelation, btNewScene, btNewStrand,
+			btNewTag,
+			btTabChapter, btTabGender, btTabIdea, btTabItem,// btTabItemlink,
+			btTabLocation, btTabMemo, btTabPart, btTabPerson, btTabRelation,
+			btTabScene, btTabStrand, btTabTag,// btTabTaglink,
+			btViewBook, btViewChrono, btViewManage, btViewMemoria,
+			btViewReading, btViewStoryboard, btViewTypist;
 
 	public JMenuBar menuBar;
 
 	private JMenu menuFile;
 	private JMenuItem fileNew, fileOpen,
-		fileProperties, fileRename, fileClose, fileExit,
-		fileSave, fileSaveAs, fileAssistant;
+			fileProperties, fileRename, fileClose, fileExit,
+			fileSave, fileSaveAs, fileAssistant;
 	private JMenu menuFileExport;
 	private JMenuItem fileExportBOOK,
-		fileExportOther,
-		fileExportXml,
-		//fileExportOptions,
-		fileExportStoryboard;
+			fileExportOther,
+			fileExportXml,
+			//fileExportOptions,
+			fileExportStoryboard;
 	//private JMenu menuFileImport;
 	private JMenuItem fileImportXml;
 
@@ -153,44 +153,44 @@ public class MainMenu implements MouseListener {
 	//menu for new entity
 	private JMenu menuNewEntity;
 	private JMenuItem newAttribute,
-		newCategory, newChapter, newChapters,
-		newEvent,
-		newFOI,
-		newGender,
-		newIdea, newItem,// newItemLink,
-		newLocation,
-		newMemo,
-		newPart, newPerson, newPlot,
-		newRelation,
-		newScene, newStrand,
-		newTag/*, newTagLink*/;
+			newCategory, newChapter, newChapters,
+			newEvent,
+			newFOI,
+			newGender,
+			newIdea, newItem,// newItemLink,
+			newLocation,
+			newMemo,
+			newPart, newPerson, newPlot,
+			newRelation,
+			newScene, newStrand,
+			newTag/*, newTagLink*/;
 	private JMenu menuPrimaryObjects;
 	private JMenu menuSecondaryObjects;
 
 	//menu for tables
 	private JMenu menuTables;
 	private JMenuItem tabAttribute,
-		tabCategory, tabChapter,
-		tabEndnote, tabEvent,
-		tabGender,
-		tabIdea, tabInternal, tabItem,// tabItemLink,
-		tabLocation,
-		tabMemo,
-		tabPart, tabPerson, tabPlot,
-		tabRelation,
-		tabScene, tabStrand,
-		tabTag/*, tabTagLink*/;
+			tabCategory, tabChapter,
+			tabEndnote, tabEvent,
+			tabGender,
+			tabIdea, tabInternal, tabItem,// tabItemLink,
+			tabLocation,
+			tabMemo,
+			tabPart, tabPerson, tabPlot,
+			tabRelation,
+			tabScene, tabStrand,
+			tabTag/*, tabTagLink*/;
 
 	//menu for charts
 	private JMenu menuCharts;
 	private JMenuItem chartItems, chartLocations,
-		chartPersons, chartPersonsByDate, chartPersonsByScene,
-		chartStrands, chartWIWW, chartAttributes;
+			chartPersons, chartPersonsByDate, chartPersonsByScene,
+			chartStrands, chartWIWW, chartAttributes;
 
 	//menu for help
 	private JMenu menuHelp;
 	private JMenuItem helpAbout, helpCheckUpdates, helpDoc, helpFaq, helpHome, helpReportBug,
-		helpTranslate, toolsChaptersOrder;
+			helpTranslate, toolsChaptersOrder;
 	private JMenuItem devTest;
 
 	//menu for edit
@@ -201,38 +201,38 @@ public class MainMenu implements MouseListener {
 	//menu for tools
 	private JMenu menuTools;
 	private JMenuItem toolsPlan,
-		toolsReplace,
-		toolsScenesOrder,
-		toolsPersonsLinks,
-		toolsLocationsLinks,
-		toolsItemsLinks,
-		toolsSearch,
-		toolsEpisodes,
-		toolsNewScenes,
-		toolsNewParts,
-		toolsRenumberEndnotes,
-		toolsEpubCover;
+			toolsReplace,
+			toolsScenesOrder,
+			toolsPersonsLinks,
+			toolsLocationsLinks,
+			toolsItemsLinks,
+			toolsSearch,
+			toolsEpisodes,
+			toolsNewScenes,
+			toolsNewParts,
+			toolsRenumberEndnotes,
+			toolsEpubCover;
 	private JMenu toolsRename;
 	private JMenuItem renameCity,
-		renameCountry,
-		renameItemCategory,
-		renameTagCategory;
+			renameCountry,
+			renameItemCategory,
+			renameTagCategory;
 
 	//menu for views
 	private JMenu menuView;
 	private JMenuItem vueBook,
-		vueChrono,
-		vueInfo,
-		vueMemos,
-		vueManageScene;
+			vueChrono,
+			vueInfo,
+			vueMemos,
+			vueManageScene;
 	private JMenuItem vueMemoria,
-		/* vueNavigation,*/
-		vueReading,
-		vueStoryboard,
-		vueTree,
-		vueTypist,
-		vueTimeline,
-		vueStorymap;
+			/* vueNavigation,*/
+			vueReading,
+			vueStoryboard,
+			vueTree,
+			vueTypist,
+			vueTimeline,
+			vueStorymap;
 
 	//menu for window
 	private JMenu menuWindow;
@@ -240,16 +240,16 @@ public class MainMenu implements MouseListener {
 	private JMenuItem windowDefaultLayout;
 	public JMenu windowLoadLayout;
 	private JMenuItem windowRefresh,
-		windowResetLayout,
-		windowSaveLayout;
+			windowResetLayout,
+			windowSaveLayout;
 	public JCheckBoxMenuItem allParts;
 
 	//separators
 	private JPopupMenu.Separator separator0,
-		separator1,
-		separator2,
-		separator3,
-		separator4;
+			separator1,
+			separator2,
+			separator3,
+			separator4;
 	private JButton btViewTimeline;
 	private JMenuItem editAssistant;
 	private JMenuItem setOut;
@@ -385,20 +385,20 @@ public class MainMenu implements MouseListener {
 	private void tbFileInit() {
 		//LOG.printInfos(TT+"initTbFile()");
 		btFileNew = initButton(K.F_NEW, "file.new",
-			evt -> App.getInstance().createNewProject());
+				evt -> App.getInstance().createNewProject());
 		toolBar.add(btFileNew);
 
 		btFileOpen = initButton(K.F_OPEN, "file.open",
-			evt -> {
-				mainFrame.cursorSetWaiting();
-				//App.getInstance().openProject();
-				App.getInstance().selectProject();
-				mainFrame.cursorSetDefault();
-			});
+				evt -> {
+					mainFrame.cursorSetWaiting();
+					//App.getInstance().openProject();
+					App.getInstance().selectProject();
+					mainFrame.cursorSetDefault();
+				});
 		toolBar.add(btFileOpen);
 
 		btFileSave = initButton(K.F_SAVE, "file.save",
-			evt -> mainFrame.fileSave(true));
+				evt -> mainFrame.fileSave(true));
 		toolBar.add(btFileSave);
 
 	}
@@ -560,7 +560,7 @@ public class MainMenu implements MouseListener {
 	 * @return
 	 */
 	public static JMenuItem initScMenuItem(K icon, String shortcut,
-		String tips, ActionListener... action) {
+			String tips, ActionListener... action) {
 		JMenuItem it = new JMenuItem();
 		it.setName(shortcut);
 		if (icon != K.EMPTY) {
@@ -604,8 +604,8 @@ public class MainMenu implements MouseListener {
 	 * @return
 	 */
 	public static JMenuItem initMenuItem(String title,
-		String key,
-		ActionListener... action) {
+			String key,
+			ActionListener... action) {
 		JMenuItem m = initMenuItem(K.EMPTY, title, "", ' ', title);
 		if (title.startsWith("!")) {
 			m.setText(title.substring(1));
@@ -634,20 +634,19 @@ public class MainMenu implements MouseListener {
 	 * @return
 	 */
 	public static JMenuItem initMenuItem(K icon,
-		String name,
-		String key,
-		char mnemonic,
-		String text,
-		ActionListener... action) {
+			String name,
+			String key,
+			char mnemonic,
+			String text,
+			ActionListener... action) {
 		if (icon == K.EMPTY) {
 			return initMenuItem("", name, key, mnemonic, text, action);
 		}
 		return initMenuItem(icon.toString(), name, key, mnemonic, text, action);
 	}
 
-	public static JMenuItem initMenuItem(K icon,
-		String text,
-		String name, ActionListener... action) {
+	public static JMenuItem initMenuItem(K icon, String text,
+			String name, ActionListener... action) {
 		return initMenuItem(icon, name, "", ' ', text, action);
 	}
 
@@ -663,11 +662,11 @@ public class MainMenu implements MouseListener {
 	 * @return
 	 */
 	public static JMenuItem initMenuItem(String icon,
-		String name,
-		String key,
-		char mnemonic,
-		String text,
-		ActionListener... action) {
+			String name,
+			String key,
+			char mnemonic,
+			String text,
+			ActionListener... action) {
 		JMenuItem m = new JMenuItem();
 		m.setFont(App.fonts.defGet());
 		if (!key.isEmpty()) {
@@ -713,11 +712,11 @@ public class MainMenu implements MouseListener {
 		menuFileCreate.setIcon(IconUtil.getIconSmall(K.PLUS));
 
 		fileNew = initScMenuItem(K.F_NEW, "file.new", "file.new_tip",
-			evt -> App.getInstance().createNewProject());
+				evt -> App.getInstance().createNewProject());
 		menuFileCreate.add(fileNew);
 
 		JMenuItem fileNewDoc = initMenuItem(K.F_IMPORT, "file.from_doc", "import-doc",
-			evt -> mainFrame.fileImportDoc());
+				evt -> mainFrame.fileImportDoc());
 		fileNewDoc.setToolTipText(I18N.getMsg("file.from_doc_tip"));
 		menuFileCreate.add(fileNewDoc);
 
@@ -726,12 +725,12 @@ public class MainMenu implements MouseListener {
 		// open a project and open recent project
 		//fileOpen = initMenuItem(K.F_OPEN, Ui.CTRL + "O", 'O', "project.open", "open-command",
 		fileOpen = initScMenuItem(K.F_OPEN, "project.open", "",
-			evt -> {
-				mainFrame.cursorSetWaiting();
-				//App.getInstance().openProject();
-				App.getInstance().selectProject();
-				mainFrame.cursorSetDefault();
-			});
+				evt -> {
+					mainFrame.cursorSetWaiting();
+					//App.getInstance().openProject();
+					App.getInstance().selectProject();
+					mainFrame.cursorSetDefault();
+				});
 		menuFile.add(fileOpen);
 
 		menuFileRecent = new JMenu(I18N.getMsg("file.open.recent"));
@@ -741,21 +740,21 @@ public class MainMenu implements MouseListener {
 
 		// write the project
 		fileSave = initScMenuItem(K.F_SAVE, "project.save", "",
-			evt -> mainFrame.fileSave(true));
+				evt -> mainFrame.fileSave(true));
 		menuFile.add(fileSave);
 
 		fileSaveAs = initMenuItem(K.F_SAVEAS, "project.save.as", "",
-			evt -> mainFrame.fileSaveAs());
+				evt -> mainFrame.fileSaveAs());
 		menuFile.add(fileSaveAs);
 
 		// rename the project file
 		fileRename = initMenuItem(K.RENAME, "project.rename", "",
-			evt -> mainFrame.fileRename());
+				evt -> mainFrame.fileRename());
 		menuFile.add(fileRename);
 
 		// close the project
 		fileClose = initScMenuItem(K.CLOSE, "project.close", "",
-			evt -> mainFrame.close(false));
+				evt -> mainFrame.close(false));
 		menuFile.add(fileClose);
 
 		// backup and restore
@@ -766,7 +765,7 @@ public class MainMenu implements MouseListener {
 		menuFile.add(separator1);
 
 		fileProperties = initMenuItem(K.EMPTY, "file.properties", "fileProperties",
-			evt -> PropertiesDlg.show(mainFrame));
+				evt -> PropertiesDlg.show(mainFrame));
 		menuFile.add(fileProperties);
 
 		// export and import
@@ -780,9 +779,9 @@ public class MainMenu implements MouseListener {
 		menuFile.add(separator4);
 
 		fileExit = initScMenuItem(K.EXIT, "file.exit", "",
-			evt -> {
-				App.getInstance().exit();
-			});
+				evt -> {
+					App.getInstance().exit();
+				});
 		menuFile.add(fileExit);
 
 		menuBar.add(menuFile);
@@ -796,10 +795,10 @@ public class MainMenu implements MouseListener {
 		menuFileBackRest = new JMenu(I18N.getMsg("file.backup"));
 		menuFileBackRest.setName("menuFileBackRest");
 		fileBackupNew = initMenuItem(K.BK_SAVE, "file.backup_new", "backup_new",
-			evt -> mainFrame.backupNew(true));
+				evt -> mainFrame.backupNew(true));
 		menuFileBackRest.add(fileBackupNew);
 		fileBackupRest = initMenuItem(K.BK_REST, "file.backup_rest", "backup_rest",
-			evt -> mainFrame.backupRest());
+				evt -> mainFrame.backupRest());
 		menuFileBackRest.add(fileBackupRest);
 		menuFile.add(menuFileBackRest);
 	}
@@ -830,19 +829,19 @@ public class MainMenu implements MouseListener {
 		menuFile.add(menuFileExport);
 
 		fileExportStoryboard = initMenuItem(K.VW_STORYBOARD, "exportStoryboard", "", ' ',
-			"view.storyboard",
-			evt -> ExportStoryboard.execute(mainFrame));
+				"view.storyboard",
+				evt -> ExportStoryboard.execute(mainFrame));
 		menuFileExport.add(fileExportStoryboard);
 
 		fileExportBOOK = initMenuItem(K.VW_BOOK, "book", "exportBOOK",
-			evt -> ExportBookDlg.show(mainFrame));
+				evt -> ExportBookDlg.show(mainFrame));
 		menuFileExport.add(fileExportBOOK);
 
 		fileExportProject = initMenuItem(K.COLUMNS, "project.archive", "exportProject",
-			evt -> mainFrame.projectArchive());
+				evt -> mainFrame.projectArchive());
 		menuFileExport.add(fileExportProject);
 		fileExportOther = initMenuItem(K.EXPAND, "file.export.other", "exportOther",
-			evt -> ExportDlg.show(mainFrame));
+				evt -> ExportDlg.show(mainFrame));
 		menuFileExport.add(fileExportOther);
 	}
 
@@ -854,7 +853,7 @@ public class MainMenu implements MouseListener {
 		menuEdit = initMenu("edit");
 
 		editCopyBook = initMenuItem(K.EDIT_COPY, "book.copy.text", "bookCopy",
-			evt -> ExportBookToHtml.toClipboard(mainFrame, (Part) null));
+				evt -> ExportBookToHtml.toClipboard(mainFrame, (Part) null));
 		menuEdit.add(editCopyBook);
 
 		editCopyBlurb = initMenuItem(K.EDIT_COPY, "book.copy.blurb", "blurbCopy");
@@ -870,7 +869,7 @@ public class MainMenu implements MouseListener {
 		menuEdit.add(editPaste);
 
 		resetEditor = initScMenuItem("editor.reset",
-			evt -> SwingUtil.resetDlgPosition());
+				evt -> SwingUtil.resetDlgPosition());
 		menuEdit.add(resetEditor);
 
 		menuEdit.add(new JPopupMenu.Separator());
@@ -894,116 +893,116 @@ public class MainMenu implements MouseListener {
 		menuNewEntity = initMenu("new");
 		//ctrl alt D
 		newStrand = initScMenuItem(K.ENT_STRAND, "new.strand", "",
-			evt -> mainFrame.newEntity(new Strand()));
+				evt -> mainFrame.newEntity(new Strand()));
 		menuNewEntity.add(newStrand);
 		//ctrl alt A
 		newPart = initScMenuItem(K.ENT_PART, "new.part", "",
-			evt -> mainFrame.newEntity(new Part()));
+				evt -> mainFrame.newEntity(new Part()));
 		menuNewEntity.add(newPart);
 		//ctrl alt C
 		newChapter = initScMenuItem(K.ENT_CHAPTER, "new.chapter", "",
-			evt -> mainFrame.newEntity(new Chapter()));
+				evt -> mainFrame.newEntity(new Chapter()));
 		menuNewEntity.add(newChapter);
 		//ctrl alt S
 		newScene = initScMenuItem(K.ENT_SCENE, "new.scene", "",
-			evt -> mainFrame.newEntity(new Scene()));
+				evt -> mainFrame.newEntity(new Scene()));
 		menuNewEntity.add(newScene);
 
 		JMenu multi = new JMenu(I18N.getMsg("new.multi"));
 		menuNewEntity.add(multi);
 		toolsNewParts = initMenuItem(K.ENT_PART, "parts", "newParts",
-			evt -> {
-				PartsCreateDlg dlg = new PartsCreateDlg(mainFrame);
-				dlg.setVisible(true);
-				if (!dlg.isCanceled()) {
-					mainFrame.getBookModel().refreshParts();
-					mainFrame.setUpdated();
-				}
-			});
+				evt -> {
+					PartsCreateDlg dlg = new PartsCreateDlg(mainFrame);
+					dlg.setVisible(true);
+					if (!dlg.isCanceled()) {
+						mainFrame.getBookModel().refreshParts();
+						mainFrame.setUpdated();
+					}
+				});
 		multi.add(toolsNewParts);
 
 		newChapters = initMenuItem(K.ENT_CHAPTER, "chapters", "newChapters",
-			evt -> {
-				ChaptersCreateDlg dlg = new ChaptersCreateDlg(mainFrame);
-				dlg.setVisible(true);
-				if (!dlg.isCanceled()) {
-					mainFrame.getBookModel().refreshChapters();
-					mainFrame.setUpdated();
-				}
-			});
+				evt -> {
+					ChaptersCreateDlg dlg = new ChaptersCreateDlg(mainFrame);
+					dlg.setVisible(true);
+					if (!dlg.isCanceled()) {
+						mainFrame.getBookModel().refreshChapters();
+						mainFrame.setUpdated();
+					}
+				});
 		multi.add(newChapters);
 
 		toolsNewScenes = initMenuItem(K.ENT_SCENE, "scenes", "newScenes",
-			evt -> {
-				ScenesCreateDlg dlg = new ScenesCreateDlg(mainFrame);
-				dlg.setVisible(true);
-				if (!dlg.isCanceled()) {
-					mainFrame.getBookModel().refreshScenes();
-					mainFrame.setUpdated();
-				}
-			});
+				evt -> {
+					ScenesCreateDlg dlg = new ScenesCreateDlg(mainFrame);
+					dlg.setVisible(true);
+					if (!dlg.isCanceled()) {
+						mainFrame.getBookModel().refreshScenes();
+						mainFrame.setUpdated();
+					}
+				});
 		multi.add(toolsNewScenes);
 		//ctrl alt O
 		newPlot = initScMenuItem(K.ENT_PLOT, "new.plot", "",
-			evt -> mainFrame.newEntity(new Plot()));
+				evt -> mainFrame.newEntity(new Plot()));
 		menuNewEntity.add(newPlot);
 		menuNewEntity.add(new JPopupMenu.Separator());
 		//ctrl alt P
 		newPerson = initScMenuItem(K.ENT_PERSON, "new.person", "",
-			evt -> mainFrame.newEntity(new Person()));
+				evt -> mainFrame.newEntity(new Person()));
 		menuNewEntity.add(newPerson);
 		//ctrl alt G
 		newGender = initScMenuItem(K.ENT_GENDER, "new.gender", "",
-			evt -> mainFrame.newEntity(new Gender()));
+				evt -> mainFrame.newEntity(new Gender()));
 		menuNewEntity.add(newGender);
 		//ctrl alt Y
 		newCategory = initScMenuItem(K.ENT_CATEGORY, "new.category", "",
-			evt -> mainFrame.newEntity(new Category()));
+				evt -> mainFrame.newEntity(new Category()));
 		menuNewEntity.add(newCategory);
 		//ctrl alt R
 		newRelation = initScMenuItem(K.ENT_RELATION, "new.relation", "",
-			evt -> {
-				mainFrame.newEntity(new Relation());
-			});
+				evt -> {
+					mainFrame.newEntity(new Relation());
+				});
 		menuNewEntity.add(newRelation);
 
 		newAttribute = initMenuItem(K.EMPTY, "new.attribute", "newAttribute",
-			evt -> mainFrame.newEntity(new Attribute()));
+				evt -> mainFrame.newEntity(new Attribute()));
 		menuNewEntity.add(newAttribute);
 		//ctrl alt V
 		newEvent = initScMenuItem(K.ENT_EVENT, "new.event", "",
-			evt -> mainFrame.newEntity(new Event()));
+				evt -> mainFrame.newEntity(new Event()));
 		menuNewEntity.add(newEvent);
 
 		menuNewEntity.add(new JPopupMenu.Separator());
 		//ctrl alt L
 		newLocation = initScMenuItem(K.ENT_LOCATION, "new.location", "",
-			evt -> mainFrame.newEntity(new Location()));
+				evt -> mainFrame.newEntity(new Location()));
 		menuNewEntity.add(newLocation);
 		menuNewEntity.add(new JPopupMenu.Separator());
 		//ctrl alt I
 		newItem = initScMenuItem(K.ENT_ITEM, "new.item", "",
-			evt -> mainFrame.newEntity(new Item()));
+				evt -> mainFrame.newEntity(new Item()));
 		menuNewEntity.add(newItem);
 
 		menuNewEntity.add(new JPopupMenu.Separator());
 		//ctrl alt T
 		newTag = initScMenuItem(K.ENT_TAG, "new.tag", "",
-			evt -> mainFrame.newEntity(new Tag()));
+				evt -> mainFrame.newEntity(new Tag()));
 		menuNewEntity.add(newTag);
 
 		menuNewEntity.add(new JPopupMenu.Separator());
 		//ctrl Z
 		newFOI = initScMenuItem(K.ENT_IDEA, "foi.title", "",
-			evt -> FoiDlg.show(mainFrame));
+				evt -> FoiDlg.show(mainFrame));
 		menuNewEntity.add(newFOI);
 		//ctrl alt F
 		newIdea = initScMenuItem(K.ENT_IDEA, "new.idea", "",
-			evt -> mainFrame.newEntity(new Idea()));
+				evt -> mainFrame.newEntity(new Idea()));
 		menuNewEntity.add(newIdea);
 		//ctrl alt M
 		newMemo = initScMenuItem(K.ENT_MEMO, "new.memo", "",
-			evt -> mainFrame.newEntity(new Memo()));
+				evt -> mainFrame.newEntity(new Memo()));
 		menuNewEntity.add(newMemo);
 
 		menuBar.add(menuNewEntity);
@@ -1026,41 +1025,41 @@ public class MainMenu implements MouseListener {
 		menuPrimaryObjects = new JMenu(I18N.getMsg("primary.objects"));
 
 		tabInternal = initMenuItem(K.EMPTY, "internal", "tabInternal",
-			evt -> mainFrame.showAndFocus(VIEWNAME.INTERNALS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.INTERNALS));
 		menuPrimaryObjects.add(tabInternal);
 		if (!App.isDev()) {
 			tabInternal.setVisible(false);
 		}
 		tabStrand = initMenuItem(K.TABLE_STRANDS, "strand", "tabStrand",
-			evt -> mainFrame.showAndFocus(VIEWNAME.STRANDS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.STRANDS));
 		menuPrimaryObjects.add(tabStrand);
 
 		tabPart = initMenuItem(K.TABLE_PARTS, "part", "tabPart",
-			evt -> mainFrame.showAndFocus(VIEWNAME.PARTS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.PARTS));
 		menuPrimaryObjects.add(tabPart);
 
 		tabChapter = initMenuItem(K.TABLE_CHAPTERS, "chapter", "tabChapter",
-			evt -> mainFrame.showAndFocus(VIEWNAME.CHAPTERS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.CHAPTERS));
 		menuPrimaryObjects.add(tabChapter);
 
 		tabScene = initMenuItem(K.TABLE_SCENES, "scene", "tabScene",
-			evt -> mainFrame.showAndFocus(VIEWNAME.SCENES));
+				evt -> mainFrame.showAndFocus(VIEWNAME.SCENES));
 		menuPrimaryObjects.add(tabScene);
 
 		tabPlot = initMenuItem(K.TABLE_PLOTS, "plot", "tabPlot",
-			evt -> mainFrame.showAndFocus(VIEWNAME.PLOTS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.PLOTS));
 		menuPrimaryObjects.add(tabPlot);
 
 		tabPerson = initMenuItem(K.TABLE_PERSONS, "person", "tabPerson",
-			evt -> mainFrame.showAndFocus(VIEWNAME.PERSONS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.PERSONS));
 		menuPrimaryObjects.add(tabPerson);
 
 		tabLocation = initMenuItem(K.TABLE_LOCATIONS, "location", "tabLocation",
-			evt -> mainFrame.showAndFocus(VIEWNAME.LOCATIONS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.LOCATIONS));
 		menuPrimaryObjects.add(tabLocation);
 
 		tabItem = initMenuItem(K.TABLE_ITEMS, "item", "tabItem",
-			evt -> mainFrame.showAndFocus(VIEWNAME.ITEMS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.ITEMS));
 		menuPrimaryObjects.add(tabItem);
 	}
 
@@ -1068,23 +1067,23 @@ public class MainMenu implements MouseListener {
 		menuSecondaryObjects = new JMenu(I18N.getMsg("secondary.objects"));
 
 		tabGender = initMenuItem(K.TABLE_GENDERS, "genders", "tabGender",
-			evt -> mainFrame.showAndFocus(VIEWNAME.GENDERS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.GENDERS));
 		menuSecondaryObjects.add(tabGender);
 
 		tabCategory = initMenuItem(K.TABLE_CATEGORIES, "persons.category", "tabCategory",
-			evt -> mainFrame.showAndFocus(VIEWNAME.CATEGORIES));
+				evt -> mainFrame.showAndFocus(VIEWNAME.CATEGORIES));
 		menuSecondaryObjects.add(tabCategory);
 
 		tabRelation = initMenuItem(K.TABLE_RELATIONS, "relations", "tabRelation",
-			evt -> mainFrame.showAndFocus(VIEWNAME.RELATIONS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.RELATIONS));
 		menuSecondaryObjects.add(tabRelation);
 
 		tabAttribute = initMenuItem(K.EMPTY, "attributes", "tabAttribute",
-			evt -> mainFrame.showAndFocus(VIEWNAME.ATTRIBUTES));
+				evt -> mainFrame.showAndFocus(VIEWNAME.ATTRIBUTES));
 		menuSecondaryObjects.add(tabAttribute);
 
 		tabEvent = initMenuItem(K.ENT_EVENT, "events", "tabEvent",
-			evt -> mainFrame.showAndFocus(VIEWNAME.EVENTS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.EVENTS));
 		menuSecondaryObjects.add(tabEvent);
 
 		menuSecondaryObjects.add(new JPopupMenu.Separator());
@@ -1095,7 +1094,7 @@ public class MainMenu implements MouseListener {
 		menuSecondaryObjects.add(new JPopupMenu.Separator());
 
 		tabTag = initMenuItem(K.TABLE_TAGS, "tags", "tabTag",
-			evt -> mainFrame.showAndFocus(VIEWNAME.TAGS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.TAGS));
 		menuSecondaryObjects.add(tabTag);
 
 		/*tabTagLink = initMenuItem(K.TABLE_TAGLINKS, "taglink", "tabTagLink",
@@ -1103,17 +1102,17 @@ public class MainMenu implements MouseListener {
 		menuSecondaryObjects.add(tabTagLink);
 		menuSecondaryObjects.add(new JPopupMenu.Separator());*/
 		tabEndnote = initMenuItem(K.CHAR_ENDNOTE, "endnote", "tabEndnote",
-			evt -> mainFrame.showAndFocus(VIEWNAME.ENDNOTES));
+				evt -> mainFrame.showAndFocus(VIEWNAME.ENDNOTES));
 		menuSecondaryObjects.add(tabEndnote);
 
 		menuSecondaryObjects.add(new JPopupMenu.Separator());
 
 		tabMemo = initMenuItem(K.TABLE_MEMOS, "memos", "tabMemo",
-			evt -> mainFrame.showAndFocus(VIEWNAME.MEMOS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.MEMOS));
 		menuSecondaryObjects.add(tabMemo);
 
 		tabIdea = initMenuItem(K.TABLE_IDEAS, "ideas", "tabIdea",
-			evt -> mainFrame.showAndFocus(VIEWNAME.IDEAS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.IDEAS));
 		menuSecondaryObjects.add(tabIdea);
 	}
 
@@ -1141,17 +1140,17 @@ public class MainMenu implements MouseListener {
 		menuTools.add(toolsTypist);
 		JMenu submenu = initMenu("story");
 		toolsEpisodes = initMenuItem("episodes",
-			evt -> {
-				if (mainFrame.isTypist) {
-					mainFrame.typistActivate();
-					mainFrame.episodeActivate();
-					toolsEpisodes.setVisible(false);
-				} else if (!mainFrame.isEpisode) {
-					mainFrame.showAndFocus(VIEWNAME.EPISODES);
-				}
-			});
+				evt -> {
+					if (mainFrame.isTypist) {
+						mainFrame.typistActivate();
+						mainFrame.episodeActivate();
+						toolsEpisodes.setVisible(false);
+					} else if (!mainFrame.isEpisode) {
+						mainFrame.showAndFocus(VIEWNAME.EPISODES);
+					}
+				});
 		submenu.add(toolsEpisodes);
-		toolsClassic = initMenuItem("story.three", evt -> {
+		toolsClassic = initMenuItem("story.classic", evt -> {
 			mainFrame.showAndFocus(VIEWNAME.STORY_THREE);
 		});
 		toolsClassic.setEnabled(Assistant.hasClassic());
@@ -1175,88 +1174,88 @@ public class MainMenu implements MouseListener {
 		menuTools.add(toolsReplace);
 
 		toolsChaptersOrder = initMenuItem("chapters.order",
-			evt -> ChaptersOrderDlg.show(mainFrame));
+				evt -> ChaptersOrderDlg.show(mainFrame));
 		menuTools.add(toolsChaptersOrder);
 
 		toolsScenesOrder = initMenuItem("scenes.renumber",
-			evt -> {
-				if (SceneRenumber.show(mainFrame)) {
-					App.getInstance().setWaitCursor();
-					final WaitingSplash dlg
-					= new WaitingSplash(mainFrame, I18N.getMsg("scenes.renumber"));
-					dlg.setVisible(true);
-					SwingUtilities.invokeLater(() -> {
-						try {
-							mainFrame.project.scenes.renumber(mainFrame);
-						} catch (Exception e) {
-							ExceptionDlg.show(getClass().getSimpleName()
-								+ ".initMenuTools()", e);
-						}
-						dlg.dispose();
-					});
-					App.getInstance().setDefaultCursor();
-				}
-			});
+				evt -> {
+					if (SceneRenumber.show(mainFrame)) {
+						App.getInstance().setWaitCursor();
+						final Waiting dlg
+						= new Waiting(mainFrame, I18N.getMsg("scenes.renumber"));
+						dlg.setVisible(true);
+						SwingUtilities.invokeLater(() -> {
+							try {
+								mainFrame.project.scenes.renumber(mainFrame);
+							} catch (Exception e) {
+								ExceptionDlg.show(getClass().getSimpleName()
+										+ ".initMenuTools()", e);
+							}
+							dlg.dispose();
+						});
+						App.getInstance().setDefaultCursor();
+					}
+				});
 		menuTools.add(toolsScenesOrder);
 
 		JMenu menuLinks = new JMenu(I18N.getMsg("links"));
 		toolsPersonsLinks = initMenuItem("links.person",
-			evt -> ScenesLinks.show(mainFrame, Book.TYPE.PERSON));
+				evt -> ScenesLinks.show(mainFrame, Book.TYPE.PERSON));
 		menuLinks.add(toolsPersonsLinks);
 		toolsLocationsLinks = initMenuItem("links.location",
-			evt -> ScenesLinks.show(mainFrame, Book.TYPE.LOCATION));
+				evt -> ScenesLinks.show(mainFrame, Book.TYPE.LOCATION));
 		menuLinks.add(toolsLocationsLinks);
 		toolsItemsLinks = initMenuItem("links.item",
-			evt -> ScenesLinks.show(mainFrame, Book.TYPE.PERSON));
+				evt -> ScenesLinks.show(mainFrame, Book.TYPE.PERSON));
 		menuLinks.add(toolsItemsLinks);
 		menuTools.add(menuLinks);
 
 		toolsRenumberEndnotes = initMenuItem("endnotes.renumber",
-			evt -> {
-				if (Endnote.renumber(mainFrame, 0)) {
-					mainFrame.setUpdated();
-					mainFrame.getBookModel().fireAgain();
-				}
-			});
+				evt -> {
+					if (Endnote.renumber(mainFrame, 0)) {
+						mainFrame.setUpdated();
+						mainFrame.getBookModel().fireAgain();
+					}
+				});
 		menuTools.add(toolsRenumberEndnotes);
 
 		toolsRename = new JMenu(I18N.getMsg("tools.rename"));
 		toolsRename.setIcon(IconUtil.getIconSmall(K.RENAME));
 
 		renameCity = initMenuItem("location.rename.city",
-			evt -> {
-				RenameDlg dlg = new RenameDlg(mainFrame, "city");
-				SwingUtil.showModalDialog(dlg, mainFrame);
-			});
+				evt -> {
+					RenameDlg dlg = new RenameDlg(mainFrame, "city");
+					SwingUtil.showModalDialog(dlg, mainFrame);
+				});
 		toolsRename.add(renameCity);
 
 		renameCountry = initMenuItem("location.rename.country",
-			evt -> {
-				RenameDlg dlg = new RenameDlg(mainFrame, "country");
-				SwingUtil.showModalDialog(dlg, mainFrame);
-			});
+				evt -> {
+					RenameDlg dlg = new RenameDlg(mainFrame, "country");
+					SwingUtil.showModalDialog(dlg, mainFrame);
+				});
 		toolsRename.add(renameCountry);
 
 		renameTagCategory = initMenuItem("tag.rename.category",
-			evt -> {
-				RenameDlg dlg = new RenameDlg(mainFrame, "tag");
-				SwingUtil.showModalDialog(dlg, mainFrame);
-			});
+				evt -> {
+					RenameDlg dlg = new RenameDlg(mainFrame, "tag");
+					SwingUtil.showModalDialog(dlg, mainFrame);
+				});
 		toolsRename.add(renameTagCategory);
 
 		renameItemCategory = initMenuItem("item.rename.category",
-			evt -> {
-				RenameDlg dlg = new RenameDlg(mainFrame, "item");
-				SwingUtil.showModalDialog(dlg, mainFrame);
-			});
+				evt -> {
+					RenameDlg dlg = new RenameDlg(mainFrame, "item");
+					SwingUtil.showModalDialog(dlg, mainFrame);
+				});
 		toolsRename.add(renameItemCategory);
 
 		menuTools.add(toolsRename);
 
 		separator3 = new JPopupMenu.Separator();
 		menuTools.add(separator3);
-		toolsEpubCover = initMenuItem("epub.cover.create",
-			evt -> PropEpubCover.show(mainFrame));
+		toolsEpubCover = initMenuItem("cover.create",
+				evt -> Cover.show(mainFrame));
 		menuTools.add(toolsEpubCover);
 
 		menuBar.add(menuTools);
@@ -1271,56 +1270,56 @@ public class MainMenu implements MouseListener {
 		menuView = initMenu("view");
 
 		vueTypist = initMenuItem(K.VW_TYPIST, "typist", "",
-			evt -> mainFrame.typistActivate());
+				evt -> mainFrame.typistActivate());
 		menuView.add(vueTypist);
 		menuView.addSeparator();
 
 		vueChrono = initMenuItem(K.VW_CHRONO, "view.chrono", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.CHRONO));
+				evt -> mainFrame.showAndFocus(VIEWNAME.CHRONO));
 		menuView.add(vueChrono);
 
 		vueTimeline = initMenuItem(K.VW_TIMELINE, "view.timeline", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.TIMELINE));
+				evt -> mainFrame.showAndFocus(VIEWNAME.TIMELINE));
 		menuView.add(vueTimeline);
 
 		vueBook = initMenuItem(K.VW_BOOK, "view.book", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.BOOK));
+				evt -> mainFrame.showAndFocus(VIEWNAME.BOOK));
 		menuView.add(vueBook);
 
 		vueReading = initMenuItem(K.VW_READING, "view.reading", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.READING));
+				evt -> mainFrame.showAndFocus(VIEWNAME.READING));
 		menuView.add(vueReading);
 
 		vueManageScene = initMenuItem(K.VW_MANAGE, "view.manage", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.MANAGE));
+				evt -> mainFrame.showAndFocus(VIEWNAME.MANAGE));
 		menuView.add(vueManageScene);
 
 		vueMemoria = initMenuItem(K.VW_MEMORIA, "view.memoria", "",
-			evt -> {
-				mainFrame.showAndFocus(VIEWNAME.MEMORIA);
-			});
+				evt -> {
+					mainFrame.showAndFocus(VIEWNAME.MEMORIA);
+				});
 		menuView.add(vueMemoria);
 
 		vueStoryboard = initMenuItem(K.STAMP, "view.storyboard", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.STORYBOARD));
+				evt -> mainFrame.showAndFocus(VIEWNAME.STORYBOARD));
 		menuView.add(vueStoryboard);
 
 		vueStorymap = initMenuItem(K.VW_STORYMAP, "view.storymap", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.STORYMAP));
+				evt -> mainFrame.showAndFocus(VIEWNAME.STORYMAP));
 		menuView.add(vueStorymap);
 
 		menuView.add(new JPopupMenu.Separator());
 
 		toolsPlan = initMenuItem(K.VW_PLAN, "view.plan", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.PLANNING));
+				evt -> mainFrame.showAndFocus(VIEWNAME.PLANNING));
 		menuView.add(toolsPlan);
 
 		vueTree = initMenuItem(K.VW_TREE, "tree", "", ' ', "tree",
-			evt -> mainFrame.showAndFocus(VIEWNAME.TREE));
+				evt -> mainFrame.showAndFocus(VIEWNAME.TREE));
 		menuView.add(vueTree);
 
 		vueInfo = initMenuItem(K.INFO, "view.info", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.INFO));
+				evt -> mainFrame.showAndFocus(VIEWNAME.INFO));
 		menuView.add(vueInfo);
 
 		/*vueNavigation = initMenuItem(K.COMPASS, "", ' ',
@@ -1328,7 +1327,7 @@ public class MainMenu implements MouseListener {
 			evt -> mainFrame.showAndFocus(VIEWNAME.NAVIGATION));
 		menuView.add(vueNavigation);*/
 		vueMemos = initMenuItem(K.ENT_MEMO, "memo", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.MEMOS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.MEMOS));
 		menuView.add(vueMemos);
 
 		menuBar.add(menuView);
@@ -1342,38 +1341,38 @@ public class MainMenu implements MouseListener {
 		menuCharts = initMenu("charts");
 
 		chartAttributes = initMenuItem(K.COLUMNS, "attribute.list", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.ATTRIBUTESLIST));
+				evt -> mainFrame.showAndFocus(VIEWNAME.ATTRIBUTESLIST));
 		if (App.isDev()) {
 			menuCharts.add(chartAttributes);
 		}
 
 		chartPersonsByDate = initMenuItem(K.VW_CHART, "tools.charts.overall.character.date", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.CHART_PERSONS_BY_DATE));
+				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_PERSONS_BY_DATE));
 		menuCharts.add(chartPersonsByDate);
 
 		chartPersonsByScene = initMenuItem(K.VW_CHART, "tools.charts.part.character.scene", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.CHART_PERSONS_BY_SCENE));
+				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_PERSONS_BY_SCENE));
 		menuCharts.add(chartPersonsByScene);
 
 		chartWIWW = initMenuItem(K.VW_CHART, "tools.charts.overall.whoIsWhereWhen", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.CHART_WIWW));
+				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_WIWW));
 		menuCharts.add(chartWIWW);
 
 		chartStrands = initMenuItem(K.VW_CHART, "tools.charts.overall.strand.date", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.CHART_STRANDS_BY_DATE));
+				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_STRANDS_BY_DATE));
 		menuCharts.add(chartStrands);
 		menuCharts.add(new JPopupMenu.Separator());
 
 		chartPersons = initMenuItem(K.VW_CHART, "tools.charts.overall.character.occurrence", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.CHART_OCCURRENCE_OF_PERSONS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_OCCURRENCE_OF_PERSONS));
 		menuCharts.add(chartPersons);
 
 		chartLocations = initMenuItem(K.VW_CHART, "tools.charts.overall.location.occurrence", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.CHART_OCCURRENCE_OF_LOCATIONS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_OCCURRENCE_OF_LOCATIONS));
 		menuCharts.add(chartLocations);
 
 		chartItems = initMenuItem(K.VW_CHART, "tools.charts.overall.item.occurrence", "",
-			evt -> mainFrame.showAndFocus(VIEWNAME.CHART_OCCURRENCE_OF_ITEMS));
+				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_OCCURRENCE_OF_ITEMS));
 		menuCharts.add(chartItems);
 
 		menuBar.add(menuCharts);
@@ -1406,7 +1405,7 @@ public class MainMenu implements MouseListener {
 		menuWindow.add(windowResetLayout);
 
 		windowRefresh = initScMenuItem(K.EMPTY, "refresh", "",
-			evt -> mainFrame.refresh());
+				evt -> mainFrame.refresh());
 		menuWindow.add(windowRefresh);
 
 		menuBar.add(menuWindow);
@@ -1420,23 +1419,23 @@ public class MainMenu implements MouseListener {
 		menuHelp = initMenu("help");
 
 		helpHome = initMenuItem("help.homepage",
-			evt -> Net.openBrowser(Net.getI18nUrl(Net.KEY.HOME)));
+				evt -> Net.openBrowser(Net.getI18nUrl(Net.KEY.HOME)));
 		menuHelp.add(helpHome);
 
 		helpDoc = initMenuItem("help.doc",
-			evt -> Net.openBrowser(Net.getI18nUrl(Net.KEY.HOME) + Net.KEY.DOC));
+				evt -> Net.openBrowser(Net.getI18nUrl(Net.KEY.HOME) + Net.KEY.DOC));
 		menuHelp.add(helpDoc);
 
 		helpFaq = initMenuItem("help.faq",
-			evt -> Net.openBrowser(Net.getI18nUrl(Net.KEY.HOME) + Net.KEY.FAQ));
+				evt -> Net.openBrowser(Net.getI18nUrl(Net.KEY.HOME) + Net.KEY.FAQ));
 		menuHelp.add(helpFaq);
 
 		helpReportBug = initMenuItem("help.bug",
-			evt -> Net.openBrowser(Net.KEY.BUG.toString()));
+				evt -> Net.openBrowser(Net.KEY.BUG.toString()));
 		menuHelp.add(helpReportBug);
 
 		JMenuItem helpShortcut = initScMenuItem(K.HELP, "help.shortcut", "",
-			evt -> ShortcutsDlg.show(mainFrame.getFullFrame()));
+				evt -> ShortcutsDlg.show(mainFrame.getFullFrame()));
 		menuHelp.add(helpShortcut);
 
 		helpAbout = initMenuItem("help.about", evt -> AboutDlg.show(mainFrame));
@@ -1453,30 +1452,30 @@ public class MainMenu implements MouseListener {
 		menuHelp.add(editSpellChecker);
 
 		editAssistant = initMenuItem(K.ASSISTANT, "assistant", "assistant",
-			evt -> {
-				AssistantWizardDlg dlg = new AssistantWizardDlg(mainFrame);
-				dlg.setVisible(true);
-			});
+				evt -> {
+					AssistantWizardDlg dlg = new AssistantWizardDlg(mainFrame);
+					dlg.setVisible(true);
+				});
 		menuHelp.add(editAssistant);
 
 		JMenuItem ideabox2 = initMenuItem(K.IDEABOX, "ideabox", "ideabox",
-			evt -> {
-				IdeaxFrm dlg = new IdeaxFrm();
-				dlg.setVisible(true);
-			});
+				evt -> {
+					IdeaxFrm dlg = new IdeaxFrm();
+					dlg.setVisible(true);
+				});
 		menuHelp.add(ideabox2);
 
 		menuHelp.add(new JPopupMenu.Separator());
 
 		helpCheckUpdates = initMenuItem("help.update",
-			evt -> {
-				if (Updater.checkForUpdate(true)) {
-					JOptionPane.showMessageDialog(mainFrame,
-						I18N.getMsg("update.no.text"),
-						I18N.getMsg("update.no.title"),
-						JOptionPane.INFORMATION_MESSAGE);
-				}
-			});
+				evt -> {
+					if (Updater.checkForUpdate(true)) {
+						JOptionPane.showMessageDialog(mainFrame,
+								I18N.getMsg("update.no.text"),
+								I18N.getMsg("update.no.title"),
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+				});
 		menuHelp.add(helpCheckUpdates);
 
 		JCheckBoxMenuItem helpTrace = new JCheckBoxMenuItem();
@@ -1507,11 +1506,11 @@ public class MainMenu implements MouseListener {
 
 		JMenu menuTranslate = new JMenu(I18N.getMsg("help.translate"));
 		JMenuItem helpAssistant = initMenuItem("assistant",
-			evt -> AppAssistant.show("--sub")
+				evt -> AppAssistant.show("--sub")
 		);
 		menuTranslate.add(helpAssistant);
 		helpTranslate = initMenuItem("help.ui",
-			evt -> I18NDlg.show(mainFrame));
+				evt -> I18NDlg.show(mainFrame));
 		menuTranslate.add(helpTranslate);
 		menuHelp.add(menuTranslate);
 
@@ -1749,8 +1748,8 @@ public class MainMenu implements MouseListener {
 			System.setErr(pslog);
 			System.setOut(pslog);
 			System.out.println(DateUtil.dateToStandard(new Date())
-				+ " " + Const.getFullName()
-				+ "-> Starting logfile");
+					+ " " + Const.getFullName()
+					+ "-> Starting logfile");
 		} catch (FileNotFoundException ex) {
 			LOG.err("Redirecting standard output error");
 		}
@@ -1768,11 +1767,11 @@ public class MainMenu implements MouseListener {
 				continue;
 			}
 			miRecent.add(initMenuItem("!" + p.title,
-				e -> App.getInstance().openProject(new Project(p.file))));
+					e -> App.getInstance().openProject(new Project(p.file))));
 		}
 		miRecent.addSeparator();
 		miRecent.add(initMenuItem("file.clear.recent",
-			e -> App.getInstance().recentfilesClear()));
+				e -> App.getInstance().recentfilesClear()));
 		miRecent.setEnabled(!list.isEmpty());
 		setMenuCopy();
 	}
@@ -1793,12 +1792,12 @@ public class MainMenu implements MouseListener {
 				if (name.endsWith(".layout")) {
 					String text = name.substring(0, name.lastIndexOf(".layout"));
 					if (text.equals("_internal_last_used_layout_")
-						|| text.equals("LastUsedLayout")) {
+							|| text.equals("LastUsedLayout")) {
 						continue;
 					}
 					miLoad.add(
-						MainMenu.initMenuItem("!" + text,
-							e -> DockUtil.layoutLoadFromFile(mainFrame, text)));
+							MainMenu.initMenuItem("!" + text,
+									e -> DockUtil.layoutLoadFromFile(mainFrame, text)));
 				}
 			}
 		}
@@ -1808,7 +1807,7 @@ public class MainMenu implements MouseListener {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menuHelp = initMenu("menu");
 		JMenuItem item = initScMenuItem(ICONS.K.HELP, "help.shortcut", "",
-			evt -> ShortcutsDlg.show(comp));
+				evt -> ShortcutsDlg.show(comp));
 		menuHelp.add(item);
 		menuBar.add(menuHelp);
 		menuBar.setMaximumSize(new Dimension(1, 1));

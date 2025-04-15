@@ -110,3 +110,6 @@ https://www.merriam-webster.com/
 
 French synonyms extracted from CRISCO-DES
 https://crisco4.unicaen.fr/des/
+
+Image templates for the Cover generator from Victoria's Journals
+<http://www.victoriasjournals.com/>

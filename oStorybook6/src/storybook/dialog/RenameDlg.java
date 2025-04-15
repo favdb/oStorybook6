@@ -23,12 +23,12 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import storybook.ctrl.Ctrl;
 import storybook.db.item.Item;
 import storybook.db.location.Location;
 import storybook.db.tag.Tag;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MainFrame;
 
 /**
@@ -54,9 +54,9 @@ public class RenameDlg extends AbsDialog {
 
 	@Override
 	public void initUi() {
-		JSLabel lbRename = new JSLabel(I18N.getMsg("rename.rename"));
+		JLabel lbRename = new JLabel(I18N.getMsg("rename.rename"));
 		combo = new JComboBox<>();
-		JSLabel lbTo = new JSLabel(I18N.getMsg("rename.to"));
+		JLabel lbTo = new JLabel(I18N.getMsg("rename.to"));
 		tfNewName = new JTextField(20);
 		switch (which) {
 			case "country":

@@ -16,6 +16,7 @@
  */
 package storybook.tools.swing.js;
 
+import api.shef.dialogs.GBC;
 import i18n.I18N;
 import java.awt.Color;
 import java.awt.GridBagLayout;
@@ -29,19 +30,19 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import resources.icons.ICONS;
-import api.shef.dialogs.GBC;
 import storybook.tools.file.EnvUtil;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.Ui;
 
 /**
+ * a JTextField to show the current file path, a JButton to choose another file
  *
  * @author favdb
  */
 public class JSFileSelector extends JPanel {
 
 	private JTextField tf;
-	private final boolean toCheck;
+	private final boolean mustExists;
 	private final String onlyTitle;
 	private final String onlyExt;
 
@@ -51,13 +52,13 @@ public class JSFileSelector extends JPanel {
 	 * @param name: internal name for the selector
 	 * @param title: prompt label
 	 * @param value: initial value
-	 * @param toCheck: true=file must exists
+	 * @param mustExists: true=file must exists
 	 * @param only: limited allowed extension
 	 */
 	public JSFileSelector(String name,
 			String title,
 			String value,
-			boolean toCheck,
+			boolean mustExists,
 			String... only) {
 		super();
 		this.setName(name);
@@ -68,7 +69,7 @@ public class JSFileSelector extends JPanel {
 			this.onlyTitle = "";
 			this.onlyExt = "";
 		}
-		this.toCheck = toCheck;
+		this.mustExists = mustExists;
 		initialize(title, value);
 	}
 
@@ -80,7 +81,7 @@ public class JSFileSelector extends JPanel {
 		tf = new JTextField(value);
 		tf.setColumns(24);
 		tf.addCaretListener(e -> {
-			if (toCheck) {
+			if (mustExists) {
 				tf.setBorder(SwingUtil.getBorderDefault());
 				File ftf = getFile();
 				if (ftf != null && !ftf.exists()) {

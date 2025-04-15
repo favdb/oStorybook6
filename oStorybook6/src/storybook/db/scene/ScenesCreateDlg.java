@@ -22,16 +22,16 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import storybook.db.EntityUtil;
 import storybook.db.book.Book;
 import storybook.db.chapter.Chapter;
+import storybook.dialog.AbsDialog;
 import storybook.tools.StringUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
-import storybook.dialog.AbsDialog;
 
 /**
  *
@@ -61,17 +61,17 @@ public class ScenesCreateDlg extends AbsDialog {
 		setLayout(new MigLayout());
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle(I18N.getMsg("scenes.generate"));
-		add(new JSLabel(I18N.getMsg("scenes.generate.text")), MIG.SPLIT2);
+		add(new JLabel(I18N.getMsg("scenes.generate.text")), MIG.SPLIT2);
 		tfQuantity = new JTextField();
 		tfQuantity.setColumns(2);
 		add(tfQuantity, MIG.WRAP);
-		add(new JSLabel(I18N.getMsg("scenes.generate.format")), MIG.WRAP);
+		add(new JLabel(I18N.getMsg("scenes.generate.format")), MIG.WRAP);
 		tfFormat = new JTextField(I18N.getMsg("scene") + " %d");
 		add(tfFormat, MIG.get(MIG.GROWX, MIG.WRAP));
 		rbRoman = new JCheckBox(I18N.getMsg("scenes.generate.roman"));
 		add(rbRoman, MIG.get(MIG.RIGHT, MIG.WRAP));
 
-		add(new JSLabel(I18N.getMsg("chapter")), MIG.SPLIT2);
+		add(new JLabel(I18N.getMsg("chapter")), MIG.SPLIT2);
 		chapterCombo = new JComboBox<>();
 		Chapter chapter = new Chapter();
 		EntityUtil.cbFill(mainFrame, chapterCombo, Book.TYPE.CHAPTER, chapter, false, false);

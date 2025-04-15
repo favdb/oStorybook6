@@ -25,6 +25,7 @@ import java.util.Date;
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import storybook.App;
@@ -34,7 +35,6 @@ import storybook.db.book.Book;
 import storybook.db.part.Part;
 import storybook.dialog.AbsDialog;
 import storybook.tools.StringUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MainFrame;
 
 /**
@@ -70,21 +70,21 @@ public class ChaptersCreateDlg extends AbsDialog {
 		setTitle(I18N.getMsg("chapters.generate"));
 		String split2 = "split 2";
 		String wrap = "wrap";
-		JSLabel lb1 = new JSLabel(I18N.getMsg("chapters.generate.text"));
+		JLabel lb1 = new JLabel(I18N.getMsg("chapters.generate.text"));
 		tfQuantity = new JTextField();
 		tfQuantity.setColumns(2);
-		JSLabel lb2 = new JSLabel(I18N.getMsg("part"));
+		JLabel lb2 = new JLabel(I18N.getMsg("part"));
 		partCombo = new JComboBox<>();
 		Part part = new Part();
 		EntityUtil.cbFill(mainFrame, partCombo, Book.TYPE.PART, part, false, false);
-		JSLabel lbn = new JSLabel(I18N.getMsg("chapters.generate.format"));
+		JLabel lbn = new JLabel(I18N.getMsg("chapters.generate.format"));
 		tfFormat = new JTextField();
 		tfFormat.setText(I18N.getMsg("chapter") + " %d");
 		rbRoman = new JCheckBox(I18N.getMsg("chapters.generate.roman"));
-		JSLabel lb3 = new JSLabel(I18N.getMsg("objective.size"));
+		JLabel lb3 = new JLabel(I18N.getMsg("objective.size"));
 		tfSize = new JTextField();
 		tfSize.setColumns(8);
-		JSLabel lb4 = new JSLabel(I18N.getMsg("objective.date"));
+		JLabel lb4 = new JLabel(I18N.getMsg("objective.date"));
 		dateChooser = new JDateChooser();
 		dateChooser.setDateFormatString(App.preferences.getString(Pref.KEY.DATEFORMAT, "MM-dd-yyyy"));
 		//layout

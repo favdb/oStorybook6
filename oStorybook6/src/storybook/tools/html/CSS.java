@@ -97,7 +97,7 @@ public class CSS {
 	 * @return
 	 */
 	public static String getDefault() {
-		return getDefault(App.getInstance().fonts.editorGet(), 0, false);
+		return getDefault(App.fonts.editorGet(), 0, false);
 	}
 
 	/**
@@ -118,102 +118,102 @@ public class CSS {
 			buf.append(CSS.getParam(2, FONT_SIZE, font.getSize(), unit));
 		}
 		buf.append(CSS.getParam(2, PADDING_LEFT, margin, unit))
-			.append(CSS.getParam(2, PADDING_RIGHT, margin, unit));
+				.append(CSS.getParam(2, PADDING_RIGHT, margin, unit));
 		buf.append(getParam(1, ""));
 		//h1
 		buf.append(getParam(1, "h1"))
-			.append(CSS.getParam(2, FONT_SIZE, 140, "%"))
-			//.append(getParam(2, TEXT_ALIGN, "center"))
-			.append(CSS.getParam(2, MARGIN_TOP, 10, unit))
-			.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
+				.append(CSS.getParam(2, FONT_SIZE, 140, "%"))
+				//.append(getParam(2, TEXT_ALIGN, "center"))
+				.append(CSS.getParam(2, MARGIN_TOP, 10, unit))
+				.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
 		buf.append(getParam(1, ""));
 		//h2
 		buf.append(getParam(1, "h2"))
-			.append(CSS.getParam(2, FONT_SIZE, 130, "%"))
-			.append(CSS.getParam(2, MARGIN_TOP, 10, unit))
-			.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
+				.append(CSS.getParam(2, FONT_SIZE, 130, "%"))
+				.append(CSS.getParam(2, MARGIN_TOP, 10, unit))
+				.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
 		buf.append(getParam(1, ""));
 		//h3
 		buf.append(getParam(1, "h3"))
-			.append(CSS.getParam(2, FONT_SIZE, 120, "%"))
-			.append(CSS.getParam(2, MARGIN_TOP, 6, unit))
-			.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
+				.append(CSS.getParam(2, FONT_SIZE, 120, "%"))
+				.append(CSS.getParam(2, MARGIN_TOP, 6, unit))
+				.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
 		buf.append(getParam(1, ""));
 		//h4
 		buf.append(getParam(1, "h4"))
-			.append(CSS.getParam(2, FONT_SIZE, 110, "%"))
-			.append(CSS.getParam(2, MARGIN_TOP, 6, unit))
-			.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
+				.append(CSS.getParam(2, FONT_SIZE, 110, "%"))
+				.append(CSS.getParam(2, MARGIN_TOP, 6, unit))
+				.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
 		buf.append(getParam(1, ""));
 		//h5
 		buf.append(getParam(1, "h5"))
-			.append(CSS.getParam(2, FONT_SIZE, 100, "%"))
-			.append(CSS.getParam(2, MARGIN_TOP, 6, unit))
-			.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
+				.append(CSS.getParam(2, FONT_SIZE, 100, "%"))
+				.append(CSS.getParam(2, MARGIN_TOP, 6, unit))
+				.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
 		buf.append(getParam(1, ""));
 		//h6
 		buf.append(getParam(1, "h6"))
-			.append(CSS.getParam(2, FONT_SIZE, 100, "%"))
-			.append(CSS.getParam(2, MARGIN_TOP, 6, unit))
-			.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
+				.append(CSS.getParam(2, FONT_SIZE, 100, "%"))
+				.append(CSS.getParam(2, MARGIN_TOP, 6, unit))
+				.append(CSS.getParam(2, MARGIN_BOTTOM, 1, unit));
 		buf.append(getParam(1, ""));
 		// links
 		if (isPanel && LaF.isDark()) {
 			buf.append(getParam(1, "a"))
-				.append(getParam(2, "color", "#e0ffff"));
+					.append(getParam(2, "color", "#e0ffff"));
 			buf.append(getParam(1, ""));
 		}
 		// paragraphe
 		buf.append(getParam(1, "p"))
-			.append(CSS.getParam(2, MARGIN_TOP, 0, unit))
-			.append(CSS.getParam(2, MARGIN_BOTTOM, 6, unit))
-			.append(getParam(2, TEXT_ALIGN, "justify"));
+				.append(CSS.getParam(2, MARGIN_TOP, 0, unit))
+				.append(CSS.getParam(2, MARGIN_BOTTOM, 6, unit))
+				.append(getParam(2, TEXT_ALIGN, "justify"));
 		buf.append(getParam(1, ""));
 		// blockquote
 		buf.append(getParam(1, "blockquote"))
-			.append(CSS.getParam(2, MARGIN_TOP, 0, unit))
-			.append(CSS.getParam(2, MARGIN_BOTTOM, 6, unit))
-			.append(CSS.getParam(2, MARGIN_RIGHT, 40, unit))
-			.append(CSS.getParam(2, MARGIN_LEFT, 40, unit))
-			.append(getParam(2, TEXT_ALIGN, "justify"))
-			.append(getParam(2, FONT_STYLE, "italic"));
+				.append(CSS.getParam(2, MARGIN_TOP, 0, unit))
+				.append(CSS.getParam(2, MARGIN_BOTTOM, 6, unit))
+				.append(CSS.getParam(2, MARGIN_RIGHT, 40, unit))
+				.append(CSS.getParam(2, MARGIN_LEFT, 40, unit))
+				.append(getParam(2, TEXT_ALIGN, "justify"))
+				.append(getParam(2, FONT_STYLE, "italic"));
 		buf.append(getParam(1, ""));
 		//nav bar
 		buf.append(getParam(1, "#navbar"))
-			.append(getParam(2, COLOR_BG, "lightgrey"))
-			.append(getParam(2, TEXT_ALIGN, "right"));
+				.append(getParam(2, COLOR_BG, "lightgrey"))
+				.append(getParam(2, TEXT_ALIGN, "right"));
 		buf.append(getParam(1, ""));
 		//ul
 		buf.append(getParam(1, "ul"))
-			.append(CSS.getParam(2, MARGIN_TOP, 2, unit))
-			.append(CSS.getParam(2, MARGIN_BOTTOM, 2, unit))
-			.append(CSS.getParam(2, MARGIN_LEFT, 15, unit));
+				.append(CSS.getParam(2, MARGIN_TOP, 2, unit))
+				.append(CSS.getParam(2, MARGIN_BOTTOM, 2, unit))
+				.append(CSS.getParam(2, MARGIN_LEFT, 15, unit));
 		buf.append(getParam(1, ""));
 		//ol
 		buf.append(getParam(1, "ol"))
-			.append(CSS.getParam(2, MARGIN_TOP, 2, unit))
-			.append(CSS.getParam(2, MARGIN_BOTTOM, 2, unit))
-			.append(CSS.getParam(2, MARGIN_LEFT, 15, unit));
+				.append(CSS.getParam(2, MARGIN_TOP, 2, unit))
+				.append(CSS.getParam(2, MARGIN_BOTTOM, 2, unit))
+				.append(CSS.getParam(2, MARGIN_LEFT, 15, unit));
 		buf.append(getParam(1, ""));
 		//table
 		buf.append(getParam(1, "table tr"))
-			.append(CSS.getParam(2, MARGIN, 0, unit))
-			.append(CSS.getParam(2, PADDING, 0, unit));
+				.append(CSS.getParam(2, MARGIN, 0, unit))
+				.append(CSS.getParam(2, PADDING, 0, unit));
 		buf.append(getParam(1, ""));
 		buf.append(getParam(1, "td"))
-			.append(CSS.getParam(2, MARGIN_RIGHT, 1, unit))
-			.append(CSS.getParam(2, PADDING, 1, unit));
+				.append(CSS.getParam(2, MARGIN_RIGHT, 1, unit))
+				.append(CSS.getParam(2, PADDING, 1, unit));
 		buf.append(getParam(1, ""));
 		buf.append(getParam(1, ".endnote"))
-			.append(getParam(2, FONT_SIZE, "0.5em"))
-			.append(getParam(2, "vertical-align: super;"));
+				.append(getParam(2, FONT_SIZE, "0.5em"))
+				.append(getParam(2, "vertical-align: super;"));
 		buf.append(getParam(1, ""));
 		buf.append(getParam(1, ".comment"))
-			.append(getParam(2, FONT_SIZE, "0.5em"))
-			.append(getParam(2, FONT_WEIGHT, "bold"))
-			.append(getParam(2, COLOR, "white"))
-			.append(getParam(2, COLOR_BG, "Red"))
-			.append(getParam(2, "vertical-align: super;"));
+				.append(getParam(2, FONT_SIZE, "0.5em"))
+				.append(getParam(2, FONT_WEIGHT, "bold"))
+				.append(getParam(2, COLOR, "white"))
+				.append(getParam(2, COLOR_BG, "Red"))
+				.append(getParam(2, "vertical-align: super;"));
 		buf.append(getParam(1, ""));
 		return buf.toString();
 	}
@@ -229,18 +229,18 @@ public class CSS {
 	 */
 	public static String forScenario(boolean force) {
 		String buf = "", unit = "pt";
-		Font font = App.getInstance().fonts.monoGet();
+		Font font = App.fonts.monoGet();
 		if (force) {
 			buf = "body {"
-				+ FONT_FAMILY + ": " + font.getFontName() + ";"
-				+ FONT_SIZE + ": " + font.getSize() + unit
-				+ "}\n"
-				+ "p {"
-				+ MARGIN_LEFT + ": 0.5cm;"
-				+ MARGIN_RIGHT + ": 0.5cm;"
-				+ MARGIN_TOP + ": " + font.getSize() / 2 + unit + ";"
-				+ MARGIN_BOTTOM + ": " + font.getSize() / 2 + unit + ";"
-				+ "}\n";
+					+ FONT_FAMILY + ": " + font.getFontName() + ";"
+					+ FONT_SIZE + ": " + font.getSize() + unit
+					+ "}\n"
+					+ "p {"
+					+ MARGIN_LEFT + ": 0.5cm;"
+					+ MARGIN_RIGHT + ": 0.5cm;"
+					+ MARGIN_TOP + ": " + font.getSize() / 2 + unit + ";"
+					+ MARGIN_BOTTOM + ": " + font.getSize() / 2 + unit + ";"
+					+ "}\n";
 			return (buf);
 		}
 		File file = new File(MainResources.class.getResource("css/scenario.css").getFile());
@@ -257,23 +257,23 @@ public class CSS {
 	public static String forEditor() {
 		StringBuilder b = new StringBuilder();
 		b.append("body {\n")
-			.append(getFontSize(App.getInstance().fonts.bookGet()))
-			.append("}\n");
+				.append(getFontSize(App.fonts.bookGet()))
+				.append("}\n");
 		b.append("a.endnote {\n")
-			.append(getParam("vertical-align", "super"))
-			.append(getParam(FONT_SIZE, "smaller"))
-			.append("}\n");
+				.append(getParam("vertical-align", "super"))
+				.append(getParam(FONT_SIZE, "smaller"))
+				.append("}\n");
 		b.append("a.comment {\n")
-			.append("vertical-align: super;\n")
-			.append(getParam(FONT_SIZE, "smaller"))
-			.append("font-weight: bold;\n")
-			.append(getParam(COLOR, "white"))
-			.append(getParam(COLOR_BG, "red"))
-			.append("}\n");
+				.append("vertical-align: super;\n")
+				.append(getParam(FONT_SIZE, "smaller"))
+				.append("font-weight: bold;\n")
+				.append(getParam(COLOR, "white"))
+				.append(getParam(COLOR_BG, "red"))
+				.append("}\n");
 		b.append("em {\n")
-			.append(getParam(COLOR_BG, "yellow"))
-			.append(getParam("font-style", "normal;"))
-			.append("}");
+				.append(getParam(COLOR_BG, "yellow"))
+				.append(getParam("font-style", "normal;"))
+				.append("}");
 		b.append(IOUtil.resourceRead("css/review.css", MainResources.class));
 		return b.toString();
 	}
@@ -342,10 +342,10 @@ public class CSS {
 	 */
 	public static String getHeadWithCss(Font font) {
 		String buf = Html.HEAD_B
-			+ Html.STYLE_B
-			+ CSS.getDefault(font, 0, false)
-			+ Html.STYLE_E
-			+ Html.HEAD_E;
+				+ Html.STYLE_B
+				+ CSS.getDefault(font, 0, false)
+				+ Html.STYLE_E
+				+ Html.HEAD_E;
 		return buf;
 	}
 
@@ -355,7 +355,7 @@ public class CSS {
 	 * @return
 	 */
 	public static String getHeadWithCss() {
-		return getHeadWithCss(App.getInstance().fonts.defGet());
+		return getHeadWithCss(App.fonts.defGet());
 	}
 
 }

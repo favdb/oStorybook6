@@ -25,6 +25,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -34,7 +35,6 @@ import storybook.db.abs.AbstractEntity;
 import storybook.db.scene.Scene;
 import storybook.tools.html.Html;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 
@@ -240,7 +240,7 @@ public class TypistInfo extends JPanel {
 		if (!links.isEmpty()) {
 			p.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 			for (AbstractEntity e : (List<AbstractEntity>) links) {
-				p.add(new JSLabel(e.getFullName()), MIG.WRAP);
+				p.add(new JLabel(e.getFullName()), MIG.WRAP);
 			}
 		} else {
 			p.setBorder(null);

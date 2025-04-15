@@ -20,10 +20,10 @@ import api.mig.swing.MigLayout;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
+import javax.swing.JLabel;
 import storybook.db.scene.Scene;
 import storybook.db.strand.Strand;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.panel.AbstractPanel;
 
@@ -71,7 +71,7 @@ public class ChronoStrand extends AbstractPanel {
 			setLayout(new MigLayout(MIG.FLOWX));
 			migValue = MIG.get(MIG.GROWX, MIG.WRAP);
 		}
-		JSLabel lb = new JSLabel(strand.getName());
+		JLabel lb = new JLabel(strand.getName());
 		lb.setBackground(strand.getJColor());
 		add(lb, migValue);
 		List<Scene> scenes = mainFrame.project.scenes.getWithDates();

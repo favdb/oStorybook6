@@ -1044,7 +1044,7 @@ public class SbViewFactory {
 			SbView view = (SbView) viewMap.getViewAtIndex(i);
 			if (isTable(view) && view.isLoaded()) {
 				AbsTable comp = (AbsTable) view.getComponent();
-				comp.saveTableDesign();
+				comp.tableDesignSave();
 			}
 		}
 		saveEpisodeDesign();
@@ -1067,7 +1067,7 @@ public class SbViewFactory {
 			if (table == null) {
 				return;
 			}
-			comp.saveTableDesign();
+			comp.tableDesignSave();
 		} catch (Exception e) {
 			LOG.err("SbViewFactory.saveTableDesign(view=" + view.getName() + ")", e);
 		}
@@ -1077,7 +1077,7 @@ public class SbViewFactory {
 		if (null == view) {
 			return;
 		}
-		((AbsTable) view.getComponent()).loadTableDesign();
+		((AbsTable) view.getComponent()).tableDesignLoad();
 	}
 
 	public void saveEpisodeDesign() {

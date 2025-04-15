@@ -17,6 +17,13 @@
  */
 package storybook.tools;
 
+import api.infonode.docking.DockingWindow;
+import api.infonode.docking.RootWindow;
+import api.infonode.docking.TabWindow;
+import api.infonode.docking.View;
+import api.infonode.docking.WindowBar;
+import api.infonode.docking.properties.TabWindowProperties;
+import api.infonode.docking.util.StringViewMap;
 import i18n.I18N;
 import java.awt.event.ActionEvent;
 import java.io.BufferedInputStream;
@@ -34,13 +41,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import api.infonode.docking.DockingWindow;
-import api.infonode.docking.RootWindow;
-import api.infonode.docking.TabWindow;
-import api.infonode.docking.View;
-import api.infonode.docking.WindowBar;
-import api.infonode.docking.properties.TabWindowProperties;
-import api.infonode.docking.util.StringViewMap;
 import resources.MainResources;
 import storybook.App;
 import storybook.Pref;
@@ -60,7 +60,7 @@ import storybook.ui.panel.AbstractPanel;
 public class DockUtil {
 
 	private static final String TT = "DockUtil",
-		LAYOUT_EXT = ".layout";
+			LAYOUT_EXT = ".layout";
 
 	private DockUtil() {
 		// nothing
@@ -149,7 +149,7 @@ public class DockUtil {
 			}
 			byte[] ba = bos.toByteArray();
 			File f = new File(EnvUtil.getPrefDir().getAbsolutePath()
-				+ File.separator + name + LAYOUT_EXT);
+					+ File.separator + name + LAYOUT_EXT);
 			try (FileOutputStream fos = new FileOutputStream(f)) {
 				fos.write(ba);
 			}
@@ -161,7 +161,7 @@ public class DockUtil {
 			App.getInstance().reloadStatusBars();
 		} catch (IOException e) {
 			LOG.err("*** " + TT + ".saveLoayout(" + mainFrame.getName()
-				+ "," + name + ") Exception", e);
+					+ "," + name + ") Exception", e);
 		}
 	}
 
@@ -188,7 +188,7 @@ public class DockUtil {
 		menu.removeAll();
 		for (String key : list) {
 			JMenuItem m = new JMenuItem();
-			m.setFont(App.getInstance().fonts.defGet());
+			m.setFont(App.fonts.defGet());
 			m.setName(key);
 			m.setText(I18N.getMsg("docking.layout." + key));
 			m.addActionListener((ActionEvent evt) -> {
@@ -210,7 +210,7 @@ public class DockUtil {
 		//LOG.trace(TT+".loadLayout(mainFrame, name='"+name+"')");
 		try {
 			Path path = Paths.get(EnvUtil.getPrefDir().getAbsolutePath()
-				+ File.separator + name + LAYOUT_EXT);
+					+ File.separator + name + LAYOUT_EXT);
 			if (!path.toFile().exists()) {
 				LOG.err("Layout not find: " + path.toString());
 				return false;
@@ -231,7 +231,7 @@ public class DockUtil {
 			return true;
 		} catch (IOException ex) {
 			LOG.err("*** " + TT + ".loadLoayout(" + mainFrame.getName()
-				+ "," + name + ") Exception :" + ex.getMessage());
+					+ "," + name + ") Exception :" + ex.getMessage());
 		}
 		return false;
 	}

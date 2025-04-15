@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.ui.panel;
 
+import api.mig.swing.MigLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -25,10 +26,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import api.mig.swing.MigLayout;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import resources.icons.IconUtil;
 import storybook.Const;
 import storybook.tools.html.Html;
+import storybook.tools.net.Net;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.swing.LaF;
 import storybook.tools.swing.SwingUtil;
@@ -76,6 +79,12 @@ public class BlankPanel extends AbstractPanel {
 		tp.setEditable(false);
 		tp.setText(Const.getGpl());
 		tp.setCaretPosition(0);
+		tp.addHyperlinkListener((HyperlinkListener) e -> {
+			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+				//LOG.trace(TT + " opening URL in default navigator");
+				Net.openUrl(e);
+			}
+		});
 		JScrollPane scroller = new JScrollPane(tp);
 		scroller.setBorder(BorderFactory.createLineBorder(ColorUtil.darker(Color.green, 0.5)));
 		scroller.setMaximumSize(SwingUtil.getScreenSize());

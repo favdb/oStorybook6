@@ -56,7 +56,7 @@ import storybook.tools.net.Updater;
 import storybook.tools.spell.SpellUtil;
 import storybook.tools.swing.LaF;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.splash.WaitingSplash;
+import storybook.tools.swing.splash.Waiting;
 import storybook.tools.synonyms.Synonyms;
 import storybook.ui.MainFrame;
 
@@ -135,18 +135,48 @@ public class App extends Component {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		LOG.log(TT + "main(...)");
-		LOG.init();
-		initPref();
-		LaF.init();
-		fonts = new AppFont();
+		//LOG.log("Starting main");
+		initArgs(args);//initialize args
+		initPref();//initialize Preferences
+		LaF.init();//initialize Look and Feel
+		fonts = new AppFont();//initialize Fonts
+		String tempDir = System.getProperty("java.io.tmpdir");
+		String fn = tempDir + File.separator + Const.getName() + Const.getVersion() + ".lck";
+		if (!lockInstance(fn)) {
+			Object[] options = {I18N.getMsg("running.remove"), I18N.getMsg("cancel")};
+			int n = JOptionPane.showOptionDialog(null,
+					I18N.getMsg("running.msg"),
+					I18N.getMsg("running.title"),
+					JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+			if (n == 1) {
+				File file = new File(fn);
+				if (file.exists() && file.canWrite() && !file.delete()) {
+					JOptionPane.showMessageDialog(null, "Delete failed",
+							"File\n" + file.getAbsolutePath() + "\ncould not be deleted.",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			return;
+		}
+		dictaphoneInit();
+		SwingUtilities.invokeLater(() -> {
+			App app = App.getInstance();
+			app.initI18N();
+			app.initDefault();
+			app.initFile(fileToOpen);
+			if (startIdeabox) {
+				app.ideaboxStart();
+			}
+		});
+	}
+
+	private static void initArgs(String[] args) {
 		String vargs = String.join(" ", args);
 		if (vargs.length() == 0) {
 			vargs = "no option";
 		}
 		LOG.log(Const.getFullName() + " starting with: " + vargs);
-		String tempDir = System.getProperty("java.io.tmpdir");
-		String fn = tempDir + File.separator + Const.getName() + Const.getVersion() + ".lck";
 		List<String> mode = new ArrayList<>();
 		if (args.length > 0) {
 			for (int i = 0; i < args.length; i++) {
@@ -154,10 +184,6 @@ public class App extends Component {
 					case "--trace":
 						mode.add("trace");
 						LOG.setTrace();
-						break;
-					case "--hibernate":
-						mode.add("hibernate");
-						LOG.setTraceHibernate();
 						break;
 					case "--dev":
 						mode.add("dev");
@@ -188,41 +214,17 @@ public class App extends Component {
 						//perhaps the file to open
 						fileToOpen = new File(args[i]);
 						if (!fileToOpen.exists()
-							|| (!fileToOpen.getAbsolutePath().endsWith(".osbk")
-							&& !fileToOpen.getAbsolutePath().endsWith(".xml"))) {
+								|| (!fileToOpen.getAbsolutePath().endsWith(".osbk")
+								&& !fileToOpen.getAbsolutePath().endsWith(".xml"))) {
 							fileToOpen = null;
 						}
 						break;
 				}
 			}
 			if (!mode.isEmpty()) {
-				LOG.trace("Set " + ListUtil.join(mode, ", ") + " mode");
+				LOG.trace("Set mode to: " + ListUtil.join(mode, ", "));
 			}
 		}
-		if (!lockInstance(fn)) {
-			Object[] options = {I18N.getMsg("running.remove"), I18N.getMsg("cancel")};
-			int n = JOptionPane.showOptionDialog(null,
-				I18N.getMsg("running.msg"),
-				I18N.getMsg("running.title"),
-				JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
-			if (n == 1) {
-				File file = new File(fn);
-				if (file.exists() && file.canWrite() && !file.delete()) {
-					JOptionPane.showMessageDialog(null, "Delete failed",
-						"File\n" + file.getAbsolutePath() + "\ncould not be deleted.",
-						JOptionPane.ERROR_MESSAGE);
-				}
-			}
-			return;
-		}
-		SwingUtilities.invokeLater(() -> {
-			App app = App.getInstance();
-			app.init(fileToOpen);
-			if (startIdeabox) {
-				app.ideaboxStart();
-			}
-		});
 	}
 
 	/**
@@ -235,8 +237,8 @@ public class App extends Component {
 	/**
 	 * default initialization
 	 */
-	private void init() {
-		//LOG.printInfos(TT + "init()");
+	private void initDefault() {
+		LOG.trace(TT + "initDefault()");
 		Shortcuts.init();
 		assistant = new Assistant();
 		String s = preferences.getString(Pref.KEY.ASSISTANT);
@@ -252,7 +254,7 @@ public class App extends Component {
 			lang = spelling.substring(0, 2);
 		}
 		Synonyms.init(getHomeDir().getAbsolutePath()
-			+ File.separator + ".storybook5/dicts/", lang);
+				+ File.separator + ".storybook5/dicts/", lang);
 	}
 
 	/**
@@ -260,16 +262,15 @@ public class App extends Component {
 	 *
 	 * @param toOpen
 	 */
-	private void init(File toOpen) {
-		LOG.trace(TT + "init(toOpen=" + (toOpen != null ? toOpen.toString() : "null") + ")");
-		init();
-		dictaphoneInit();
+	private void initFile(File toOpen) {
+		LOG.trace(TT + "initFile(toOpen=" + (toOpen != null ? toOpen.toString() : "null") + ")");
 		try {
 			// first start dialog
 			if (preferences.getBoolean(Pref.KEY.FIRST_START, true)) {
-				LOG.trace("call First Start Dialog");
+				LOG.log("open First Start Dialog");
 				FirstStartDlg dlg = new FirstStartDlg();
 				dlg.setVisible(true);
+				LOG.log("setting preferences, font size and icon size");
 				preferences.setBoolean(Pref.KEY.FIRST_START, false);
 				fonts.defRestore();
 				IconUtil.setDefSize();
@@ -280,7 +281,7 @@ public class App extends Component {
 				LOG.trace("trying to open " + toOpen.getAbsolutePath());
 				dbFile = new Project(toOpen);
 			} else if (preferences.getBoolean(Pref.KEY.OPEN_LASTFILE, false)
-				&& !preferences.getString(Pref.KEY.LASTOPEN_FILE).isEmpty()) {
+					&& !preferences.getString(Pref.KEY.LASTOPEN_FILE).isEmpty()) {
 				String str = preferences.getString(Pref.KEY.LASTOPEN_FILE);
 				LOG.trace("loading last file... " + str);
 				dbFile = new Project(new File(str));
@@ -306,7 +307,7 @@ public class App extends Component {
 	 * initialize the I18N with preferences
 	 */
 	public void initI18N() {
-		//LOG.printInfos(TT+"initI18N()");
+		//LOG.trace(TT + "initI18N()");
 		Locale locale = Locale.getDefault();
 		try {
 			String localeStr = preferences.getString(Pref.KEY.LANGUAGE, "en_US");
@@ -408,9 +409,9 @@ public class App extends Component {
 			titlename += StringUtil.capitalize(z);
 		}
 		String filename = EnvUtil.getHomeDir().getPath()
-			+ File.separator
-			+ titlename
-			+ STORYBOOK.FILE_EXT_OSBK.toString();
+				+ File.separator
+				+ titlename
+				+ STORYBOOK.FILE_EXT_OSBK.toString();
 		File f = IOUtil.fileSelect(null, filename, "osbk", "osbk", "file.create");
 		if (f == null) {
 			return "";
@@ -478,7 +479,7 @@ public class App extends Component {
 	 * create a new project file
 	 */
 	public void createNewProject() {
-		LOG.trace(TT + "createNewFile()");
+		//LOG.trace(TT + "createNewFile()");
 		ProjectNewDlg dlg = new ProjectNewDlg(mainFrames.get(0));
 		dlg.setVisible(true);
 		if (dlg.isCanceled()) {
@@ -494,9 +495,9 @@ public class App extends Component {
 		File fOsbk = new File(filename + STORYBOOK.FILE_EXT_OSBK.toString());
 		if (fOsbk.exists()) {
 			if (ConfirmDlg.show(null,
-				I18N.getMsg("file.save.overwrite.title"),
-				I18N.getMsg("file.exists", filename),
-				false) == ConfirmDlg.CANCEL) {
+					I18N.getMsg("file.save.overwrite.title"),
+					I18N.getMsg("file.exists", filename),
+					false) == ConfirmDlg.CANCEL) {
 				return;
 			}
 			IOUtil.fileDelete(fOsbk);
@@ -549,7 +550,7 @@ public class App extends Component {
 	 * @return
 	 */
 	public boolean openProject(final Project project, String oldPath, String newPath) {
-		LOG.trace(TT + "openProject(project, oldPath=" + oldPath + ", newPath=" + newPath + ")");
+		//LOG.trace(TT + "openProject(project, oldPath=" + oldPath + ", newPath=" + newPath + ")");
 		boolean rc = openProject(project);
 		SwingUtilities.invokeLater(() -> App.changingProject(project, oldPath, newPath));
 		return rc;
@@ -565,14 +566,14 @@ public class App extends Component {
 	public static void changingProject(Project project, String oldPath, String newPath) {
 		MainFrame mf = null;
 		for (MainFrame m : App.getInstance().mainFrames) {
-			LOG.trace("changingDbFile h2File="
-				+ project.getName() + ", m.dbFile=" + m.getProject().getName());
+			//LOG.trace("changingDbFile h2File="
+			//		+ project.getName() + ", m.dbFile=" + m.getProject().getName());
 			if (m.getProject().equals(project)) {
 				mf = m;
 			}
 		}
 		if (mf == null) {
-			LOG.trace("changingDbFile mf=null");
+			//LOG.trace("changingDbFile mf=null");
 			return;
 		}
 		mf.changePath(oldPath, newPath);
@@ -597,27 +598,26 @@ public class App extends Component {
 		}
 		try {
 			setWaitCursor();
-			final WaitingSplash dlg
-				= new WaitingSplash(null, I18N.getMsg("loading", project.getFilename()));
+			Waiting dlg = new Waiting(null, I18N.getMsg("loading", project.getFilename()));
 			SwingUtilities.invokeLater(() -> {
 				try {
-					LOG.trace(">>> open a Project");
+					//LOG.trace(">>> open a Project");
 					setWaitCursor();
-					LOG.trace("--> Initialize MainFrame...");
+					dlg.setText("--> Initialize MainFrame...");
 					MainFrame newMainFrame = new MainFrame(project);
-					LOG.trace("--> Adding MainFrame...");
+					dlg.setText("--> Adding MainFrame...");
 					addMainFrame(newMainFrame);
-					LOG.trace("--> Close blank...");
+					//LOG.trace("--> Close blank...");
 					closeBlank();
-					LOG.trace("--> Update preferences...");
+					dlg.setText("--> Update preferences...");
 					recentfilesUpdate(project);
-					LOG.trace("--> Reload menu bars...");
+					dlg.setText("--> Reload menu bars...");
 					reloadMenuBars();
 					setDefaultCursor();
-					LOG.trace("<<< open a Project");
+					dlg.setText("<<< open a Project");
 				} catch (Exception e) {
 					ExceptionDlg.show(this.getClass().getSimpleName()
-						+ ".openProject(" + project.getFilename() + ")", e);
+							+ ".openProject(" + project.getFilename() + ")", e);
 				}
 				dlg.dispose();
 			});
@@ -671,11 +671,11 @@ public class App extends Component {
 			}
 		}
 		if (!mainFrames.isEmpty()
-			&& preferences.getBoolean(Pref.KEY.CONFIRM_EXIT)
-			&& ConfirmDlg.show(mainFrames.get(0),
-				I18N.getMsg("exit"),
-				I18N.getMsg("want.exit"),
-				false) == ConfirmDlg.CANCEL) {
+				&& preferences.getBoolean(Pref.KEY.CONFIRM_EXIT)
+				&& ConfirmDlg.show(mainFrames.get(0),
+						I18N.getMsg("exit"),
+						I18N.getMsg("want.exit"),
+						false) == ConfirmDlg.CANCEL) {
 			return;
 		}
 		preferences.save();
@@ -857,6 +857,7 @@ public class App extends Component {
 			m.getMainMenu().enableCopyEntity(mainFrames.size() > 1);
 		}
 	}
+	/////// end Copy/Paste functions
 
 	/**
 	 * import a document as an OSBK project
@@ -869,9 +870,20 @@ public class App extends Component {
 		MainFrame newMainFrame = initNewFile(proj);
 		newMainFrame.getBookModel().initEntities(hi.getTitle());
 		newMainFrame.project.book.param.getParamLayout()
-			.setSceneSeparatorValue(preferences.getString(Pref.KEY.SCENE_SEPARATOR));
+				.setSceneSeparatorValue(preferences.getString(Pref.KEY.SCENE_SEPARATOR));
 		hi.getAll(proj);
 		initNewFileEnd(newMainFrame, proj, hi.getTitle());
+	}
+
+	public void refreshLanguage() {
+		JOptionPane.showMessageDialog(this,
+				I18N.getMsg("preferences.lang.change"),
+				I18N.getMsg("preferences"),
+				JOptionPane.YES_OPTION);
+		// change all tables headers
+		for (MainFrame m : mainFrames) {
+			m.updateLanguage();
+		}
 	}
 
 }

@@ -132,7 +132,7 @@ public class I18N {
 	}
 
 	public static final void initMessages(Locale locale) {
-		//LOG.trace(TT+".initMessages(locale="+locale.toString()+")");
+		LOG.trace(TT + ".initMessages(locale=" + locale.toString() + ")");
 		if (msgType == '0' || msgType == 'i') {
 			initMsgInternal(locale);
 			initMsgProp();

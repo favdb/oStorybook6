@@ -43,7 +43,6 @@ import storybook.db.scene.SceneEdit;
 import storybook.tools.html.CSS;
 import storybook.tools.html.Html;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.Ui;
@@ -61,7 +60,7 @@ public class Markdown extends JPanel implements ActionListener, CaretListener {
 	private String original;
 	private AbstractPanel caller;
 	private int maxLength;
-	private JSLabel lbMessage;
+	private JLabel lbMessage;
 	private JToolBar toolbar;
 	private JScrollPane textScroll, htmlScroll;
 	private JButton btText, btHtml, btBoth;
@@ -126,6 +125,7 @@ public class Markdown extends JPanel implements ActionListener, CaretListener {
 	 * @param type: type of textArea, may be textArea or html
 	 * @param text: textArea content
 	 */
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public Markdown(String name, String type, String text) {
 		this(name);
 		setContentType(type);
@@ -259,8 +259,8 @@ public class Markdown extends JPanel implements ActionListener, CaretListener {
 	}
 
 	private void init() {
-		setFont(App.getInstance().fonts.monoGet());
-		setEditorFont(App.getInstance().fonts.monoGet());
+		setFont(App.fonts.monoGet());
+		setEditorFont(App.fonts.monoGet());
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
 		textArea.addCaretListener(this);
@@ -284,7 +284,7 @@ public class Markdown extends JPanel implements ActionListener, CaretListener {
 		add(px, MIG.get(MIG.SPAN, MIG.GROW));
 		setContentType("text/plain");
 		modified = false;
-		lbMessage = new JSLabel("", JLabel.RIGHT);
+		lbMessage = new JLabel("", JLabel.RIGHT);
 		add(lbMessage, "shrink, pos null null 100% 100%");
 	}
 
@@ -294,13 +294,13 @@ public class Markdown extends JPanel implements ActionListener, CaretListener {
 		toolbar.setFloatable(false);
 		// show textArea
 		btText = Ui.initButton(ACTION.BT_LEFT.toString(),
-		   "", ICONS.K.SCREEN_NORMAL, "screen.text", this);
+				"", ICONS.K.SCREEN_NORMAL, "screen.text", this);
 		toolbar.add(btText);
 		btHtml = Ui.initButton(ACTION.BT_RIGHT.toString(),
-		   "", ICONS.K.SCREEN_RIGHT, "screen.preview", this);
+				"", ICONS.K.SCREEN_RIGHT, "screen.preview", this);
 		toolbar.add(btHtml);
 		btBoth = Ui.initButton(ACTION.BT_BOTH.toString(),
-		   "", ICONS.K.SCREEN_BOTH, "screen.both", this);
+				"", ICONS.K.SCREEN_BOTH, "screen.both", this);
 		toolbar.add(btBoth);
 		//toolbar.add(Ui.initButton("btHelp", "", ICONS.K.HELP, "markdown.help"), MIG.RIGHT);
 	}
@@ -373,7 +373,7 @@ public class Markdown extends JPanel implements ActionListener, CaretListener {
 				lbMessage.setForeground(Color.black);
 			}
 			lbMessage.setText(I18N.getMsg("editor.letters.left", (len + "/" + maxLength))
-			   + ", " + I18N.getMsg("editor.words") + ": " + TextUtil.countWords(getText()));
+					+ ", " + I18N.getMsg("editor.words") + ": " + TextUtil.countWords(getText()));
 		}
 	}
 
@@ -421,12 +421,12 @@ public class Markdown extends JPanel implements ActionListener, CaretListener {
 			return ("");
 		}
 		boolean isBold = false,
-		   isUnderline = false,
-		   isItalic = false,
-		   isDidascalie = false,
-		   isDialog = false,
-		   isTitle = false,
-		   isPara = false;
+				isUnderline = false,
+				isItalic = false,
+				isDidascalie = false,
+				isDialog = false,
+				isTitle = false,
+				isPara = false;
 		int title = 0;
 		String[] lines = mark.split("\\r?\\n");
 		StringBuilder html = new StringBuilder();

@@ -85,6 +85,9 @@ public class IntensityPanel extends JPanel {
 	}
 
 	public Color getColor() {
+		if (cbList.getSelectedIndex() < 0) {
+			cbList.setSelectedIndex(0);
+		}
 		return colors[cbList.getSelectedIndex()];
 	}
 
@@ -102,7 +105,7 @@ public class IntensityPanel extends JPanel {
 
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index,
-			boolean sel, boolean focus) {
+				boolean sel, boolean focus) {
 			JLabel lb = (JLabel) super.getListCellRendererComponent(list, value, index, sel, focus);
 			if (value instanceof Integer) {
 				Color color = colors[(Integer) value];

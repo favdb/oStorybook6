@@ -21,14 +21,14 @@ import i18n.I18N;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import storybook.App;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MainFrame;
-import storybook.ui.panel.AbstractOptions;
 import storybook.ui.SbView;
+import storybook.ui.panel.AbstractOptions;
 
 /**
  *
@@ -53,7 +53,7 @@ public class TreeOpt extends AbstractOptions implements CaretListener, ActionLis
 	public void initUi() {
 		setLayout(new MigLayout("wrap,fill"));
 		// tree text troncation
-		add(new JSLabel(I18N.getMsg("tree.trunc")));
+		add(new JLabel(I18N.getMsg("tree.trunc")));
 		cbChar = new JCheckBox(I18N.getMsg("tree.trunc.char"));
 		cbChar.addActionListener(this);
 		add(cbChar, "split 3");
@@ -62,7 +62,7 @@ public class TreeOpt extends AbstractOptions implements CaretListener, ActionLis
 		tfChar.setColumns(3);
 		tfChar.setText("8");
 		add(tfChar);
-		add(new JSLabel(I18N.getMsg("characters")));
+		add(new JLabel(I18N.getMsg("characters")));
 		if (App.preferences.treeviewGetTrunc()) {
 			cbChar.setSelected(true);
 			tfChar.setText("" + App.preferences.treeviewGetChar());

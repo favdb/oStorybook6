@@ -56,30 +56,30 @@ import storybook.ui.MainFrame;
 public class AbsColumn {
 
 	public static final String AL_CENTER = "center",
-	   TCR_NAME = "NameTCR",
-	   TCR_HIDE = "hide",
-	   //SORTABLE = "sort",
-	   TCR_ATTRIBUTES = "AttributesTCR",
-	   TCR_BOOLEAN = "BooleanTCR",
-	   TCR_CATEGORY = "CategoryTCR",
-	   TCR_ENTITY = "EntityTCR",
-	   TCR_ENTITIES = "EntitiesTCR",
-	   TCR_EVENT = "EventTCR",
-	   TCR_GENDER = "GenderTCR",
-	   TCR_HTML = "HtmlTCR",
-	   TCR_ID = "IdTCR",
-	   TCR_STATUS = "StatusTCR",
-	   NUMERIC_EDITABLE = "NumericEditable",
-	   NUM_LONG = "Long",
-	   NUMERIC_RENDERER = "NumericRenderer",
-	   NUMERIC = "Numeric",
-	   TCR_DATE = "Date",
-	   TCR_DATE_EDITABLE = "DateEditable",
-	   TCR_DAY = "Day",
-	   TCR_DAY_EDITABLE = "DayEditable",
-	   TCR_ICON = "Icon",
-	   TCR_COLOR = "Color",
-	   NO_SORT = "noSort";
+			TCR_NAME = "NameTCR",
+			TCR_HIDE = "hide",
+			//SORTABLE = "sort",
+			TCR_ATTRIBUTES = "AttributesTCR",
+			TCR_BOOLEAN = "BooleanTCR",
+			TCR_CATEGORY = "CategoryTCR",
+			TCR_ENTITY = "EntityTCR",
+			TCR_ENTITIES = "EntitiesTCR",
+			TCR_EVENT = "EventTCR",
+			TCR_GENDER = "GenderTCR",
+			TCR_HTML = "HtmlTCR",
+			TCR_ID = "IdTCR",
+			TCR_STATUS = "StatusTCR",
+			NUMERIC_EDITABLE = "NumericEditable",
+			NUM_LONG = "Long",
+			NUMERIC_RENDERER = "NumericRenderer",
+			NUMERIC = "Numeric",
+			TCR_DATE = "Date",
+			TCR_DATE_EDITABLE = "DateEditable",
+			TCR_DAY = "Day",
+			TCR_DAY_EDITABLE = "DayEditable",
+			TCR_ICON = "Icon",
+			TCR_COLOR = "Color",
+			NO_SORT = "noSort";
 
 	private final int id;
 	private String name;
@@ -95,11 +95,13 @@ public class AbsColumn {
 	private int align = SwingConstants.LEFT;
 	private boolean sortable = true;
 	private MainFrame mainFrame;
+	private String code;
 
 	public AbsColumn(MainFrame mainFrame, List<AbsColumn> cols, DATA data) {
 		this.mainFrame = mainFrame;
 		this.id = cols.size();
 		this.name = data.i18n();
+		this.code = data.name();
 	}
 
 	public AbsColumn(MainFrame mainFrame, List<AbsColumn> cols, String data, String... opt) {

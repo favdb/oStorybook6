@@ -28,6 +28,7 @@ import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
@@ -55,7 +56,6 @@ import storybook.tools.TextUtil;
 import storybook.tools.html.Html;
 import storybook.tools.swing.FontUtil;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import static storybook.ui.Ui.MINIMUM_SIZE;
@@ -92,12 +92,12 @@ public class ReplaceDlg extends AbsDialog {
 
 	@Override
 	public void initUi() {
-		JSLabel lb1 = new JSLabel(I18N.getMsg("search.words"));
+		JLabel lb1 = new JLabel(I18N.getMsg("search.words"));
 		txWords = new JTextField(32);
 		txWords.addCaretListener((CaretEvent evt) -> {
 			checkIfOk();
 		});
-		JSLabel lb2 = new JSLabel(I18N.getMsg("replace.bywords"));
+		JLabel lb2 = new JLabel(I18N.getMsg("replace.bywords"));
 		txByWords = new JTextField(32);
 		txByWords.addCaretListener((CaretEvent evt) -> {
 			checkIfOk();
@@ -118,7 +118,7 @@ public class ReplaceDlg extends AbsDialog {
 			jPanel1.add(cb);
 			cbList.add(cb);
 		}
-		jPanel1.add(new JSLabel(""), MIG.WRAP);
+		jPanel1.add(new JLabel(""), MIG.WRAP);
 		jPanel1.add(btAll, MIG.get(MIG.SPAN, MIG.RIGHT));
 
 		btReplace = new JButton(I18N.getMsg("find"));
@@ -314,14 +314,14 @@ public class ReplaceDlg extends AbsDialog {
 		int finds = 0;
 		for (Scene entity : entities) {
 			if (searchWords(entity.toCsv(" ", " ", "\t"))
-			   || searchWordsHtml(entity.getSummary())) {
+					|| searchWordsHtml(entity.getSummary())) {
 				finds++;
 			}
 		}
 		doTitle("scene", finds);
 		for (Scene entity : entities) {
 			if (searchWords(entity.toCsv(" ", " ", "\t"))
-			   || searchWordsHtml(entity.getSummary())) {
+					|| searchWordsHtml(entity.getSummary())) {
 				if (finds == 0) {
 					doNext();
 				}
@@ -507,7 +507,7 @@ public class ReplaceDlg extends AbsDialog {
 	}
 
 	private void doTitle(String msg, int finds) {
-		JSLabel lb = new JSLabel(I18N.getMsg(msg));
+		JLabel lb = new JLabel(I18N.getMsg(msg));
 		lb.setFont(FontUtil.getBold());
 		resultat.add(lb);
 		if (finds == 0) {
@@ -523,14 +523,14 @@ public class ReplaceDlg extends AbsDialog {
 	}
 
 	private void doEmpty() {
-		JSLabel r = new JSLabel(I18N.getMsg("search.empty"));
+		JLabel r = new JLabel(I18N.getMsg("search.empty"));
 		resultat.add(r, MIG.WRAP);
 	}
 
 	private void doEntity(String nature, String str, AbstractEntity entity) {
-		resultat.add(new JSLabel(" "), MIG.RIGHT);
-		JSLabel r = new JSLabel(str);
-		JSLabel doOk = new JSLabel(IconUtil.getIconSmall(ICONS.K.OK));
+		resultat.add(new JLabel(" "), MIG.RIGHT);
+		JLabel r = new JLabel(str);
+		JLabel doOk = new JLabel(IconUtil.getIconSmall(ICONS.K.OK));
 		doOk.setVisible(false);
 		JButton bt = new JButton(IconUtil.getIconSmall(ICONS.K.RENAME));
 		bt.setName("btReplace_" + nature);
@@ -545,11 +545,11 @@ public class ReplaceDlg extends AbsDialog {
 	}
 
 	private void doNext() {
-		JSLabel r = new JSLabel(" ");
+		JLabel r = new JLabel(" ");
 		resultat.add(r, MIG.WRAP);
 	}
 
-	private void replace(AbstractEntity entity, JButton bt, JSLabel doOk) {
+	private void replace(AbstractEntity entity, JButton bt, JLabel doOk) {
 		words = txWords.getText();
 		bywords = txByWords.getText();
 		switch (Book.getTYPE(entity)) {

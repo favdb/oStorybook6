@@ -44,7 +44,6 @@ import storybook.dialog.OptionsDlg;
 import storybook.tools.ViewUtil;
 import storybook.tools.swing.LaF;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.SbView;
@@ -277,7 +276,7 @@ public class BookPanel extends AbstractScrollPanel {
 			}
 		}
 		if (panel.getComponentCount() == 0) {
-			panel.add(new JSLabel(I18N.getMsg("warning.no.scenes")));
+			panel.add(new JLabel(I18N.getMsg("warning.no.scenes")));
 		}
 		panel.revalidate();
 	}

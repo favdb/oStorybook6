@@ -21,6 +21,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import javax.swing.Icon;
 
 /**
@@ -87,6 +93,20 @@ public class ColorIcon implements Icon {
 		graphics.setColor(color);
 		graphics.drawRect(x, y, width, height);
 		graphics.fillRect(x, y, width, height);
+	}
+
+	public Image toImage() {
+		int w = getIconWidth();
+		int h = getIconHeight();
+		GraphicsEnvironment ge
+				= GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice gd = ge.getDefaultScreenDevice();
+		GraphicsConfiguration gc = gd.getDefaultConfiguration();
+		BufferedImage image = gc.createCompatibleImage(w, h);
+		Graphics2D g = image.createGraphics();
+		paintIcon(null, g, 0, 0);
+		g.dispose();
+		return image;
 	}
 
 }

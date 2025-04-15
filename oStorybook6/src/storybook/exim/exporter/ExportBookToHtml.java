@@ -37,6 +37,7 @@ import storybook.db.book.Book;
 import storybook.db.book.BookParamExport;
 import storybook.db.book.BookParamLayout;
 import storybook.db.book.BookParamWeb;
+import storybook.db.book.WEB_SUMMARY;
 import storybook.db.chapter.Chapter;
 import storybook.db.chapter.Chapters;
 import storybook.db.endnote.Endnote;
@@ -69,7 +70,7 @@ import storybook.ui.MainFrame;
 public class ExportBookToHtml extends AbstractExport {
 
 	private static final String TT = "ExportBookToHtml.",
-		ENDNOTEFILE = "endnote.html";
+			ENDNOTEFILE = "endnote.html";
 	private Part onlyPart = null;
 	private Chapter chapterFirst, chapterLast, chapterPrior, chapterNext, chapterCur;
 	private Scene scenePrior, sceneNext;
@@ -80,11 +81,20 @@ public class ExportBookToHtml extends AbstractExport {
 	private List<Endnote> endnotes;
 	private StringBuilder buffer = new StringBuilder();
 	private boolean bSeparator, tocLink = false, toFile = false,
-		review = false, withExternal = false;
+			review = false, withExternal = false;
 	private String sceneSeparator = Const.SCENE_SEPARATOR, imageDir;
 	private Chapter lastChapter;
 	private BookParamLayout layout;
 	private BookParamWeb web;
+	private boolean advanced = false;
+
+	private void setAdvanced() {
+		advanced = true;
+	}
+
+	private boolean isAdvanced() {
+		return advanced;
+	}
 
 	enum NAV {
 		HOME,
@@ -161,11 +171,14 @@ public class ExportBookToHtml extends AbstractExport {
 		//LOG.trace(TT + "toFile(mainFrame)");
 		ExportBookToHtml exp = new ExportBookToHtml(mainFrame);
 		exp.withExternal = true;
+		if (adv) {
+			exp.setAdvanced();
+		}
 		boolean rc = exp.writeFile();
 		if (adv) {
 			// first copy the banner to the Images directory
 			if (exp.web.getBanner()
-				&& !exp.web.getBannerImg().isEmpty()) {
+					&& !exp.web.getBannerImg().isEmpty()) {
 				File src = new File(exp.web.getBannerImg());
 				File dest = new File(exp.imageDir + File.separator + src.getName());
 				IOUtil.fileCopy(src, dest);
@@ -178,6 +191,14 @@ public class ExportBookToHtml extends AbstractExport {
 			createHome(exp);
 			createSummary(exp, adv);
 			createCover(exp);
+			if (exp.param.isMulti() && !exp.param.getHtmlNav()) {
+				// context multi file && not nav bar then replace index.html by home.html
+				//delete index.html
+				File indexFile = new File(exp.param.getDirectory() + "/" + "index.html");
+				indexFile.delete();
+				File homeFile = new File(exp.param.getDirectory() + "/" + "home.html");
+				homeFile.renameTo(indexFile);
+			}
 		}
 		return rc;
 	}
@@ -188,7 +209,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @param exp
 	 */
 	private static void createHome(ExportBookToHtml exp) {
-		HtmlHome.write(exp);
+		HtmlHome.write2(exp);
 	}
 
 	/**
@@ -200,15 +221,15 @@ public class ExportBookToHtml extends AbstractExport {
 	private static void createSummary(ExportBookToHtml exp, boolean adv) {
 		StringBuilder html = new StringBuilder();
 		html.append(Html.DOCTYPE)
-			.append(Html.HTML_B_LANG)
-			.append(Html.META_UTF8)
-			.append(getCssSummary(exp.book.param.getParamWeb()))
-			.append(Html.HEAD_E)
-			.append(Html.BODY_B)
-			.append(exp.tocBookGet(0, adv))
-			.append(Html.BODY_E).append(Html.HTML_E);
+				.append(Html.HTML_B_LANG)
+				.append(Html.META_UTF8)
+				.append(getCssSummary(exp.book.param.getParamWeb()))
+				.append(Html.HEAD_E)
+				.append(Html.BODY_B)
+				.append(exp.tocBookGet(0, adv))
+				.append(Html.BODY_E).append(Html.HTML_E);
 		IOUtil.fileWriteString(exp.param.getDirectory() + File.separator + "summary.html",
-			html.toString());
+				html.toString());
 
 	}
 
@@ -220,10 +241,10 @@ public class ExportBookToHtml extends AbstractExport {
 			b.append(nm).append(web.getSummary().getCss(i, true)).append("}\n");
 		}
 		b.append("a {text-decoration: none;}\n"
-			+ "a:link {color: inherit;}\n"
-			+ "a:visited {color: inherit;}\n"
-			+ "a:hover {font-weight: bold; color: blue;}\n"
-			+ "</style>");
+				+ "a:link {color: inherit;}\n"
+				+ "a:visited {color: inherit;}\n"
+				+ "a:hover {font-weight: bold; color: blue;}\n"
+				+ "</style>");
 		return b.toString();
 	}
 
@@ -236,10 +257,10 @@ public class ExportBookToHtml extends AbstractExport {
 	private static void createCover(ExportBookToHtml exp) {
 		StringBuilder html = new StringBuilder();
 		html.append(Html.DOCTYPE)
-			.append(Html.HTML_B_LANG)
-			.append(Html.META_UTF8)
-			.append(Html.HEAD_E)
-			.append(Html.BODY_B);
+				.append(Html.HTML_B_LANG)
+				.append(Html.META_UTF8)
+				.append(Html.HEAD_E)
+				.append(Html.BODY_B);
 		String title = "", subtitle = "";
 		//title
 		if (exp.web.getBanner() && !exp.web.getBannerImg().isEmpty()) {
@@ -263,7 +284,7 @@ public class ExportBookToHtml extends AbstractExport {
 			.append(Html.P_E);*/
 		html.append(Html.BODY_E).append(Html.HTML_E);
 		IOUtil.fileWriteString(exp.param.getDirectory() + File.separator + "cover.html",
-			html.toString());
+				html.toString());
 	}
 
 	/**
@@ -285,10 +306,10 @@ public class ExportBookToHtml extends AbstractExport {
 		buf.append(Html.HEAD_B);
 		buf.append("<title>").append(mainFrame.getBook().getTitle()).append("</title>");
 		buf.append("<style>"
-			+ "body {font-size: 12pt;}"
-			+ "h1, h2, h3 {text-align: center;page-break-before:always;}"
-			+ "em {background-color: yellow;}"
-			+ "</style>");
+				+ "body {font-size: 12pt;}"
+				+ "h1, h2, h3 {text-align: center;page-break-before:always;}"
+				+ "em {background-color: yellow;}"
+				+ "</style>");
 		buf.append(Html.HEAD_E);
 		buf.append(Html.BODY_B);
 		buf.append(exp.bookGetTitle(false));
@@ -321,13 +342,13 @@ public class ExportBookToHtml extends AbstractExport {
 		}
 		StringBuilder htmlContent = new StringBuilder();
 		htmlContent.append(Html.DOCTYPE)
-			.append(Html.HTML_B)
-			.append(Html.HEAD_B)
-			.append("<title>").append(mainFrame.project.book.getTitle()).append("</title>");
+				.append(Html.HTML_B)
+				.append(Html.HEAD_B)
+				.append("<title>").append(mainFrame.project.book.getTitle()).append("</title>");
 		htmlContent.append("<style>"
-			+ " em {background-color: yellow;}"
-			+ "</style>")
-			.append(Html.HEAD_E);
+				+ " em {background-color: yellow;}"
+				+ "</style>")
+				.append(Html.HEAD_E);
 		htmlContent.append(Html.BODY_B);
 		ls.add(htmlContent.toString());
 
@@ -364,11 +385,11 @@ public class ExportBookToHtml extends AbstractExport {
 		exp.param.setHighlight(Html.EM_LEFTASIS);
 		try {
 			String strText = exp.getString()
-				.replaceAll("<a name=.*</a>", "");
+					.replaceAll("<a name=.*</a>", "");
 			Clip.to(strText, "html");
 			JOptionPane.showMessageDialog(mainFrame,
-				I18N.getMsg("book.copy.text.confirmation"),
-				I18N.getMsg("copied.title"), 1);
+					I18N.getMsg("book.copy.text.confirmation"),
+					I18N.getMsg("copied.title"), 1);
 		} catch (HeadlessException exc) {
 		}
 	}
@@ -384,7 +405,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @return
 	 */
 	public static String toPanel(MainFrame mainFrame,
-		Strand strand, Part onlyPart, boolean review, int level) {
+			Strand strand, Part onlyPart, boolean review, int level) {
 		/*LOG.trace(TT + "toPanel(m, strand=" + LOG.trace(strand)
 				+ ",onlyPart=" + LOG.trace(onlyPart)
 				+ ",level=" + level
@@ -415,7 +436,7 @@ public class ExportBookToHtml extends AbstractExport {
 			b.append(ExportBookInfo.getBlurb(book));
 		}
 		if (!book.getDedication().isEmpty()) {
-			b.append(ExportBookInfo.getDedication(book, 30));
+			b.append(replaceImages(ExportBookInfo.getDedication(book, 30)));
 		}
 		return b.toString();
 	}
@@ -449,7 +470,7 @@ public class ExportBookToHtml extends AbstractExport {
 		review = mainFrame.getBook().getParam().getParamLayout().getShowReview();
 		writeText(ExportBookInfo.getTitle(book, false));
 		writeText(Html.intoP(book.getBlurb(),
-			"font-style: italic; text-align: center; margin-left: 10%; margin-right: 10%"));
+				"font-style: italic; text-align: center; margin-left: 10%; margin-right: 10%"));
 		writeText(ExportBookInfo.getDedication(book, 30));
 		writeText(tocBookGet(0, false));
 		bSeparator = true;
@@ -464,8 +485,8 @@ public class ExportBookToHtml extends AbstractExport {
 			}
 		}
 		JOptionPane.showMessageDialog(mainFrame,
-			I18N.getMsg("export.success", param.getDirectory()),
-			I18N.getMsg("export"), JOptionPane.INFORMATION_MESSAGE);
+				I18N.getMsg("export.success", param.getDirectory()),
+				I18N.getMsg("export"), JOptionPane.INFORMATION_MESSAGE);
 		return true;
 	}
 
@@ -495,9 +516,9 @@ public class ExportBookToHtml extends AbstractExport {
 	 */
 	private boolean tocBookNeed() {
 		return layout.getPartTitle()
-			|| layout.getChapterTitle()
-			|| layout.getSceneTitle()
-			&& (parts.size() > 1 || chapters.size() > 1 || !scenes.isEmpty());
+				|| layout.getChapterTitle()
+				|| layout.getSceneTitle()
+				&& (parts.size() > 1 || chapters.size() > 1 || !scenes.isEmpty());
 	}
 
 	/**
@@ -512,12 +533,12 @@ public class ExportBookToHtml extends AbstractExport {
 			return ("<a name=\"toc\"></a>");
 		}
 		if (layout.getPartTitle()
-			|| layout.getChapterTitle()
-			|| layout.getSceneTitle()) {
+				|| layout.getChapterTitle()
+				|| layout.getSceneTitle()) {
 			String t = I18N.getMsg("export.toc") + "</b>";
 			if ((adv && web.getSummary().getTitled()) || !adv) {
 				buf.append("<p><a name=\"toc\" /><b>")
-					.append(t);
+						.append(t);
 				if (adv) {
 					buf.append(Html.P_E);
 				}
@@ -579,22 +600,24 @@ public class ExportBookToHtml extends AbstractExport {
 			b.append(Html.intoA("toc" + href, "#" + href, EXIM.getTitle(text), cpl));
 		} else {
 			b.append(Html.intoA("toc" + href,
-				book.getTitle() + "-" + href + ".html",
-				EXIM.getTitle(text), cpl));
+					book.getTitle() + "-" + href + ".html",
+					EXIM.getTitle(text), cpl));
 		}
 		return (adv ? Html.intoH(level, b.toString()) : b.toString());
 	}
 
-	private String titleOf(int level, String name, String text) {
+	private String titleOf(int level, String name, String text, String... style) {
 		if (EXIM.getTitle(text).isEmpty()) {
 			return "";
 		}
 		if (level == 0 || text.isEmpty()) {
 			return Html.intoA(name, "", "");
 		}
-		return "<h" + level + ">"
-			+ Html.intoA(name, "", EXIM.getTitle(text))
-			+ "</h" + level + ">\n";
+		return "<h" + level
+				+ (style != null && style.length > 0 ? " style=\"" + style[0] + "\"" : "")
+				+ ">"
+				+ Html.intoA(name, "", EXIM.getTitle(text))
+				+ "</h" + level + ">\n";
 	}
 
 	/**
@@ -690,9 +713,9 @@ public class ExportBookToHtml extends AbstractExport {
 				}
 			}
 			b.append(Html.intoA("toc" + href,
-				book.getTitle() + "-" + scene.getIdent() + ".html" + "#" + scene.getIdent(),
-				EXIM.getTitle(scene.getName()),
-				(adv ? "target=\"mc\"" : "")));
+					book.getTitle() + "-" + scene.getIdent() + ".html" + "#" + scene.getIdent(),
+					EXIM.getTitle(scene.getName()),
+					(adv ? "target=\"mc\"" : "")));
 			return (adv ? Html.intoH(n/* + scene.getLevel()*/, b.toString()) : b.toString());
 		}
 		if (sceneIsOK(scene)) {
@@ -720,7 +743,7 @@ public class ExportBookToHtml extends AbstractExport {
 		}
 		if (param.isMulti()) {
 			return String.format("<a href=\"%s\">%s</a>",
-				filenameOfScene(scene), link);
+					filenameOfScene(scene), link);
 		}
 		return String.format("<a href=\"#%s\">%s</a>", scene.getIdent(), link);
 	}
@@ -977,9 +1000,9 @@ public class ExportBookToHtml extends AbstractExport {
 	 */
 	private boolean sceneIsOK(Scene scene) {
 		return !(scene.getInformative()
-			|| (strand != null
-			&& (!strand.equals(scene.getStrand())
-			&& !scene.getStrands().contains(strand))));
+				|| (strand != null
+				&& (!strand.equals(scene.getStrand())
+				&& !scene.getStrands().contains(strand))));
 	}
 
 	/**
@@ -1087,8 +1110,20 @@ public class ExportBookToHtml extends AbstractExport {
 		if (buffer == null) {
 			buffer = new StringBuilder();
 		}
+		StringBuilder title = new StringBuilder();
+		String spanB = WEB_SUMMARY.getAdvancedStyle(book.param.getParamWeb(), true);
 		if (layout.getSceneTitle() && !getTitle(scene.getName()).isEmpty()) {
 			int n = 1;
+			if (param.isMultiScene() && isAdvanced()) {
+				if (mainFrame.project.parts.getList().size() > 1) {
+					title.append(scene.getChapter().getPart().getName()).append(" > ");
+				}
+				if (mainFrame.project.chapters.getList().size() > 1) {
+					title.append(scene.getChapter().getName()).append(" > ");
+				}
+			} else {
+				spanB = "";
+			}
 			if (layout.getPartTitle()) {
 				n++;
 			}
@@ -1099,8 +1134,17 @@ public class ExportBookToHtml extends AbstractExport {
 				lastChapter = scene.getChapter();
 				//sb.append(titleOf(n, lastChapter.getIdent(), getTitle(lastChapter.getName())));
 			}
-			String bx = titleOf(n + 1, scene.getIdent(), getTitle(scene.getName()));
-			sb.append(bx);
+			title.append(getTitle(scene.getName()));
+			sb.append(titleOf(n + 1, scene.getIdent(), title.toString(), spanB));
+		} else if (param.isMultiScene() && isAdvanced()
+				&& layout.getSceneTitle() && !scene.getName().isEmpty()) {
+			if (mainFrame.project.parts.getList().size() > 1) {
+				title.append(scene.getChapter().getPart().getName()).append(" > ");
+			}
+			if (mainFrame.project.chapters.getList().size() > 1) {
+				title.append(scene.getChapter().getName());
+			}
+			sb.append(titleOf(3, scene.getIdent(), title.toString(), spanB));
 		}
 		if (layout.getSceneDidascalie()) {
 			sb.append(sceneGetDidascalie(param, scene));
@@ -1133,17 +1177,17 @@ public class ExportBookToHtml extends AbstractExport {
 		}
 		StringBuilder b = new StringBuilder();
 		b.append("<table "
-			+ "style=\"border: none; "
-			+ "border-collapse: collapse; "
-			+ "width:100%; "
-			+ "background-color: rgb(220, 220, 220); "
-			+ "\">\n").append(Html.TR_B);
+				+ "style=\"border: none; "
+				+ "border-collapse: collapse; "
+				+ "width:100%; "
+				+ "background-color: rgb(220, 220, 220); "
+				+ "\">\n").append(Html.TR_B);
 		b.append(Html.intoTD(
-			Html.intoA("", "#toc", Html.intoIMG(img, "", I18N.getMsg("toc"), 20)),
-			"style=\""
-			+ Html.FONT_SIZE + ":8px;"
-			+ Html.AL_LEFT, "text-align:center;padding:0px;"
-			+ "\""));
+				Html.intoA("", "#toc", Html.intoIMG(img, "", I18N.getMsg("toc"), 20)),
+				"style=\""
+				+ Html.FONT_SIZE + ":8px;"
+				+ Html.AL_LEFT, "text-align:center;padding:0px;"
+				+ "\""));
 		b.append(Html.TR_E).append(Html.TABLE_E);
 		return b.toString();
 	}
@@ -1259,15 +1303,15 @@ public class ExportBookToHtml extends AbstractExport {
 							break;
 						}
 						r = String.format("%s-%s%s#%s",
-							book.getTitle(),
-							sc.getChapter().getIdent(),
-							Html.EXT,
-							sc.getIdent());
+								book.getTitle(),
+								sc.getChapter().getIdent(),
+								Html.EXT,
+								sc.getIdent());
 					} else if (param.isMultiScene()) {
 						r = String.format("%s-%s%s",
-							book.getTitle(),
-							sc.getChapter().getIdent(),
-							Html.EXT);
+								book.getTitle(),
+								sc.getChapter().getIdent(),
+								Html.EXT);
 					}
 					e.attr("href", r);
 				}

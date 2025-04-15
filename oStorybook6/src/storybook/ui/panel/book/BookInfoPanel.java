@@ -27,7 +27,6 @@ import storybook.db.book.Book;
 import storybook.db.scene.Scene;
 import storybook.db.strand.Strand;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractPanel;
@@ -44,7 +43,7 @@ import storybook.ui.panel.chrono.StrandDateLabel;
 public class BookInfoPanel extends AbstractPanel {
 
 	private Scene scene;
-	private JSLabel lbStrand;
+	private JLabel lbStrand;
 	private EntityLinksPanel personLinksPanel, itemLinksPanel, locationLinksPanel, strandLinksPanel;
 	private StrandDateLabel lbDate;
 
@@ -110,11 +109,11 @@ public class BookInfoPanel extends AbstractPanel {
 		setBorder(SwingUtil.getBorderDefault());
 		// strand
 		if (scene.getStrand() == null
-		   && mainFrame.project != null
-		   && !mainFrame.project.strands.getList().isEmpty()) {
+				&& mainFrame.project != null
+				&& !mainFrame.project.strands.getList().isEmpty()) {
 			scene.setStrand((Strand) mainFrame.project.strands.getList().get(0));
 		}
-		lbStrand = new JSLabel(scene.getStrand().toString(), JLabel.CENTER);
+		lbStrand = new JLabel(scene.getStrand().toString(), JLabel.CENTER);
 		lbStrand.setBackground(scene.getStrand().getJColor());
 		add(lbStrand, MIG.GROWX);
 		// date

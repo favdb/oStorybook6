@@ -53,7 +53,7 @@ public class ColumnPanel extends AbstractStrandDatePanel {
 			setLayout(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0, MIG.FILL), "[][]", "[top]"));
 			setBorder(SwingUtil.getBorderDefault());
 			setOpaque(false);
-			setFont(App.getInstance().fonts.defGet());
+			setFont(App.fonts.defGet());
 			// date
 			StrandDateLabel lbDate = new StrandDateLabel(strand, date, true);
 			lbDate.setUI(new JSLabelVertical(false));

@@ -37,8 +37,8 @@ import javax.swing.event.CaretListener;
 import resources.MainResources;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
+import storybook.dialog.cover.Cover;
 import storybook.tools.file.IOUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.Ui;
@@ -48,7 +48,7 @@ import storybook.ui.Ui;
  *
  * @author favdb
  */
-public class PropEpubPanel extends JPanel implements ActionListener, CaretListener {
+public class PropPublicationPanel extends JPanel implements ActionListener, CaretListener {
 
 	private static final String TT = "EpubPanel";
 
@@ -57,13 +57,13 @@ public class PropEpubPanel extends JPanel implements ActionListener, CaretListen
 	private JTextField tfISBN;
 	private JComboBox<Object> cbLanguage;
 	private JCheckBox ckCover;
-	private JSLabel lbCover;
+	private JLabel lbCover;
 	private final PropertiesDlg properties;
 	private JPanel pCover;
 	private JButton btUUID;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
-	public PropEpubPanel(MainFrame mainFrame, PropertiesDlg properties) {
+	public PropPublicationPanel(MainFrame mainFrame, PropertiesDlg properties) {
 		this.mainFrame = mainFrame;
 		this.properties = properties;
 		init();
@@ -83,7 +83,7 @@ public class PropEpubPanel extends JPanel implements ActionListener, CaretListen
 		tfUUID.addCaretListener(this);
 		add(tfUUID, MIG.get(MIG.SPLIT2, MIG.GROWX));
 		btUUID = Ui.initButton("btUuid", "epub.uuid.create", ICONS.K.COGS, "uuid.create",
-		   e -> createUUID());
+				e -> createUUID());
 		add(btUUID);
 		if (tfUUID.getText().isEmpty()) {
 			tfUUID.setVisible(false);
@@ -118,11 +118,11 @@ public class PropEpubPanel extends JPanel implements ActionListener, CaretListen
 
 		// cover personnalisation
 		ckCover = new JCheckBox(I18N.getMsg("epub.cover_use"));
-		ckCover.setSelected(mainFrame.project.book.param.getParamExport().getEpubCover());
-		ckCover.addActionListener(this);
 		add(ckCover, MIG.get("skip", MIG.SPLIT + " 3", MIG.TOP));
 		add(initCover());
-		changeCover();
+		ckCover.setSelected(mainFrame.project.book.getCover());
+		pCover.setVisible(ckCover.isSelected());
+		ckCover.addActionListener(this);
 	}
 
 	public boolean check() {
@@ -132,7 +132,7 @@ public class PropEpubPanel extends JPanel implements ActionListener, CaretListen
 	public void apply() {
 		mainFrame.project.book.setUUID(tfUUID.getText());
 		mainFrame.project.book.setISBN(tfISBN.getText());
-		mainFrame.project.book.param.getParamExport().setEpubCover(ckCover.isSelected());
+		mainFrame.project.book.setCover(ckCover.isSelected());
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class PropEpubPanel extends JPanel implements ActionListener, CaretListen
 		if (event.getSource() instanceof JButton) {
 			JButton bt = (JButton) event.getSource();
 			if (bt.getName().equalsIgnoreCase("changeCover")) {
-				PropEpubCover.show(properties);
+				Cover.show(properties);
 				setCoverIcon();
 			}
 		}
@@ -161,14 +161,14 @@ public class PropEpubPanel extends JPanel implements ActionListener, CaretListen
 	private JPanel initCover() {
 		//LOG.printInfos(TT+".initCover()");
 		pCover = new JPanel(new MigLayout(MIG.get(MIG.FILL, MIG.WRAP, MIG.INS0), "[]"));
-		lbCover = new JSLabel();
+		lbCover = new JLabel();
 		lbCover.setMinimumSize(new Dimension(130, 250));
 		lbCover.setHorizontalAlignment(SwingConstants.CENTER);
 		lbCover.setVerticalAlignment(SwingConstants.CENTER);
 		lbCover.setBorder(BorderFactory.createEtchedBorder());
 		setCoverIcon();
 		pCover.add(lbCover, MIG.GROW);
-		JButton change = new JButton(I18N.getMsg("epub.cover.create"));
+		JButton change = new JButton(I18N.getMsg("cover.create"));
 		change.setName("changeCover");
 		change.addActionListener(this);
 		pCover.add(change, MIG.CENTER);
@@ -178,10 +178,10 @@ public class PropEpubPanel extends JPanel implements ActionListener, CaretListen
 	private void setCoverIcon() {
 		//LOG.printInfos(TT + ".setCoverIcon()");
 		File file = new File(mainFrame.getProject().getPath()
-		   + File.separator
-		   + "Images"
-		   + File.separator
-		   + "cover.jpeg");
+				+ File.separator
+				+ "Images"
+				+ File.separator
+				+ "cover.jpeg");
 		if (file.exists()) {
 			lbCover.setIcon(IconUtil.getIconExternal(file.getAbsolutePath(), new Dimension(130, 250)));
 		} else {

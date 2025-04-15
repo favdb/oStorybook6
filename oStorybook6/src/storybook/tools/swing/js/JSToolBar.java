@@ -16,13 +16,13 @@
  */
 package storybook.tools.swing.js;
 
+import api.mig.swing.MigLayout;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.BorderFactory;
 import javax.swing.JToolBar;
-import api.mig.swing.MigLayout;
 import storybook.App;
 import storybook.Pref;
 import storybook.tools.swing.ColorUtil;
@@ -30,6 +30,7 @@ import storybook.tools.swing.LaF;
 import storybook.ui.MIG;
 
 /**
+ * a JToolBar with default background color and optional gradient (color from preferences)
  *
  * @author favdb
  */

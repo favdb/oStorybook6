@@ -24,13 +24,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import storybook.App;
 import storybook.Pref;
 import storybook.dialog.AbsDialog;
 import storybook.tools.StringUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 
@@ -60,17 +60,17 @@ public class PartsCreateDlg extends AbsDialog {
 
 	@Override
 	public void initUi() {
-		JSLabel lb1 = new JSLabel(I18N.getMsg("parts.generate.text"));
+		JLabel lb1 = new JLabel(I18N.getMsg("parts.generate.text"));
 		tfQuantity = new JTextField();
 		tfQuantity.setColumns(2);
-		JSLabel lbn = new JSLabel(I18N.getMsg("parts.generate.format"));
+		JLabel lbn = new JLabel(I18N.getMsg("parts.generate.format"));
 		tfFormat = new JTextField();
 		tfFormat.setText(I18N.getMsg("part") + " %d");
 		rbRoman = new JCheckBox(I18N.getMsg("parts.generate.roman"));
-		JSLabel lb3 = new JSLabel(I18N.getMsg("objective.size"));
+		JLabel lb3 = new JLabel(I18N.getMsg("objective.size"));
 		tfSize = new JTextField();
 		tfSize.setColumns(8);
-		JSLabel lb4 = new JSLabel(I18N.getMsg("objective.date"));
+		JLabel lb4 = new JLabel(I18N.getMsg("objective.date"));
 		dateChooser = new JDateChooser();
 		dateChooser.setDateFormatString(App.preferences.getString(Pref.KEY.DATEFORMAT, "MM-dd-yyyy"));
 		//layout

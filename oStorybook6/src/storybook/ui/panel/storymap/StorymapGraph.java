@@ -52,7 +52,6 @@ import storybook.tools.swing.ColorUtil;
 import storybook.tools.swing.Draw;
 import storybook.tools.swing.LaF;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.panel.AbstractPanel;
 
@@ -187,7 +186,7 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 			}
 			add(lb, MIG.getPos(p));
 			if (horizontal) {
-				//add(new JSLabel(TextUtil.ellipsize(node.getName(), 15)), MIG.getPos(p.x, p.y - charH));
+				//add(new JLabel(TextUtil.ellipsize(node.getName(), 15)), MIG.getPos(p.x, p.y - charH));
 			}
 		}
 		validate();
@@ -456,11 +455,11 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 	 * @param lb: label to find
 	 * @return
 	 */
-	private Long getIdFromLabel(JSLabel lb) {
+	private Long getIdFromLabel(JLabel lb) {
 		if (!lb.getName().contains("_")) {
 			return -1L;
 		}
-		return Long.parseLong(lb.getName().split("_")[1]);
+		return Long.valueOf(lb.getName().split("_")[1]);
 	}
 
 	/**
@@ -469,7 +468,7 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 	 * @param lb: th label to find
 	 * @return the entity
 	 */
-	private AbstractEntity getEntityFromLabel(JSLabel lb) {
+	private AbstractEntity getEntityFromLabel(JLabel lb) {
 		Long id = getIdFromLabel(lb);
 		if (id == -1L) {
 			return null;
@@ -485,8 +484,8 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 	 */
 	private AbstractEntity getEntity(MouseEvent evt) {
 		AbstractEntity entity = null;
-		if (evt.getSource() instanceof JSLabel) {
-			entity = getEntityFromLabel((JSLabel) evt.getSource());
+		if (evt.getSource() instanceof JLabel) {
+			entity = getEntityFromLabel((JLabel) evt.getSource());
 		} else {
 			Long id = findId(evt.getPoint());
 			if (id != -1L) {
@@ -521,8 +520,8 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 	public void mouseClicked(MouseEvent evt) {
 		if (evt.getClickCount() == 2) {
 			AbstractEntity entity = null;
-			if (evt.getSource() instanceof JSLabel) {
-				entity = getEntityFromLabel((JSLabel) evt.getSource());
+			if (evt.getSource() instanceof JLabel) {
+				entity = getEntityFromLabel((JLabel) evt.getSource());
 			} else {
 				Long id = findId(evt.getPoint());
 				if (id == -1L) {

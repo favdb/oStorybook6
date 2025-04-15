@@ -49,7 +49,7 @@ public class RowPanel extends AbstractStrandDatePanel {
 		try {
 			MigLayout layout = new MigLayout(MIG.INS1, "[fill,grow]", "[top][fill,grow]");
 			setLayout(layout);
-			setFont(App.getInstance().fonts.defGet());
+			setFont(App.fonts.defGet());
 			setOpaque(false);
 			// date
 			StrandDateLabel lbDate = new StrandDateLabel(strand, date, true);

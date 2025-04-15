@@ -20,10 +20,10 @@ import api.mig.swing.MigLayout;
 import i18n.I18N;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import storybook.db.book.BookParamExport;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 
 /**
@@ -74,10 +74,10 @@ public class CSVpanel extends JPanel {
 
 		//layout
 		setLayout(new MigLayout(MIG.FILL, "[][]"));
-		add(new JSLabel(I18N.getColonMsg("export.options.csv.quoted")), MIG.SPAN);
+		add(new JLabel(I18N.getColonMsg("export.options.csv.quoted")), MIG.SPAN);
 		add(csvSingleQuotes);
 		add(csvDoubleQuotes, MIG.WRAP);
-		add(new JSLabel(I18N.getColonMsg("export.options.csv.separate")), MIG.SPAN);
+		add(new JLabel(I18N.getColonMsg("export.options.csv.separate")), MIG.SPAN);
 		add(csvComma);
 		add(csvSemicolon);
 		csvSingleQuotes.setSelected(param.getCsvQuote().equals("'"));

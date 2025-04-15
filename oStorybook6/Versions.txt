@@ -1,13 +1,21 @@
-oStorybook
-==========
-
 Versions :
+==========
+6.03: 21/04/2025
+- correction anomalie codage des caractères
+
+6.02b: 01/02/2025 correctif d'urgence
+- UTF8 contexte récupération ancien fichier
+6.02a: 12/01/2025 correctif d'urgence
+- caracatères spéciaux en XML
+- premier démarrage (prise en charge de la langue)
+6.02: 01/01/2025
+- actualisation de la banniere et de l'icone
+- amélioration du créateur de couverture
 6.01: (01/09/2024)
 - export HTML pour site Web
 - ajout de la fonction Challenge
 - remplacement (en français) du terme "Les grandes lignes" par "Ébauche"
 - corrections de bugs
-
 6.00d :correctif d'urgence
 6.00c :correctif d'urgence
 6.00b :correctif d'urgence
@@ -22,7 +30,6 @@ Versions :
 - ajout de racourcis clavier pour SHEF (style paragraphe, listes)
 - ajout de l'export TeX/LaTeX
 - correction anomalie Infos rapides
-
 5.60: (01/09/2023)
 - ajout de la boîte à idées
 - ajout du show/hide dans Shef
@@ -34,21 +41,18 @@ Versions :
 - traitement du signe @ dans un titre (partie, chapitre, scène)
 - ajout de la dédicace
 - correction de la copie d'éléments
-
 5.59:(21/04/2023)
 - integration de la personnalisation/traduction de l'Assistant
 - ajout du Ctrl+Maj+V
 - ajout du Zoom à l'editeur
 - ajout de la recherche de synonymes et antonymes
 - ajout de la fonction relecture (Comment/Review)
-
 5.05.08: (31/12/2022)
 - amélioration de la recherche d'un mot
 - ajout de raccourcis clavier dans SHEF (espace insécable, cadratin, BR)
 - ajout de l'import EPUB comme nouveau projet
 - ajout de l'assistant pour les Fils et les Parties
 - refonte de l'assistant (format XML)
-
 5.05.07: (04/09/2022)
 - possibilité de personnaliser la couleur des intensités
 - amélioration de la gestion de l'Assistant
@@ -56,11 +60,9 @@ Versions :
 - amélioration de l'interface graphique (meilleure flexibilité)
 - amélioration de l'interface Episode
 - possibilité de modifier directement la taille objectif dans le tableau des 
-parties et des chapitres
-- ajout de la visualisation d'objectif dans la barre d'état et le tableau des 
-chapitres
+  parties et des chapitres
+- ajout de la visualisation objectif dans barre d'état et tableau des chapitres
 - correction du bug dans l'outil de traduction (I18N)
-
 5.05.06: (21/04/2022)
 - ajout Episodes
 - ajout du Storymap
@@ -74,7 +76,6 @@ chapitres
 - finalisation de l'export DOCX (avec limitation)
 - ajout de l'intensité dans Scene avec visualisation dans Chapter
 - ajout de la possibilité d'utiliser une ressource locale (dossier ou fichier) dans SHEF en tant qu'hyperlien
-
 5.05.05: (01/01/2022)
 - corrections diverses
 - suppression API swingX
@@ -82,7 +83,6 @@ chapitres
 - ajout de la fonction de détection automatique des liens Personnages, Lieux ou Objets
 - ajout des fonctions ODT et DOCX, et amélioration Import/Export
 - suppression API JOpenDocument
-
 5.05.04: (01/09/2021)
 - corrections mineures (EPUB+Editeur)
 - assistant fonctionnel
@@ -103,7 +103,6 @@ chapitres
 - possibilité d'activer/désactiver l'option scénario
 - extension du mode scénario à toutes les fonctions (table des scène, editeur de scène)
 - #119 fixed (largeur des colonnes dans la vue "Gérer les chapitres et les scènes")
-
 5.05.03: (25/12/2020)
 - activation des racourcis clavier dans l'éditeur
 - possibilité de choisir son L&F
@@ -119,17 +118,14 @@ chapitres
 - révision de la migration de la BDD
 - ajout de la memorisation de la configuration pour les vues Arbre, Chrono, Memo 
 - ajout du Catalan
-
 5.05.02: (01/09/2020)
 - affinage export epub
 - ajout Endnotes
 - correction bug Memo
-
 5.05.01: (01/08/2020)
 - ajout de l'export epub
 - ajout toolbar pour les tableaux (filtrage)
 - correction bug sur nom de fichier (apostrophe)
-
 5.05.00: (01/07/2020)
 - correction anomalie JOrtho
 - implémentation du Scénario et du Markdown
@@ -141,18 +137,16 @@ chapitres
 - modification de la traduction du I18N (prise en compte du codage UTF8)
 - amélioration du filtrage pour le tableau des scènes
 - #97 tri des éléments par catégorie
-
 5.04.04d: (07/01/2020) corrections mineures
-5.04.04c:
-5.04.04b:
-5.04.04a:
+5.04.04c: correctif d'urgence
+5.04.04b: correctif d'urgence
+5.04.04a: correctif d'urgence
 5.04.04: (13/02/2019)
 - correctif d'urgence exportation liste Idea en HTML
 5.04.03: (02/11/2018)
 - correctif d'urgence exportation HTML
 5.04.02: (18/06/2018)
 5.04.01: (08/05/2018)
-
 5.04.00: (22/04/2018)
 - ajout d'options supplémentaires pour l'exportation en HTML
 - finalisation de l'assistant (personnage, lieu, objet)

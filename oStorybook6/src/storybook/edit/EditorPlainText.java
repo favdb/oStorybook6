@@ -16,17 +16,17 @@
  */
 package storybook.edit;
 
+import api.mig.swing.MigLayout;
+import i18n.I18N;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
-import api.mig.swing.MigLayout;
-import i18n.I18N;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.panel.AbstractPanel;
 
@@ -38,7 +38,7 @@ public class EditorPlainText extends AbstractPanel implements CaretListener {
 
 	private JTextArea ta;
 	private int maxLength;
-	private JSLabel lbMessage;
+	private JLabel lbMessage;
 	private JScrollPane scroller;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
@@ -72,7 +72,7 @@ public class EditorPlainText extends AbstractPanel implements CaretListener {
 
 		scroller = new JScrollPane(ta);
 		ta.setMaximumSize(SwingUtil.getScreenSize());
-		lbMessage = new JSLabel(" ");
+		lbMessage = new JLabel(" ");
 
 		// layout
 		add(scroller, MIG.GROW);

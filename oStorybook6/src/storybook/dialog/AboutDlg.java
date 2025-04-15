@@ -75,12 +75,12 @@ public class AboutDlg extends AbsDialog {
 		super.initUi();
 		this.setTitle(I18N.getMsg("about.title"));
 		setLayout(new MigLayout(MIG.FLOWY, "[center]", "[]10[]10[]10[]"));
-		setPreferredSize(new Dimension(680, 650));
+		setPreferredSize(new Dimension(800, 600));
 
 		// logo
 		JLabel lbLogo = new JLabel((ImageIcon) IconUtil.getIcon("banner"));
 		lbLogo.setBackground(Color.WHITE);
-		lbLogo.setOpaque(true);
+		lbLogo.setBorder(BorderFactory.createEtchedBorder());
 
 		// application info
 		JLabel lbInfo = new JLabel();
@@ -98,7 +98,7 @@ public class AboutDlg extends AbsDialog {
 		// system properties
 		pane.addTab("System Properties", initSytems());
 		// layout
-		add(lbLogo);
+		add(lbLogo, MIG.GROWX);
 		add(lbInfo);
 		add(pane, MIG.GROWX);
 		add(getCloseButton(), MIG.RIGHT);
@@ -112,12 +112,12 @@ public class AboutDlg extends AbsDialog {
 		StringBuilder ta = new StringBuilder();
 		if (!CallProcess.getPythonVersion().isEmpty()) {
 			ta.append(Html.intoB("python version: "))
-			   .append(CallProcess.getPythonVersion())
-			   .append(Html.BR);
+					.append(CallProcess.getPythonVersion())
+					.append(Html.BR);
 		}
 		ta.append(Html.BR)
-		   .append(Html.intoB(Const.getName()))
-		   .append(Html.BR);
+				.append(Html.intoB(Const.getName()))
+				.append(Html.BR);
 		ta.append(Const.getVersionFull()).append(Html.BR);
 		String[] keys = {
 			//about operating system
@@ -151,7 +151,7 @@ public class AboutDlg extends AbsDialog {
 			}
 		}
 		String txt = Html.HTML_B + Html.BODY_B + ta.toString().replace(Html.BR, "<br>\n")
-		   + Html.BODY_E + Html.HTML_E;
+				+ Html.BODY_E + Html.HTML_E;
 		tx.setText(txt);
 		tx.setCaretPosition(0);
 		panel.add(new JScrollPane(tx), MIG.get(MIG.GROW, MIG.WRAP));
@@ -160,8 +160,8 @@ public class AboutDlg extends AbsDialog {
 			try {
 				Clip.to(txt, "txt");
 				JOptionPane.showMessageDialog(this,
-				   I18N.getMsg("copy.to_clip_ok"),
-				   I18N.getMsg("copied.title"), 1);
+						I18N.getMsg("copy.to_clip_ok"),
+						I18N.getMsg("copied.title"), 1);
 			} catch (HeadlessException exc) {
 			}
 		});
@@ -236,22 +236,24 @@ public class AboutDlg extends AbsDialog {
 		};
 		String thanks[] = {
 			"<b>Synonyms/antonyms dictionaries</b>",
-			"English: online Merriam-Webster Dictionary",
+			"English: online <a href=\"https://www.merriam-webster.com\">Merriam-Webster Dictionary</a>",
 			"Français: Laboratoire"
 			+ " <a href=\"http://crisco.unicaen.fr/des\">CRISCO</a>"
 			+ ", UR4255, Université de Caen\" ",
 			"",
 			"<b>Grammar tool</b>",
-			"LanguageTool",
-			"Grammalecte pour le Français"
+			"- <a href=\"https://languagetool.org\">LanguageTool</a>",
+			"- <a href=\"https://grammalecte.net\">Grammalecte</a> pour le Français",
+			"<br><b>Templates image for Cover generator</b>",
+			" <a href=\"https://victoriasjournals.ca\">Victoria's Journals</a>"
 		};
 		JTextPane taCredits = new JTextPane();
 		StringBuilder b = new StringBuilder();
 		b.append(Html.HTML_B)
-		   .append(Html.getBody(SwingUtil.setFontDefault(mainFrame)));
+				.append(Html.getBody(SwingUtil.setFontDefault(mainFrame)));
 		getCredits(b, dev);
 		b.append(Html.intoP(Html.intoB("Logo Designer : ")
-		   + "Jose Campoy, modified by FaVdB"));
+				+ "Jose Campoy, modified by FaVdB"));
 		getCredits(b, translators);
 		getCredits(b, thanks);
 		b.append(Html.BODY_E).append(Html.HTML_E);
@@ -271,9 +273,9 @@ public class AboutDlg extends AbsDialog {
 		lbVersions.setContentType("text/html");
 		lbVersions.setEditable(false);
 		lbVersions.setText("<html>please check the complete version file on <a href=\""
-		   + Net.KEY.HOME.toString()
-		   + "articles.php?lng=fr&pg=5&mnuid=1&tconfig=0\"> website</a>"
-		   + "</html>");
+				+ Net.KEY.HOME.toString()
+				+ "articles.php?lng=fr&pg=5&mnuid=1&tconfig=0\"> website</a>"
+				+ "</html>");
 		lbVersions.addHyperlinkListener(e -> openURL(e));
 		JLabel lb = new JLabel();
 		lbVersions.setForeground(lb.getForeground());
@@ -294,14 +296,14 @@ public class AboutDlg extends AbsDialog {
 		StringBuilder b = new StringBuilder();
 		if (!d.isEmpty()) {
 			b.append(Html.HTML_B)
-			   .append(Html.getBody(Html.getFontMono(mainFrame)))
-			   .append(Html.intoP(Html.intoI(Html.intoU("Build: "
-				  + getBuildDate())), Html.AL_CENTER))
-			   .append(Html.textToHTML(d))
-			   .append(Html.BODY_E).append(Html.HTML_E);
+					.append(Html.getBody(Html.getFontMono(mainFrame)))
+					.append(Html.intoP(Html.intoI(Html.intoU("Build: "
+							+ getBuildDate())), Html.AL_CENTER))
+					.append(Html.textToHTML(d))
+					.append(Html.BODY_E).append(Html.HTML_E);
 		} else {
 			b.append(Html.HTML_B).append(
-			   Html.getBody(SwingUtil.setFontDefault(mainFrame)));
+					Html.getBody(SwingUtil.setFontDefault(mainFrame)));
 			b.append(Html.intoP("No Versions.txt file", Html.AL_CENTER));
 			b.append(Html.BODY_E).append(Html.HTML_E);
 		}

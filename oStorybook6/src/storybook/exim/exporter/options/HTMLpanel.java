@@ -121,6 +121,14 @@ public class HTMLpanel extends JPanel implements ChangeListener {
 		ckAdvanced.setSelected(paramExport.getHtmlAdvanced());
 	}
 
+	public void checkAdvanced(boolean b) {
+		ckAdvanced.setEnabled(b);
+		btAdvanced.setEnabled(b);
+		if (!b) {
+			ckAdvanced.setSelected(false);
+		}
+	}
+
 	private void htmlUseCssChanged(ItemEvent evt) {
 		if (evt.getStateChange() == ItemEvent.SELECTED) {
 			txCssFile.setEnabled(true);

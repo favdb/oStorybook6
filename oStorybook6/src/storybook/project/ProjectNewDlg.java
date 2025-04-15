@@ -16,7 +16,7 @@
  */
 package storybook.project;
 
-import storybook.dialog.AbsDialog;
+import api.jsoup.internal.StringUtil;
 import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.event.ActionEvent;
@@ -32,12 +32,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import api.jsoup.internal.StringUtil;
 import storybook.db.DB;
 import storybook.dialog.AbsDialog;
 import storybook.tools.swing.FontUtil;
 import storybook.tools.swing.js.JSDateChooser;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.Ui;
@@ -99,11 +97,11 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 		objective.setVisible(false);
 		panel.add(objective);
 		//objective panel
-		add(new JSLabel(" "));
+		add(new JLabel(" "));
 		add(panel, MIG.SPAN);
 		panel.setVisible(false);
 		// ok/cancel
-		add(new JSLabel(" "));
+		add(new JLabel(" "));
 		add(getCancelButton(), MIG.get(MIG.SPLIT2, MIG.RIGHT));
 		add(getOkButton(), MIG.RIGHT);
 		pack();

@@ -18,8 +18,8 @@ package storybook.dialog.chooser;
 
 import java.awt.Color;
 import javax.swing.JComboBox;
-import storybook.tools.swing.ColorUtil.PALETTE;
 import storybook.renderer.ColorLCR;
+import storybook.tools.swing.ColorUtil.PALETTE;
 
 /**
  *
@@ -31,6 +31,7 @@ public class ColorPicker extends JComboBox {
 	public ColorPicker(Color color) {
 		super();
 		this.setRenderer(new ColorLCR());
+		int sel = -1, i = -1;
 		for (PALETTE c : PALETTE.values()) {
 			this.addItem(c.getColor());
 		}

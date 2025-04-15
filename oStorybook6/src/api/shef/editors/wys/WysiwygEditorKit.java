@@ -42,6 +42,7 @@ import javax.swing.BorderFactory;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.MouseInputAdapter;
@@ -60,7 +61,6 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.ObjectView;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import storybook.tools.swing.js.JSLabel;
 
 /**
  * An HTML Wysiwyg editor kit which can properly draw borderless tables and allows for resizing of
@@ -76,7 +76,7 @@ public class WysiwygEditorKit extends HTMLEditorKit {
 	private final MouseInputAdapter resizeHandler = new ResizeHandler();
 	private final Map editorToActionsMap = new HashMap();
 	private final KeyStroke KEY_TAB_BACKWARD
-		= KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK);
+			= KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK);
 	private final WysiwygEditor editor;
 
 	public WysiwygEditorKit(WysiwygEditor editor) {
@@ -112,27 +112,27 @@ public class WysiwygEditorKit extends HTMLEditorKit {
 
 		delegate = actionMap.get("insert-break");
 		addAction(actions, actionMap, "insert-break",
-			new EnterKeyAction(delegate));
+				new EnterKeyAction(delegate));
 
 		delegate = actionMap.get("delete-previous");
 		addAction(actions, actionMap, "delete-previous",
-			new RemoveAction(RemoveAction.BACKSPACE, delegate));
+				new RemoveAction(RemoveAction.BACKSPACE, delegate));
 
 		delegate = actionMap.get("delete-next");
 		addAction(actions, actionMap, "delete-next",
-			new RemoveAction(RemoveAction.DELETE, delegate));
+				new RemoveAction(RemoveAction.DELETE, delegate));
 
 		delegate = actionMap.get("insert-tab");
 		addAction(actions, actionMap, "insert-tab",
-			new TabAction(TabAction.FORWARD, delegate));
+				new TabAction(TabAction.FORWARD, delegate));
 		addAction(actions, actionMap, "paste-from-clipboard",
-			new EditPasteAction(editor));
+				new EditPasteAction(editor));
 		addAction(actions, actionMap, "pasteformatted-from-clipboard",
-			new EditPasteFormattedAction(editor));
+				new EditPasteFormattedAction(editor));
 		addAction(actions, actionMap, "edit-undo",
-			CompoundManager.ActionUndo);
+				CompoundManager.ActionUndo);
 		addAction(actions, actionMap, "edit-redo",
-			CompoundManager.ActionRedo);
+				CompoundManager.ActionRedo);
 
 		inputMap.put(KEY_TAB_BACKWARD, "tab-backward");
 		delegate = actionMap.get("tab-backward");
@@ -220,7 +220,7 @@ public class WysiwygEditorKit extends HTMLEditorKit {
 				HTML.Tag kind = (HTML.Tag) o;
 				if (kind == HTML.Tag.TABLE) {
 					ResizableView v = new ResizableView(
-						new BorderlessTableView(super.create(elem)));
+							new BorderlessTableView(super.create(elem)));
 					monitoredViews.add(v);
 					return v;
 				} else if (kind == HTML.Tag.IMG) {
@@ -232,14 +232,14 @@ public class WysiwygEditorKit extends HTMLEditorKit {
 				} else if (kind == HTML.Tag.OBJECT) {
 					ObjectView ov = new ObjectView(elem) {
 						//make a nicer looking representation for <object>.
-						//The default is a crappy red JSLabel with "??" as the text
+						//The default is a crappy red JLabel with "??" as the text
 						@Override
 						protected Component createComponent() {
 							Component comp = super.createComponent();
-							if (comp instanceof JSLabel) {
-								JSLabel l = (JSLabel) comp;
+							if (comp instanceof JLabel) {
+								JLabel l = (JLabel) comp;
 								if (l.getText().equals("??")
-									&& l.getForeground().equals(Color.red)) {
+										&& l.getForeground().equals(Color.red)) {
 									l.setIcon(IconUtil.getIconSmall(ICONS.K.COGS));
 									l.setText(null);
 									l.setBackground(Color.YELLOW);
@@ -253,15 +253,15 @@ public class WysiwygEditorKit extends HTMLEditorKit {
 					};
 					return ov;
 				} else if ((kind instanceof HTML.UnknownTag)
-					|| (kind == HTML.Tag.TITLE)
-					|| (kind == HTML.Tag.META)
-					|| (kind == HTML.Tag.LINK)
-					|| (kind == HTML.Tag.STYLE)
-					|| (kind == HTML.Tag.SCRIPT)
-					|| (kind == HTML.Tag.AREA)
-					|| (kind == HTML.Tag.MAP)
-					|| (kind == HTML.Tag.PARAM)
-					|| (kind == HTML.Tag.APPLET)) {
+						|| (kind == HTML.Tag.TITLE)
+						|| (kind == HTML.Tag.META)
+						|| (kind == HTML.Tag.LINK)
+						|| (kind == HTML.Tag.STYLE)
+						|| (kind == HTML.Tag.SCRIPT)
+						|| (kind == HTML.Tag.AREA)
+						|| (kind == HTML.Tag.MAP)
+						|| (kind == HTML.Tag.PARAM)
+						|| (kind == HTML.Tag.APPLET)) {
 					return new UnknownElementView(elem);
 				}
 			}
@@ -648,8 +648,8 @@ public class WysiwygEditorKit extends HTMLEditorKit {
 				Stroke cachedStroke = g2.getStroke();
 				float dash[] = {3.0f};
 				BasicStroke stroke = new BasicStroke(
-					1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
-					10f, dash, 0.0f);
+						1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
+						10f, dash, 0.0f);
 				g2.setStroke(stroke);
 				g2.setColor(Color.DARK_GRAY);
 				int rows = getViewCount();
@@ -684,7 +684,7 @@ public class WysiwygEditorKit extends HTMLEditorKit {
 			AttributeSet atr = getElement().getAttributes();
 			boolean isBorderAttr = hasBorderAttr(atr);
 			return (!isBorderAttr) || isBorderAttr
-				&& atr.getAttribute(HTML.Attribute.BORDER).toString().equals("0");
+					&& atr.getAttribute(HTML.Attribute.BORDER).toString().equals("0");
 		}
 
 		private boolean hasBorderAttr(AttributeSet atr) {
@@ -717,7 +717,7 @@ public class WysiwygEditorKit extends HTMLEditorKit {
 
 		@Override
 		protected Component createComponent() {
-			JSLabel p = new JSLabel();
+			JLabel p = new JLabel();
 			if (getElement().getAttributes().getAttribute(StyleConstants.NameAttribute) == HTML.Tag.COMMENT) {
 				p.setText("<!-- -->");
 				AttributeSet as = getElement().getAttributes();

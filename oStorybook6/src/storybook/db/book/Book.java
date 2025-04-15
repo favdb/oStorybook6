@@ -42,7 +42,6 @@ public class Book {
 	public final Project project;
 	public BookInfo info;
 	public BookParam param;
-	private int sceneDateInit;
 
 	public Book(Project project) {
 		this.project = project;
@@ -88,14 +87,6 @@ public class Book {
 			}
 		}
 		return nb;
-	}
-
-	public void setSceneDateInit(int value) {
-		this.sceneDateInit = value;
-	}
-
-	public int getSceneDateInit() {
-		return sceneDateInit;
 	}
 
 	/**
@@ -224,10 +215,12 @@ public class Book {
 		NOTES("Notes"),// String
 		DEDICATION("Dedication"),// String
 		SCENARIO("Scenario"),// Boolean
+		SCENEDATEINIT("SceneDateInit"),
 		SUBTITLE("SubTitle"),// String
 		TITLE("Title"),// String
 		UUID("UUID"),// String
 		ISBN("ISBN"),// String
+		COVER("Cover"),// boolean
 		LANG("Language"),// String
 		DB_VERSION("dbversion"),// String
 		NATURE("Nature"),// Integer
@@ -461,6 +454,14 @@ public class Book {
 
 	public void setUUID(String str) {
 		info.uuidSet(str);
+	}
+
+	public boolean getCover() {
+		return info.coverGet();
+	}
+
+	public void setCover(boolean val) {
+		info.coverSet(val);
 	}
 
 	public String getLanguage() {

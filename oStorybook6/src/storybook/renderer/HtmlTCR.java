@@ -18,11 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.renderer;
 
 import java.awt.Component;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import storybook.tools.TextUtil;
 import storybook.tools.html.Html;
-import storybook.tools.swing.js.JSLabel;
 
 @SuppressWarnings("serial")
 public class HtmlTCR extends DefaultTableCellRenderer {
@@ -33,9 +33,9 @@ public class HtmlTCR extends DefaultTableCellRenderer {
 		if (value instanceof String) {
 			String str = (String) value;
 			String dest = TextUtil.ellipsize(Html.htmlToText(str), 128);
-			return new JSLabel(dest);
+			return new JLabel(dest);
 		}
-		return new JSLabel("???");
+		return new JLabel("???");
 	}
 
 }

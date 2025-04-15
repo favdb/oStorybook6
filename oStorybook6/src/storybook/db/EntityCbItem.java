@@ -16,10 +16,10 @@
  */
 package storybook.db;
 
-import storybook.db.abs.AbstractEntity;
 import javax.swing.Icon;
+import javax.swing.JLabel;
+import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
-import storybook.tools.swing.js.JSLabel;
 
 /**
  *
@@ -80,8 +80,8 @@ public class EntityCbItem {
 		return name;
 	}
 
-	public JSLabel toLabel() {
-		JSLabel lb = new JSLabel(name);
+	public JLabel toLabel() {
+		JLabel lb = new JLabel(name);
 		if (icon != null) {
 			lb.setIcon(icon);
 		}

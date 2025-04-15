@@ -84,7 +84,6 @@ import storybook.tools.net.Net;
 import storybook.tools.spell.SpellCheck;
 import storybook.tools.swing.FontUtil;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.tools.swing.js.JSMenuScroller;
 import storybook.tools.synonyms.Synonyms;
 import storybook.tools.synonyms.Word;
@@ -112,26 +111,20 @@ public class WysiwygEditor extends AbstractPanel implements HyperlinkListener {
 	private int dlgLang = ShefEditor.DLG_EN;//for dialog open/close, 0=all, 1=english only, 2=french only, 3=none
 	private ShefEditor editor;
 	private JPanel statusbar, shortcut = new JPanel();
-	private JSLabel lbStatus;
-	private JToolBar tb1;
-	private JToolBar tb11, tb12, tb13, tb14;
-	private JToolBar tb2;
-	private JToolBar linksBar;
+	private JLabel lbStatus;
+	private JToolBar tb1, tb11, tb12, tb13, tb14, tb2, linksBar;
 	private int maxLen = 32768;
 	private JProgressBar progress;
 	private boolean tb2Show = true;
-	private JButton btTb2;
 	private Dimension tbSize;
-	private JMenu synMenu = null, antMenu = null;
+	private JMenu synMenu = null, antMenu = null, mshortcut;
 	private JMenuItem synLook = null, antLook = null;
 	private boolean spell;
 	private ActionList blockActs;
-	private JButton btSource, btWys;
-	private JButton btShowHideTB;
-	public JButton btEndnoteAdd, btEndnoteShow;
+	private JButton btTb2, btSource, btWys, btShowHideTB, btEndnoteAdd;
+	public JButton btEndnoteShow;
 	private WysiwygEditorKit editorKit;
 	private String baseDir = "";
-	private JMenu mshortcut;
 
 	public WysiwygEditor(ShefEditor editor, String param) {
 		super(editor);
@@ -234,7 +227,7 @@ public class WysiwygEditor extends AbstractPanel implements HyperlinkListener {
 	private JPanel initTop() {
 		JPanel top = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP1, MIG.FILL, MIG.HIDEMODE3), "[][grow]"));
 		btShowHideTB = Ui.initButton("btShowHideTB", "▲",
-		   ICONS.K.NONE, "shef.showhide", e -> showHideTB());
+				ICONS.K.NONE, "shef.showhide", e -> showHideTB());
 		btShowHideTB.setText("▲");
 		btShowHideTB.setFont(FontUtil.getSmall());
 		btShowHideTB.setMaximumSize(new Dimension(IconUtil.getDefSize() / 2, IconUtil.getDefSize() / 2));
@@ -392,18 +385,18 @@ public class WysiwygEditor extends AbstractPanel implements HyperlinkListener {
 		tb14 = getDefaultToolbar();
 		// view wysiwyg/html
 		btWys = Ui.initButton(ShefEditor.SOURCE, "", ICONS.K.SOURCE,
-		   "shef." + ShefEditor.SOURCE,
-		   e -> editor.changeTo(ShefEditor.SOURCE));
+				"shef." + ShefEditor.SOURCE,
+				e -> editor.changeTo(ShefEditor.SOURCE));
 		tb14.add(btWys);
 		btSource = Ui.initButton(ShefEditor.HTML, "", ICONS.K.HTML,
-		   "shef." + ShefEditor.HTML,
-		   e -> editor.changeTo(ShefEditor.HTML));
+				"shef." + ShefEditor.HTML,
+				e -> editor.changeTo(ShefEditor.HTML));
 		tb14.add(btSource);
 		// external spellchecker
 		if (SpellCheck.checkForCkEditor()) {
 			JButton bt = Ui.initButton("langtool", "", ICONS.K.LANGTOOL,
-			   "shef.spellcheck_external",
-			   e -> SpellCheck.launchExternal(wysEditor.getText()));
+					"shef.spellcheck_external",
+					e -> SpellCheck.launchExternal(wysEditor.getText()));
 			tb14.add(bt);
 		}
 		// dictaphone
@@ -582,7 +575,7 @@ public class WysiwygEditor extends AbstractPanel implements HyperlinkListener {
 	private JPanel initStatusbar() {
 		//LOG.trace(TT + ".initStatusbar()");
 		statusbar = new JPanel(new BorderLayout());
-		lbStatus = new JSLabel();
+		lbStatus = new JLabel();
 		lbStatus.setFont(FontUtil.getSmall());
 		statusbar.add(lbStatus, BorderLayout.LINE_END);
 		return statusbar;
@@ -845,7 +838,7 @@ public class WysiwygEditor extends AbstractPanel implements HyperlinkListener {
 	@Override
 	public void hyperlinkUpdate(HyperlinkEvent evt) {
 		if (evt.getEventType() == HyperlinkEvent.EventType.ACTIVATED
-		   && !evt.getDescription().startsWith("#")) {
+				&& !evt.getDescription().startsWith("#")) {
 			Net.openUrl(evt);
 		}
 	}
@@ -1216,7 +1209,7 @@ public class WysiwygEditor extends AbstractPanel implements HyperlinkListener {
 
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index,
-		   boolean isSelected, boolean cellHasFocus) {
+				boolean isSelected, boolean cellHasFocus) {
 			if (value instanceof Action) {
 				value = ((Action) value).getValue(Action.NAME);
 			}

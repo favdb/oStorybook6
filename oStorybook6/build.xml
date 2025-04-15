@@ -70,7 +70,7 @@
     nbproject/build-impl.xml file.
 
     -->
-    <property name="sb.version" value="6.01" />
+    <property name="sb.version" value="6.03" />
     <property name="sb.distdir" value="${basedir}/distrib/${sb.version}" />
     <property name="sb.distzip" value="${sb.distdir}/oStorybook-${sb.version}.zip" />
     <property name="sb.file.name" value="oStorybook" />
@@ -88,7 +88,6 @@
         <copy file="README.md" todir="${dist.dir}" />
         <copy file="THANKS.TXT" todir="${dist.dir}" />
         <copy file="Versions.txt" todir="${dist.dir}" />
-        <copy file="splash.png" todir="${dist.dir}" />
         <copy file="oStorybook-icon.icns" todir="${dist.dir}" />
         <copy file="oStorybook-icon.ico" todir="${dist.dir}" />
         <copy file="oStorybook-icon.png" todir="${dist.dir}" />
@@ -132,7 +131,6 @@
                 <include name="THANKS.TXT" />
                 <include name="Versions.txt" />
                 <include name="oStorybook-*.*" />
-                <include name="splash.png" />
             </zipfileset>
         </zip>
         <echo level="info" message="--- end of build-srczip"/>
@@ -174,8 +172,6 @@
                 <include name="*.txt" />
                 <include name="${sb.jar.name}" />
                 <include name="lib/**" />
-                <!-- <include name="resources/**" /> -->
-                <include name="splash.png" />
                 <include name="oStorybook-icon.icns" />
                 <include name="oStorybook-icon.ico" />
                 <include name="oStorybook-icon.png" />

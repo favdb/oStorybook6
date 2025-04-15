@@ -20,9 +20,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 import storybook.db.abs.AbstractEntity;
 import storybook.tools.file.EnvUtil;
 import storybook.tools.file.IOUtil;
@@ -34,28 +31,21 @@ import storybook.tools.file.IOUtil;
  */
 public class LOG {
 
-	private static boolean bTrace = false, bHibernate = false, bTraceFile = false;
+	private static boolean B_TRACE = false, B_TRACEFILE = false;
 
 	/**
 	 * set trace logging
 	 */
 	public static void setTrace() {
-		bTrace = true;
+		B_TRACE = true;
 	}
 
 	public static void setTrace(boolean btrace) {
-		bTrace = btrace;
-	}
-
-	/**
-	 * set trace for hibernate
-	 */
-	public static void setTraceHibernate() {
-		bHibernate = true;
+		B_TRACE = btrace;
 	}
 
 	public static void traceToFile(String testhtml, String inHtml) {
-		if (bTrace) {
+		if (B_TRACE) {
 			IOUtil.fileWriteString(EnvUtil.getHomeDir() + File.separator + "test.html", inHtml);
 		}
 	}
@@ -65,15 +55,6 @@ public class LOG {
 	 */
 	private LOG() {
 		//empty
-	}
-
-	/**
-	 * initalize logging
-	 *
-	 */
-	public static void init() {
-		bTrace = false;
-		bHibernate = false;
 	}
 
 	/**
@@ -92,16 +73,7 @@ public class LOG {
 	 * @return
 	 */
 	public static boolean getTrace() {
-		return bTrace;
-	}
-
-	/**
-	 * get hibernate trace status
-	 *
-	 * @return
-	 */
-	public static boolean getTraceHibernate() {
-		return bHibernate;
+		return B_TRACE;
 	}
 
 	/**
@@ -110,7 +82,7 @@ public class LOG {
 	 * @param msg
 	 */
 	public static void trace(String msg) {
-		if (bTrace) {
+		if (B_TRACE) {
 			log(msg);
 		}
 	}
@@ -123,7 +95,7 @@ public class LOG {
 	 * @param value
 	 */
 	public static void trace(String key, String value) {
-		if (bTrace) {
+		if (B_TRACE) {
 			trace(key + "='" + value + "'");
 		}
 	}
@@ -162,38 +134,6 @@ public class LOG {
 		} else {
 			System.err.println(txt);
 		}
-	}
-
-	/**
-	 * set the DB logging
-	 *
-	 */
-	public static void setDbLogging() {
-		if (getTraceHibernate()) {
-			LOG.trace("Enable DB logging");
-			enableDbLogging();
-		} else {
-			//LOG.trace("Disable DB logging");
-			disableDbLogging();
-		}
-	}
-
-	/**
-	 * disable the DB logging
-	 */
-	public static void disableDbLogging() {
-		LogManager logManager = LogManager.getLogManager();
-		Logger logger = logManager.getLogger("");
-		logger.setLevel(Level.OFF);
-	}
-
-	/**
-	 * enable the DB logging
-	 */
-	public static void enableDbLogging() {
-		LogManager logManager = LogManager.getLogManager();
-		Logger logger = logManager.getLogger("");
-		logger.setLevel(Level.INFO);
 	}
 
 }

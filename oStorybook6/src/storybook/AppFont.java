@@ -91,7 +91,7 @@ public class AppFont {
 	 *
 	 */
 	public void defRestore() {
-		//LOG.trace("App.fontRestoreDefault()");
+		//LOG.trace(TT+"defRestore()");
 		if (App.preferences == null) {
 			App.preferences = new Pref();
 		}
@@ -129,7 +129,6 @@ public class AppFont {
 
 	/**
 	 * restore the Book font
-	 *
 	 */
 	public void bookRestore() {
 		//LOG.trace("LOG.fontRestoreBook()");

@@ -18,7 +18,6 @@
 package storybook.dialog.chooser;
 
 import i18n.I18N;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -27,7 +26,6 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -79,11 +77,9 @@ public class ImageChooserDlg extends JFileChooser {
 					if (upper == null || upper.isEmpty()) {
 						return;
 					}
-					//dumpComponents(chooser, true);
 					String nd = newDir.getPath() + File.separator;
 					if (!nd.startsWith(upper)) {
 						bloc = true;
-						//dumpComponents(chooser, false);
 						if (warning == 0) {
 							JOptionPane.showMessageDialog(this,
 									I18N.getMsg("imagechooser.warning", upper),
@@ -99,31 +95,6 @@ public class ImageChooserDlg extends JFileChooser {
 
 	public void setUpper(String upper) {
 		this.upper = upper;
-	}
-
-	/*private void dumpComponents(JFileChooser chooser, boolean b) {
-		int i = 1;
-		for (Component c : chooser.getComponents()) {
-			if (c instanceof JPanel) {
-				dumpComponent(i, (JPanel) c, b);
-			}
-			i++;
-		}
-	}*/
-	private void dumpComponent(int n, JPanel chooser, boolean b) {
-		int i = n * 10;
-		for (Component c : chooser.getComponents()) {
-			if (c instanceof JPanel) {
-				dumpComponent(i, (JPanel) c, b);
-			}
-			if (c instanceof JButton) {
-				JButton btn = (JButton) c;
-				if (i == 400) {
-					btn.setEnabled(b);
-				}
-				i++;
-			}
-		}
 	}
 
 	private static class ImagePanel extends JPanel {

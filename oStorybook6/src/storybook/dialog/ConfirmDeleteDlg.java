@@ -16,17 +16,17 @@
  */
 package storybook.dialog;
 
+import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import api.mig.swing.MigLayout;
 import storybook.db.EntityUtil;
 import storybook.db.abs.AbstractEntity;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MainFrame;
 
 /**
@@ -75,7 +75,7 @@ public class ConfirmDeleteDlg extends AbsDialog {
 	@Override
 	public void initUi() {
 		setLayout(new MigLayout("", "", ""));
-		JSLabel lb = new JSLabel(I18N.getMsg("ask.delete.multi"));
+		JLabel lb = new JLabel(I18N.getMsg("ask.delete.multi"));
 		if (entities.size() < 2) {
 			setTitle(I18N.getMsg("ask.delete"));
 			lb.setText(I18N.getMsg("ask.delete"));

@@ -1,0 +1,7 @@
+Copyright and Licenses of the templates
+
+antic: Authorized by Victoria's Journals https://victoriasjournals.ca
+classic: Authorized by Victoria's Journals https://victoriasjournals.ca
+contemporary: Authorized by Victoria's Journals https://victoriasjournals.ca
+modern: The oStorybookTeam, CC-BY-SA
+osbk: The oStorybookTeam, CC-BY-SA

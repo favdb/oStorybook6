@@ -34,7 +34,6 @@ import storybook.db.strand.Strand;
 import storybook.tools.ListUtil;
 import storybook.tools.html.Html;
 import storybook.tools.swing.ColorIcon;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 
@@ -94,7 +93,7 @@ public class EntityLinksPanel extends AbstractPanel {
 		List<String> tooltip = new ArrayList<>();
 		for (Object obj : list) {
 			AbstractEntity entity = (AbstractEntity) obj;
-			JSLabel lb = new JSLabel(entity.getIcon());
+			JLabel lb = new JLabel(entity.getIcon());
 			lb.setOpaque(false);
 			if (entity instanceof Strand) {
 				lb.setIcon(new ColorIcon(((Strand) entity).getJColor(), IconUtil.getDefSize()));

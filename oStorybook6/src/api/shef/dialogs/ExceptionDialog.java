@@ -8,6 +8,7 @@
  */
 package api.shef.dialogs;
 
+import i18n.I18N;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -18,13 +19,12 @@ import java.io.PrintStream;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
-import i18n.I18N;
-import storybook.tools.swing.js.JSLabel;
 
 /**
  * Dialogue pour l'affichage d'une exception
@@ -37,9 +37,9 @@ public class ExceptionDialog extends JDialog {
 	private static final int PREFERRED_WIDTH = 450;
 	private static final String DEFAULT_TITLE = I18N.getMsg("shef.error");
 	private JPanel jContentPane = null;
-	private JSLabel iconLabel = null;
-	private JSLabel titleLabel = null;
-	private JSLabel msgLabel = null;
+	private JLabel iconLabel = null;
+	private JLabel titleLabel = null;
+	private JLabel msgLabel = null;
 	private JPanel buttonPanel = null;
 	private JButton okButton = null;
 	private JButton detailsButton = null;
@@ -105,14 +105,14 @@ public class ExceptionDialog extends JDialog {
 			jContentPane.setLayout(new GridBagLayout());
 			jContentPane.setBorder(BorderFactory.createEmptyBorder(12, 5, 10, 5));
 
-			iconLabel = new JSLabel();
+			iconLabel = new JLabel();
 			iconLabel.setText("");
 			iconLabel.setIcon(UIManager.getIcon("OptionPane.errorIcon"));
 			jContentPane.add(iconLabel, new GBC("0,0, insets 0 0 0 0, weighty 0.0, anchor N"));
-			titleLabel = new JSLabel();
+			titleLabel = new JLabel();
 			titleLabel.setText(I18N.getMsg("shef.error_prompt"));
 			jContentPane.add(titleLabel, new GBC("0,1, fill N, anchor W, insets 0 0 0 5"));
-			msgLabel = new JSLabel();
+			msgLabel = new JLabel();
 			msgLabel.setText("");
 			jContentPane.add(msgLabel, new GBC("1, 1, anchor W, insets 0 25 5 5"));
 			jContentPane.add(getButtonPanel(), new GBC("0, 2, fill V, gridheight 3, insets 0 0 10 0, anchor W"));

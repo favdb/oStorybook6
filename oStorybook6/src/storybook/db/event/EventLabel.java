@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.db.event;
 
 import i18n.I18N;
-import storybook.tools.swing.js.JSLabel;
+import javax.swing.JLabel;
 import storybook.ui.interfaces.IRefreshable;
 
 /**
@@ -26,7 +26,7 @@ import storybook.ui.interfaces.IRefreshable;
  *
  */
 @SuppressWarnings("serial")
-public class EventLabel extends JSLabel implements IRefreshable {
+public class EventLabel extends JLabel implements IRefreshable {
 
 	private EventStatus state;
 

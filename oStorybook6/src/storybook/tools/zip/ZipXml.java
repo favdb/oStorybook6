@@ -37,7 +37,7 @@ import storybook.tools.ListUtil;
 import storybook.tools.TextUtil;
 
 /**
- * class for parsing a ZipXML file (for ODT or DOCX
+ * class for parsing a ZipXML file (for ODT or DOCX)
  *
  * @author favdb
  */

@@ -42,27 +42,23 @@ public class BookInfo {
 
 	private Book book;
 	public String creation = "",
-		maj = "",
-		title = "",
-		subtitle = "",
-		author = "",
-		copyright = "",
-		UUID = "",
-		ISBN = "",
-		language = "",
-		blurb = "",
-		notes = "",
-		dedication = "",
-		assistant = "",
-		assistantValue = "";
+			maj = "",
+			title = "", subtitle = "",
+			author = "", copyright = "",
+			UUID = "", ISBN = "",
+			language = "",
+			blurb = "", notes = "", dedication = "",
+			assistant = "", assistantValue = "";
 	private boolean scenario = false,
-		markdown = false,
-		calendarUse = false,
-		review = false;
+			markdown = false,
+			calendarUse = false,
+			review = false;
 	private Status status;
 	private Integer nature = 0;
+	private int sceneDateInit;
 	private Element elInfo;
 	private String dbVersion;
+	private boolean cover;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public BookInfo(Book book) {
@@ -120,11 +116,13 @@ public class BookInfo {
 			copyrightSet(getString(elInfo, INFO.COPYRIGHT));
 			isbnSet(getString(elInfo, INFO.ISBN));
 			uuidSet(getString(elInfo, INFO.UUID));
+			coverSet(getBoolean(elInfo, INFO.COVER));
 			languageSet(getString(elInfo, INFO.LANG));
 			natureSet(getInteger(elInfo, INFO.NATURE));
 			reviewSet(getBoolean(elInfo, INFO.REVIEW));
 			scenarioSet(getBoolean(elInfo, INFO.SCENARIO));
 			markdownSet(getBoolean(elInfo, INFO.MARKDOWN));
+			sceneDateInitSet(getInteger(elInfo, INFO.SCENEDATEINIT));
 			blurbSet(Book.getText(elInfo, INFO.BLURB));
 			notesSet(Book.getText(elInfo, INFO.NOTES));
 			dedicationSet(Book.getText(elInfo, INFO.DEDICATION));
@@ -139,6 +137,7 @@ public class BookInfo {
 		b.append(setAttribute(0, INFO.UPDATE.toString(), majGet()));
 		b.append(setAttribute(8, INFO.UUID.toString(), uuidGet()));
 		b.append(setAttribute(8, INFO.ISBN.toString(), isbnGet()));
+		b.append(setAttribute(8, INFO.COVER.toString(), coverGet()));
 		b.append(setAttribute(8, INFO.LANG.toString(), languageGet()));
 		b.append(setAttribute(8, INFO.TITLE.toString(), titleGet()));
 		b.append(setAttribute(8, INFO.SUBTITLE.toString(), subtitleGet()));
@@ -147,6 +146,7 @@ public class BookInfo {
 		b.append(setAttribute(8, INFO.REVIEW.toString(), reviewGet() ? "1" : "0"));
 		b.append(setAttribute(0, INFO.SCENARIO.toString(), scenarioGet() ? "1" : "0"));
 		b.append(setAttribute(0, INFO.MARKDOWN.toString(), markdownGet() ? "1" : "0"));
+		b.append(setAttribute(0, INFO.SCENEDATEINIT.toString(), sceneDateInitGet() + ""));
 		b.append(setAttribute(0, INFO.NATURE.toString(), natureGet() + ""));
 		b.append(">\n");
 		b.append(XmlUtil.setChild(2, INFO.BLURB.toString(), blurbGet(), false));
@@ -298,6 +298,14 @@ public class BookInfo {
 		return (markdown);
 	}
 
+	public void sceneDateInitSet(int x) {
+		this.sceneDateInit = x;
+	}
+
+	public int sceneDateInitGet() {
+		return sceneDateInit;
+	}
+
 	public void reviewSet(boolean value) {
 		review = value;
 	}
@@ -382,6 +390,14 @@ public class BookInfo {
 			rc += I18N.getColonMsg("book.copyright") + tolong + "\n";
 		}
 		return (rc);
+	}
+
+	public void coverSet(boolean val) {
+		cover = val;
+	}
+
+	public boolean coverGet() {
+		return cover;
 	}
 
 }

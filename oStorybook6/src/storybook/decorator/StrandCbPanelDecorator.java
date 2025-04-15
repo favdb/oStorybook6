@@ -18,9 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.decorator;
 
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.strand.Strand;
-import storybook.tools.swing.js.JSLabel;
+import storybook.ui.MIG;
 
 /**
  * @author martin
@@ -45,7 +46,7 @@ public class StrandCbPanelDecorator extends CbPanelDecorator {
 	@Override
 	public void decorateEntity(JCheckBox cb, AbstractEntity entity) {
 		Strand strand = (Strand) entity;
-		panel.add(new JSLabel(strand.getColorIcon()), "split 2");
+		panel.add(new JLabel(strand.getColorIcon()), MIG.SPLIT2);
 		panel.add(cb);
 	}
 

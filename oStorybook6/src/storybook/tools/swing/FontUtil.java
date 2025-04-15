@@ -99,7 +99,7 @@ public class FontUtil {
 
 	public static String getString(Font font) {
 		if (font == null) {
-			return (getString(App.getInstance().fonts.defGet()));
+			return (getString(App.fonts.defGet()));
 		}
 		StringBuilder buf = new StringBuilder();
 		buf.append(font.getName());
@@ -146,7 +146,7 @@ public class FontUtil {
 
 	public static Font getSmall() {
 		//LOG.trace(TT+".getSmallFont()");
-		int sz = App.getInstance().fonts.defGet().getSize();
+		int sz = App.fonts.defGet().getSize();
 		sz = (sz / 4) * 3;
 		return new Font("Default", 0, sz);
 	}

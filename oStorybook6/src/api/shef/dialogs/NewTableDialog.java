@@ -8,6 +8,7 @@
  */
 package api.shef.dialogs;
 
+import i18n.I18N;
 import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -18,14 +19,13 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import i18n.I18N;
-import storybook.tools.swing.js.JSLabel;
 
 public class NewTableDialog extends OptionDialog {
 
@@ -88,12 +88,9 @@ public class NewTableDialog extends OptionDialog {
 
 	private class LayoutPanel extends JPanel {
 
-		private static final long serialVersionUID = 1L;
-		private JSLabel rowsLabel = null;
-		private JSLabel colsLabel = null;
+		private JLabel rowsLabel = null, colsLabel = null;
 		private int iRows, iCols;
-		private JSpinner rowsField = null;
-		private JSpinner colsField = null;
+		private JSpinner rowsField = null, colsField = null;
 
 		/**
 		 * This is the default constructor
@@ -134,10 +131,10 @@ public class NewTableDialog extends OptionDialog {
 							TitledBorder.DEFAULT_POSITION, null, null),
 					BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
-			rowsLabel = new JSLabel(I18N.getMsg("shef.rows"));
+			rowsLabel = new JLabel(I18N.getMsg("shef.rows"));
 			add(rowsLabel, new GBC("0,0,anchor W, wy 0.0, ins 0 0 0 5"));
 			add(getRowsField(), new GBC("0,1, fill N, wx 0.0, anchor W, ins 0 0 0 15"));
-			colsLabel = new JSLabel(I18N.getMsg("shef.columns"));
+			colsLabel = new JLabel(I18N.getMsg("shef.columns"));
 			add(colsLabel, new GBC("0,2,anchor W, ins 0 0 0 5"));
 			add(getColsField(), new GBC("0,3,fill N, wx 1.0, anchor W"));
 		}

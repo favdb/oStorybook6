@@ -8,31 +8,30 @@
  */
 package api.shef.dialogs;
 
-import java.awt.GridBagLayout;
-import java.util.Hashtable;
-import javax.swing.JTextField;
 import api.shef.actions.TextEditPopupManager;
 import i18n.I18N;
-import storybook.tools.swing.js.JSLabel;
+import java.awt.GridBagLayout;
+import java.util.Hashtable;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class StyleAttributesPanel extends HTMLAttributeEditorPanel {
 
 	private static final String SCLASS = "class";
 
-	private JSLabel classLabel = null;
-	private JSLabel idLabel = null;
-	private JTextField classField = null;
-	private JTextField idField = null;
+	private JLabel classLabel = null, idLabel = null;
+	private JTextField classField = null, idField = null;
 
 	/**
 	 * This method initializes
 	 *
 	 */
+	@SuppressWarnings("UseOfObsoleteCollectionType")
 	public StyleAttributesPanel() {
 		this(new Hashtable());
 	}
 
-	public StyleAttributesPanel(Hashtable attr) {
+	public StyleAttributesPanel(@SuppressWarnings("UseOfObsoleteCollectionType") Hashtable attr) {
 		super();
 		initialize();
 		setAttributes(attr);
@@ -49,14 +48,14 @@ public class StyleAttributesPanel extends HTMLAttributeEditorPanel {
 		setPreferredSize(new java.awt.Dimension(210, 60));
 		setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		add(new JSLabel(I18N.getMsg("shef.nothing")));
+		add(new JLabel(I18N.getMsg("shef.nothing")));
 		/*
 		 * nothing because class is not allowed*/
-		classLabel = new JSLabel(I18N.getMsg("shef." + SCLASS));
+		classLabel = new JLabel(I18N.getMsg("shef." + SCLASS));
 		add(classLabel, new GBC("0,0,anchor W, ins 0 0 5 5"));
 		classLabel.setVisible(false);
 		add(getClassField(), new GBC("0,1,fill H, wx 1.0, wy 0.0, ins 0 0 5 0"));
-		idLabel = new JSLabel(I18N.getMsg("shef.id"));
+		idLabel = new JLabel(I18N.getMsg("shef.id"));
 		add(idLabel, new GBC("1,0,anchor W, ins 0 0 5 5"));
 		add(getIdField(), new GBC("1,1,fill H, ins 0 0 5 0, wx 1.0"));
 

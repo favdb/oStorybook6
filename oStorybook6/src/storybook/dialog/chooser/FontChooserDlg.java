@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2017 favdb
+ * Copyright (C) 2024 favdb
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12,26 +12,32 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 package storybook.dialog.chooser;
 
+import api.mig.swing.MigLayout;
+import i18n.I18N;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import javax.swing.JButton;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
-import i18n.I18N;
-import storybook.tools.swing.LaF;
-import storybook.tools.swing.js.JSLabel;
+import resources.icons.ICONS;
+import storybook.tools.swing.SwingUtil;
+import storybook.ui.MIG;
+import storybook.ui.Ui;
 
 /**
  *
@@ -39,151 +45,201 @@ import storybook.tools.swing.js.JSLabel;
  */
 public class FontChooserDlg extends JDialog {
 
-	String[] styleList = new String[]{"Plain", "Bold", "Italic"};
-	String[] sizeList = new String[]{"3", "4", "5", "6", "7", "8", "9", "10",
-		"11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22",
-		"24", "27", "30", "34", "39", "45", "51", "60"};
-	NwList listStyle;
-	NwList listFont;
-	NwList listSize;
-	static JSLabel sample = new JSLabel();
-	private boolean canceled = false;
+	String[] styleList = new String[]{
+		I18N.getMsg("font.plain"),
+		I18N.getMsg("font.bold"),
+		I18N.getMsg("font.italic")
+	};
+	Integer[] sizeList = new Integer[]{3, 4, 5, 6, 7, 8, 9, 10,
+		11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22,
+		24, 27, 30, 34, 39, 45, 51, 60};
+	private final JLabel sample = new JLabel();
+	private JList lsFamily, lsStyle;
+	private JList<Integer> lsSize;
+	//private JLabel lbFamily, lbStyle, lbSize;
+	private boolean cancel = true;
+	private JPanel pup;
 
-	public FontChooserDlg(JDialog parent, Font font) {
+	public FontChooserDlg(JFrame parent, Font initfont) {
 		super(parent, true);
-		initAll();
+		initialize(initfont);
+	}
+
+	public FontChooserDlg(JDialog parent, Font initfont) {
+		super(parent, true);
+		initialize(initfont);
+	}
+
+	private void initialize(Font inFont) {
 		setTitle(I18N.getMsg("font.chooser"));
-		if (font == null) {
-			font = sample.getFont();
-		} else {
-			sample.setFont(font);
+		setLayout(new MigLayout(MIG.WRAP1));
+		pup = new JPanel(new MigLayout(MIG.WRAP, "[][][]"));
+		//family
+		pup.add(initFamily(inFont));
+		String fam = inFont.getFamily();
+		if (fam.equalsIgnoreCase("sans serif")) {
+			fam = "SansSerif";
 		}
-		listFont.setSelectedItem(font.getName());
-		listSize.setSelectedItem(font.getSize() + "");
-		listStyle.setSelectedItem(styleList[font.getStyle()]);
+		if (fam.equalsIgnoreCase("monospace")) {
+			fam = "Monospaced";
+		}
+		lsFamily.setSelectedValue(fam, true);
+		lsFamily.addListSelectionListener((ListSelectionEvent e) -> {
+			showSample();
+		});
+		//style
+		pup.add(initStyle(inFont));
+		lsStyle.setSelectedValue(styleList[inFont.getStyle()], true);
+		lsStyle.addListSelectionListener((ListSelectionEvent e) -> {
+			showSample();
+		});
+		//size
+		pup.add(initSize(inFont));
+		lsSize.addListSelectionListener((ListSelectionEvent e) -> {
+			showSample();
+		});
+		add(pup);
+		//sample
+		sample.setText("The quick brown fox jumped over the lazy dog.");
+		sample.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		add(sample, MIG.get(MIG.SPAN, MIG.CENTER));
+		//ok+cancel
+		add(initOkCancel(), MIG.get(MIG.SPAN, MIG.RIGHT));
 
+		pack();
+		this.setLocationRelativeTo(getParent());
+		setSampleSize();
 	}
 
-	private void initAll() {
-		getContentPane().setLayout(null);
-		setBounds(200, 200, 460, 430);
-		addLists();
-		addButtons();
-		sample.setBounds(10, 320, 415, 25);
-		sample.setForeground(Color.black);
-		getContentPane().add(sample);
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				setVisible(false);
+	public void disableStyle() {
+		lsStyle.setEnabled(false);
+	}
+
+	public void disableSize() {
+		lsSize.setEnabled(false);
+	}
+
+	@SuppressWarnings("unchecked")
+	private JPanel initFamily(Font initfont) {
+		JPanel p = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0, MIG.WRAP1)));
+		p.add(new JLabel(I18N.getColonMsg("font.family")));
+		lsFamily = new JList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+		p.add(new JScrollPane(lsFamily));
+		return p;
+	}
+
+	@SuppressWarnings("unchecked")
+	private JPanel initStyle(Font initfont) {
+		JPanel p = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0, MIG.WRAP1)));
+		p.add(new JLabel(I18N.getColonMsg("font.style")));
+		lsStyle = new JList(styleList);
+		p.add(new JScrollPane(lsStyle));
+		return p;
+	}
+
+	@SuppressWarnings("unchecked")
+	private JPanel initSize(Font initfont) {
+		int sz = initfont.getSize();
+		JPanel p = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0, MIG.WRAP1)));
+		p.add(new JLabel(I18N.getColonMsg("font.size")));
+		DefaultListModel<Integer> model = new DefaultListModel<>();
+		int i = 0;
+		Integer idx = 12;
+		for (Integer v : sizeList) {
+			model.addElement(v);
+			if (v <= sz) {
+				idx = v;
 			}
-		});
+			i++;
+		}
+		lsSize = new JList<>(model);
+		lsSize.setSelectedValue(idx, true);
+		p.add(new JScrollPane(lsSize));
+		return p;
 	}
 
-	private void addLists() {
-		listFont = new NwList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
-		listFont.setBounds(10, 10, 260, 295);
-		getContentPane().add(listFont);
-		listStyle = new NwList(styleList);
-		listStyle.setBounds(280, 10, 80, 295);
-		getContentPane().add(listStyle);
-		listSize = new NwList(sizeList);
-		listSize.setBounds(370, 10, 60, 295);
-		getContentPane().add(listSize);
+	private JPanel initOkCancel() {
+		JPanel p = new JPanel(new MigLayout());
+		p.add(Ui.initButton("btOK", "ok", ICONS.K.OK, "", e -> {
+			cancel = false;
+			dispose();
+		}));
+		p.add(Ui.initButton("btCancel", "cancel", ICONS.K.CANCEL, "", e -> {
+			dispose();
+		}));
+		return p;
 	}
 
-	private void addButtons() {
-		JButton ok = new JButton(I18N.getMsg("ok"));
-		ok.setMargin(new Insets(0, 0, 0, 0));
-		ok.setBounds(260, 350, 70, 24);
-		getContentPane().add(ok);
-		ok.addActionListener((ActionEvent e) -> {
-			setVisible(false);
-			canceled = false;
-		});
-		JButton cancel = new JButton(I18N.getMsg("cancel"));
-		cancel.setMargin(new Insets(0, 0, 0, 0));
-		cancel.setBounds(340, 350, 70, 24);
-		getContentPane().add(cancel);
-		cancel.addActionListener((ActionEvent e) -> {
-			setVisible(false);
-			canceled = true;
-		});
+	public Font getSelectedFont() {
+		Font f = sample.getFont();
+		int g = 0;
+		try {
+			g = lsSize.getSelectedValue();
+		} catch (NumberFormatException nfe) {
+			g = 12;
+		}
+		return new Font(f.getFamily(), f.getStyle(), g);
 	}
 
 	private void showSample() {
 		int g = 0;
 		try {
-			g = Integer.parseInt(listSize.getSelectedValue());
-		} catch (NumberFormatException nfe) {
+			g = lsSize.getSelectedValue();
+		} catch (Exception nfe) {
+			g = 12;
 		}
-		String st = listStyle.getSelectedValue();
+		g = sample.getFont().getSize();
 		int s = Font.PLAIN;
-		if (st.equalsIgnoreCase("Bold")) {
-			s = Font.BOLD;
+		switch (lsStyle.getSelectedIndex()) {
+			case 1:
+				s = Font.BOLD;
+				break;
+			case 2:
+				s = Font.ITALIC;
+				break;
+			default:
+				break;
 		}
-		if (st.equalsIgnoreCase("Italic")) {
-			s = Font.ITALIC;
-		}
-		sample.setFont(new Font(listFont.getSelectedValue(), s, g));
-		sample.setText("The quick brown fox jumped over the lazy dog.");
+		sample.setFont(new Font((String) lsFamily.getSelectedValue(), s, g));
+		setSampleSize();
 	}
 
-	public Font getSelectedFont() {
-		return (sample.getFont());
+	private void setSampleSize() {
+		int h = sample.getFont().getSize() * 2, w = pup.getWidth() - sample.getFont().getSize();
+		Dimension dim = new Dimension(w, h);
+		SwingUtil.setFixedSize(sample, dim);
 	}
 
 	public boolean isCanceled() {
-		return canceled;
+		return cancel;
 	}
 
-	public class NwList extends JPanel {
-
-		JList jl;
-		JScrollPane sp;
-		JSLabel jt;
-		String si = " ";
-
-		@SuppressWarnings("unchecked")
-		public NwList(String[] values) {
-			setLayout(null);
-			jl = new JList(values);
-			sp = new JScrollPane(jl);
-			jt = new JSLabel();
-			if (!LaF.isDark()) {
-				jt.setBackground(Color.white);
-				jt.setForeground(Color.black);
+	/**
+	 * remove size values out of limits
+	 *
+	 * @param min: minimal allowed size
+	 * @param max: maximal allowed size
+	 */
+	public void setLimitedSize(int min, int max) {
+		Integer idx = lsSize.getSelectedValue();
+		DefaultListModel<Integer> model = (DefaultListModel<Integer>) lsSize.getModel();
+		List<Integer> valuesToKeep = new ArrayList<>();
+		for (int i = 0; i < model.getSize(); i++) {
+			Integer value = model.getElementAt(i);
+			if (value >= min && value <= max) {
+				valuesToKeep.add(value);
 			}
-			jt.setOpaque(true);
-			jt.setBorder(new JTextField().getBorder());
-			jt.setFont(getFont());
-			jl.setBounds(0, 0, 100, 1000);
-			if (!LaF.isDark()) {
-				jl.setBackground(Color.white);
-			}
-			jl.addListSelectionListener((ListSelectionEvent e) -> {
-				jt.setText((String) jl.getSelectedValue());
-				si = (String) jl.getSelectedValue();
-				showSample();
-			});
-			add(sp);
-			add(jt);
 		}
-
-		public String getSelectedValue() {
-			return (si);
+		model.clear();
+		for (Integer value : valuesToKeep) {
+			model.addElement(value);
 		}
+		//select current font size
+		try {
+			lsSize.setSelectedValue(idx, true);
+		} catch (Exception ex) {
 
-		public void setSelectedItem(String s) {
-			jl.setSelectedValue(s, true);
-		}
-
-		@Override
-		public void setBounds(int x, int y, int w, int h) {
-			super.setBounds(x, y, w, h);
-			sp.setBounds(0, y + 12, w, h - 23);
-			sp.revalidate();
-			jt.setBounds(0, 0, w, 20);
 		}
 	}
+
 }

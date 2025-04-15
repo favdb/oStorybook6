@@ -16,20 +16,20 @@
  */
 package storybook.ideabox;
 
+import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import api.mig.swing.MigLayout;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
 import storybook.App;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.idea.Idea;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 
 /**
@@ -67,7 +67,7 @@ public class IdeaConfirmDelete extends JDialog {
 	public void initUi() {
 		this.setModal(true);
 		setLayout(new MigLayout(MIG.WRAP));
-		JSLabel lb = new JSLabel();
+		JLabel lb = new JLabel();
 		setTitle(I18N.getMsg("ask.delete"));
 		lb.setText(I18N.getMsg("ask.delete"));
 		JScrollPane scroller = new JScrollPane();
@@ -87,7 +87,7 @@ public class IdeaConfirmDelete extends JDialog {
 
 	private JButton getOkButton(String... txt) {
 		JButton bt = new JButton();
-		bt.setFont((App.getInstance().fonts.defGet()));
+		bt.setFont((App.fonts.defGet()));
 		bt.setText(I18N.getMsg("ok"));
 		bt.setIcon(IconUtil.getIconSmall(ICONS.K.OK));
 		bt.addActionListener(e -> {
@@ -99,7 +99,7 @@ public class IdeaConfirmDelete extends JDialog {
 
 	private JButton getCancelButton() {
 		JButton bt = new JButton();
-		bt.setFont((App.getInstance().fonts.defGet()));
+		bt.setFont((App.fonts.defGet()));
 		bt.setText(I18N.getMsg("cancel"));
 		bt.setIcon(IconUtil.getIconSmall(ICONS.K.CANCEL));
 		bt.addActionListener(e -> {

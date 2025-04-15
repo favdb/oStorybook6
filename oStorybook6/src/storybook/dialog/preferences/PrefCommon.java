@@ -73,6 +73,7 @@ public class PrefCommon extends AbstractPanel {
 	public PreferencesDlg caller;
 	private JPanel pColors;
 	private JCheckBox ckOffline;
+	private JLabel lbColors;
 
 	public PrefCommon(PreferencesDlg dlg) {
 		super(dlg.getMainFrame());
@@ -159,7 +160,8 @@ public class PrefCommon extends AbstractPanel {
 		ckOnExit.setSelected(pref.getBoolean(Pref.KEY.CONFIRM_EXIT, false));
 		add(ckOnExit);
 
-		add(new JLabel(I18N.getColonMsg("intensity.colors")));
+		lbColors = new JLabel(I18N.getColonMsg("intensity.colors"));
+		add(lbColors);
 		pColors = new JPanel(new MigLayout());
 		for (int i = 0; i < 5; i++) {
 			JButton btc = new JButton((i + 1) + " ");
@@ -200,6 +202,7 @@ public class PrefCommon extends AbstractPanel {
 		int iLang = cbLanguage.getSelectedIndex();
 		Const.Language lang = Const.Language.values()[iLang];
 		Locale locale = lang.getLocale();
+		//LOG.trace("selected language=" + locale.toString());
 		pref.setString(Pref.KEY.LANGUAGE, locale.toString());
 		if (modifLanguage) {
 			if (newMsgFile != null) {
@@ -213,8 +216,8 @@ public class PrefCommon extends AbstractPanel {
 			I18N.initMsgInternal(locale);
 			pref.setString(Pref.KEY.SPELLING, locale.getLanguage());
 			Synonyms.init(getHomeDir().getAbsolutePath()
-			   + File.separator + ".storybook5/dicts/", pref.getString(Pref.KEY.SPELLING));
-			caller.setToRefresh();
+					+ File.separator + ".storybook6/dicts/", pref.getString(Pref.KEY.SPELLING));
+			caller.refreshUi();
 			mainFrame.getMainMenu().refresh();
 		}
 
@@ -242,6 +245,7 @@ public class PrefCommon extends AbstractPanel {
 		lbOnExit.setText(I18N.getColonMsg("preferences.exit"));
 		ckOnExit.setText(I18N.getMsg("preferences.exit.chb"));
 		ckOffline.setText(I18N.getMsg("preferences.offline"));
+		lbColors.setText(I18N.getColonMsg("intensity.colors"));
 	}
 
 	private void changeLanguageFile() {
@@ -259,6 +263,10 @@ public class PrefCommon extends AbstractPanel {
 		I18N.initMessages(currentlocale);
 		refreshUi();
 		modifLanguage = true;
+	}
+
+	public boolean isModifLanguage() {
+		return modifLanguage;
 	}
 
 }

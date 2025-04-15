@@ -38,6 +38,7 @@ import java.util.ResourceBundle;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -58,7 +59,6 @@ import storybook.tools.StringUtil;
 import storybook.tools.file.EnvUtil;
 import storybook.tools.file.IOUtil;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.tools.swing.js.JSTable;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
@@ -71,7 +71,7 @@ import storybook.ui.Ui;
 public class I18NDlg extends AbsDialog {
 
 	private static final String TT = "I18NDlg",
-	   PROP_EXT = ".properties";
+			PROP_EXT = ".properties";
 
 	private JComboBox<String> cbLanguage;
 	private JButton btSave;
@@ -101,12 +101,12 @@ public class I18NDlg extends AbsDialog {
 	@Override
 	public void initUi() {
 		JToolBar.Separator separator = new JToolBar.Separator();
-		JSLabel spacer = new JSLabel(" ");
+		JLabel spacer = new JLabel(" ");
 		JToolBar toolbar = new JToolBar();
 		toolbar.setLayout(new MigLayout());
 		toolbar.setRollover(true);
 
-		JSLabel lbLanguages = new JSLabel(I18N.getMsg("language") + ":");
+		JLabel lbLanguages = new JLabel(I18N.getMsg("language") + ":");
 		toolbar.add(lbLanguages);
 		cbLanguage = new JComboBox<>();
 		cbLanguage.addItemListener((ItemEvent evt) -> {
@@ -118,18 +118,18 @@ public class I18NDlg extends AbsDialog {
 		toolbar.add(separator);
 
 		JButton btNew = Ui.initButton("btNew", "", ICONS.K.F_NEW, "new",
-		   (evt -> btNewAction()));
+				(evt -> btNewAction()));
 		toolbar.add(btNew);
 		JButton btOpen = Ui.initButton("btOpen", "", ICONS.K.F_OPEN, "open",
-		   (evt -> btOpenAction()));
+				(evt -> btOpenAction()));
 		toolbar.add(btOpen);
 		toolbar.add(separator);
 
 		JButton btRefresh = Ui.initButton("btRefresh", "", ICONS.K.REFRESH, "refresh",
-		   (ActionEvent evt) -> {
-			   bModified = false;
-			   changeLanguage();
-		   });
+				(ActionEvent evt) -> {
+					bModified = false;
+					changeLanguage();
+				});
 		toolbar.add(btRefresh);
 		toolbar.add(separator);
 
@@ -155,9 +155,9 @@ public class I18NDlg extends AbsDialog {
 			public void windowClosing(WindowEvent e) {
 				if (bModified) {
 					int confirmed = JOptionPane.showConfirmDialog(null,
-					   I18N.getMsg("language.confirm"),
-					   I18N.getMsg("confirm"),
-					   JOptionPane.YES_NO_OPTION);
+							I18N.getMsg("language.confirm"),
+							I18N.getMsg("confirm"),
+							JOptionPane.YES_NO_OPTION);
 					if (confirmed == JOptionPane.YES_OPTION) {
 						dispose();
 					}
@@ -175,7 +175,7 @@ public class I18NDlg extends AbsDialog {
 		JScrollPane scrollTable = new JScrollPane();
 		scrollTable.setViewportView(msgTable);
 
-		JSLabel lbText = new JSLabel(I18N.getColonMsg("text"));
+		JLabel lbText = new JLabel(I18N.getColonMsg("text"));
 		text = new JTextArea();
 		text.setColumns(20);
 		text.setRows(5);
@@ -186,7 +186,7 @@ public class I18NDlg extends AbsDialog {
 		JScrollPane scrollInfoText = new JScrollPane();
 		scrollInfoText.setViewportView(text);
 
-		JSLabel lbComment = new JSLabel(I18N.getColonMsg("language.comment"));
+		JLabel lbComment = new JLabel(I18N.getColonMsg("language.comment"));
 		JScrollPane scrollComment = new JScrollPane();
 		txComment = new javax.swing.JTextArea();
 		txComment.setEditable(false);
@@ -204,9 +204,9 @@ public class I18NDlg extends AbsDialog {
 
 		infoPane1.setEditable(false);
 		infoPane1.setText("{0}, {1}, ... are for insertion of variables data, they are mandatory.\n\n"
-		   + "\\n stands for line feed.\n\n"
-		   + "Don't translate the 'shortcut.k...' - it's only for keyboard shortcuts,\n"
-		   + "which remain the same in any language.");
+				+ "\\n stands for line feed.\n\n"
+				+ "Don't translate the 'shortcut.k...' - it's only for keyboard shortcuts,\n"
+				+ "which remain the same in any language.");
 		JScrollPane scrollInfo = new JScrollPane();
 		scrollInfo.setViewportView(infoPane1);
 		scrollInfo.setFocusable(false);
@@ -242,10 +242,10 @@ public class I18NDlg extends AbsDialog {
 
 	private void btOpenAction() {
 		File f = IOUtil.fileSelect(this,
-		   App.preferences.getString(Pref.KEY.LASTOPEN_DIR, ""),
-		   PROP_EXT,
-		   "Properties file (*.properties)",
-		   "file.select");
+				App.preferences.getString(Pref.KEY.LASTOPEN_DIR, ""),
+				PROP_EXT,
+				"Properties file (*.properties)",
+				"file.select");
 		if (f == null) {
 			return;
 		}
@@ -329,7 +329,7 @@ public class I18NDlg extends AbsDialog {
 		if (curLanguage.contains("=")) {
 			return;
 		}
-		String bundler = "i18n.msg.messages" + "_" + curLanguage.substring(0, 2).toLowerCase();
+		String bundler;
 		Object src;
 		if (curLanguage.startsWith("file:")) {
 			bundler = curLanguage.replace("file:", "");
@@ -397,22 +397,22 @@ public class I18NDlg extends AbsDialog {
 			filename = lng.replace("file:", "");
 		} else {
 			filename = EnvUtil.getHomeDir().getAbsolutePath()
-			   + File.separator
-			   + "messages_"
-			   + lng + PROP_EXT;
+					+ File.separator
+					+ "messages_"
+					+ lng + PROP_EXT;
 		}
 		File dir = new File(filename);
 		dir = IOUtil.fileSelect(this,
-		   dir.getAbsolutePath(),
-		   PROP_EXT,
-		   "*.properties file",
-		   "file.save");
+				dir.getAbsolutePath(),
+				PROP_EXT,
+				"*.properties file",
+				"file.save");
 		if (dir == null) {
 			return;
 		}
 		try (Writer out = new BufferedWriter(
-		   new OutputStreamWriter(
-			  new FileOutputStream(dir), "UTF-8"))) {
+				new OutputStreamWriter(
+						new FileOutputStream(dir), "UTF-8"))) {
 			if (!txComment.getText().isEmpty()) {
 				out.write("#" + txComment.getText().replace("\n", "\n#") + "\n");
 			}
@@ -450,8 +450,8 @@ public class I18NDlg extends AbsDialog {
 				stream = I18N.class.getResourceAsStream(fileName);
 				if (stream == null) {
 					ExceptionDlg.show(this.getClass().getSimpleName()
-					   + ".readComment(lang=" + lang + ") no language file",
-					   null);
+							+ ".readComment(lang=" + lang + ") no language file",
+							null);
 				}
 			}
 		}
@@ -481,9 +481,9 @@ public class I18NDlg extends AbsDialog {
 	private int onExit() {
 		if (bModified) {
 			if (JOptionPane.showConfirmDialog(null,
-			   I18N.getMsg("language.confirm"),
-			   I18N.getMsg("confirm"),
-			   JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					I18N.getMsg("language.confirm"),
+					I18N.getMsg("confirm"),
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				dispose();
 				return (DISPOSE_ON_CLOSE);
 			} else {

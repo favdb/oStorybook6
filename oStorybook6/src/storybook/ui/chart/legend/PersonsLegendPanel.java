@@ -15,15 +15,14 @@
  */
 package storybook.ui.chart.legend;
 
+import api.mig.swing.MigLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
 import java.util.Set;
 import javax.swing.JLabel;
-import api.mig.swing.MigLayout;
 import storybook.db.person.Person;
 import storybook.tools.swing.ColorUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MainFrame;
 
 public class PersonsLegendPanel extends AbstractLegendPanel {
@@ -41,7 +40,7 @@ public class PersonsLegendPanel extends AbstractLegendPanel {
 		setLayout(new MigLayout("wrap 10"));
 		setOpaque(false);
 		for (Person localPerson : this.collection) {
-			JSLabel lbAbbr = new JSLabel(localPerson.getAbbreviation(), 0);
+			JLabel lbAbbr = new JLabel(localPerson.getAbbreviation(), 0);
 			lbAbbr.setPreferredSize(new Dimension(50, 18));
 			if (localPerson.getColor() != null) {
 				lbAbbr.setBackground(ColorUtil.darker(localPerson.getJColor(), 0.05D));

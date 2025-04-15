@@ -16,6 +16,7 @@
  */
 package storybook.exim.exporter.options;
 
+import api.mig.swing.MigLayout;
 import i18n.I18N;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -24,9 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import api.mig.swing.MigLayout;
-import storybook.exim.exporter.ExportBookDlg;
 import storybook.db.book.BookParamExport;
+import storybook.exim.exporter.ExportBookDlg;
 import storybook.ui.MIG;
 import storybook.ui.Ui;
 
@@ -64,7 +64,7 @@ public class BOOKpanel extends JPanel implements ChangeListener {
 		rbOneFile.setSelected(!paramExport.isMulti());
 		rbOneFile.addChangeListener(this);
 		bg1.add(rbOneFile);
-		add(rbOneFile, MIG.SKIP + " 1");
+		add(rbOneFile, MIG.get(MIG.SKIP + " 1"));
 
 		rbMultiChapter = new JRadioButton(I18N.getMsg("export.book.htmloption.multichapter"));
 		rbMultiChapter.setSelected(paramExport.isMultiChapter());
@@ -111,6 +111,7 @@ public class BOOKpanel extends JPanel implements ChangeListener {
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		ckChapterBooktitle.setEnabled(rbMultiChapter.isSelected() || rbMultiScene.isSelected());
+		dlgExport.HTML.checkAdvanced(!this.rbOneFile.isSelected());
 	}
 
 }

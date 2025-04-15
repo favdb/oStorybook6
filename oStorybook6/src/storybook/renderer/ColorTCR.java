@@ -24,7 +24,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import storybook.App;
-import storybook.db.scene.IntensityPanel;
+import storybook.db.scene.Intensity;
 import storybook.tools.swing.ColorIcon;
 
 /**
@@ -40,20 +40,20 @@ public class ColorTCR extends DefaultTableCellRenderer {
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
-		boolean selected, boolean focus, int row, int column) {
+			boolean selected, boolean focus, int row, int column) {
 		JLabel lbText = (JLabel) super.getTableCellRendererComponent(table, null,
-			selected, focus, row, column);
+				selected, focus, row, column);
 		if (value == null) {
 			return lbText;
 		}
 		int sz = App.fonts.defGet().getSize();
 		if (value instanceof String) {
 			lbText.setIcon(null);
-		} else if (value instanceof Integer) {
-			Integer v = ((Integer) value) - 1;
-			Color color = IntensityPanel.colors[v];
-			lbText.setIcon(new ColorIcon(color, sz));
-			lbText.setText("" + (v + 1));
+		} else if (value instanceof Intensity) {
+			Intensity v = (Intensity) value;
+			Color c = ((Intensity) value).getColor();
+			lbText.setIcon(new ColorIcon(c, sz));
+			lbText.setText("" + v.get().toString());
 			lbText.setHorizontalTextPosition(SwingConstants.LEFT);
 		} else if (value instanceof Color) {
 			Color color = (Color) value;

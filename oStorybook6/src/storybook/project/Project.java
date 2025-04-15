@@ -29,7 +29,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -90,6 +89,7 @@ import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.xml.Xml;
+import storybook.tools.zip.XmlZipHandler;
 import storybook.tools.zip.ZipUtil;
 import storybook.tools.zip.ZipXml;
 import storybook.ui.MainFrame;
@@ -191,8 +191,8 @@ public class Project {
 	public void initDefaultEntities() {
 		//initialize the default Strand
 		Strand strand = new Strand(1,
-			I18N.getMsg("strand.name.init_value"), I18N.getMsg("strand.abbr.init_value"),
-			ColorUtil.PALETTE.LIGHT_BLUE.getRGB(), "");
+				I18N.getMsg("strand.name.init_value"), I18N.getMsg("strand.abbr.init_value"),
+				ColorUtil.PALETTE.LIGHT_BLUE.getRGB(), "");
 		strands.add(strand);
 		//initialize Categories
 		categorys.add(new Category(1, I18N.getMsg("category.central_character"), null));
@@ -466,10 +466,10 @@ public class Project {
 			rc = documentBuilder.parse(file);
 		} catch (SAXException e) {
 			ExceptionDlg.show(this.getClass().getSimpleName()
-				+ ".readDom() Parsing error for " + file.getAbsolutePath(), e);
+					+ ".readDom() Parsing error for " + file.getAbsolutePath(), e);
 		} catch (IOException e) {
 			ExceptionDlg.show(this.getClass().getSimpleName()
-				+ ".readDom() I/O error for " + file.getAbsolutePath(), e);
+					+ ".readDom() I/O error for " + file.getAbsolutePath(), e);
 		}
 		return (rc);
 	}
@@ -905,18 +905,18 @@ public class Project {
 		// file doesn't exist
 		if (!file.exists()) {
 			JOptionPane.showMessageDialog(null,
-				I18N.getMsg("project.not.exist.text", file.getPath()),
-				I18N.getMsg("project.not.exist.title"),
-				JOptionPane.ERROR_MESSAGE);
+					I18N.getMsg("project.not.exist.text", file.getPath()),
+					I18N.getMsg("project.not.exist.title"),
+					JOptionPane.ERROR_MESSAGE);
 			App.getInstance().reloadMenuBars();
 			return false;
 		}
 		// file is read-only
 		if (!file.canWrite()) {
 			JOptionPane.showMessageDialog(null,
-				I18N.getMsg("err.db.read.only", file.getPath()),
-				I18N.getMsg("warning"),
-				JOptionPane.ERROR_MESSAGE);
+					I18N.getMsg("err.db.read.only", file.getPath()),
+					I18N.getMsg("warning"),
+					JOptionPane.ERROR_MESSAGE);
 			rc = false;
 		}
 		return rc;
@@ -1044,8 +1044,8 @@ public class Project {
 		int textLength = BookUtil.getNbChars(this);
 		int words = Math.max(1, BookUtil.getNbWords(this));
 		String size = String.format("%,d %s (%,d %s) => %d %s",
-			words, I18N.getMsg("words"), textLength, I18N.getMsg("characters"),
-			words / 480, I18N.getMsg("pages"));//nb de pages sur la base de 480 mots par page
+				words, I18N.getMsg("words"), textLength, I18N.getMsg("characters"),
+				words / 480, I18N.getMsg("pages"));//nb de pages sur la base de 480 mots par page
 		b.append(Html.keyToHtml("file.info.text.length", size));
 		b.append(Html.keyToHtml("title", book.getTitle()));
 		b.append(Html.keyToHtml("author", book.getAuthor()));
@@ -1066,11 +1066,11 @@ public class Project {
 		b.append(Html.keyToHtml("memos", memos.getCount()));
 		if (!html) {
 			String str = b.toString()
-				.replace("<tr>", "").replace("</tr>\n", "@")
-				.replace("<td valign=\"top\"><b>", "").replace("</b>", "=")
-				.replace("<td>", "")
-				.replace("</td>", "")
-				.replace("\n", "").replace("@", "\n");
+					.replace("<tr>", "").replace("</tr>\n", "@")
+					.replace("<td valign=\"top\"><b>", "").replace("</b>", "=")
+					.replace("<td>", "")
+					.replace("</td>", "")
+					.replace("\n", "").replace("@", "\n");
 			return str.substring(0, str.lastIndexOf("\n"));
 		} else {
 			return (b.toString());
@@ -1086,15 +1086,17 @@ public class Project {
 	 */
 	public boolean initDomFromZip(String filePath) throws IOException {
 		//LOG.trace(TT + "initDomFromZip(filePath=" + filePath + ")");
-		ZipXml zipXml = new ZipXml(new File(filePath));
 		try {
+			String validPath = XmlZipHandler.validateAndFixZipIfNeeded(filePath);
+			LOG.trace("validPath=" + validPath);
+			ZipXml zipXml = new ZipXml(new File(validPath));
 			ZipEntry entry = zipXml.open("db.xml");
 			if (entry == null) {
 				return false;
 			}
 			this.document = zipXml.document;
 			return true;
-		} catch (SAXException | ParserConfigurationException ex) {
+		} catch (Exception ex) {
 			LOG.err("error opening ZIP file", ex);
 		}
 		return false;
@@ -1140,7 +1142,7 @@ public class Project {
 	}
 
 	private void archiveProjectFiles(File dir,
-		File curDir, ZipOutputStream zos, File destZip) throws Exception {
+			File curDir, ZipOutputStream zos, File destZip) throws Exception {
 		byte[] data = new byte[2048];
 		File[] files = curDir.listFiles();
 		if (files != null) {

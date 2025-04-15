@@ -17,11 +17,11 @@ package storybook.ui.chart.wiww;
 
 import api.mig.swing.MigLayout;
 import java.awt.Color;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import storybook.db.person.Person;
 import storybook.tools.swing.ColorUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.interfaces.IPaintable;
 import storybook.ui.interfaces.IRefreshable;
 
@@ -58,7 +58,7 @@ public class WiWWPanel extends JPanel implements IRefreshable, IPaintable {
 			setForeground(UIManager.getColor("Table.foreground"));
 		}
 		for (Person person : this.container.getCharacterList()) {
-			JSLabel label = new JSLabel(person.getAbbr(), 0);
+			JLabel label = new JLabel(person.getAbbr(), 0);
 			Color lc2 = person.getJColor() == null ? ColorUtil.PALETTE.LIGHT_GREY.getColor() : person.getJColor();
 			Color fg = label.getForeground();
 			label.setToolTipText(person.getName());

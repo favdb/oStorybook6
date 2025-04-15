@@ -16,16 +16,16 @@
  */
 package storybook.exim.exporter.options;
 
+import api.mig.swing.MigLayout;
+import i18n.I18N;
 import java.awt.event.ItemEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import api.mig.swing.MigLayout;
-import i18n.I18N;
 import storybook.db.book.BookParamExport;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 
 /**
@@ -43,7 +43,7 @@ public class TXTpanel extends JPanel {
 		this.param = param;
 		setLayout(new MigLayout(MIG.FILL, "[][]"));
 		setBorder(BorderFactory.createTitledBorder("TXT"));
-		add(new JSLabel(I18N.getMsg("export.options.csv.separate")), MIG.SPAN);
+		add(new JLabel(I18N.getMsg("export.options.csv.separate")), MIG.SPAN);
 		ButtonGroup group1 = new ButtonGroup();
 		rbTab = new JRadioButton("tab");
 		rbOther = new JRadioButton(I18N.getMsg("other"));

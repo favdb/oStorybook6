@@ -29,9 +29,9 @@ public class StatusTCR extends DefaultTableCellRenderer {
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
-		boolean isSelected, boolean hasFocus, int row, int column) {
+			boolean isSelected, boolean hasFocus, int row, int column) {
 		JLabel lbStatus = (JLabel) super.getTableCellRendererComponent(table,
-			value, isSelected, hasFocus, row, column);
+				value, isSelected, hasFocus, row, column);
 		int st;
 		if (value instanceof SceneStatus) {
 			st = ((SceneStatus) value).getNumber();
@@ -41,7 +41,7 @@ public class StatusTCR extends DefaultTableCellRenderer {
 			return lbStatus;
 		}
 		JLabel lb = new JLabel(Status.getStatusIcon(st));
-		lb.setFont(App.getInstance().fonts.defGet());
+		lb.setFont(App.fonts.defGet());
 		lb.setBackground(lbStatus.getBackground());
 		lb.setOpaque(true);
 		lb.setToolTipText(Status.getStatusMsg(st));

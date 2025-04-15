@@ -42,7 +42,6 @@ import storybook.db.book.Book;
 import storybook.db.chapter.Chapter;
 import storybook.db.strand.Strand;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.tools.swing.js.JSPanelViewsRadioButton;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
@@ -65,7 +64,7 @@ public class NavigationPanel extends AbstractPanel implements ItemListener {
 	private JComboBox chapterCombo;
 	private JSPanelViewsRadioButton viewsRbPanel;
 	private JComboBox strandCombo;
-	private JSLabel lbWarning;
+	private JLabel lbWarning;
 	private JComboBox dateCombo;
 
 	public NavigationPanel(MainFrame mainFrame) {
@@ -128,7 +127,7 @@ public class NavigationPanel extends AbstractPanel implements ItemListener {
 						"[]10[grow]10[]",
 						"[]10[]10[]"));
 		JPanel px = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP1)));
-		px.add(new JSLabel(I18N.getColonMsg("chapter")));
+		px.add(new JLabel(I18N.getColonMsg("chapter")));
 		chapterCombo = new JComboBox();
 		Chapter chapter = new Chapter();
 		EntityUtil.cbFill(mainFrame, chapterCombo, Book.TYPE.CHAPTER, chapter, false, false);
@@ -157,7 +156,7 @@ public class NavigationPanel extends AbstractPanel implements ItemListener {
 		//btNext.set20x20();
 		px.add(btNext);
 		p.add(px, MIG.SPAN);
-		p.add(new JSLabel(I18N.getColonMsg("navigation.show.in")), MIG.WRAP);
+		p.add(new JLabel(I18N.getColonMsg("navigation.show.in")), MIG.WRAP);
 		viewsRbPanel = new JSPanelViewsRadioButton(mainFrame);
 		p.add(viewsRbPanel, MIG.WRAP);
 		JButton btFind = new IconButton("btFind", ICONS.K.SEARCH, evt -> scrollToChapter());
@@ -177,12 +176,12 @@ public class NavigationPanel extends AbstractPanel implements ItemListener {
 		JPanel p = new JPanel(
 				new MigLayout(MIG.get(MIG.FLOWX, MIG.WRAP + " 2", MIG.HIDEMODE3)));
 		JPanel px = new JPanel(new MigLayout());
-		px.add(new JSLabel(I18N.getColonMsg("strand")), MIG.RIGHT);
+		px.add(new JLabel(I18N.getColonMsg("strand")), MIG.RIGHT);
 		strandCombo = new JComboBox();
 		EntityUtil.cbFill(mainFrame, strandCombo, Book.TYPE.STRAND, new Strand(), false, false);
 		strandCombo.addItemListener(this);
 		px.add(strandCombo, MIG.get(MIG.SPAN, MIG.GROWX));
-		px.add(new JSLabel(I18N.getColonMsg("date")));
+		px.add(new JLabel(I18N.getColonMsg("date")));
 		dateCombo = new JComboBox();
 		refreshDateCombo();
 		px.add(dateCombo, MIG.get(MIG.GROWX));
@@ -207,10 +206,10 @@ public class NavigationPanel extends AbstractPanel implements ItemListener {
 		});
 		px.add(btNext);
 		p.add(px, MIG.SPAN);
-		p.add(new JSLabel(I18N.getColonMsg("navigation.show.in")), MIG.SPAN);
+		p.add(new JLabel(I18N.getColonMsg("navigation.show.in")), MIG.SPAN);
 		viewsRbPanel = new JSPanelViewsRadioButton(mainFrame, false);
 		p.add(viewsRbPanel, MIG.SPAN);
-		lbWarning = new JSLabel(" ");
+		lbWarning = new JLabel(" ");
 		lbWarning.setVisible(false);
 		p.add(lbWarning, MIG.get(MIG.SPAN, MIG.GROWX));
 		JButton btFind = Ui.initButton("btFind", "find", ICONS.K.SEARCH, "", evt -> scrollToStrandDate());

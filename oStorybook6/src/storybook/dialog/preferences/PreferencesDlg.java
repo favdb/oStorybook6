@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import resources.icons.IconUtil;
 import storybook.App;
@@ -31,7 +32,6 @@ import storybook.Pref;
 import storybook.dialog.AbsDialog;
 import storybook.project.PropBookLayoutPanel;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 
@@ -52,6 +52,7 @@ public class PreferencesDlg extends AbsDialog implements ActionListener {
 	private PropBookLayoutPanel tabLayout;
 	private PrefLaf tabPlaf;
 	private boolean toRefresh;
+	private String curLang;
 
 	public PreferencesDlg(MainFrame m) {
 		super(m);
@@ -60,6 +61,7 @@ public class PreferencesDlg extends AbsDialog implements ActionListener {
 
 	@Override
 	public void init() {
+		curLang = App.preferences.getString(Pref.KEY.LANGUAGE);
 	}
 
 	@Override
@@ -94,7 +96,7 @@ public class PreferencesDlg extends AbsDialog implements ActionListener {
 		btDumpPreferences.setFont((App.fonts.defGet()));
 		btDumpPreferences.addActionListener(evt -> App.preferences.dump());
 		add(btDumpPreferences, "split 4, left");
-		JSLabel lbEmpty = new JSLabel(" ");
+		JLabel lbEmpty = new JLabel(" ");
 		add(lbEmpty, MIG.GROWX);
 		add(getCancelButton(), MIG.RIGHT);
 		add(getOkButton(), MIG.RIGHT);
@@ -139,10 +141,14 @@ public class PreferencesDlg extends AbsDialog implements ActionListener {
 		if (toRefresh) {
 			App.getInstance().refresh();
 		}
+		if (tabCommon.isModifLanguage()) {
+			App.getInstance().refreshLanguage();
+		}
 		SwingUtil.setDefaultCursor(this);
 	}
 
 	public void refreshUi() {
+		setTitle(I18N.getMsg("preferences.title"));
 		cbMemory.setText(I18N.getMsg("preferences.memory"));
 		tbPane.setTitleAt(0, I18N.getMsg("pref.common"));
 		tbPane.setTitleAt(1, I18N.getMsg("pref.updater"));

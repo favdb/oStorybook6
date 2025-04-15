@@ -18,10 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.decorator;
 
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.location.Location;
 import storybook.tools.StringUtil;
-import storybook.tools.swing.js.JSLabel;
 
 /**
  * @author martin
@@ -76,8 +76,7 @@ public class LocationCbPanelDecorator extends CbPanelDecorator {
 					buf.append("</b>");
 				}
 			}
-			JSLabel lb = new JSLabel(buf.toString());
-			//lb.setIcon(p.getIcon(16, 16));
+			JLabel lb = new JLabel(buf.toString());
 			panel.add(lb, "span");
 			oldCountry = country;
 			oldCity = city;
@@ -88,7 +87,7 @@ public class LocationCbPanelDecorator extends CbPanelDecorator {
 	@Override
 	public void decorateEntity(JCheckBox cb, AbstractEntity entity) {
 		if (!oldCountry.isEmpty() || !oldCity.isEmpty()) {
-			JSLabel lb = new JSLabel("<html><p style='margin-left:5px'>&nbsp;");
+			JLabel lb = new JLabel("<html><p style='margin-left:5px'>&nbsp;");
 			panel.add(lb, "split 2");
 		}
 		panel.add(cb);

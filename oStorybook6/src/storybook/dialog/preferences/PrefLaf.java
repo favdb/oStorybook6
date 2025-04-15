@@ -189,14 +189,14 @@ public class PrefLaf extends AbstractPanel {
 		pref.setInteger(Pref.KEY.ICON_SCREEN, screenSize.width);
 		if (first && !origin.equalsIgnoreCase(checkValues())) {
 			JOptionPane.showMessageDialog(this,
-			   I18N.getMsg("preferences.laf.first"),
-			   I18N.getMsg("preferences.laf"),
-			   JOptionPane.YES_OPTION);
+					I18N.getMsg("preferences.laf.first"),
+					I18N.getMsg("preferences.laf"),
+					JOptionPane.YES_OPTION);
 		} else if (!origin.equalsIgnoreCase(checkValues())) {
 			JOptionPane.showMessageDialog(this,
-			   I18N.getMsg("preferences.laf.warning"),
-			   I18N.getMsg("preferences.laf"),
-			   JOptionPane.YES_OPTION);
+					I18N.getMsg("preferences.laf.warning"),
+					I18N.getMsg("preferences.laf"),
+					JOptionPane.YES_OPTION);
 		}
 	}
 
@@ -229,7 +229,7 @@ public class PrefLaf extends AbstractPanel {
 		return b.toString();
 	}
 
-	private static class FontPanel extends JPanel {
+	private class FontPanel extends JPanel {
 
 		private final JLabel show;
 
@@ -245,6 +245,7 @@ public class PrefLaf extends AbstractPanel {
 			JButton bt = new JButton(IconUtil.getIconSmall(ICONS.K.PREFERENCES));
 			bt.setMargin(new Insets(0, 0, 0, 0));
 			bt.addActionListener((java.awt.event.ActionEvent evt) -> {
+				//FontChooserDlg dlg = new FontChooserDlg(caller, show.getFont());
 				FontChooserDlg dlg = new FontChooserDlg(caller, show.getFont());
 				dlg.setVisible(true);
 				if (dlg.isCanceled() || dlg.getSelectedFont() == null) {

@@ -47,7 +47,6 @@ import storybook.tools.Markdown;
 import storybook.tools.swing.FontUtil;
 import storybook.tools.swing.LaF;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.tools.swing.undo.UndoableTextArea;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
@@ -60,8 +59,8 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 	private static final String TT = "ChronoScenePanel";
 
 	private static final String CN_TITLE = "taTitle",
-	   CN_TEXT = "tcText",
-	   CN_UPPER_PANEL = "upperPanel";
+			CN_TEXT = "tcText",
+			CN_UPPER_PANEL = "upperPanel";
 	private JPanel upperPanel;
 	private UndoableTextArea taTitle;
 	private JTextComponent tcText;
@@ -154,7 +153,7 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 		SwingUtil.setForcedSize(this, new Dimension(size, size));
 		//setPreferredSize(new Dimension(size, size));
 		setComponentPopupMenu(EntityUtil.createPopupMenu(mainFrame, scene, EntityUtil.WITH_CHRONO));
-		setFont(App.getInstance().fonts.defGet());
+		setFont(App.fonts.defGet());
 		// set dotted border for scenes of other parts
 		//setBorder(SwingUtil.getBorderDefault());
 		upperPanel = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0), "[][grow][]", "[top][top][top]"));
@@ -169,7 +168,7 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 		buttonPanel.add(getEditButton());
 		upperPanel.add(buttonPanel, MIG.get(MIG.GROWX));
 		// chapter and scene number
-		lbSceneNo = new JSLabel("", SwingConstants.CENTER);
+		lbSceneNo = new JLabel("", SwingConstants.CENTER);
 		lbSceneNo.setText(scene.getChapterSceneNo(false));
 		lbSceneNo.setToolTipText(scene.getChapterSceneToolTip());
 		lbSceneNo.setOpaque(true);
@@ -181,7 +180,7 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 		lbStatus = new StatusLabel(scene.getStatus(), true);
 		upperPanel.add(lbStatus, MIG.GROWY);
 		// informational
-		lbInformational = new JSLabel("");
+		lbInformational = new JLabel("");
 		if (scene.getInformative()) {
 			lbInformational.setIcon(IconUtil.getIconSmall(ICONS.K.INFO));
 			lbInformational.setToolTipText(I18N.getMsg("informative"));
@@ -195,8 +194,8 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 		// person links
 		EntityLinksPanel personLinksPanel = new EntityLinksPanel(mainFrame, scene, Book.TYPE.PERSON, false);
 		JScrollPane scroller = new JScrollPane(personLinksPanel,
-		   JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-		   JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroller.setMinimumSize(new Dimension(FontUtil.getHeight(), FontUtil.getHeight()));
 		scroller.setOpaque(false);
 		scroller.getViewport().setOpaque(false);
@@ -210,7 +209,7 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 		// plot links
 		upperPanel.add(new EntityLinksPanel(mainFrame, scene, Book.TYPE.PLOT, false), sgn);
 		// scene time
-		lbTime = new JSLabel();
+		lbTime = new JLabel();
 		if (scene.hasScenets() && !DateUtil.isZeroTimeDate(scene.getScenets())) {
 			String tx = DateUtil.simpleDateTimeToString(scene.getScenets(), true);
 			lbTime.setText(tx);

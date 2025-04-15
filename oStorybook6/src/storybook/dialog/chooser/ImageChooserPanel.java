@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.dialog.chooser;
 
+import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -30,18 +31,17 @@ import java.io.File;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
-import api.mig.swing.MigLayout;
 import resources.icons.ICONS;
 import resources.icons.IconButton;
 import resources.icons.IconUtil;
+import storybook.dialog.MessageDlg;
 import storybook.tools.file.IOUtil;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
-import storybook.dialog.MessageDlg;
 import storybook.ui.interfaces.IRefreshable;
 
 @SuppressWarnings("serial")
@@ -51,7 +51,7 @@ public class ImageChooserPanel extends JPanel implements IRefreshable, MouseList
 	private final String startIconFile;
 	private JTextField tfFile;
 	private String currentFile;
-	private JSLabel lbIcon;
+	private JLabel lbIcon;
 	private final String path;
 	private final boolean isIcon;
 
@@ -87,7 +87,7 @@ public class ImageChooserPanel extends JPanel implements IRefreshable, MouseList
 		SwingUtil.setForcedSize(btClear, IconUtil.getDefDim());
 		add(btClear);
 		//set the lbIconFile
-		lbIcon = new JSLabel(startIcon);
+		lbIcon = new JLabel(startIcon);
 		if (!isIcon) {
 			add(lbIcon, MIG.get(MIG.SPAN, MIG.CENTER, MIG.WRAP));
 		}
@@ -117,7 +117,7 @@ public class ImageChooserPanel extends JPanel implements IRefreshable, MouseList
 			return;
 		}
 		File file = chooser.getSelectedFile();
-		// checkallowed images as *.png or *.jpg or *.jpeg or *.bmp or *.gif
+		// check allowed images as *.png or *.jpg or *.jpeg or *.bmp or *.gif
 		if (!IOUtil.isImage(file)) {
 			MessageDlg.show(tfFile, I18N.getMsg("imagechooser.not_image"), "image");
 			return;
@@ -174,7 +174,7 @@ public class ImageChooserPanel extends JPanel implements IRefreshable, MouseList
 	@Override
 	public void mousePressed(MouseEvent evt) {
 		Object source = evt.getSource();
-		if (source instanceof JSLabel) {
+		if (source instanceof JLabel) {
 			JComponent comp = (JComponent) source;
 			JComponent parent1 = (JComponent) comp.getParent();
 			JComponent parent2 = (JComponent) parent1.getParent();

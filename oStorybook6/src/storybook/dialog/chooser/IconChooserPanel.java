@@ -31,6 +31,7 @@ import java.io.File;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
@@ -38,7 +39,6 @@ import resources.icons.ICONS;
 import resources.icons.IconButton;
 import resources.icons.IconUtil;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MainFrame;
 import storybook.ui.interfaces.IRefreshable;
 
@@ -52,7 +52,7 @@ public class IconChooserPanel extends JPanel implements IRefreshable, MouseListe
 	private String startIconFile;
 	private JTextField tfIconFile;
 	private String currentFile;
-	private JSLabel lbIconFile;
+	private JLabel lbIconFile;
 
 	public IconChooserPanel(MainFrame m) {
 		this(m, IconUtil.getImageIcon("small.unlink"), "");
@@ -70,7 +70,7 @@ public class IconChooserPanel extends JPanel implements IRefreshable, MouseListe
 		MigLayout layout = new MigLayout("insets 0");
 		setLayout(layout);
 		//set the lbIconFile
-		lbIconFile = new JSLabel(startIcon);
+		lbIconFile = new JLabel(startIcon);
 		//the icon start
 		tfIconFile = new JTextField();
 		tfIconFile.setText(startIconFile);
@@ -171,7 +171,7 @@ public class IconChooserPanel extends JPanel implements IRefreshable, MouseListe
 	@Override
 	public void mousePressed(MouseEvent evt) {
 		Object source = evt.getSource();
-		if (source instanceof JSLabel) {
+		if (source instanceof JLabel) {
 			JComponent comp = (JComponent) source;
 			JComponent parent1 = (JComponent) comp.getParent();
 			JComponent parent2 = (JComponent) parent1.getParent();

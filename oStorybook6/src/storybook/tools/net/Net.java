@@ -41,11 +41,11 @@ public class Net {
 
 	public enum KEY {
 		ROOT("http://ostorybook.eu/"),
-		HOME(ROOT + "v5/"),
+		HOME(ROOT + "v6/"),
 		CONTACT("mailto:admin@ostorybook.eu"),
 		DOC("documentation.html"),
 		FAQ("faq.html"),
-		DOWNLOAD(ROOT + "download/v5/"),
+		DOWNLOAD(ROOT + "download/"),
 		DOWNLOAD_CURRENT(DOWNLOAD + "current/"),
 		VERSION(DOWNLOAD_CURRENT + "Versions.txt"),
 		UPDATE(DOWNLOAD_CURRENT + "Update.zip"),
@@ -114,9 +114,9 @@ public class Net {
 			str = "#map=15/" + location.getGps();
 		} else if (str.isEmpty()) {
 			JOptionPane.showMessageDialog(null,
-				I18N.getMsg("location.gps.no_position"),
-				I18N.getMsg("location.gps.show"),
-				JOptionPane.ERROR_MESSAGE);
+					I18N.getMsg("location.gps.no_position"),
+					I18N.getMsg("location.gps.show"),
+					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		openBrowser(KEY.OSM.toString() + str);

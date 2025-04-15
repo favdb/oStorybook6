@@ -72,9 +72,9 @@ public class IOUtil {
 	 */
 	public static boolean askInfo(Component parent, String title, String msg, String filename) {
 		int n = JOptionPane.showConfirmDialog(parent,
-		   I18N.getMsg(msg, filename),
-		   I18N.getMsg(title),
-		   JOptionPane.YES_NO_OPTION);
+				I18N.getMsg(msg, filename),
+				I18N.getMsg(title),
+				JOptionPane.YES_NO_OPTION);
 		return n == JOptionPane.YES_OPTION;
 	}
 
@@ -197,7 +197,7 @@ public class IOUtil {
 			return true;
 		} catch (IOException e) {
 			LOG.err(TT + ".fileWriteString(" + file.getAbsolutePath()
-			   + ",str len=" + str.length() + ")", e);
+					+ ",str len=" + str.length() + ")", e);
 		}
 		return false;
 	}
@@ -246,10 +246,10 @@ public class IOUtil {
 	 * @return
 	 */
 	public static File fileSelect(Component parent,
-	   String fileName,
-	   String ext,
-	   String desc,
-	   String title) {
+			String fileName,
+			String ext,
+			String desc,
+			String title) {
 		/*LOG.printInfos("IOUtil.fileSelect(parent"
 				+ ", fileName=\"" + fileName + "\""
 				+ ", ext=" + ext
@@ -523,8 +523,8 @@ public class IOUtil {
 	 * @return
 	 */
 	public static String getEntityFileNameForExport(MainFrame mainFrame,
-	   String str,
-	   AbstractEntity entity) {
+			String str,
+			AbstractEntity entity) {
 		String str1 = "";
 		try {
 			String str2 = mainFrame.getProject().getName();
@@ -622,8 +622,7 @@ public class IOUtil {
 		OutputStream os;
 
 		try {
-			is = MainResources.class
-			   .getResourceAsStream(in);
+			is = MainResources.class.getResourceAsStream(in);
 			if (is == null) {
 				LOG.err("Cannot get resource \"" + in + "\" from Jar file.");
 				return (false);
@@ -649,17 +648,17 @@ public class IOUtil {
 		res = fromClass.getResourceAsStream(in);
 		if (res == null) {
 			LOG.err(TT + ".resourceRead(in=\""
-			   + in
-			   + "\", fromClass="
-			   + fromClass.getName()
-			   + "resource not found");
+					+ in
+					+ "\", fromClass="
+					+ fromClass.getName()
+					+ "resource not found");
 			return "";
 		}
 		StringBuilder sb = new StringBuilder();
 		try {
 			BufferedReader br = new BufferedReader(
-			   new InputStreamReader(
-				  fromClass.getResourceAsStream(in), "UTF-8"));
+					new InputStreamReader(
+							fromClass.getResourceAsStream(in), "UTF-8"));
 			for (int c = br.read(); c != -1; c = br.read()) {
 				sb.append((char) c);
 			}

@@ -51,7 +51,6 @@ import storybook.review.Review;
 import storybook.tools.html.CSS;
 import storybook.tools.html.Html;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.SbView;
@@ -76,7 +75,7 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 	private JTextPane fileInfoPanel;
 	private PropAssistantPanel PropAssistant;
 	private PropBookLayoutPanel PropLayout;
-	private PropEpubPanel PropEpub;
+	private PropPublicationPanel propPub;
 	private PropXEditor PropEditor;
 	private ShefEditor hDedication;
 	private JButton btInitPhp;
@@ -148,8 +147,8 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 			}
 			tbBookLayout = initBookLayout();
 			tabbedPane.addTab(I18N.getMsg("book.layout"), tbBookLayout);
-			PropEpub = new PropEpubPanel(mainFrame, this);
-			tabbedPane.addTab(I18N.getMsg("epub.title"), PropEpub);
+			propPub = new PropPublicationPanel(mainFrame, this);
+			tabbedPane.addTab(I18N.getMsg("epub.title"), propPub);
 			tabbedPane.addTab(I18N.getMsg("file.info"), initFileInfo());
 		}
 	}
@@ -157,10 +156,10 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 	private void getInitPhpBB() {
 		StringBuilder b = new StringBuilder();
 		b.append(Html.intoB(I18N.getColonMsg("book.title"))).append(" ")
-			.append(book.getTitle()).append("\n");
+				.append(book.getTitle()).append("\n");
 		if (!book.getSubtitle().isEmpty()) {
 			b.append(Html.intoB(I18N.getColonMsg("book.title"))).append(" ")
-				.append(book.getTitle()).append("\n");
+					.append(book.getTitle()).append("\n");
 		}
 		if (book.info.natureGet() > 0) {
 			String nature = "";
@@ -169,11 +168,11 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 				nature = x.substring(0, x.indexOf(":")).trim();
 			}
 			b.append(Html.intoB(I18N.getColonMsg("book.nature"))).append(" ")
-				.append(nature).append("\n");
+					.append(nature).append("\n");
 		}
 		if (!book.info.blurbGet().isEmpty()) {
 			b.append(Html.intoB(I18N.getColonMsg("book.blurb"))).append(" ")
-				.append(book.info.blurbGet()).append("\n");
+					.append(book.info.blurbGet()).append("\n");
 		}
 		ExportToPhpBB.getInit(b.toString());
 	}
@@ -227,7 +226,7 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 		SwingUtil.setMaxPreferredSize(scroller);
 		panel.add(scroller, MIG.GROW);
 
-		panel.add(new JSLabel(""));
+		panel.add(new JLabel(""));
 
 		ckMarkdown = Ui.initCheckBox(null, "markdown", "markdown", false, BMANDATORY);
 		panel.add(ckMarkdown, MIG.get(MIG.SPAN, MIG.RIGHT));
@@ -273,10 +272,10 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 	private void initSceneDate(JPanel p) {
 		p.add(new JLabel(I18N.getColonMsg("date.init")), MIG.SPLIT2);
 		cbSceneDateInit = Ui.initComboBox("cbSceneDateInit",
-			"date.init",
-			new String[]{"date.init.empty", "date.init.last", "date.init.today"},
-			1, !EMPTY, !ALL);
-		cbSceneDateInit.setSelectedIndex(book.getSceneDateInit());
+				"date.init",
+				new String[]{"date.init.empty", "date.init.last", "date.init.today"},
+				1, !EMPTY, !ALL);
+		cbSceneDateInit.setSelectedIndex(book.info.sceneDateInitGet());
 		p.add(cbSceneDateInit);
 	}
 
@@ -375,10 +374,10 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 		buf.append(Html.getRow2Cols("file.info.filename", (file != null ? file.toString() : "null")));
 		buf.append(Html.getRow2Cols("file.info.creation", project.book.getCreation()));
 		String size
-			= String.format("%,d %s (%,d %s) => %d %s",
-				words, I18N.getMsg("words"),
-				textLength, I18N.getMsg("characters"),
-				words / 480, I18N.getMsg("pages"));
+				= String.format("%,d %s (%,d %s) => %d %s",
+						words, I18N.getMsg("words"),
+						textLength, I18N.getMsg("characters"),
+						words / 480, I18N.getMsg("pages"));
 		//nb de pages sur la base de 480 mots par page
 		buf.append(Html.getRow2Cols("file.info.text.length", size));
 		buf.append(Html.getRow2Cols("episodes", project.episodes.getCount()));
@@ -396,8 +395,8 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 		buf.append(Html.getRow2Cols("ideas", project.ideas.getCount()));
 		buf.append(Html.getRow2Cols("memos", project.memos.getCount()));
 		buf.append(Html.TABLE_E)
-			.append(Html.BODY_E)
-			.append(Html.HTML_E);
+				.append(Html.BODY_E)
+				.append(Html.HTML_E);
 		fileInfoPanel = new JTextPane();
 		fileInfoPanel.setEditable(false);
 		fileInfoPanel.setContentType(Html.TYPE);
@@ -411,9 +410,9 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 
 	private boolean verify() {
 		String rc = BookInfo.isDataOK(tfTitle.getText(),
-			tfSubtitle.getText(),
-			tfAuthor.getText(),
-			tfCopyright.getText());
+				tfSubtitle.getText(),
+				tfAuthor.getText(),
+				tfCopyright.getText());
 		if (!rc.isEmpty()) {
 			tabbedPane.setSelectedComponent(tbProject);
 			showError(rc);
@@ -470,11 +469,11 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 		if (ckUseNonModalEditors != null) {
 			book.param.getParamEditor().setModless(ckUseNonModalEditors.isSelected());
 		}
-		book.setSceneDateInit(cbSceneDateInit.getSelectedIndex());
+		bookInfo.sceneDateInitSet(cbSceneDateInit.getSelectedIndex());
 
 		// book assistant, epub, layout
 		PropAssistant.apply();
-		PropEpub.apply();
+		propPub.apply();
 		PropLayout.apply();
 		if (origin != book.hashCode()) {
 			mainFrame.getBookModel().setRefresh(mainFrame.getView(SbView.VIEWNAME.READING));
@@ -488,7 +487,7 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 		dispose();
 	}
 
-	public void setSettings() {
+	/*public void setSettings() {
 		if (book != null) {
 			book.info.majSet();
 			book.info.titleSet(tfTitle.getText());
@@ -500,8 +499,7 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 			book.info.scenarioSet(ckScenario.isSelected());
 			book.info.markdownSet(ckMarkdown.isSelected());
 		}
-	}
-
+	}*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JButton) {

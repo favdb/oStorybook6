@@ -47,7 +47,17 @@ import storybook.tools.swing.ColorUtil;
  */
 public class Pref {
 
-	private static final String TT = "Pref";
+	private static final String TT = "Pref.";
+
+	/**
+	 * check if preferences file exists
+	 *
+	 * @return
+	 */
+	public static boolean exists() {
+		File f = new File(EnvUtil.getIniFile().getAbsolutePath());
+		return f.exists();
+	}
 
 	List<PrefValue> preferences = new ArrayList<>();
 	private final String prefFile = EnvUtil.getIniFile().getAbsolutePath();
@@ -232,45 +242,45 @@ public class Pref {
 		TREE_CHAR("TreeTruncNbChar", "8"),//for text truncation to nb char, default value is 8
 		TOOLBAR_ORIENTATION("ToolBarOrientation", "North"),
 		TOOLBAR("Toolbar",
-		   "1"//file.new
-		   + "1"//file.open
-		   + "1"//file.save
-		   + "0"//strand.new
-		   + "0"//part.new
-		   + "1"//chapter.new
-		   + "1"//scene.new
-		   + "1"//person.new
-		   + "0"//gender.new
-		   + "0"//relation.new
-		   + "1"//location.new
-		   + "1"//item.new
-		   + "0"//temlink.new
-		   + "0"//tag.new
-		   + "0"//taglink.new
-		   + "1"//memo.new
-		   + "1"//idea.new
-		   + "1"//manage_strands
-		   + "0"//manage_parts
-		   + "1"//manage_chapters
-		   + "1"//manage_scenes
-		   + "1"//manage_persons
-		   + "0"//manage_genders
-		   + "0"//manage_relations
-		   + "1"//manage_locations
-		   + "1"//manage_items
-		   + "0"//manage_itemlinks
-		   + "0"//manage_tags
-		   + "0"//manage_taglinks
-		   + "0"//manage_memos
-		   + "0"//manage_ideas
-		   + "1"//chrono
-		   + "0"//timeline
-		   + "1"//book
-		   + "1"//manage_view
-		   + "1"//reading
-		   + "1"//memoria
-		   + "0"//storyboard
-		   + "1"//typist
+				"1"//file.new
+				+ "1"//file.open
+				+ "1"//file.save
+				+ "0"//strand.new
+				+ "0"//part.new
+				+ "1"//chapter.new
+				+ "1"//scene.new
+				+ "1"//person.new
+				+ "0"//gender.new
+				+ "0"//relation.new
+				+ "1"//location.new
+				+ "1"//item.new
+				+ "0"//temlink.new
+				+ "0"//tag.new
+				+ "0"//taglink.new
+				+ "1"//memo.new
+				+ "1"//idea.new
+				+ "1"//manage_strands
+				+ "0"//manage_parts
+				+ "1"//manage_chapters
+				+ "1"//manage_scenes
+				+ "1"//manage_persons
+				+ "0"//manage_genders
+				+ "0"//manage_relations
+				+ "1"//manage_locations
+				+ "1"//manage_items
+				+ "0"//manage_itemlinks
+				+ "0"//manage_tags
+				+ "0"//manage_taglinks
+				+ "0"//manage_memos
+				+ "0"//manage_ideas
+				+ "1"//chrono
+				+ "0"//timeline
+				+ "1"//book
+				+ "1"//manage_view
+				+ "1"//reading
+				+ "1"//memoria
+				+ "0"//storyboard
+				+ "1"//typist
 		),
 		TYPIST_SHOWBAR("TypistShowBar", "1"),
 		TYPIST_SHOWINFO("TypistShowInfo", "0"),
@@ -604,7 +614,7 @@ public class Pref {
 		try {
 			if (uniqueList.size() > 10) {
 				uniqueList = uniqueList.subList(uniqueList.size() - 10,
-				   uniqueList.size());
+						uniqueList.size());
 			}
 		} catch (IndexOutOfBoundsException e) {
 		}
@@ -953,7 +963,8 @@ public class Pref {
 	 * @return
 	 */
 	public Color intensityGet(int i) {
-		if (intensityColors.isEmpty()) {
+		//LOG.trace(TT + "intensityGet(i=" + i + ")");
+		if (intensityColors.isEmpty() || i < 0) {
 			return ColorUtil.getIntensityColor(i);
 		}
 		return intensityColors.get(i);
@@ -1036,14 +1047,13 @@ public class Pref {
 	 *
 	 */
 	public void save() {
+		//LOG.trace(TT + "save()");
 		intensitySave();
 		preferences.sort((PrefValue c1, PrefValue c2) -> c1.key.compareTo(c2.key));
 		String newline = System.getProperty("line.separator");
 		try (OutputStream f = new FileOutputStream(prefFile)) {
 			for (PrefValue p : preferences) {
-				if (isToLoad(p.key)) {
-					f.write((p.toString() + newline).getBytes());
-				}
+				f.write((p.toString() + newline).getBytes());
 			}
 		} catch (FileNotFoundException ex) {
 			LOG.err("Unable to save Preferences (file not found)", ex);
@@ -1053,7 +1063,7 @@ public class Pref {
 	}
 
 	/**
-	 * Prefrence value class
+	 * Preference value class
 	 */
 	private static class PrefValue {
 

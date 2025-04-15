@@ -79,7 +79,7 @@ public class HTMLFontColorAction extends HTMLTextEditAction {
 		if (win != null) {
 			c = win;
 		}
-		Color color = JColorChooser.showDialog(c, "Color", Color.black);
+		Color color = JColorChooser.showDialog(c, I18N.getMsg("color.choose"), Color.black);
 		return color;
 	}
 

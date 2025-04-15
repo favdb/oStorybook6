@@ -54,14 +54,14 @@ public class JSTable extends JTable {
 
 	public static boolean isLocationOk(JTable table, int row, int col) {
 		return !(row < 0 || row >= table.getRowCount()
-		   || col < 0 || col >= table.getColumnCount());
+				|| col < 0 || col >= table.getColumnCount());
 	}
 
 	// The minimum column width.
-	private int widthMin = App.getInstance().fonts.defGet().getSize() * 3;
+	private int widthMin = App.fonts.defGet().getSize() * 3;
 
 	// The maximum column width.
-	private int widthMax = App.getInstance().fonts.defGet().getSize() * 64;
+	private int widthMax = App.fonts.defGet().getSize() * 64;
 
 	// The visible columns.
 	private final Map<String, Boolean> visibles = new HashMap<>();
@@ -291,7 +291,7 @@ public class JSTable extends JTable {
 				renderer = getTableHeader().getDefaultRenderer();
 			}
 			Component headComp = renderer.getTableCellRendererComponent(this,
-			   tableColumn.getHeaderValue(), false, false, -1, column);
+					tableColumn.getHeaderValue(), false, false, -1, column);
 			width = Math.max(headComp.getPreferredSize().width + 1 + 24, width);
 
 			if ((widthMax > 0) && (width > widthMax)) {
@@ -482,9 +482,9 @@ public class JSTable extends JTable {
 				break;
 			case "csv":
 				b.append(entity.toCsv(
-				   "",
-				   "",
-				   App.preferences.getString(Pref.KEY.EXP_CSV_SEPARATOR)));
+						"",
+						"",
+						App.preferences.getString(Pref.KEY.EXP_CSV_SEPARATOR)));
 				break;
 			case "html":
 				b.append(Html.intoHTML(Html.intoTag("body", entity.toDetail(2))));

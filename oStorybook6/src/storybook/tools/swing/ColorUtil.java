@@ -251,7 +251,7 @@ public class ColorUtil {
 		color2.getColorComponents(rgb2);
 
 		Color color = new Color(rgb1[0] * r + rgb2[0] * ir, rgb1[1] * r
-			+ rgb2[1] * ir, rgb1[2] * r + rgb2[2] * ir);
+				+ rgb2[1] * ir, rgb1[2] * r + rgb2[2] * ir);
 
 		return color;
 	}
@@ -353,8 +353,8 @@ public class ColorUtil {
 		String gHex = Integer.toString(g, 16);
 		String bHex = Integer.toString(b, 16);
 		return (rHex.length() == 2 ? "" + rHex : "0" + rHex)
-			+ (gHex.length() == 2 ? "" + gHex : "0" + gHex)
-			+ (bHex.length() == 2 ? "" + bHex : "0" + bHex);
+				+ (gHex.length() == 2 ? "" + gHex : "0" + gHex)
+				+ (bHex.length() == 2 ? "" + bHex : "0" + bHex);
 	}
 
 	/**
@@ -371,7 +371,7 @@ public class ColorUtil {
 	 * @return Distance bwetween colors.
 	 */
 	public static double colorDistance(double r1, double g1, double b1,
-		double r2, double g2, double b2) {
+			double r2, double g2, double b2) {
 		double a = r2 - r1;
 		double b = g2 - g1;
 		double c = b2 - b1;
@@ -387,7 +387,7 @@ public class ColorUtil {
 	 */
 	public static double colorDistance(double[] color1, double[] color2) {
 		return ColorUtil.colorDistance(color1[0], color1[1], color1[2],
-			color2[0], color2[1], color2[2]);
+				color2[0], color2[1], color2[2]);
 	}
 
 	/**
@@ -403,7 +403,7 @@ public class ColorUtil {
 		color1.getColorComponents(rgb1);
 		color2.getColorComponents(rgb2);
 		return ColorUtil.colorDistance(rgb1[0], rgb1[1], rgb1[2], rgb2[0],
-			rgb2[1], rgb2[2]);
+				rgb2[1], rgb2[2]);
 	}
 
 	/**
@@ -436,9 +436,9 @@ public class ColorUtil {
 
 	public static boolean isLight(Color c) {
 		return Math.sqrt(
-			c.getRed() * c.getRed() * .241
-			+ c.getGreen() * c.getGreen() * .691
-			+ c.getBlue() * c.getBlue() * .068) < 130;
+				c.getRed() * c.getRed() * .241
+				+ c.getGreen() * c.getGreen() * .691
+				+ c.getBlue() * c.getBlue() * .068) < 130;
 	}
 
 	public static Color getFontColor(Color color) {
@@ -471,4 +471,10 @@ public class ColorUtil {
 		}
 		return Color.decode(color);
 	}
+
+	public static Color opposit(Color c) {
+		Color rc = new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue());
+		return rc;
+	}
+
 }

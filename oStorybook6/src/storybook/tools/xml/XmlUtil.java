@@ -78,7 +78,7 @@ public class XmlUtil {
 	}
 
 	/**
-	 * set a Xml output String for a String value
+	 * set a Xml output String for a String value, value must be escaped for special caracter
 	 *
 	 * @param tab
 	 * @param key
@@ -86,7 +86,16 @@ public class XmlUtil {
 	 * @return
 	 */
 	public static String setAttribute(int tab, XmlKey.XK key, String value) {
-		return setAttribute(tab, key.toString().toLowerCase(), value);
+		if (value == null) {
+			return null;
+		}
+		return setAttribute(tab, key.toString().toLowerCase(),
+				value.replace("&", "&amp;")
+						.replace("<", "&lt;")
+						.replace(">", "&gt;")
+						.replace("\"", "&quot;")
+						.replace("'", "&apos;")
+		);
 	}
 
 	/**
@@ -280,7 +289,15 @@ public class XmlUtil {
 
 	public static String getString(Node node, String n) {
 		Element e = (Element) node;
-		return (e.getAttribute(n).trim());
+		String value = (e.getAttribute(n).trim());
+		if (value == null) {
+			return "";
+		}
+		return value.replace("&amp;", "&")
+				.replace("&lt;", "<")
+				.replace("&gt;", ">")
+				.replace("&quot;", "\"")
+				.replace("&apos;", "'");
 	}
 
 	/**
@@ -449,10 +466,10 @@ public class XmlUtil {
 			trans.transform(new DOMSource(document), new StreamResult(out));
 			return out.toString();
 		} catch (IOException
-			| IllegalArgumentException
-			| ParserConfigurationException
-			| TransformerException
-			| SAXException e) {
+				| IllegalArgumentException
+				| ParserConfigurationException
+				| TransformerException
+				| SAXException e) {
 			LOG.err("Error occurs when pretty-printing xml:\n" + xmlString, e);
 			return xmlString;
 		}

@@ -18,11 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.decorator;
 
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.idea.Idea;
 import storybook.tools.StringUtil;
 import storybook.tools.swing.FontUtil;
-import storybook.tools.swing.js.JSLabel;
 
 /**
  * @author FaVdB
@@ -46,7 +46,7 @@ public class IdeaCbPanelDecorator extends CbPanelDecorator {
 		Idea p = (Idea) entity;
 		String cat = StringUtil.capitalize(p.getCategory());
 		if (!oldCat.equals(cat)) {
-			JSLabel lb = new JSLabel(cat);
+			JLabel lb = new JLabel(cat);
 			lb.setFont(FontUtil.getBold());
 			panel.add(lb, "span");
 			oldCat = cat;
@@ -56,7 +56,7 @@ public class IdeaCbPanelDecorator extends CbPanelDecorator {
 	@Override
 	public void decorateEntity(JCheckBox cb, AbstractEntity entity) {
 		Idea p = (Idea) entity;
-		JSLabel lbIcon = new JSLabel(p.getIcon());
+		JLabel lbIcon = new JLabel(p.getIcon());
 		panel.add(lbIcon, "split 2");
 		panel.add(cb);
 	}

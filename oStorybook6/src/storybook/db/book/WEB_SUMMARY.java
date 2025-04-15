@@ -84,6 +84,28 @@ public class WEB_SUMMARY {
 		h.set(n, v);
 	}
 
+	public static String getAdvancedStyle(BookParamWeb web, boolean coloronly) {
+		StringBuilder b = new StringBuilder();
+		WEB_SUMMARY_H hcss = web.getSummary().h.get(0);
+		if (!coloronly) {
+			b.append("font-family: ").append(hcss.getFamily()).append("; ");
+			b.append("font-size: ").append(hcss.getSize()).append("%; ");
+			if ("bold".equals(hcss.getStyle())) {
+				b.append("font-weight: bold; ");
+			} else {
+				b.append("font-weight: normal; ");
+			}
+			if ("italic".equals(hcss.getStyle())) {
+				b.append("font-style: italic; ");
+			}
+		} else {
+			b.append("font-family: ").append(hcss.getFamily()).append("; ");
+		}
+		b.append("color: ").append(hcss.getColor()).append("; ");
+		b.append("background: ").append(hcss.getBkColor()).append("; ");
+		return b.toString();
+	}
+
 	public String getCss(int n, boolean margin) {
 		StringBuilder b = new StringBuilder();
 		WEB_SUMMARY_H hcss = h.get(n);

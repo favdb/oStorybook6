@@ -49,7 +49,6 @@ import storybook.db.location.Location;
 import storybook.db.person.Person;
 import storybook.tools.ListUtil;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.Ui;
@@ -140,7 +139,7 @@ public class EntityCopyDlg extends AbsDialog {
 		fromCombo.setRenderer(new ProjectComboRenderer());
 		panel.add(fromCombo, MIG.GROWX);
 		panel.add(Ui.initButton("btOpen", "", ICONS.K.F_OPEN,
-		   "copy.open.project", e -> openProjectAction()));
+				"copy.open.project", e -> openProjectAction()));
 		if (fromCombo.getItemCount() > 0) {
 			fromFrame = (MainFrame) fromCombo.getItemAt(0);
 		}
@@ -233,7 +232,7 @@ public class EntityCopyDlg extends AbsDialog {
 		App.getInstance().selectProject();
 		SwingUtilities.invokeLater(() -> {
 			DefaultComboBoxModel<MainFrame> model
-			   = (DefaultComboBoxModel<MainFrame>) fromCombo.getModel();
+					= (DefaultComboBoxModel<MainFrame>) fromCombo.getModel();
 			model.removeAllElements();
 			for (MainFrame frame : App.getInstance().getMainFrames()) {
 				if (frame != mainFrame) {
@@ -317,7 +316,7 @@ public class EntityCopyDlg extends AbsDialog {
 
 		@Override
 		public Component getListCellRendererComponent(JList list,
-		   Object value, int index, boolean sel, boolean focus) {
+				Object value, int index, boolean sel, boolean focus) {
 			JLabel lb = (JLabel) super.getListCellRendererComponent(list, value, index, sel, focus);
 			if (value instanceof Book.TYPE) {
 				lb.setText(I18N.getMsg(((Book.TYPE) value).toString()));
@@ -329,7 +328,7 @@ public class EntityCopyDlg extends AbsDialog {
 	/**
 	 * render class for projects
 	 */
-	class ProjectComboRenderer extends JSLabel implements ListCellRenderer<MainFrame> {
+	class ProjectComboRenderer extends JLabel implements ListCellRenderer<MainFrame> {
 
 		public ProjectComboRenderer() {
 			super("");
@@ -338,10 +337,10 @@ public class EntityCopyDlg extends AbsDialog {
 
 		@Override
 		public Component getListCellRendererComponent(JList<? extends MainFrame> list,
-		   MainFrame value,
-		   int index,
-		   boolean isSelected,
-		   boolean cellHasFocus) {
+				MainFrame value,
+				int index,
+				boolean isSelected,
+				boolean cellHasFocus) {
 			if (value instanceof MainFrame) {
 				MainFrame frame = (MainFrame) value;
 				String title = frame.getBook().getTitle();
@@ -371,7 +370,7 @@ public class EntityCopyDlg extends AbsDialog {
 		}
 		if (!list.isEmpty()) {
 			MessageDlg.show(this, I18N.getMsg("copy.error", ListUtil.join(list)),
-			   "copy", true);
+					"copy", true);
 			return false;
 		}
 		return true;

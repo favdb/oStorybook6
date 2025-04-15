@@ -20,15 +20,15 @@ package storybook.ui.panel.chrono;
 import i18n.I18N;
 import java.text.DateFormat;
 import java.util.Date;
+import javax.swing.JLabel;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
 import storybook.App;
 import storybook.tools.DateUtil;
 import storybook.tools.html.Html;
-import storybook.tools.swing.js.JSLabel;
 
 @SuppressWarnings("serial")
-public class DateDiffLabel extends JSLabel {
+public class DateDiffLabel extends JLabel {
 
 	private Date date1;
 	private Date date2;
@@ -38,13 +38,13 @@ public class DateDiffLabel extends JSLabel {
 	}
 
 	public DateDiffLabel(Date date1, Date date2, boolean isVertical) {
-		super("", JSLabel.CENTER);
+		super("", JLabel.CENTER);
 		this.date1 = date1;
 		this.date2 = date2;
 		String text = I18N.getColonMsg("preferences.datediff") + " " + getDays();
 		DateFormat formatter = I18N.getLongDateFormatter();
 		String text2 = "(" + formatter.format(date1) + " - " + formatter.format(date2) + ")";
-		setFont(App.getInstance().fonts.defGet());
+		setFont(App.fonts.defGet());
 		setText(getDays() + " " + text2);
 		setToolTipText(Html.HTML_B + text + Html.BR + text2 + Html.HTML_E);
 		setIcon(IconUtil.getIconSmall(ICONS.K.DATEDIFF));

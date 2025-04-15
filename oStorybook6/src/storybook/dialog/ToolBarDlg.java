@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
@@ -33,7 +34,6 @@ import resources.icons.ICONS;
 import resources.icons.IconUtil;
 import storybook.App;
 import storybook.Pref;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 
@@ -44,10 +44,10 @@ import storybook.ui.MainFrame;
 public class ToolBarDlg extends AbsDialog {
 
 	private static final String TT = "ToolBarDlg",
-	   FILE = "file",
-	   NEW = "new",
-	   TABLE = "table",
-	   VIEW = "view";
+			FILE = "file",
+			NEW = "new",
+			TABLE = "table",
+			VIEW = "view";
 
 	/* desciption des boutons
 	paramètre 1 = groupe (file,new, table, view
@@ -166,11 +166,11 @@ public class ToolBarDlg extends AbsDialog {
 		//		+ " param length=" + param.length() + ", boutons length=" + boutons.length);
 		JPanel p = new JPanel();
 		p.setBorder(
-		   BorderFactory.createTitledBorder(null,
-			  I18N.getMsg(name),
-			  TitledBorder.DEFAULT_JUSTIFICATION,
-			  TitledBorder.DEFAULT_POSITION,
-			  new Font("Dialog", 1, 12)));
+				BorderFactory.createTitledBorder(null,
+						I18N.getMsg(name),
+						TitledBorder.DEFAULT_JUSTIFICATION,
+						TitledBorder.DEFAULT_POSITION,
+						new Font("Dialog", 1, 12)));
 		p.setLayout(new MigLayout());
 		String line = "0";
 		int i = 0;
@@ -193,7 +193,7 @@ public class ToolBarDlg extends AbsDialog {
 					bt.setBorder(BorderFactory.createLineBorder(Color.red, 3));
 				}
 				if (!b[1].equals(line)) {
-					p.add(new JSLabel(""), MIG.WRAP);
+					p.add(new JLabel(""), MIG.WRAP);
 					line = b[1];
 				}
 				bt.addActionListener((java.awt.event.ActionEvent evt) -> {

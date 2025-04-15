@@ -17,65 +17,62 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.tools.swing.splash;
 
-import java.awt.Container;
+import api.mig.swing.MigLayout;
+import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import api.mig.swing.MigLayout;
 import resources.icons.IconUtil;
 import storybook.App;
-import storybook.tools.swing.SwingUtil;
+import storybook.tools.LOG;
 import storybook.ui.MIG;
-import storybook.ui.interfaces.IPaintable;
 
 /**
- * @author martin
- * @modified by: favdb
+ * waiting dialog
  *
  */
 @SuppressWarnings("serial")
-public class WaitingSplash extends JDialog implements IPaintable {
+public class Waiting extends JDialog {
 
 	private String text;
 	private JLabel lbText;
-	private final Container caller;
 
-	public WaitingSplash(Container parent, String text) {
-		this.caller = parent;
+	public Waiting(JFrame caller, String text) {
+		super(caller, false);
 		this.text = text;
-		init();
-		initUi();
+		initialize();
 	}
 
-	@Override
-	public void init() {
-		// empty
-	}
-
-	@Override
-	public void initUi() {
+	private void initialize() {
 		String migset = MIG.get(MIG.FILL, MIG.CENTER, MIG.FLOWY);
 		setLayout(new MigLayout(migset));
 		setUndecorated(true);
 		setAlwaysOnTop(true);
+		// logo
+		JLabel lbLogo = new JLabel(IconUtil.getIcon("banner"));
+		lbLogo.setBackground(Color.WHITE);
+		lbLogo.setBorder(BorderFactory.createEtchedBorder());
+		add(lbLogo, MIG.GROWX);
+
 		JPanel panel = new JPanel(new MigLayout(migset));
-		panel.setBorder(BorderFactory.createRaisedBevelBorder());
 		JLabel lbHg = new JLabel(IconUtil.getIcon("hourglass"));
 		lbText = new JLabel(text);
-		lbText.setFont(App.getInstance().fonts.defGet());
+		lbText.setFont(App.fonts.defGet());
 		panel.add(lbHg, MIG.get(MIG.CENTER, "gap bottom 10"));
 		panel.add(lbText);
 		add(panel);
-		SwingUtil.showDialog(this, caller);
+		pack();
+		this.setLocationRelativeTo(getParent());
+		setVisible(true);
 		repaint();
 	}
 
 	public void setText(String s) {
-		//App.trace("waiting: " + s);
-		text = s;
+		LOG.trace(s);
 		lbText.setText(s);
-		repaint();
+		lbText.repaint();
 	}
 
 }

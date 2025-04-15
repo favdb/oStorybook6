@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -37,7 +38,6 @@ import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 
@@ -63,7 +63,7 @@ public class EditDictionaryDlg extends AbsDialog {
 	public void init() {
 		setLayout(new MigLayout("", "[grow][][]", "[][][]"));
 		setTitle(I18N.getMsg("jortho.userDictionary"));
-		add(new JSLabel(I18N.getMsg("search.for")));
+		add(new JLabel(I18N.getMsg("search.for")));
 
 		txWord = new JTextField(20);
 		txWord.addCaretListener((javax.swing.event.CaretEvent evt) -> {
@@ -171,8 +171,8 @@ public class EditDictionaryDlg extends AbsDialog {
 
 	private void errorMessage(String s) {
 		JOptionPane.showMessageDialog(this,
-			I18N.getMsg(s),
-			I18N.getMsg("error"), JOptionPane.ERROR_MESSAGE);
+				I18N.getMsg(s),
+				I18N.getMsg("error"), JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void searchAction() {

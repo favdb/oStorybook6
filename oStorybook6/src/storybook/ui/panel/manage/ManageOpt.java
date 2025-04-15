@@ -32,7 +32,6 @@ import storybook.App;
 import storybook.Pref;
 import storybook.tools.LOG;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractOptions;
@@ -45,8 +44,8 @@ import static storybook.ui.panel.manage.ManagePanel.*;
 public class ManageOpt extends AbstractOptions {
 
 	private static final String CN_COLUMNS = "ColumnSlider",
-	   HIDE_UNASSIGNED = "HideUnassigned",
-	   VERTICAL = "Vertical";
+			HIDE_UNASSIGNED = "HideUnassigned",
+			VERTICAL = "Vertical";
 	private int columns;
 	private boolean hideUnassigned;
 	private JCheckBox ckHide;
@@ -58,8 +57,7 @@ public class ManageOpt extends AbstractOptions {
 
 	public ManageOpt(MainFrame m) {
 		super(m);
-		init();
-		initUi();
+		initAll();
 	}
 
 	@Override
@@ -98,7 +96,7 @@ public class ManageOpt extends AbstractOptions {
 		});
 		add(ckVertical);
 		// columns
-		add(new JSLabel(I18N.getColonMsg("columns")), MIG.get(MIG.SPLIT2));
+		add(new JLabel(I18N.getColonMsg("columns")), MIG.get(MIG.SPLIT2));
 		slider = new JSlider(JSlider.HORIZONTAL, 1, 20, columns);
 		slider.setName(CN_COLUMNS);
 		slider.setMajorTickSpacing(10);
@@ -133,9 +131,9 @@ public class ManageOpt extends AbstractOptions {
 	public void stateChanged(ChangeEvent e) {
 		Component comp = (Component) e.getSource();
 		if (CN_COLUMNS.equals(comp.getName())) {
-			JSlider slider = (JSlider) e.getSource();
-			if (!slider.getValueIsAdjusting()) {
-				int val = slider.getValue();
+			JSlider js = (JSlider) e.getSource();
+			if (!js.getValueIsAdjusting()) {
+				int val = js.getValue();
 				App.preferences.manageSetColumns(val);
 				mainFrame.getBookController().manageSetColumns(val);
 				return;

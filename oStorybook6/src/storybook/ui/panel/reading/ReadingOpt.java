@@ -20,12 +20,12 @@ import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import storybook.App;
 import storybook.Pref;
 import storybook.tools.LOG;
-import storybook.tools.swing.js.JSLabel;
 import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractOptions;
 
@@ -61,7 +61,7 @@ public class ReadingOpt extends AbstractOptions {
 	public void initUi() {
 		setLayout(new MigLayout("wrap,fill"));
 		// font size
-		add(new JSLabel(I18N.getColonMsg("font.size")));
+		add(new JLabel(I18N.getColonMsg("font.size")));
 		JSlider slider = new JSlider(JSlider.HORIZONTAL, 6, 40, fontSize);
 		slider.setName(CN_FONT_SIZE);
 		slider.setMajorTickSpacing(10);

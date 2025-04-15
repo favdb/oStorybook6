@@ -125,6 +125,7 @@ public class ExportBookDlg extends AbsDialog {
 		btOK = Ui.initButton("btOk", "ok", ICONS.K.OK, "", e -> apply());
 		add(btOK, MIG.get(MIG.SPAN, MIG.SPLIT2, MIG.SG, MIG.RIGHT));
 		add(Ui.initButton("btCancel", "cancel", ICONS.K.CANCEL, "", e -> dispose()), MIG.SG);
+		HTML.checkAdvanced(!BOOK.rbOneFile.isSelected());
 
 		pack();
 		setLocationRelativeTo(mainFrame);
@@ -237,17 +238,17 @@ public class ExportBookDlg extends AbsDialog {
 		String f = tfFolder.getText();
 		if (f.isEmpty()) {
 			JOptionPane.showMessageDialog(mainFrame,
-				I18N.getMsg("directory.empty"),
-				I18N.getMsg("directory.select"),
-				JOptionPane.INFORMATION_MESSAGE);
+					I18N.getMsg("directory.empty"),
+					I18N.getMsg("directory.select"),
+					JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 		File folder = new File(f);
 		if (!folder.exists()) {
 			JOptionPane.showMessageDialog(mainFrame,
-				I18N.getMsg("directory.not_exists", f),
-				I18N.getMsg("directory.select"),
-				JOptionPane.INFORMATION_MESSAGE);
+					I18N.getMsg("directory.not_exists", f),
+					I18N.getMsg("directory.select"),
+					JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 		paramExport = mainFrame.getBook().getParam().getParamExport();
@@ -275,6 +276,7 @@ public class ExportBookDlg extends AbsDialog {
 		//LOG.trace(TT + "doExport()");
 		String sel = (String) cbFormat.getSelectedItem();
 		sel = sel.substring(sel.indexOf('(')).replace("(*.", "").replace(")", "");
+		mainFrame.project.save();
 		mainFrame.fileSave(true);
 		switch (sel) {
 			case "html":

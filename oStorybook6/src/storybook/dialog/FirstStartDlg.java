@@ -22,6 +22,8 @@ import i18n.I18N;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Locale;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
@@ -56,6 +58,7 @@ public class FirstStartDlg extends JDialog implements ActionListener {
 	private int phase = 1;
 	private PrefLaf lafPanel;
 	private JButton btOK;
+	private JLabel lbLanguage;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public FirstStartDlg() {
@@ -64,6 +67,7 @@ public class FirstStartDlg extends JDialog implements ActionListener {
 	}
 
 	public void initialize() {
+		setIconImage(IconUtil.getIconImage("icon"));
 		setLayout(new MigLayout("", "[][]"));
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setModal(true);
@@ -78,7 +82,8 @@ public class FirstStartDlg extends JDialog implements ActionListener {
 		add(lbLogo, MIG.get(MIG.SPAN, MIG.CENTER));
 
 		// language selection
-		add(new JLabel(I18N.getColonMsg("language")));
+		lbLanguage = new JLabel(I18N.getColonMsg("language"));
+		add(lbLanguage);
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
 		for (Const.Language lang : Const.Language.values()) {
 			model.addElement(lang.getI18N());
@@ -92,6 +97,14 @@ public class FirstStartDlg extends JDialog implements ActionListener {
 			cbLanguage.setSelectedIndex(Const.getLanguageIndex(k));
 		}
 		add(cbLanguage, MIG.get(MIG.GROWX, MIG.SPAN));
+		cbLanguage.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				if (event.getStateChange() == ItemEvent.SELECTED) {
+					changeLanguage();
+				}
+			}
+		});
 		// typist default mode
 		ckTypist = new JCheckBox(I18N.getMsg("typist.preference"));
 		add(ckTypist, MIG.get(MIG.SPAN));
@@ -108,6 +121,7 @@ public class FirstStartDlg extends JDialog implements ActionListener {
 		Locale locale = lang.getLocale();
 		I18N.initMsgInternal(locale);
 		setTitle(I18N.getMsg("first_start.title"));
+		lbLanguage.setText(I18N.getColonMsg("language"));
 		ckTypist.setText(I18N.getMsg("typist.preference"));
 		pack();
 	}
@@ -138,6 +152,7 @@ public class FirstStartDlg extends JDialog implements ActionListener {
 
 	private void initPhase2() {
 		//LOG.trace(TT + ".initPhase2()");
+		setTitle(I18N.getMsg("first_start.title"));
 		phase++;
 		if (messageYesNo("spell")) {
 			SpellDlg.install();//install dictionnary
@@ -172,10 +187,10 @@ public class FirstStartDlg extends JDialog implements ActionListener {
 
 	private boolean messageYesNo(String str) {
 		int n = JOptionPane.showConfirmDialog(null,
-		   I18N.getMsg("first_start.install." + str),
-		   I18N.getMsg("first_start.title"),
-		   JOptionPane.YES_NO_OPTION,
-		   JOptionPane.QUESTION_MESSAGE);
+				I18N.getMsg("first_start.install." + str),
+				I18N.getMsg("first_start.title"),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
 		return n == JOptionPane.YES_OPTION;
 	}
 
