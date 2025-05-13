@@ -45,22 +45,24 @@ public class GBC extends GridBagConstraints {
 	/**
 	 * Constructeur en mode textuel
 	 *
-	 * paramétrage explicite des contraintes commence toujours par les valeur
-	 * gridy et gridx separateurs : espace pour séparer les paramètres, virgule
-	 * pour séparer les valeurs eventuelles
+	 * paramétrage explicite des contraintes commence toujours par les valeur gridy et gridx
+	 * separateurs : espace pour séparer les paramètres, virgule pour séparer les valeurs
+	 * eventuelles
 	 *
-	 * Remarques: - anchor (forme abrégé anc) : accepte les valeurs (casse
-	 * indifférente): c ou center n ou north ne ou northeast nw ou northwest e
-	 * ou east w ou west s ou south se ou southeast sw ou southwest ps ou
-	 * page_start pe ou page_end ls ou line_start le ou line_end fls ou
-	 * first_line_start fle ou first_line_end lls ou last_line_start lle ou
-	 * last_line_end": - fill accepte les valeurs (casse indifférente): n ou
-	 * none h ou horizontal v ou vertical b ou both - insets (forme abrégée ins)
-	 * peut s'écrire de trois manière: insets est équivalent à insets 0 0 0 0
-	 * insets x est équivalent à insets x x x x insets x1 x2 x3 x4 - width
-	 * (forme abégée gw) est équivalent à gridwidth - height (forme abrégée gh)
-	 * est équivalent à gridheight - wx est équivalent à weightx - wy est
-	 * équivalent à weighty
+	 * Remarques:
+	 * <ul>
+	 * <li>- anchor (forme abrégé anc) : accepte les valeurs (casse indifférente): c ou center n ou
+	 * north ne ou northeast nw ou northwest e ou east w ou west s ou south se ou southeast sw ou
+	 * southwest ps ou page_start pe ou page_end ls ou line_start le ou line_end fls ou
+	 * first_line_start fle ou first_line_end lls ou last_line_start lle ou last_line_end": </li>
+	 * <li>- fill accepte les valeurs (casse indifférente): n ou none h ou horizontal v ou vertical
+	 * b ou both </li>
+	 * <li>- insets (forme abrégée ins) peut s'écrire de trois manière: insets est équivalent à
+	 * insets 0 0 0 0 insets x est équivalent à insets x x x x insets x1 x2 x3 x4 </li>
+	 * <li>- width (forme abégée gw) est équivalent à gridwidth </li>
+	 * <li>- height (forme abrégée gh) est équivalent à gridheight </li>
+	 * <li>- wx est équivalent à weightx </li>
+	 * <li>- wy est équivalent à weighty</li>
 	 *
 	 * @param param : texte de paramétrage
 	 */

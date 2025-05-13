@@ -48,6 +48,8 @@ import storybook.ui.panel.AbstractPanel;
 @SuppressWarnings("serial")
 public class ManageChapter extends AbstractPanel implements MouseListener, IRefreshable {
 
+	private static final String TT = "ManageChapter.";
+
 	public ManagePanel manage;
 	private Chapter chapter;
 	private ManageSceneTransfer sceneTransferHandler;
@@ -101,7 +103,7 @@ public class ManageChapter extends AbstractPanel implements MouseListener, IRefr
 						return;
 					}
 					if (!newSceneChapter.getId().equals(chapter.getId())
-					   && !oldSceneChapter.getId().equals(chapter.getId())) {
+							&& !oldSceneChapter.getId().equals(chapter.getId())) {
 						return;
 					}
 					refresh();
@@ -124,7 +126,7 @@ public class ManageChapter extends AbstractPanel implements MouseListener, IRefr
 
 	@Override
 	public void init() {
-		//LOG.trace(TT+".init()");
+		LOG.trace(TT + ".init()");
 		try {
 			setZoomedSize(App.preferences.manageGetZoom());
 		} catch (Exception e) {
@@ -135,7 +137,7 @@ public class ManageChapter extends AbstractPanel implements MouseListener, IRefr
 
 	@Override
 	public void initUi() {
-		//LOG.trace(TT+".initUI()");
+		LOG.trace(TT + ".initUI()");
 		MigLayout layout = new MigLayout(MIG.get(MIG.INS0, MIG.GAP0));
 		if (isForUnassignedScene()) {
 			layout = new MigLayout(MIG.FLOWX, "[]", "[fill]");

@@ -41,6 +41,7 @@ public class Html {
 	 */
 	public static final String TYPE = "text/html",
 			NL = "\n", // new ligne
+			//DOCTYPE = "",//empty DOCTYPE
 			DOCTYPE = "<!DOCTYPE html>" + NL,
 			// alignment
 			AL_CENTER = "text-align: center;",

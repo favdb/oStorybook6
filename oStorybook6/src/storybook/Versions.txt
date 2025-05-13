@@ -1,8 +1,9 @@
 Versions :
 ==========
+6.03a: 13/05/2025 correctif d'urgence
 6.03: 21/04/2025
-6.02b: correctif d'ugence
-6.02a: correctif d'ugence
+6.02b: correctif d'urgence
+6.02a: correctif d'urgence
 6.02: 01/01/2025
 6.01: 01/09/2024
 6.00d :correctif d'urgence

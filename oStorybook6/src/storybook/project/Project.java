@@ -1088,7 +1088,7 @@ public class Project {
 		//LOG.trace(TT + "initDomFromZip(filePath=" + filePath + ")");
 		try {
 			String validPath = XmlZipHandler.validateAndFixZipIfNeeded(filePath);
-			LOG.trace("validPath=" + validPath);
+			//LOG.trace("validPath=" + validPath);
 			ZipXml zipXml = new ZipXml(new File(validPath));
 			ZipEntry entry = zipXml.open("db.xml");
 			if (entry == null) {

@@ -38,8 +38,8 @@ public class Const {
 		VERSION_MINOR("03"),
 		VERSION(VERSION_MAJOR + "." + VERSION_MINOR),
 		//replace alpha by empty string for a stable release
-		VERSION_ALPHA(""),
-		RELEASE_DATE("2025-04-21"),
+		VERSION_ALPHA("a"),
+		RELEASE_DATE("2025-05-13"),
 		COPYRIGHT_YEAR("2012-2025"),
 		COPYRIGHT_COMPANY("The oStorybook Team"),
 		DB_VERSION("5.0"),
