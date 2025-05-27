@@ -41,7 +41,7 @@ public class DureeScene {
 
 	public DureeScene(MainFrame mainFrame, Scene scene) {
 		this.id = scene.getId();
-		this.debut = mainFrame.project.scenes.computeRelativeDate(scene);
+		this.debut = mainFrame.project.scenes.relativeDateCompute(scene, scene.getRelativetime());
 	}
 
 	public static List<DureeScene> initScenes(MainFrame mainFrame) {

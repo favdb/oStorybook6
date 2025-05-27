@@ -38,14 +38,14 @@ public class ShefEditor extends JPanel {
 
 	public static final String TT = "ShefEditor", VERSION = "1.0";
 	public static final int DLG_NONE = 0,
-	   DLG_EN = 1,
-	   DLG_FR = 2,
-	   DLG_ALL = 3;
+			DLG_EN = 1,
+			DLG_FR = 2,
+			DLG_ALL = 3;
 	public static final int NONE = 0, REDUCED = 1, FULL = 2;
 	public static final String WYSIWYG = "wysiwyg",
-	   SOURCE = "source",
-	   HTML = "html",
-	   NORMAL = "normal";
+			SOURCE = "source",
+			HTML = "html",
+			NORMAL = "normal";
 	private static String spelling = "none";
 
 	public static String getSpelling() {
@@ -62,7 +62,7 @@ public class ShefEditor extends JPanel {
 	private int dlgLang = DLG_ALL;// dialog marks type 0=none, 1=en, 2=fr
 	private int reducedMode = FULL;// tool bar type 0=none, 1=reduced, 2=full
 	private boolean colored = false,//if true then use RSyantaxArea, else use JTeaxtArea
-	   showStatus = true;// if false status bar must not be shown
+			showStatus = true;// if false status bar must not be shown
 	private String param = "";// param memorized
 	private String curMod = NORMAL;// current mode
 	private int maxLen = 32768;// max length of text

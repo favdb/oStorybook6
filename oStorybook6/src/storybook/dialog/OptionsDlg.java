@@ -16,19 +16,19 @@
  */
 package storybook.dialog;
 
-import storybook.ui.panel.tree.TreeOpt;
-import storybook.ui.panel.timeline.TimelineOpt;
-import storybook.ui.panel.manage.ManageOpt;
-import storybook.ui.panel.chrono.ChronoOpt;
-import storybook.db.book.OptBook;
+import api.mig.swing.MigLayout;
+import i18n.I18N;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
-import api.mig.swing.MigLayout;
 import resources.icons.IconUtil;
-import i18n.I18N;
+import storybook.db.book.OptBook;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.SbView;
+import storybook.ui.panel.chrono.ChronoOpt;
+import storybook.ui.panel.manage.ManageOpt;
+import storybook.ui.panel.timeline.TimelineOpt;
+import storybook.ui.panel.tree.TreeOpt;
 
 /**
  *

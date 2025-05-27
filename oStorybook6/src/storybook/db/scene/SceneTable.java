@@ -98,6 +98,7 @@ public class SceneTable extends AbsTable implements ActionListener {
 	@Override
 	public void init() {
 		withPart = true;
+		mainFrame.project.scenes.relativeDateInit();
 	}
 
 	@SuppressWarnings({"unchecked"})
@@ -380,10 +381,14 @@ public class SceneTable extends AbsTable implements ActionListener {
 		if (App.getAssistant().isExists(book, "stage")) {
 			cols.add(e.getScenariostage());
 		}
-		if (e.hasRelativescene()) { // relative date
-			Date dx = mainFrame.project.scenes.computeRelativeDate(e);
-			if (dx != null) {
-				cols.add("(" + DateUtil.simpleDateTimeToString(dx, false) + ")");
+		Date date = e.getDateRel();
+		if (e.hasScenets()) {// fixed date
+			cols.add(date);
+			cols.add(-1L);//relative scene
+			cols.add(" ");//relative time
+		} else if (e.hasRelativescene()) { // relative date
+			if (date != null) {
+				cols.add("(" + DateUtil.simpleDateTimeToString(date, false) + ")");
 			} else {
 				cols.add("(?)");
 			}
@@ -395,10 +400,6 @@ public class SceneTable extends AbsTable implements ActionListener {
 				SbDuration dur = new SbDuration(e.getRelativetime());
 				cols.add(dur.toText());
 			}
-		} else if (e.hasScenets()) {// fixed date
-			cols.add(e.getDate());
-			cols.add(-1L);//relative scene
-			cols.add(" ");//relative time
 		} else {
 			cols.add("");
 			cols.add(" ");

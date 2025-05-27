@@ -35,10 +35,10 @@ public class Const {
 	public enum STORYBOOK {
 		NAME("oStorybook"),
 		VERSION_MAJOR("6"),
-		VERSION_MINOR("03"),
+		VERSION_MINOR("04"),
 		VERSION(VERSION_MAJOR + "." + VERSION_MINOR),
 		//replace alpha by empty string for a stable release
-		VERSION_ALPHA("a"),
+		VERSION_ALPHA(""),
 		RELEASE_DATE("2025-05-13"),
 		COPYRIGHT_YEAR("2012-2025"),
 		COPYRIGHT_COMPANY("The oStorybook Team"),

@@ -8,6 +8,7 @@
  */
 package api.shef.dialogs;
 
+import api.shef.ShefEditor;
 import i18n.I18N;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -15,7 +16,6 @@ import java.awt.Frame;
 import javax.swing.Icon;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import api.shef.ShefEditor;
 
 /**
  * Dialogue pour la saisie d'une note de renvoi
@@ -54,9 +54,9 @@ public class HTMLEndnoteDialog extends HTMLOptionDialog {
 	}
 
 	/**
-	 * retourne le lien de la note de renvoi au format HTML
+	 * return the link to the endnote in HTML format
 	 *
-	 * @return : la texte formatté
+	 * @return : the formatted text
 	 */
 	@Override
 	public String getHTML() {

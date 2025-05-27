@@ -36,16 +36,11 @@ import javax.swing.event.ChangeListener;
 import storybook.App;
 import storybook.ctrl.ActKey;
 import storybook.ctrl.Ctrl;
-import static storybook.ctrl.Ctrl.PROPS.PRINT;
-import static storybook.ctrl.Ctrl.PROPS.REFRESH;
-import static storybook.ctrl.Ctrl.PROPS.SHOWOPTIONS;
-import static storybook.ctrl.Ctrl.PROPS.TIMELINE_OPTIONS;
-import static storybook.ctrl.Ctrl.PROPS.TIMELINE_ZOOM;
+import static storybook.ctrl.Ctrl.PROPS.*;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.person.Person;
 import storybook.db.scene.Scene;
-import storybook.db.scene.Scenes;
 import storybook.dialog.OptionsDlg;
 import storybook.tools.print.ComponentPrinter;
 import storybook.tools.swing.LaF;
@@ -295,47 +290,48 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 		if (!tlEntities.isEmpty()) {
 			tlEntities.clear();
 		}
-		//load scenes
-		List<Scene> scenes = Scenes.find(mainFrame);
-		int nb = 0;
-		for (Scene scene : scenes) {
-			if (scene.hasScenets()) {
-				nb++;
-			}
-		}
-		if (nb < 2) {
+		mainFrame.project.scenes.relativeDateInit();
+		List<Scene> scenes = mainFrame.project.scenes.getWithDates();
+		if (scenes.size() < 2) {
 			return;
 		}
-		scenes = mainFrame.project.scenes.getWithDates();
+		//LOG.trace("loaded scenes=" + scenes.size());
 		for (Scene scene : scenes) {
 			tlEntities.add(new TimelineEntity(mainFrame, (AbstractEntity) scene));
 		}
-		//load events
+		int nb = 0;
 		for (Object obj : (List) mainFrame.project.getList(Book.TYPE.EVENT)) {
 			if (((AbstractEntity) obj).hasDate()) {
 				tlEntities.add(new TimelineEntity(mainFrame, (AbstractEntity) obj));
+				nb++;
 			}
 		}
-		//load persons
+		//LOG.trace("loaded events=" + nb);
+		nb = 0;
 		for (Object obj : (List) mainFrame.project.getList(Book.TYPE.PERSON)) {
 			Person person = (Person) obj;
 			if (!person.getBirthdayToString().isEmpty()
 					&& begin.before(person.getBirthday())
 					&& end.after(person.getBirthday())) {
+				nb++;
 				tlEntities.add(new TimelineEntity(mainFrame, (AbstractEntity) person, person.getBirthday()));
 			}
 			if (!person.getDayofdeathToString().isEmpty()
 					&& begin.before(person.getDayofdeath())
 					&& end.after(person.getDayofdeath())) {
+				nb++;
 				tlEntities.add(new TimelineEntity(mainFrame, (AbstractEntity) person, person.getDayofdeath()));
 			}
 		}
+		//LOG.trace("loaded persons=" + nb);
 		begin = computeBegin();
 		end = computeEnd();
+		//LOG.trace("begin=" + DateUtil.dateToStandard(begin)
+		//		+ ", end=" + DateUtil.dateToStandard(end));
 	}
 
 	private Date computeBegin() {
-		//LOG.trace(TT + ".computeBegin()");
+		//LOG.trace(TT + "computeBegin()");
 		Date r = null;
 		for (TimelineEntity t : tlEntities) {
 			if (r == null) {
@@ -349,7 +345,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 	}
 
 	private Date computeEnd() {
-		//LOG.trace(TT + ".computeEnd()");
+		//LOG.trace(TT + "computeEnd()");
 		Date r = null;
 		for (TimelineEntity t : tlEntities) {
 			if (r == null) {
@@ -363,9 +359,9 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 	}
 
 	private void setScale() {
-		/*LOG.trace(TT + ".setScale()"
-				+ " begin date=" + DateUtil.dateToString(begin)
-				+ ", ending date=" + DateUtil.dateToString(end));*/
+		//LOG.trace(TT + ".setScale()"
+		//		+ " begin date=" + DateUtil.dateToString(begin)
+		//		+ ", ending date=" + DateUtil.dateToString(end));
 		scale = new TimelineScale(zoomValue, begin, end);
 		panel.add(scale, "pos 0 0");
 	}

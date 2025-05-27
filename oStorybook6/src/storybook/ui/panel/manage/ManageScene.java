@@ -46,6 +46,7 @@ import storybook.db.status.Status.STATUS;
 import storybook.db.status.StatusButton;
 import storybook.db.strand.Strand;
 import storybook.db.strand.StrandButton;
+import storybook.tools.TextUtil;
 import storybook.tools.html.Html;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.swing.FontUtil;
@@ -56,9 +57,9 @@ import storybook.ui.panel.AbstractScenePanel;
 
 @SuppressWarnings("serial")
 public class ManageScene extends AbstractScenePanel
-   implements Accessible, FocusListener, IRefreshable {
+		implements Accessible, FocusListener, IRefreshable {
 
-	private static final String TT = "ManageScene";
+	private static final String TT = "ManageScene.";
 
 	public enum TYPE {
 		SCENE, UNASSIGNED, BEGIN, NEXT, MAKE_UNASSIGNED
@@ -108,11 +109,12 @@ public class ManageScene extends AbstractScenePanel
 
 	@Override
 	public void init() {
-		//LOG.printInfos(TT+".init()");
+		//empty
 	}
 
 	@Override
 	public void initUi() {
+		//LOG.trace(TT+"initUi()");
 		setLayout(new MigLayout(MIG.get(MIG.INS1, MIG.GAP1)));
 		setOpaque(true);
 		borderDefault = BorderFactory.createEmptyBorder();
@@ -145,20 +147,20 @@ public class ManageScene extends AbstractScenePanel
 	}
 
 	private void initPanel() {
-		//LOG.printInfos(TT + ".initPanel()");
+		//LOG.trace(TT + "initPanel()");
 		setBackground(scene.getIntensityColor());
 		add(initLeft(), MIG.GROWY);
-		JLabel lbScene = new JLabel();
-		StringBuilder buf = new StringBuilder();
-		String titleText = scene.getTitleText(true, manage.textLen);
-		buf.append(Html.htmlToText(titleText));
-		lbScene.setText(Html.HTML_B + buf.toString() + Html.HTML_E);
+		String txt = TextUtil.ellipsize("<b>" + scene.getName() + "</b>:<br>"
+				+ Html.htmlToText(scene.getSummary()),
+				manage.textLen);
+		JLabel lbScene = new JLabel(Html.HTML_B + txt + Html.HTML_E);
 		lbScene.setVerticalAlignment(SwingConstants.TOP);
 		if (ColorUtil.isDark(getBackground())) {
 			lbScene.setForeground(Color.WHITE);
 		}
 		SwingUtil.setForcedSize(lbScene,
-		   new Dimension(manage.sceneSize.width - manage.leftSize.width, manage.sceneSize.height - 6));
+				new Dimension(manage.sceneSize.width - manage.leftSize.width,
+						manage.sceneSize.height - 6));
 		add(lbScene, MIG.get(MIG.TOP, MIG.GROWX));
 		addFocusListener(this);
 	}
@@ -255,11 +257,6 @@ public class ManageScene extends AbstractScenePanel
 			item.addActionListener(e -> manage.sceneSetUnassigned(this));
 			popup.insert(item, 0);
 		}
-		/*if (!scene.getInformative()) {
-			JMenuItem item = new JMenuItem(I18N.getMsg("informative"));
-			item.addActionListener(e -> manage.sceneSetInformative(this));
-			popup.insert(item, 0);
-		}*/
 		return popup;
 	}
 

@@ -80,13 +80,10 @@ public class Storymap extends AbstractPanel implements ItemListener {
 	public void initUi() {
 		//LOG.trace(TT + ".initUi()");
 		setLayout(new MigLayout(MIG.get(MIG.INS0, MIG.FILL)));
-		//setBackground(SwingUtil.getBackgroundColor());
 		initToolbar();
 		add(toolbar, MIG.get(MIG.SPAN, MIG.GROWX));
 		graph = new StorymapGraph(this);
 		scroll = new JScrollPane(graph);
-		//SwingUtil.setUnitIncrement(scroll);
-		//SwingUtil.setMaxPreferredSize(scroll);
 		add(scroll, MIG.get(MIG.GROW, MIG.SPAN));
 	}
 

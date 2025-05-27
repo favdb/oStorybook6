@@ -18,7 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.db.relation;
 
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.List;
 import storybook.ctrl.ActKey;
 import storybook.db.DB;
@@ -61,43 +60,6 @@ public class RelationTable extends AbsTable {
 				|| act.getType() == Book.TYPE.SCENE)) {
 			fillTable();
 		}
-	}
-
-	@Override
-	protected void sendSetEntityToEdit(int row) {
-		if (row == -1) {
-			return;
-		}
-		Relation r = (Relation) getEntityFromRow(row);
-		if (r != null) {
-			mainFrame.showEditorAsDialog(r);
-		}
-	}
-
-	@Override
-	protected void sendSetNewEntityToEdit(AbstractEntity entity) {
-		mainFrame.showEditorAsDialog(entity);
-	}
-
-	@Override
-	protected synchronized void sendDeleteEntity(int row) {
-		Relation r = (Relation) getEntityFromRow(row);
-		if (r != null) {
-			ctrl.deleteEntity(r);
-		}
-	}
-
-	@Override
-	protected synchronized void sendDeleteEntities(List<AbstractEntity> entities) {
-		if (entities.isEmpty()) {
-			return;
-		}
-		ArrayList<Long> ids = new ArrayList<>();
-		for (AbstractEntity entity : entities) {
-			Relation r = (Relation) entity;
-			ids.add(r.getId());
-		}
-		ctrl.deletemultiEntity(entities.get(0).getObjType(), ids);
 	}
 
 	@Override

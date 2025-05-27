@@ -73,35 +73,35 @@ public class Ui {
 	private static final String TT = "Ui";
 
 	public static final String CTRL = "ctrl ", ALT = "alt ", SHIFT = "shift ",
-		CTRL_SHIFT = CTRL + SHIFT, CTRL_ALT = CTRL + ALT;
+			CTRL_SHIFT = CTRL + SHIFT, CTRL_ALT = CTRL + ALT;
 
 	private Ui() {
 		throw new IllegalStateException("Utility class");
 	}
 
 	public static final Dimension MINIMUM_SIZE = new Dimension(440, 120),
-		MAXIMUM_SIZE = new Dimension(800, 600),
-		PREF_SIZE = new Dimension(750, 560);
+			MAXIMUM_SIZE = new Dimension(800, 600),
+			PREF_SIZE = new Dimension(750, 560);
 	public static String BALL = "all",
-		BBORDER = "border",
-		BCHECK = "check",
-		BEMPTY = "empty",
-		BGROW = "grow",
-		BINFO = "info",
-		BMANDATORY = "mandatory",
-		BNEW = "new",
-		BNONE = "";
+			BBORDER = "border",
+			BCHECK = "check",
+			BEMPTY = "empty",
+			BGROW = "grow",
+			BINFO = "info",
+			BMANDATORY = "mandatory",
+			BNEW = "new",
+			BNONE = "";
 	public static final boolean MANDATORY = true,
-		NEW = true,
-		ALL = true,
-		EMPTY = true,
-		HIDE = true,
-		INFO = true,
-		NEWTAB = true,
-		GROW = true,
-		TIME = true,
-		TOP = true,
-		WRAP = true;
+			NEW = true,
+			ALL = true,
+			EMPTY = true,
+			HIDE = true,
+			INFO = true,
+			NEWTAB = true,
+			GROW = true,
+			TIME = true,
+			TOP = true,
+			WRAP = true;
 
 	/**
 	 * add a component with it's title in a JPanel
@@ -114,7 +114,7 @@ public class Ui {
 	 * @param tab
 	 */
 	public static void addField(JPanel panel, String title, String top,
-		JComponent comp, JTabbedPane tab, String opt) {
+			JComponent comp, JTabbedPane tab, String opt) {
 		if (tab != null) {
 			tab.add(comp, I18N.getMsg(title));
 		} else {
@@ -194,7 +194,7 @@ public class Ui {
 	 * @return
 	 */
 	public static JTextField initStringField(JPanel p, String name, int len,
-		String val, String opt) {
+			String val, String opt) {
 		JTextField tf = new JTextField();
 		tf.setName(name);
 		tf.setText(val);
@@ -212,7 +212,7 @@ public class Ui {
 	}
 
 	public static JTextField initStringField(JPanel p, DATA data, int len,
-		String val, String opt) {
+			String val, String opt) {
 		return initStringField(p, data.i18n(), len, val, opt);
 	}
 
@@ -234,12 +234,12 @@ public class Ui {
 	}
 
 	public static JTextField initIntegerField(JPanel p, DATA data, int len,
-		Integer val, String opt) {
+			Integer val, String opt) {
 		return initIntegerField(p, data.i18n(), len, val, opt);
 	}
 
 	public static JTextField initIntegerField(JPanel p, String name, int len,
-		Integer val, String opt) {
+			Integer val, String opt) {
 		if (val == null) {
 			val = 0;
 		}
@@ -261,10 +261,10 @@ public class Ui {
 	 * @return
 	 */
 	public static ShefEditor initHtmlEditor(JPanel panel,
-		String name,
-		String val,
-		JTabbedPane tab,
-		String opt) {
+			String name,
+			String val,
+			JTabbedPane tab,
+			String opt) {
 		ShefEditor ta = new ShefEditor("", "full", val);
 		ta.setName(name);
 		ta.setMinimumSize(new Dimension(200, 80));
@@ -306,7 +306,7 @@ public class Ui {
 	 */
 	@SuppressWarnings("unchecked")
 	public static JComboBox initCbStrings(JPanel panel, AbstractEditor caller,
-		String name, List<String> list, String toSel, String opt) {
+			String name, List<String> list, String toSel, String opt) {
 		JComboBox combo = initCB(name, opt);
 		//load the list
 		for (String str : list) {
@@ -343,15 +343,15 @@ public class Ui {
 	 * @return
 	 */
 	public static JComboBox initCbEntities(JPanel panel, AbstractEditor caller,
-		String name, Book.TYPE objtype,
-		AbstractEntity toSel, AbstractEntity toHide,
-		String opt) {
+			String name, Book.TYPE objtype,
+			AbstractEntity toSel, AbstractEntity toHide,
+			String opt) {
 		JComboBox cb = new JComboBox();
 		cb.setFont(App.fonts.defGet());
 		SwingUtil.setCBsize(cb);
 		cb.setName(name);
 		CbUtil.fillEntity(caller.mainFrame, cb, objtype, toSel, toHide,
-			(opt.contains(BNEW) ? "1" : "0") + (opt.contains(BEMPTY) ? "1" : "0") + "0");
+				(opt.contains(BNEW) ? "1" : "0") + (opt.contains(BEMPTY) ? "1" : "0") + "0");
 		if (opt.contains(BNEW)) {
 			JPanel p = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0)));
 			JButton bt = new JButton(IconUtil.getIconSmall(ICONS.K.NEW));
@@ -361,7 +361,7 @@ public class Ui {
 				boolean rc = caller.mainFrame.showEditorAsDialog(newEntity, bt);
 				if (rc != true) {
 					CbUtil.fillEntity(caller.mainFrame, cb, objtype, newEntity, toHide,
-						(opt.contains(BNEW) ? "1" : "0") + (opt.contains(BEMPTY) ? "1" : "0") + "1");
+							(opt.contains(BNEW) ? "1" : "0") + (opt.contains(BEMPTY) ? "1" : "0") + "1");
 				}
 			});
 			p.add(cb, MIG.GROWX);
@@ -386,13 +386,13 @@ public class Ui {
 	 * @return
 	 */
 	public static JComboBox getCB(JPanel panel,
-		AbstractEditor caller, Book.TYPE type,
-		AbstractEntity toSel, AbstractEntity toHide, String opt) {
+			AbstractEditor caller, Book.TYPE type,
+			AbstractEntity toSel, AbstractEntity toHide, String opt) {
 		JComboBox combo = new JComboBox();
 		combo.setName(type.toString());
 		SwingUtil.setCBsize(combo);
 		CbUtil.fillEntity(caller.mainFrame, combo, type, toSel, toHide,
-			(opt.contains(BALL) ? "1" : "0") + (opt.contains(BEMPTY) ? "1" : "0") + "0");
+				(opt.contains(BALL) ? "1" : "0") + (opt.contains(BEMPTY) ? "1" : "0") + "0");
 		if (opt.contains(BNEW)) {
 			JPanel p = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0)));
 			JButton bt = new JButton(IconUtil.getIconSmall(ICONS.K.NEW));
@@ -402,7 +402,7 @@ public class Ui {
 				boolean rc = caller.mainFrame.showEditorAsDialog(newEntity, bt);
 				if (rc != true) {
 					CbUtil.fillEntity(caller.mainFrame, combo, type, newEntity, toHide,
-						(opt.contains(BALL) ? "1" : "0") + (opt.contains(BEMPTY) ? "1" : "0") + "1");
+							(opt.contains(BALL) ? "1" : "0") + (opt.contains(BEMPTY) ? "1" : "0") + "1");
 				}
 			});
 			p.add(combo);
@@ -422,14 +422,14 @@ public class Ui {
 	 * return the JCheckBox
 	 * @param name: internal name of the JCheckBox
 	 * @param text: text for the JCheckBox
-	 * @param sel
-	 * @param opt
+	 * @param sel: checkbox to be selected
+	 * @param opt: mandatory option
 	 * @param action : optional, action when changed
 	 * @return an initialized JCheckBox
 	 */
-	public static JCheckBox initCheckBox(JPanel panel,
-		String name, String text, boolean sel,
-		String opt, ActionListener... action) {
+	public static JCheckBox initCheckBox(JComponent panel,
+			String name, String text, boolean sel,
+			String opt, ActionListener... action) {
 		JCheckBox cb = new JCheckBox();
 		cb.setName(name);
 		cb.setText(I18N.getMsg(text));
@@ -452,12 +452,12 @@ public class Ui {
 
 	@SuppressWarnings("unchecked")
 	public static JComboBox initComboBox(String name,
-		String tooltip,
-		List list,
-		AbstractEntity toSel,
-		boolean isEmpty,
-		boolean isAll,
-		ActionListener... action) {
+			String tooltip,
+			List list,
+			AbstractEntity toSel,
+			boolean isEmpty,
+			boolean isAll,
+			ActionListener... action) {
 		//App.trace(TT+".comboboxInit(title="+title+"tooltip, list, toSel, isEmpty, isAll)");
 		JComboBox cb = new JComboBox();
 		cb.setMinimumSize(IconUtil.getDefDim());
@@ -488,12 +488,12 @@ public class Ui {
 
 	@SuppressWarnings("unchecked")
 	public static JComboBox initComboBox(String name,
-		String tooltip,
-		String[] list,
-		int toSel,
-		boolean isEmpty,
-		boolean isAll,
-		ActionListener... action) {
+			String tooltip,
+			String[] list,
+			int toSel,
+			boolean isEmpty,
+			boolean isAll,
+			ActionListener... action) {
 		//App.trace(TT+".comboboxInit(title="+title+"tooltip, list, toSel, isEmpty, isAll)");
 		JComboBox cb = new JComboBox();
 		cb.setMinimumSize(IconUtil.getDefDim());
@@ -530,9 +530,9 @@ public class Ui {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void fillCB(JComboBox cb,
-		List list,
-		String opt,
-		ActionListener... action) {
+			List list,
+			String opt,
+			ActionListener... action) {
 		//App.trace(TT+".fillComboBox(cb, list, toSel, isEmpty, isAll)");
 		int toSel = cb.getSelectedIndex();
 		if (action != null && action.length > 0) {
@@ -569,7 +569,7 @@ public class Ui {
 	 * @return an initialized JCheckBox
 	 */
 	public static JRadioButton initRadioButton(JPanel panel,
-		String text, boolean check, String opt, String... top) {
+			String text, boolean check, String opt, String... top) {
 		JRadioButton cb = new JRadioButton();
 		cb.setName(text);
 		cb.setText(I18N.getMsg(text));
@@ -597,7 +597,7 @@ public class Ui {
 	 * @return
 	 */
 	public static JComboBox initCategory(JPanel panel,
-		List<String> list, String toSel, String opt) {
+			List<String> list, String toSel, String opt) {
 		return initAutoCombo(panel, DB.DATA.CATEGORY, list, toSel, opt);
 	}
 
@@ -614,7 +614,7 @@ public class Ui {
 	 */
 	@SuppressWarnings("unchecked")
 	public static JComboBox initAutoCombo(JPanel panel, DATA title,
-		List<String> list, String toSel, String opt) {
+			List<String> list, String toSel, String opt) {
 		JComboBox cb = new JComboBox();
 		cb.setName(title.i18n());
 		cb.setMinimumSize(new Dimension(150, 20));
@@ -639,9 +639,9 @@ public class Ui {
 	}
 
 	public static JComboBox initAutoCombo(JPanel panel, MainFrame mainFrame,
-		DATA title, Book.TYPE objtype,
-		AbstractEntity toSel, AbstractEntity toHide,
-		String opt) {
+			DATA title, Book.TYPE objtype,
+			AbstractEntity toSel, AbstractEntity toHide,
+			String opt) {
 		JComboBox combo = new JComboBox();
 		combo.setName(title.i18n());
 		combo.setMinimumSize(new Dimension(150, IconUtil.getDefSize()));
@@ -671,8 +671,8 @@ public class Ui {
 	}
 
 	public static JComboBox initAutoCombo(JPanel panel, MainFrame mainFrame,
-		String title, Book.TYPE objtype,
-		AbstractEntity toSel, AbstractEntity toHide, String opt) {
+			String title, Book.TYPE objtype,
+			AbstractEntity toSel, AbstractEntity toHide, String opt) {
 		JComboBox combo = new JComboBox();
 		combo.setName(title);
 		combo.setMinimumSize(new Dimension(150, IconUtil.getDefSize()));
@@ -695,7 +695,7 @@ public class Ui {
 
 	@SuppressWarnings("unchecked")
 	public static JPanel initListBox(JPanel panel, MainFrame mainFrame, Book.TYPE type,
-		String title, List<?> list, AbstractEntity tosel, ActionListener actionNew) {
+			String title, List<?> list, AbstractEntity tosel, ActionListener actionNew) {
 		/*LOG.trace(TT+".initListBox(panel, mainFrame"+
 				", type="+type.toString()+
 				", title="+ title+
@@ -739,7 +739,7 @@ public class Ui {
 	 */
 	@SuppressWarnings("unchecked")
 	public static JSCheckList initCkList(JPanel p, MainFrame mainFrame, Book.TYPE type,
-		List<?> ls, JTabbedPane tab, String opt) {
+			List<?> ls, JTabbedPane tab, String opt) {
 		JPanel p1 = new JPanel(new MigLayout(MIG.get(MIG.INS1, MIG.GAP0, MIG.FILLX), "[grow][]"));
 		if (opt.contains(BBORDER)) {
 			p1.setBorder(BorderFactory.createTitledBorder(I18N.getColonMsg(type.toString())));
@@ -815,10 +815,10 @@ public class Ui {
 			return initButton(name, "", ICONS.K.UNKNOWN, "");
 		}
 		JButton bt = initButton(name,
-			"!" + TextUtil.ellipsize(entity.getName(), 20),
-			null,
-			"",
-			act);
+				"!" + TextUtil.ellipsize(entity.getName(), 20),
+				null,
+				"",
+				act);
 		bt.setIcon(entity.getIcon());
 		bt.setToolTipText(EntityUtil.getTooltip(entity));
 		return bt;
@@ -857,7 +857,7 @@ public class Ui {
 	 * @return
 	 */
 	public static JButton initButton(String name, DATA data,
-		ICONS.K icon, String tooltip, ActionListener... act) {
+			ICONS.K icon, String tooltip, ActionListener... act) {
 		if (data == null) {
 			return initButton(name, "", icon, tooltip, act);
 		}
@@ -876,7 +876,7 @@ public class Ui {
 	 * @return
 	 */
 	public static JButton initButton(String name, String text, ICONS.K icon,
-		String tooltip, ActionListener... act) {
+			String tooltip, ActionListener... act) {
 		//LOG.trace(TT+".initButton(name=" + name + ",
 		//text=" + text + ", icon=" + icon.toString() + ")");
 		JButton btn = new JButton();
@@ -916,7 +916,7 @@ public class Ui {
 	 * @return
 	 */
 	public static JToggleButton initToggleButton(String name,
-		String text, ICONS.K icon, ActionListener act) {
+			String text, ICONS.K icon, ActionListener act) {
 		JToggleButton bt = new JToggleButton();
 		bt.setName(name);
 		if (!text.isEmpty()) {
@@ -967,10 +967,10 @@ public class Ui {
 	 * @param action : action to perform, optional
 	 */
 	public static void addShortcut(ActionListener listener,
-		JComponent comp,
-		String name,
-		String shortcut,
-		Action... action) {
+			JComponent comp,
+			String name,
+			String shortcut,
+			Action... action) {
 		KeyStroke key = Shortcuts.getKey("shortcut.k." + shortcut);
 		comp.getInputMap().put(key, name);
 		if (action != null && action.length > 0) {

@@ -81,8 +81,7 @@ abstract public class AbstractScenePanel extends AbstractGradientPanel {
 
 	public JButton getEditButton() {
 		if (btEdit == null) {
-			btEdit = SwingUtil.getIconButton("edit", e -> EntityUtil.createEntity(mainFrame, scene));
-			//new EntityEditAction(mainFrame, scene, false));
+			btEdit = SwingUtil.getIconButton("edit", e -> EntityUtil.editEntity(mainFrame, scene));
 		}
 		return btEdit;
 	}

@@ -17,8 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.db.strand;
 
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.List;
 import storybook.ctrl.ActKey;
 import storybook.db.DB;
@@ -34,7 +34,9 @@ import storybook.ui.MainFrame;
  *
  */
 @SuppressWarnings("serial")
-public class StrandTable extends AbsTable {
+public class StrandTable extends AbsTable implements ActionListener {
+
+	private static final String TT = "StrandTable.";
 
 	public StrandTable(MainFrame mainFrame) {
 		super(mainFrame, Book.TYPE.STRAND);
@@ -55,44 +57,8 @@ public class StrandTable extends AbsTable {
 	}
 
 	@Override
-	protected void sendSetEntityToEdit(int row) {
-		if (row == -1) {
-			return;
-		}
-		Strand strand = (Strand) getEntityFromRow(row);
-		if (strand != null) {
-			mainFrame.showEditorAsDialog(strand);
-		}
-	}
-
-	@Override
-	protected void sendSetNewEntityToEdit(AbstractEntity entity) {
-		if (entity != null) {
-			mainFrame.showEditorAsDialog(entity);
-		}
-	}
-
-	@Override
-	protected synchronized void sendDeleteEntity(int row) {
-		Strand strand = (Strand) getEntityFromRow(row);
-		if (strand != null) {
-			ctrl.deleteEntity(strand);
-		}
-	}
-
-	@Override
-	protected synchronized void sendDeleteEntities(List<AbstractEntity> entities) {
-		ArrayList<Long> ids = new ArrayList<>();
-		for (AbstractEntity entity : entities) {
-			Strand strand = (Strand) entity;
-			ids.add(strand.getId());
-		}
-		ctrl.deletemultiEntity(Book.TYPE.STRAND, ids);
-	}
-
-	@Override
 	protected AbstractEntity getEntity(Long id) {
-		return (Strand) mainFrame.project.get(Book.TYPE.STRAND, id);
+		return (Strand) mainFrame.project.strands.get(id);
 	}
 
 	@Override

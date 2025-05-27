@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package storybook.ui.panel.chrono;
+package storybook.ui.panel.book;
 
 import java.util.Date;
 import storybook.db.strand.Strand;

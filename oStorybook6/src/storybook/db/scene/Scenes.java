@@ -22,7 +22,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import storybook.App;
 import storybook.db.abs.AbsEntitys;
 import storybook.db.abs.AbstractEntity;
@@ -53,7 +55,7 @@ import storybook.ui.MainFrame;
  */
 public class Scenes extends AbsEntitys {
 
-	private static final String TT = "Scenes";
+	private static final String TT = "Scenes.";
 	private final List<Scene> scenes = new ArrayList<>();
 
 	@SuppressWarnings("unchecked")
@@ -146,7 +148,7 @@ public class Scenes extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Scene r1, Scene r2)
-			-> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -194,7 +196,7 @@ public class Scenes extends AbsEntitys {
 		List<Scene> list = new ArrayList<>();
 		for (Scene p : scenes) {
 			if ((chapter == null && !p.hasChapter())
-				|| (chapter != null && p.hasChapter() && chapter.equals(p.getChapter()))) {
+					|| (chapter != null && p.hasChapter() && chapter.equals(p.getChapter()))) {
 				list.add(p);
 			}
 		}
@@ -256,15 +258,16 @@ public class Scenes extends AbsEntitys {
 	}
 
 	/**
-	 * get list of Scenes which have a fixed date
+	 * get list of Scenes which have a fixed date, if no fixed date but relative scene then set a
+	 * computed date
 	 *
 	 * @return
 	 */
 	public List<Scene> getWithDates() {
-		//LOG.trace(TT+".getWithDates(mainFrame)");
+		//LOG.trace(TT+".getWithDates()");
 		List<Scene> list = new ArrayList<>();
 		for (Scene p : scenes) {
-			if (p.hasDate()) {
+			if (p.getDateRel() != null) {
 				list.add(p);
 			}
 		}
@@ -280,10 +283,9 @@ public class Scenes extends AbsEntitys {
 	@SuppressWarnings("unchecked")
 	public static List<Scene> find(MainFrame mainFrame) {
 		List<Scene> scenes = new ArrayList<>();
-		if (mainFrame == null) {
-			return scenes;
+		if (mainFrame != null) {
+			scenes = mainFrame.project.scenes.getList();
 		}
-		scenes = mainFrame.project.scenes.getList();
 		return scenes;
 	}
 
@@ -388,15 +390,9 @@ public class Scenes extends AbsEntitys {
 		//LOG.trace(TT + ".findDistinctDates(scenes=" + rs.size() + ", periode=" + periode + ")");
 		List<Date> dates = new ArrayList<>();
 		for (Scene scene : rs) {
-			Date ds = null;
-			if (scene.hasScenets()) {
-				ds = DateUtil.setMilliseconds(scene.getDate(), 0);
-				ds = DateUtil.setSeconds(ds, 0);
-			} else if (scene.hasRelativescene()) {
-				ds = computeRelativeDate(get(scene.getRelativesceneid()));
-			}
+			Date ds = scene.getDateRel();
 			if (ds != null) {
-				switch (periode) {
+				/*switch (periode) {
 					case 'Y':
 						ds = DateUtil.forYear(ds);
 						break;
@@ -409,7 +405,7 @@ public class Scenes extends AbsEntitys {
 					case 'H':
 						ds = DateUtil.forHour(ds);
 						break;
-				}
+				}*/
 				if (!dates.contains(ds)) {
 					dates.add(ds);
 				}
@@ -506,7 +502,7 @@ public class Scenes extends AbsEntitys {
 			}
 		} catch (Exception e) {
 			ExceptionDlg.show(TT
-				+ ".renumber(mainFrame, chapter=" + LOG.trace(chapter) + ") Exception", e);
+					+ ".renumber(mainFrame, chapter=" + LOG.trace(chapter) + ") Exception", e);
 		}
 	}
 
@@ -586,9 +582,9 @@ public class Scenes extends AbsEntitys {
 			if (chapter != null) {
 				@SuppressWarnings("null")
 				String snum = String.format("%02d%02d%02d0",
-					(chapter.hasPart() ? chapter.getPart().getNumber() : 0),
-					chapter.getChapterno(),
-					number + 1);
+						(chapter.hasPart() ? chapter.getPart().getNumber() : 0),
+						chapter.getChapterno(),
+						number + 1);
 				return Integer.parseInt(snum);
 			}
 			return (number + 1) * 10;
@@ -674,7 +670,7 @@ public class Scenes extends AbsEntitys {
 		List<Scene> ls = find(chapter);
 		if (!ls.isEmpty()) {
 			Collections.sort(ls, (Scene r1, Scene r2)
-				-> r1.getCCSS().compareTo(r2.getCCSS()));
+					-> r1.getCCSS().compareTo(r2.getCCSS()));
 			return (ls.get(0));
 		}
 		return null;
@@ -684,7 +680,7 @@ public class Scenes extends AbsEntitys {
 		List<Date> ls = new ArrayList<>();
 		for (Scene p : scenes) {
 			if ((p.getStrand().equals(strand) || p.getStrands().contains(strand))
-				&& (p.hasDate() && !ls.contains(p.getDate()))) {
+					&& (p.hasDate() && !ls.contains(p.getDate()))) {
 				ls.add(p.getDate());
 
 			}
@@ -855,25 +851,72 @@ public class Scenes extends AbsEntitys {
 		return ls;
 	}
 
-	public Date computeRelativeDate(Scene e) {
-		//LOG.trace(TT + "computeRelativeDate(e=" + LOG.trace(e) + ")");
-		Scene sx = (Scene) get(e.getRelativesceneid());
-		if (sx != null) {
-			if (sx.hasScenets()) {
-				return DateUtil.addDateTime(sx.getDate(), e.getRelativetime());
-			} else if (sx.hasRelativescene()) {
-				Date dx = computeRelativeDate(sx);
-				if (dx != null) {
-					String er = e.getRelativetime();
-					if (SbDuration.isZero(er)) {
-						SbDuration tx = SbDuration.getFromWords(sx.getSummary());
-						return DateUtil.add(dx, tx);
+	public void relativeDateInit() {
+		//set the relDate for all scenes with a fixed date
+		for (Scene scene : scenes) {
+			if (scene.hasScenets()) {
+				scene.setDateRel(new Date(scene.getScenets().getTime()));
+			} else {
+				scene.setDateRel(null);
+			}
+		}
+		//set the relDate for relative scene
+		for (Scene scene : scenes) {
+			if (scene.hasRelativescene()) {
+				Scene rs = get(scene.getRelativesceneid());
+				if (rs.getDateRel() != null) {
+					SbDuration rel;
+					if (rs.hasDuration()) {
+						rel = new SbDuration(rs.getDuration());
+					} else {
+						rel = rs.getSbDuration();
 					}
-					return DateUtil.add(dx, er);
+					if (!scene.getRelativetime().equals("00-00-00_00:00:00")) {
+						rel = new SbDuration(scene.getRelativetime());
+					}
+					scene.setDateRel(DateUtil.add(rs.getDateRel(), rel));
 				}
 			}
 		}
-		return null;
+	}
+
+	public Date relativeDateCompute(Scene rel, String after) {
+		return relativeDateCompute(rel, after, new HashSet<>());
+	}
+
+	private Date relativeDateCompute(Scene rel, String after, Set<Long> visited) {
+		// protect against circular reference
+		Long sceneId = rel.getRelativesceneid();
+		if (visited.contains(sceneId)) {
+			LOG.err("Circular reference detected for scene: " + sceneId);
+			return null;
+		}
+		Scene sx = (Scene) get(sceneId);
+		if (sx == null) {
+			LOG.err("Scene not found: " + sceneId);
+			return null;
+		}
+		visited.add(sceneId);
+		Date resultDate = null;
+		try {
+			// if the referenced scene has a fixed date (scenets)
+			if (sx.getDateRel() != null) {
+				resultDate = DateUtil.add(sx.getDateRel(), (after.isEmpty() ? sx.getDuration() : after));
+			} else if (sx.hasRelativescene()) {
+				// compute recursively the begining date of the refercned scene
+				Date baseDate = relativeDateCompute(sx, sx.getRelativetime(), visited);
+				if (baseDate != null) {
+					resultDate = DateUtil.add(baseDate, after);
+				}
+			}
+			// if this is a base date and if the duration after is not empty
+			if (resultDate != null && after != null && !SbDuration.isZero(after)) {
+				resultDate = DateUtil.add(resultDate, after);
+			}
+		} finally {
+			visited.remove(sceneId);
+		}
+		return resultDate;
 	}
 
 	@Override

@@ -47,6 +47,7 @@ import javax.swing.event.ChangeListener;
 import storybook.App;
 import storybook.ctrl.ActKey;
 import storybook.ctrl.Ctrl;
+import static storybook.ctrl.Ctrl.PROPS.CHRONO_LAYOUTDIRECTION;
 import storybook.db.book.Book;
 import storybook.db.chapter.Chapter;
 import storybook.db.scene.Scene;
@@ -54,6 +55,7 @@ import storybook.db.scene.Scenes;
 import storybook.db.strand.Strand;
 import storybook.db.strand.StrandLabel;
 import storybook.dialog.OptionsDlg;
+import storybook.tools.MessageLabel;
 import storybook.tools.ViewUtil;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.swing.LaF;
@@ -61,8 +63,8 @@ import storybook.tools.swing.PrintUtil;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
-import storybook.tools.MessageLabel;
 import storybook.ui.SbView;
+import storybook.ui.Ui;
 import static storybook.ui.panel.AbstractPanel.setMinMax;
 import storybook.ui.panel.AbstractScrollPanel;
 
@@ -75,16 +77,16 @@ public class Chrono extends AbstractScrollPanel
 
 	private static final String TT = "ChronoPanel";
 
-	private final String CB_DIRECTION = "CbDirection", SL_ZOOM = "SlZoom";
+	private final String CK_DIRECTION = "CbDirection", CK_NODATES = "CkNodates", SL_ZOOM = "SlZoom";
 	private static final String CLIENT_PROPERTY_STRAND_ID = "strand_id";
 
 	public final static int ZOOM_MIN = 2;
 	public final static int ZOOM_MAX = 15;
 	private int zoom;
-	public boolean vertical;
+	public boolean vertical, nodates;
 	private List<StrandLabel> strandLabels = new ArrayList<>();
 	private JSlider sl_zoom;
-	private JCheckBox ckDirection;
+	private JCheckBox ckDirection, ckNodates;
 	private JPanel panelData;
 
 	public Chrono(MainFrame mainFrame) {
@@ -117,6 +119,7 @@ public class Chrono extends AbstractScrollPanel
 	public void init() {
 		this.withPart = true;
 		zoom = setMinMax(ZOOM_MIN, ZOOM_MAX, App.preferences.chronoGetZoom());
+		nodates = App.preferences.chronoGetLayoutNodates();
 		vertical = App.preferences.chronoGetLayoutDirection();
 	}
 
@@ -143,13 +146,15 @@ public class Chrono extends AbstractScrollPanel
 			return toolbar;
 		}
 		super.initToolbar();
-		ckDirection = new JCheckBox();
-		ckDirection.setName(CB_DIRECTION);
-		ckDirection.addItemListener(this);
-		ckDirection.setText(I18N.getMsg("vertical"));
-		ckDirection.setOpaque(false);
-		ckDirection.setSelected(vertical);
+		ckNodates = Ui.initCheckBox(toolbar,
+				CK_NODATES, "view.chrono.nodates", nodates, null, this);
+		ckNodates.addItemListener(this);
+		toolbar.add(ckNodates);
+
+		ckDirection = Ui.initCheckBox(toolbar,
+				CK_DIRECTION, "vertical", vertical, null, this);
 		ckDirection.setToolTipText(I18N.getColonMsg("statusbar.change.layout.direction"));
+		ckDirection.addItemListener(this);
 		toolbar.add(ckDirection);
 
 		JPanel zp = new JPanel();
@@ -170,19 +175,13 @@ public class Chrono extends AbstractScrollPanel
 		if (panel == null) {
 			return;
 		}
+		mainFrame.project.scenes.relativeDateInit();
 		panel.removeAll();
 		panel.setLayout(new MigLayout(MIG.INS1, "", "[top]"));
 		if (vertical) {
 			panel.setLayout(new MigLayout(MIG.get(MIG.INS1, MIG.WRAP), "[]", "[top]"));
 		}
 		List<Scene> scenes = Scenes.find(mainFrame);
-		for (Scene scene : scenes) {
-			if (!scene.hasDate()) {
-				panel.add(new MessageLabel("warning.chronology", 3), MIG.get(MIG.SPAN, MIG.WRAP, MIG.GROWX));
-				break;
-			}
-		}
-		scenes = mainFrame.project.scenes.getWithDates();
 		List<Date> dates = mainFrame.project.scenes.findDistinctDates(scenes, 'H');
 		Collections.sort(dates);
 		// check that there is at least one date
@@ -197,6 +196,11 @@ public class Chrono extends AbstractScrollPanel
 			panelData.setBackground(SwingUtil.getBackgroundColor());
 		}
 		String migVal = (vertical ? MIG.WRAP : MIG.TOP);
+		//panel for scene without date
+		if (nodates) {
+			panelData.add(new ChronoDate(this, null), migVal);
+		}
+		//panel for ChronoDate
 		for (Date date : dates) {
 			panelData.add(new ChronoDate(this, date), migVal);
 		}
@@ -226,6 +230,10 @@ public class Chrono extends AbstractScrollPanel
 			case CHRONO_ZOOM:
 				zoom = setMinMax(ZOOM_MIN, ZOOM_MAX, (Integer) newValue);
 				sl_zoom.setValue(zoom);
+				return;
+			case CHRONO_LAYOUTNODATES:
+				nodates = (Boolean) evt.getNewValue();
+				refresh();
 				return;
 			case CHRONO_LAYOUTDIRECTION:
 				vertical = (Boolean) evt.getNewValue();
@@ -353,6 +361,7 @@ public class Chrono extends AbstractScrollPanel
 
 	@Override
 	public void itemStateChanged(ItemEvent evt) {
+		//LOG.trace(TT + "itemStateChanged(evt=" + evt.toString() + ")");
 		if (evt.getSource() instanceof JComboBox) {
 			JComboBox cb = (JComboBox) evt.getSource();
 			if (cb.getName().equals("cbPartFilter")) {
@@ -360,7 +369,12 @@ public class Chrono extends AbstractScrollPanel
 			}
 		} else if (evt.getSource() instanceof JCheckBox) {
 			JCheckBox cb = (JCheckBox) evt.getSource();
-			if (cb.getName().equals(CB_DIRECTION)) {
+			if (cb.getName().equals(CK_NODATES)) {
+				nodates = cb.isSelected();
+				App.preferences.chronoSetLayoutNodates(nodates);
+				refresh();
+			}
+			if (cb.getName().equals(CK_DIRECTION)) {
 				vertical = cb.isSelected();
 				App.preferences.chronoSetLayoutDirection(vertical);
 				refresh();

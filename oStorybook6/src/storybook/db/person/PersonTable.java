@@ -18,7 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.db.person;
 
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.List;
 import storybook.ctrl.ActKey;
 import storybook.db.DB;
@@ -82,6 +81,7 @@ public class PersonTable extends AbsTable {
 		}
 	}
 
+	/*
 	@Override
 	protected void sendSetEntityToEdit(int row) {
 		if (row == -1) {
@@ -114,7 +114,7 @@ public class PersonTable extends AbsTable {
 			ids.add(person.getId());
 		}
 		ctrl.deletemultiEntity(Book.TYPE.PERSON, ids);
-	}
+	}*/
 
 	@Override
 	protected AbstractEntity getEntity(Long id) {

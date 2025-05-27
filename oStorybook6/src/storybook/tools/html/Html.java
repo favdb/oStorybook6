@@ -3,6 +3,8 @@ package storybook.tools.html;
 import api.jsoup.Jsoup;
 import api.jsoup.nodes.Document;
 import api.jsoup.nodes.Element;
+import api.jsoup.nodes.Entities;
+import api.jsoup.parser.Parser;
 import api.jsoup.select.Elements;
 import i18n.I18N;
 import java.awt.Color;
@@ -219,6 +221,59 @@ public class Html {
 		b.append(intoTag("body", text));
 		b.append(HTML_E);
 		return b.toString();
+	}
+
+	/**
+	 * check and correct a malformed XHTML.
+	 *
+	 * @param src the source XHTML potentialy malformed
+	 * @return A corrected and cleaned HTML
+	 */
+	public static String cleanXHTML(String src) {
+		if (src == null || src.trim().isEmpty()) {
+			return "";
+		}
+		Document doc = Jsoup.parse(src, "", Parser.xmlParser());
+
+		// 🔧 Suppress not allowed or obsolets attributes
+		String[] attributesToRemove = {"clear", "align", "border", "width", "height", "valign"};
+		for (String attr : attributesToRemove) {
+			doc.select("[" + attr + "]").forEach(el -> el.removeAttr(attr));
+		}
+
+		// 🧹 Suppress unallowed or obsolets tags
+		String[] tagsToRemove = {"font", "center", "marquee", "blink"};
+		for (String tag : tagsToRemove) {
+			Elements badTags = doc.select(tag);
+			for (Element el : badTags) {
+				el.unwrap(); // suppress the tag bu keep the content
+			}
+		}
+
+		// Force the close of tags <br>, <img>, <hr>, etc.
+		for (Element elem : doc.select("br, img, hr, meta, link")) {
+			elem.tagName(elem.tagName());
+		}
+		// Clean others tags
+		doc.select("img[name]").forEach(el -> el.removeAttr("name"));
+		doc.select("img[hspace]").forEach(el -> el.removeAttr("hspace"));
+		doc.select("img[vspace]").forEach(el -> el.removeAttr("vspace"));
+		// 🔁 Remplace <a name="..."> by <a id="...">
+		for (Element a : doc.select("a[name]")) {
+			String nameValue = a.attr("name");
+			if (!a.hasAttr("id")) {
+				a.attr("id", nameValue);
+			}
+			a.removeAttr("name");
+		}
+
+		// 🔄 output the clean XHTML
+		doc.outputSettings()
+				.syntax(Document.OutputSettings.Syntax.xml)
+				.escapeMode(Entities.EscapeMode.xhtml)
+				.prettyPrint(true);
+
+		return doc.outerHtml();
 	}
 
 	public static String removeComments(String html) {

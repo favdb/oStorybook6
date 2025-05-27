@@ -87,7 +87,7 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 	@Override
 	@SuppressWarnings("unchecked")
 	public void init() {
-		//LOG.printInfos(TT + ".init()");
+		//LOG.trace(TT + ".init()");
 		zoom = storymap.getZoom();
 		withTitle = storymap.getCkTitle();
 		horizontal = storymap.getHorizontal();
@@ -120,7 +120,7 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 
 	@Override
 	public void initUi() {
-		//LOG.printInfos(TT + ".initUi()");
+		//LOG.trace(TT + ".initUi()");
 		setLayout(new MigLayout(MIG.get(MIG.FILL, MIG.INS0)));
 		if (LaF.isDark()) {
 			this.setForeground(ColorUtil.darker(this.getForeground(), 0));
@@ -272,7 +272,7 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 	 * @return the Point
 	 */
 	private Point getP1(MDATA node) {
-		//LOG.printInfos(TT + ".getPoint(sx=" + sx + ", sy=" + sy + ")");
+		//LOG.trace(TT + ".getPoint(sx=" + sx + ", sy=" + sy + ")");
 		Point p = getP0(node);
 		if (horizontal) {
 			return new Point(p.x - (iconH / 2), p.y /*+ (iconH / 2)*/);
@@ -290,7 +290,7 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 	 * @return the Point
 	 */
 	private Point getP2(MDATA node) {
-		//LOG.printInfos(TT + ".getPoint(sx=" + sx + ", sy=" + sy + ")");
+		//LOG.trace(TT + ".getPoint(sx=" + sx + ", sy=" + sy + ")");
 		Point p = getP0(node);
 		if (horizontal) {
 			return new Point(p.x + (iconH / 2), p.y/* + (iconH / 2)*/);
@@ -308,7 +308,7 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 	 * @return the Point
 	 */
 	private Point getP3(MDATA node) {
-		//LOG.printInfos(TT + ".getPoint(sx=" + sx + ", sy=" + sy + ")");
+		//LOG.trace(TT + ".getPoint(sx=" + sx + ", sy=" + sy + ")");
 		Point p = getP0(node);
 		if (horizontal) {
 			return new Point(p.x + iconH, p.y);
@@ -319,22 +319,12 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 
 	@Override
 	public void actionPerformed(ActionEvent evt) {
-		//LOG.printInfos(TT + ".actionPerformed(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + ".actionPerformed(evt=" + evt.toString() + ")");
 		if (evt.getSource() instanceof JCheckBox) {
 			refresh();
 		}
 	}
 
-	/**
-	 * just for tracing point values
-	 *
-	 * @param p
-	 * @return
-	 */
-	/*private String tp(Point p) {
-		return "[" + p.x + "," + p.y + "]";
-	}
-	 */
 	/**
 	 * paint component
 	 *
@@ -342,7 +332,7 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 	 */
 	@Override
 	public void paintComponent(Graphics g) {
-		//LOG.printInfos(TT + ".paintComponent(g) for strands nb=" + strands.size() + " and nodes nb=" + nodes.size());
+		//LOG.trace(TT + ".paintComponent(g) for strands nb=" + strands.size() + " and nodes nb=" + nodes.size());
 		g.setFont(this.getFont());
 		super.paintComponent(g);
 		if (strands.isEmpty()) {
@@ -567,7 +557,7 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 	}
 
 	public List<SDATA> getSelected() {
-		//LOG.printInfos(TT + ".getSelected()");
+		//LOG.trace(TT + ".getSelected()");
 		List<SDATA> r = new ArrayList<>();
 		for (int i = 0; i < tbEntities.size(); i++) {
 			r.add(new SDATA(strands.get(i).getId(), tbEntities.get(i).isSelected()));
@@ -576,7 +566,7 @@ public class StorymapGraph extends AbstractPanel implements ActionListener, Mous
 	}
 
 	private void setSelected(List<SDATA> r) {
-		//LOG.printInfos(TT + ".setSelected(r=" + ListUtil.join(r, ";") + ")");
+		//LOG.trace(TT + ".setSelected(r=" + ListUtil.join(r, ";") + ")");
 		for (int i = 0; i < r.size(); i++) {
 			for (int j = 0; j < strands.size(); j++) {
 				if (strands.get(j).getId().equals(r.get(i).id)) {

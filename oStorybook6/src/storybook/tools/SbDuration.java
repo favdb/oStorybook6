@@ -17,6 +17,7 @@
 package storybook.tools;
 
 import i18n.I18N;
+import storybook.tools.html.Html;
 
 /**
  *
@@ -82,7 +83,7 @@ public class SbDuration {
 	@Override
 	public String toString() {
 		return String.format("%02d-%02d-%02d_%02d:%02d:%02d",
-		   years, months, days, hours, minutes, seconds);
+				years, months, days, hours, minutes, seconds);
 	}
 
 	/**
@@ -146,7 +147,7 @@ public class SbDuration {
 			//this is a preformated duration like 00-00-00_00:00:00
 			return new SbDuration(text);
 		}
-		return getFromText(text, I18N.getMsg("duration.initiales"));
+		return getFromText(Html.htmlToText(text), I18N.getMsg("duration.initiales"));
 	}
 
 	/**
@@ -269,7 +270,7 @@ public class SbDuration {
 		int minutes = (li - (heures * 3600)) / 60;
 		int secondes = li % 60;
 		String str = String.format("%02d-%02d-%02d_%02d:%02d:%02d",
-		   annees, months, jours, heures, minutes, secondes);
+				annees, months, jours, heures, minutes, secondes);
 		return str;
 	}
 

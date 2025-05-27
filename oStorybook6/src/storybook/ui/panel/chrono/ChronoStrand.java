@@ -19,10 +19,11 @@ package storybook.ui.panel.chrono;
 import api.mig.swing.MigLayout;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
+import java.util.Date;
 import java.util.List;
-import javax.swing.JLabel;
 import storybook.db.scene.Scene;
 import storybook.db.strand.Strand;
+import storybook.tools.DateUtil;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
 import storybook.ui.panel.AbstractPanel;
@@ -35,23 +36,45 @@ public class ChronoStrand extends AbstractPanel {
 
 	private static final String TT = "ChronoStrand";
 
+	@SuppressWarnings("unchecked")
 	public static int nbScenes(ChronoDate chronoDate, Strand strand) {
+		/*LOG.trace(TT + "nbScene("
+				+ "chronoDate.date=" + chronoDate.date.toString()
+				+ ", strand=" + strand.toString() + ")");*/
 		int nb = 0;
-		List<Scene> scenes = chronoDate.mainFrame.project.scenes.getWithDates();
-		for (Scene scene : scenes) {
-			if (scene.getStrand().equals(strand) && (scene.hasDate() && scene.getDate().equals(chronoDate.date))) {
-				nb++;
+		if (chronoDate != null) {
+			List<Scene> scenes = chronoDate.mainFrame.project.scenes.getWithDates();
+			if (chronoDate.date == null) {
+				scenes = (List<Scene>) chronoDate.mainFrame.project.scenes.getList();
+			}
+			for (Scene scene : scenes) {
+				if (scene.getStrand() != null && scene.getStrand().equals(strand)
+						&& checkDate(scene.getDateRel(), chronoDate.date)) {
+					nb++;
+				}
 			}
 		}
 		return nb;
 	}
 
-	public final ChronoDate date;
+	public static boolean checkDate(Date indate, Date refdate) {
+		if (indate == null && refdate == null) {
+			return true;
+		} else if (indate == null || refdate == null) {
+			return false;
+		}
+		String ins = DateUtil.dateToStandard(indate);
+		String res = DateUtil.dateToStandard(refdate);
+		res = res.substring(0, res.length() - 3);
+		return ins.startsWith(res);
+	}
+
+	public final ChronoDate chronoDate;
 	public final Strand strand;
 
 	public ChronoStrand(ChronoDate date, Strand strand) {
 		super(date.mainFrame);
-		this.date = date;
+		this.chronoDate = date;
 		this.strand = strand;
 		initAll();
 	}
@@ -61,33 +84,37 @@ public class ChronoStrand extends AbstractPanel {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void initUi() {
 		//LOG.trace(TT + ".initUi()");
 		setBorder(SwingUtil.getBorderDefault());
 		String migValue = "";
-		if (!date.chrono.vertical) {
+		if (!chronoDate.chrono.vertical) {
 			setLayout(new MigLayout(MIG.get(MIG.WRAP1)));
 		} else {
 			setLayout(new MigLayout(MIG.FLOWX));
 			migValue = MIG.get(MIG.GROWX, MIG.WRAP);
 		}
-		JLabel lb = new JLabel(strand.getName());
-		lb.setBackground(strand.getJColor());
-		add(lb, migValue);
-		List<Scene> scenes = mainFrame.project.scenes.getWithDates();
-		for (Scene scene : scenes) {
-			if (scene.getStrand().equals(strand) && (scene.hasDate() && scene.getDate().equals(date.date))) {
-				add(new ChronoScenePanel(mainFrame, scene));
+		this.setBackground(strand.getJColor());
+		List<Scene> scenes = mainFrame.project.scenes.getList();
+		for (Scene sc : scenes) {
+			if (chronoDate.date == null && sc.getDateRel() == null) {
+				add(new SceneSticker(mainFrame, sc));
+			} else if (chronoDate.date != null && sc.getDateRel() != null
+					&& chronoDate.date.equals(sc.getDateRel())) {
+				add(new SceneSticker(mainFrame, sc));
 			}
 		}
 	}
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
+		//empty
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//empty
 	}
 
 }

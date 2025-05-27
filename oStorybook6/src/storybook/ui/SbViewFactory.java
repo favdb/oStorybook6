@@ -72,7 +72,7 @@ import storybook.ui.panel.typist.TypistPanel;
 import storybook.ui.panel.typist.TypistScenario;
 
 /**
- * @author martin
+ * @author martin, rewrited by favdb
  *
  */
 public class SbViewFactory {

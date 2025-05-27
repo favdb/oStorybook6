@@ -31,7 +31,6 @@ import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractPanel;
 import storybook.ui.panel.EntityLinksPanel;
-import storybook.ui.panel.chrono.StrandDateLabel;
 
 /**
  * class for the information panel in the Book view

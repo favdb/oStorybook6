@@ -17,6 +17,8 @@
 package storybook.ui.panel.chrono;
 
 import api.mig.swing.MigLayout;
+import i18n.I18N;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.Date;
@@ -36,7 +38,7 @@ import storybook.ui.panel.AbstractPanel;
  */
 public class ChronoDate extends AbstractPanel {
 
-	private static final String TT = "ChronoDate";
+	private static final String TT = "ChronoDate.";
 
 	public final Date date;
 	public final Chrono chrono;
@@ -63,7 +65,13 @@ public class ChronoDate extends AbstractPanel {
 			setLayout(new MigLayout(MIG.get(MIG.WRAP1)));
 			migValue = MIG.get(MIG.SPAN, MIG.GROWX);
 		}
-		JLabel lbDate = new JLabel(DateUtil.dateToString(date));
+		String lbVal = I18N.getMsg("scene.nodate");
+		if (date != null) {
+			lbVal = DateUtil.dateToString(date, true);
+		} else {
+			this.setBackground(Color.red);
+		}
+		JLabel lbDate = new JLabel(lbVal);
 		lbDate.setHorizontalAlignment(SwingConstants.CENTER);
 		if (chrono.vertical) {
 			lbDate.setUI(new JSLabelVertical(false));

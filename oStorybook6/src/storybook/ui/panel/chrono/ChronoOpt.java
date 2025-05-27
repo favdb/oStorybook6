@@ -24,10 +24,9 @@ import javax.swing.JSlider;
 import storybook.App;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
+import storybook.ui.Ui;
 import storybook.ui.panel.AbstractOptions;
 import storybook.ui.panel.AbstractPanel;
-import static storybook.ui.panel.chrono.ChronoPanel.ZOOM_MAX;
-import static storybook.ui.panel.chrono.ChronoPanel.ZOOM_MIN;
 
 /**
  *
@@ -35,11 +34,12 @@ import static storybook.ui.panel.chrono.ChronoPanel.ZOOM_MIN;
  */
 public class ChronoOpt extends AbstractOptions {
 
-	private static final String CN_LAYOUT_DIRECTION = "CbLayoutDirection", SL_ZOOM = "ZoomSlider";
-	private boolean layoutDirection;
+	private static final String CK_DIRECTION = "ckDirection", CK_NODATES = "ckNodates", SL_ZOOM = "ZoomSlider";
+	private boolean vertical, nodates;
 	private JSlider sl_zoom;
-	private JCheckBox cbDirection;
+	private JCheckBox ckDirection, ckNodates;
 
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public ChronoOpt(MainFrame m) {
 		super(m);
 		init();
@@ -48,26 +48,29 @@ public class ChronoOpt extends AbstractOptions {
 
 	@Override
 	public void init() {
-		setZoomMin(ChronoPanel.ZOOM_MIN);
-		setZoomMax(ChronoPanel.ZOOM_MAX);
-		zoomValue = AbstractPanel.setMinMax(ChronoPanel.ZOOM_MIN, ChronoPanel.ZOOM_MAX,
-		   App.preferences.chronoGetZoom());
-		layoutDirection = App.preferences.chronoGetLayoutDirection();
+		setZoomMin(Chrono.ZOOM_MIN);
+		setZoomMax(Chrono.ZOOM_MAX);
+		zoomValue = AbstractPanel.setMinMax(Chrono.ZOOM_MIN, Chrono.ZOOM_MAX,
+				App.preferences.chronoGetZoom());
+		vertical = App.preferences.chronoGetLayoutDirection();
+		nodates = App.preferences.chronoGetLayoutNodates();
 	}
 
 	@Override
 	public void initUi() {
 		setLayout(new MigLayout(MIG.get(MIG.FILL, MIG.WRAP1)));
 		// layout direction
-		cbDirection = new JCheckBox();
-		cbDirection.setName(CN_LAYOUT_DIRECTION);
-		cbDirection.addItemListener(e -> changeDirection());
-		cbDirection.setText(I18N.getMsg("vertical"));
-		cbDirection.setOpaque(false);
-		cbDirection.setSelected(layoutDirection);
-		cbDirection.setToolTipText(I18N.getColonMsg("statusbar.change.layout.direction"));
-		add(cbDirection);
-		sl_zoom = new JSlider(JSlider.HORIZONTAL, ZOOM_MIN, ZOOM_MAX, zoomValue);
+		ckDirection = Ui.initCheckBox(this,
+				CK_DIRECTION, "vertical", vertical, null, this);
+		ckDirection.addItemListener(e -> changeDirection());
+		ckDirection.setToolTipText(I18N.getColonMsg("statusbar.change.layout.direction"));
+		add(ckDirection);
+		// show nodates
+		ckNodates = Ui.initCheckBox(this,
+				CK_NODATES, "view.chrono.nodates", nodates, null, this);
+		ckNodates.addItemListener(e -> changeNodates());
+		add(ckNodates);
+		sl_zoom = new JSlider(JSlider.HORIZONTAL, Chrono.ZOOM_MIN, Chrono.ZOOM_MAX, zoomValue);
 		sl_zoom.setName(SL_ZOOM);
 		sl_zoom.setMajorTickSpacing(5);
 		sl_zoom.setMinorTickSpacing(1);
@@ -85,9 +88,15 @@ public class ChronoOpt extends AbstractOptions {
 	}
 
 	public void changeDirection() {
-		boolean val = cbDirection.isSelected();
+		boolean val = ckDirection.isSelected();
 		App.preferences.chronoSetLayoutDirection(val);
 		mainFrame.getBookController().chronoSetLayoutDirection(val);
+	}
+
+	public void changeNodates() {
+		boolean val = ckNodates.isSelected();
+		App.preferences.chronoSetLayoutNodates(val);
+		mainFrame.getBookController().chronoSetLayoutNodates(val);
 	}
 
 	@Override

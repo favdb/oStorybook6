@@ -38,6 +38,7 @@ import storybook.db.chapter.Chapter;
 import storybook.db.endnote.Endnote;
 import storybook.db.part.Part;
 import storybook.db.scene.Scene;
+import storybook.dialog.cover.Cover;
 import storybook.review.Review;
 import storybook.tools.LOG;
 import storybook.tools.Markdown;
@@ -57,78 +58,81 @@ public class ExportBookToEpub extends AbstractExport {
 	private static final String TT = "ExportBookToEpub";
 
 	private static final String VERSION = "version",
-	   XMLNS = "xmlns";
+			XMLNS = "xmlns";
 	private static final String ALIGN_CENTER = "text-align: center;",
-	   DOCTYPE = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"",
-	   ENDNOTE_FILE = "endnotes.xhtml",
-	   EPUB = "epub",
-	   MARGIN_BOTTOM = "margin-bottom: 6px;",
-	   MARGIN_LEFT = "margin-left: 0.5cm;margin-right: 0.5cm;",
-	   MARGIN_TOP = "margin-top: 6px;",
-	   META_INF = "META-INF",
-	   NAVPOINT_END = "</navPoint>\n",
-	   OEBPS = "OEBPS",
-	   OEBPS_IMAGES = OEBPS + File.separator + "Images",
-	   OEBPS_CSS = OEBPS + File.separator + "css",
-	   OEBPS_TEXT = OEBPS + File.separator + "Text",
-	   TAB = "   ",
-	   TYPE_XHTML = Html.getAttribute("media-type", "application/xhtml+xml"),
-	   XML_HEAD = "<?xml" + Html.getAttribute(VERSION, "1.0")
-	   + Html.getAttribute("encoding", "utf-8")
-	   + Html.getAttribute("standalone", "no") + "?>\n",
-	   XHTML = "http://www.w3.org/1999/xhtml",
-	   XHTML_TAG = "<html" + Html.getAttribute(XMLNS, XHTML) + ">\n",
-	   XHTML_DTD = "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd";
+			DOCTYPE = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"",
+			ENDNOTE_FILE = "endnotes.xhtml",
+			EPUB = "epub",
+			MARGIN_BOTTOM = "margin-bottom: 6px;",
+			MARGIN_LEFT = "margin-left: 0.5cm;margin-right: 0.5cm;",
+			MARGIN_TOP = "margin-top: 6px;",
+			META_INF = "META-INF",
+			NAVPOINT_END = "</navPoint>\n",
+			OEBPS = "OEBPS",
+			OEBPS_IMAGES = OEBPS + File.separator + "Images",
+			OEBPS_CSS = OEBPS + File.separator + "css",
+			OEBPS_TEXT = OEBPS + File.separator + "Text",
+			TAB = "   ",
+			TYPE_XHTML = Html.getAttribute("media-type", "application/xhtml+xml"),
+			XML_HEAD = "<?xml" + Html.getAttribute(VERSION, "1.0")
+			+ Html.getAttribute("encoding", "utf-8")
+			+ Html.getAttribute("standalone", "no") + "?>\n",
+			XHTML = "http://www.w3.org/1999/xhtml",
+			XHTML_TAG = "<html" + Html.getAttribute(XMLNS, XHTML) + ">\n",
+			XHTML_DTD = "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd";
 
 	private static final String CONTAINER = "<?xml" + Html.getAttribute(VERSION, "1.0") + "?>\n"
-	   + "<container"
-	   + Html.getAttribute(XMLNS, "urn:oasis:names:tc:opendocument:xmlns:container")
-	   + Html.getAttribute(VERSION, "1.0")
-	   + ">\n"
-	   + "  <rootfiles>\n"
-	   + "    <rootfile"
-	   + Html.getAttribute("full-path", "OEBPS/content.opf")
-	   + Html.getAttribute("media-type", "application/oebps-package+xml")
-	   + "/>\n"
-	   + "  </rootfiles>\n"
-	   + "</container>";
+			+ "<container"
+			+ Html.getAttribute(XMLNS, "urn:oasis:names:tc:opendocument:xmlns:container")
+			+ Html.getAttribute(VERSION, "1.0")
+			+ ">\n"
+			+ "  <rootfiles>\n"
+			+ "    <rootfile"
+			+ Html.getAttribute("full-path", "OEBPS/content.opf")
+			+ Html.getAttribute("media-type", "application/oebps-package+xml")
+			+ "/>\n"
+			+ "  </rootfiles>\n"
+			+ "</container>";
 
 	private final String CONTENT_HEAD
-	   = "<?xml"
-	   + Html.getAttribute(VERSION, "1.0")
-	   + Html.getAttribute("encoding", "utf-8")
-	   + Html.getAttribute("standalone", "yes")
-	   + "?>\n";
+			= "<?xml"
+			+ Html.getAttribute(VERSION, "1.0")
+			+ Html.getAttribute("encoding", "utf-8")
+			+ Html.getAttribute("standalone", "yes")
+			+ "?>\n";
 
 	private final String CONTENT_PACKAGE
-	   = "<package"
-	   + Html.getAttribute(XMLNS, "http://www.idpf.org/2007/opf") + "\n"
-	   + tab(2)
-	   + Html.getAttribute("unique-identifier", "BookId")
-	   + Html.getAttribute(VERSION, "2.0") + "\n"
-	   + tab(2)
-	   + Html.getAttribute("xmlns:opf", "http://www.idpf.org/2007/opf")
-	   + ">\n";
+			= "<package"
+			+ Html.getAttribute(XMLNS, "http://www.idpf.org/2007/opf") + "\n"
+			+ tab(2)
+			+ Html.getAttribute("unique-identifier", "BookId")
+			+ Html.getAttribute(VERSION, "2.0") + "\n"
+			+ tab(2)
+			+ Html.getAttribute("xmlns:opf", "http://www.idpf.org/2007/opf")
+			+ ">\n";
 
 	private final String NCX_HEAD = XML_HEAD
-	   + "<ncx"
-	   + Html.getAttribute(XMLNS, "http://www.daisy.org/z3986/2005/ncx/")
-	   + Html.getAttribute(VERSION, "2005-1")
-	   + Html.getAttribute("xml:lang", "fra")
-	   + ">\n"
-	   + tab(1) + Html.HEAD_B
-	   + getMeta("dtb:depth", "1")
-	   + getMeta("dtb:totalPageCount", "0")
-	   + getMeta("dtb:maxPageNumber", "0")
-	   + getMeta("dtb:uid", "%s")
-	   + tab(1) + Html.HEAD_E;
+			+ "<ncx"
+			+ Html.getAttribute(XMLNS, "http://www.daisy.org/z3986/2005/ncx/")
+			+ Html.getAttribute(VERSION, "2005-1")
+			+ Html.getAttribute("xml:lang", "fra")
+			+ ">\n"
+			+ tab(1) + Html.HEAD_B
+			+ getMeta("dtb:depth", "1")
+			+ getMeta("dtb:totalPageCount", "0")
+			+ getMeta("dtb:maxPageNumber", "0")
+			+ getMeta("dtb:uid", "%s")
+			+ tab(1) + Html.HEAD_E;
 
 	private List<Chapter> chapters;
 	private List<Endnote> endnotes;
 	private boolean SUMMARY = false;
 
 	public static void execute(MainFrame mainFrame, String folder, boolean byScenes) {
-		//LOG.printInfos(TT + ".execute(mainFrame, folder=" + folder + ")");
+		//LOG.trace(TT + ".execute(mainFrame, folder=" + folder + ")");
+		if (!mainFrame.getBook().getCover()) {
+			// export epub without a cover is not allowed
+		}
 		ExportBookToEpub exp = new ExportBookToEpub(mainFrame, byScenes);
 		exp.create(folder);
 	}
@@ -143,7 +147,7 @@ public class ExportBookToEpub extends AbstractExport {
 		super(mainFrame, EPUB);
 		layout = mainFrame.getBook().getParam().getParamLayout();
 		if ((layout.getPartTitle() && book.project.parts.getCount() > 1)
-		   || (layout.getChapterTitle() && book.project.chapters.getCount() > 1)) {
+				|| (layout.getChapterTitle() && book.project.chapters.getCount() > 1)) {
 			SUMMARY = true;
 		}
 		this.byScenes = byScenes;
@@ -176,7 +180,7 @@ public class ExportBookToEpub extends AbstractExport {
 				epubDir.delete();
 			}
 			File epubFile = new File(param.getDirectory() + File.separator
-			   + mainFrame.getProject().getName() + ".epub");
+					+ mainFrame.getProject().getName() + ".epub");
 			if (epubFile.exists()) {
 				// existing file, ask to replace it
 				if (!askInfo("export.replace", epubFile.getAbsolutePath())) {
@@ -197,7 +201,7 @@ public class ExportBookToEpub extends AbstractExport {
 			}
 			epubDirText = epubDir.getPath() + File.separator + OEBPS_TEXT + File.separator;
 			File container = new File(epubDir + File.separator + META_INF + File.separator
-			   + "container.xml");
+					+ "container.xml");
 			container.delete();
 			IOUtil.fileWriteString(container, CONTAINER);
 			copyImages();
@@ -220,8 +224,8 @@ public class ExportBookToEpub extends AbstractExport {
 			ZipUtil.fromDir(srcDir, destFile, "application/epub+zip");
 			epubDir.delete();
 			JOptionPane.showMessageDialog(mainFrame,
-			   I18N.getMsg("export.success", destFile.getAbsoluteFile()),
-			   I18N.getMsg("epub.title"), JOptionPane.INFORMATION_MESSAGE);
+					I18N.getMsg("export.success", destFile.getAbsoluteFile()),
+					I18N.getMsg("epub.title"), JOptionPane.INFORMATION_MESSAGE);
 			return true;
 		} catch (IOException ex) {
 			LOG.err("unable to create EPUB file", ex);
@@ -238,9 +242,9 @@ public class ExportBookToEpub extends AbstractExport {
 	 */
 	private boolean askInfo(String msg, String info) {
 		int n = JOptionPane.showConfirmDialog(mainFrame,
-		   I18N.getMsg(msg, info),
-		   I18N.getMsg(EPUB),
-		   JOptionPane.YES_NO_OPTION);
+				I18N.getMsg(msg, info),
+				I18N.getMsg(EPUB),
+				JOptionPane.YES_NO_OPTION);
 		if (n == JOptionPane.YES_OPTION) {
 			return (true);
 		}
@@ -256,9 +260,9 @@ public class ExportBookToEpub extends AbstractExport {
 	 */
 	private void infoMsg(boolean error, String msg, String info) {
 		JOptionPane.showMessageDialog(mainFrame,
-		   I18N.getMsg(msg, info),
-		   I18N.getMsg(EPUB),
-		   (error ? JOptionPane.ERROR_MESSAGE : JOptionPane.INFORMATION_MESSAGE));
+				I18N.getMsg(msg, info),
+				I18N.getMsg(EPUB),
+				(error ? JOptionPane.ERROR_MESSAGE : JOptionPane.INFORMATION_MESSAGE));
 	}
 
 	/**
@@ -270,7 +274,7 @@ public class ExportBookToEpub extends AbstractExport {
 	private String getFilename(Chapter chapter) {
 		//LOG.printInfos(TT + ".chapterGetFilename(chapter=" + chapter.getName() + ")");
 		return (String.format("P%02dC%02d.xhtml",
-		   chapter.getPart().getNumber(), chapter.getChapterno()));
+				chapter.getPart().getNumber(), chapter.getChapterno()));
 	}
 
 	/**
@@ -302,52 +306,52 @@ public class ExportBookToEpub extends AbstractExport {
 		//LOG.printInfos(TT+".writeCover()");
 		String cover = epubDir + File.separator + "OEBPS/Images/" + "cover.jpeg";
 		File destFile = new File(cover);
-		// create the cover file image if not exists
-		if (!destFile.exists() && !IOUtil.resourceCopyTo("cover/" + "cover.jpeg", destFile)) {
-			return;
+		// create the default cover file image if not exists
+		if (!destFile.exists()) {
+			Cover.generate(mainFrame);
 		}
 		StringBuilder b = new StringBuilder();
 		b.append(XML_HEAD);
 		b.append(DOCTYPE)
-		   .append(" \"" + XHTML_DTD + "\">\n");
+				.append(" \"" + XHTML_DTD + "\">\n");
 		b.append("<html")
-		   .append(Html.getAttribute(XMLNS, XHTML))
-		   .append(Html.getAttribute("xml:lang", "en"))
-		   .append(">\n");
+				.append(Html.getAttribute(XMLNS, XHTML))
+				.append(Html.getAttribute("xml:lang", "en"))
+				.append(">\n");
 		b.append(Html.HEAD_B).append("  <meta")
-		   .append(Html.getAttribute("content", "true"))
-		   .append(Html.getAttribute("name", "cover"))
-		   .append(" />\n");
+				.append(Html.getAttribute("content", "true"))
+				.append(Html.getAttribute("name", "cover"))
+				.append(" />\n");
 		b.append(Html.getHeadTitle("Cover"))
-		   .append("<style type=\"text/css\">\n")
-		   .append("@page {padding: 0pt; margin:0pt}\n")
-		   .append("body { text-align: center; padding:0pt; margin: 0pt; }\n")
-		   .append(Html.STYLE_E);
+				.append("<style type=\"text/css\">\n")
+				.append("@page {padding: 0pt; margin:0pt}\n")
+				.append("body { text-align: center; padding:0pt; margin: 0pt; }\n")
+				.append(Html.STYLE_E);
 		b.append(Html.HEAD_E);
 		b.append(Html.BODY_B);
 		if (destFile.exists()) {
 			b.append("  <div>\n");
 			b.append("    <svg")
-			   .append(Html.getAttribute(XMLNS, "http://www.w3.org/2000/svg"))
-			   .append(Html.getAttribute("height", "100%"))
-			   .append(Html.getAttribute("width", "100%"))
-			   .append(Html.getAttribute("preserveAspectRatio", "none"))
-			   .append(Html.getAttribute(VERSION, "1.1"))
-			   .append(Html.getAttribute("viewBox", "0 0 380 550"))
-			   .append(Html.getAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink"))
-			   .append(">\n");
+					.append(Html.getAttribute(XMLNS, "http://www.w3.org/2000/svg"))
+					.append(Html.getAttribute("height", "100%"))
+					.append(Html.getAttribute("width", "100%"))
+					.append(Html.getAttribute("preserveAspectRatio", "none"))
+					.append(Html.getAttribute(VERSION, "1.1"))
+					.append(Html.getAttribute("viewBox", "0 0 380 550"))
+					.append(Html.getAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink"))
+					.append(">\n");
 			b.append("      <image")
-			   .append(Html.getAttribute("width", "380"))
-			   .append(Html.getAttribute("height", "550"))
-			   .append(Html.getAttribute("xlink:href", "../Images/cover.jpeg"))
-			   .append("></image>\n");
+					.append(Html.getAttribute("width", "380"))
+					.append(Html.getAttribute("height", "550"))
+					.append(Html.getAttribute("xlink:href", "../Images/cover.jpeg"))
+					.append("></image>\n");
 			b.append("    </svg>\n");
 			b.append("  </div>\n");
 		} else {
 			b.append(Html.intoPcenter(book.getAuthor()));
-			b.append(Html.emptyLines(4));
+			b.append(Html.P_B).append(Html.emptyLines(2)).append(Html.P_E);
 			b.append(Html.intoTag("h1", book.getTitle()));
-			b.append(Html.emptyLines(2));
+			b.append(Html.P_B).append(Html.emptyLines(1)).append(Html.P_E);
 		}
 		b.append(Html.BODY_E);
 		b.append(Html.HTML_E);
@@ -368,23 +372,23 @@ public class ExportBookToEpub extends AbstractExport {
 		StringBuilder b = new StringBuilder();
 		b.append(XML_HEAD);
 		b.append(DOCTYPE)
-		   .append(" \"" + XHTML_DTD + "\">\n");
+				.append(" \"" + XHTML_DTD + "\">\n");
 		b.append("<html xmlns=\"" + XHTML + "\" xml:lang=\"en\">\n");
 		b.append(Html.HEAD_B)
-		   .append("  <meta")
-		   .append(Html.getAttribute("content", "true"))
-		   .append(Html.getAttribute("name", "cover"))
-		   .append(" />\n")
-		   .append(Html.getHeadTitle("Coverback"))
-		   .append("<style type=\"text/css\">\n")
-		   .append("@page {padding: 0pt; margin:0pt}\n")
-		   .append("body {")
-		   .append("text-align: justify;")
-		   .append("font-style: italic;")
-		   .append("padding:0pt;")
-		   .append("margin: 0pt;")
-		   .append("}\n")
-		   .append(Html.STYLE_E);
+				.append("  <meta")
+				.append(Html.getAttribute("content", "true"))
+				.append(Html.getAttribute("name", "cover"))
+				.append(" />\n")
+				.append(Html.getHeadTitle("Coverback"))
+				.append("<style type=\"text/css\">\n")
+				.append("@page {padding: 0pt; margin:0pt}\n")
+				.append("body {")
+				.append("text-align: justify;")
+				.append("font-style: italic;")
+				.append("padding:0pt;")
+				.append("margin: 0pt;")
+				.append("}\n")
+				.append(Html.STYLE_E);
 		b.append(Html.HEAD_E);
 		b.append(Html.BODY_B);
 		b.append(Html.intoP(Html.textToHTML(book.getBlurb())));
@@ -407,29 +411,29 @@ public class ExportBookToEpub extends AbstractExport {
 		StringBuilder b = new StringBuilder();
 		b.append(XML_HEAD);
 		b.append(DOCTYPE)
-		   .append(" \"" + XHTML_DTD + "\">\n");
+				.append(" \"" + XHTML_DTD + "\">\n");
 		b.append("<html")
-		   .append(Html.getAttribute(XMLNS, XHTML))
-		   .append(Html.getAttribute("xml:lang", "en")).append(">\n");
+				.append(Html.getAttribute(XMLNS, XHTML))
+				.append(Html.getAttribute("xml:lang", "en")).append(">\n");
 		b.append(Html.HEAD_B).append("  <meta")
-		   .append(Html.getAttribute("content", "true"))
-		   .append(Html.getAttribute("name", "summary"))
-		   .append(" />\n");
+				.append(Html.getAttribute("content", "true"))
+				.append(Html.getAttribute("name", "summary"))
+				.append(" />\n");
 		b.append(Html.getHeadTitle("Summary"))
-		   .append("<style type=\"text/css\">\n")
-		   .append("@page {padding: 0pt; margin:0pt}\n")
-		   .append("body {")
-		   .append("text-align: justify;")
-		   .append("padding:0pt;")
-		   .append("margin: 0pt;")
-		   .append("}\n")
-		   .append(Html.STYLE_E);
+				.append("<style type=\"text/css\">\n")
+				.append("@page {padding: 0pt; margin:0pt}\n")
+				.append("body {")
+				.append("text-align: justify;")
+				.append("padding:0pt;")
+				.append("margin: 0pt;")
+				.append("}\n")
+				.append(Html.STYLE_E);
 		b.append(Html.HEAD_E);
 		b.append(Html.BODY_B);
 		b.append(Html.P_B)
-		   .append(Html.intoB(I18N.getMsg("export.book.toc")))
-		   .append(Html.P_E);
-		b.append(Html.P_B);
+				.append(Html.intoB(I18N.getMsg("export.book.toc")))
+				.append(Html.P_E);
+		//b.append(Html.P_B);
 		String tb = "   ";
 		for (Part part : (List<Part>) mainFrame.project.parts.getList()) {
 			chapters = mainFrame.project.chapters.find(part);
@@ -437,7 +441,7 @@ public class ExportBookToEpub extends AbstractExport {
 				String link = ((Part) part).getNumberName();
 				if (!chapters.isEmpty()) {
 					link = Html.intoA("",
-					   getFilename((Chapter) mainFrame.project.chapters.getList().get(0)), part.getName());
+							getFilename((Chapter) mainFrame.project.chapters.getList().get(0)), part.getName());
 				}
 				b.append(tb).append(Html.intoP(link));
 			}
@@ -448,7 +452,7 @@ public class ExportBookToEpub extends AbstractExport {
 				}
 			}
 		}
-		b.append(Html.P_E);
+		//b.append(Html.P_E);
 		b.append(Html.BODY_E);
 		b.append(Html.HTML_E);
 		File f = new File(epubDirText + "summary.xhtml");
@@ -465,60 +469,60 @@ public class ExportBookToEpub extends AbstractExport {
 		int n = 1;
 		b.append(String.format(NCX_HEAD, uuid));
 		b.append(tab(1))
-		   .append(Html.intoTag("docTitle", Html.intoTag("text", book.getTitle())))
-		   .append("\n");
+				.append(Html.intoTag("docTitle", Html.intoTag("text", book.getTitle())))
+				.append("\n");
 		b.append(tab(1)).append("<navMap>\n");
 		b.append(tab(2)).append(navPoint("chapter", n++));
 		b.append(tab(3))
-		   .append(Html.intoTag("navLabel",
-			  Html.intoTag("text", I18N.getMsg("epub.cover"))))
-		   .append("\n");
+				.append(Html.intoTag("navLabel",
+						Html.intoTag("text", I18N.getMsg("epub.cover"))))
+				.append("\n");
 		b.append(tab(3)).append("<content")
-		   .append(Html.getAttribute("src", "Text/coverpage.xhtml"))
-		   .append("/>\n");
+				.append(Html.getAttribute("src", "Text/coverpage.xhtml"))
+				.append("/>\n");
 		b.append(tab(3)).append(NAVPOINT_END);
 		b.append(tab(2)).append(navPoint("chapter", n++));
 		b.append(tab(3)).append(Html.intoTag("navLabel",
-		   Html.intoTag("text", I18N.getMsg("blurb"))));
+				Html.intoTag("text", I18N.getMsg("blurb"))));
 		b.append(tab(3)).append("<content")
-		   .append(Html.getAttribute("src", "Text/coverback.xhtml"))
-		   .append("/>\n");
+				.append(Html.getAttribute("src", "Text/coverback.xhtml"))
+				.append("/>\n");
 		b.append(tab(3)).append(NAVPOINT_END);
 		if (SUMMARY) {
 			b.append(tab(2)).append(navPoint("chapter", n++));
 			b.append(tab(3)).append(Html.intoTag("navLabel",
-			   Html.intoTag("text", I18N.getMsg("export.book.toc"))));
+					Html.intoTag("text", I18N.getMsg("export.book.toc"))));
 			b.append(tab(3)).append("<content")
-			   .append(Html.getAttribute("src", "Text/summary.xhtml"))
-			   .append("/>\n");
+					.append(Html.getAttribute("src", "Text/summary.xhtml"))
+					.append("/>\n");
 			b.append(tab(3)).append(NAVPOINT_END);
 		}
 		b.append(tab(2)).append(navPoint("chapter", n++));
 		b.append(tab(3)).append(Html.intoTag("navLabel", Html.intoTag("text",
-		   I18N.getMsg("epub.titlepage"))));
+				I18N.getMsg("epub.titlepage"))));
 		b.append(tab(3)).append("<content")
-		   .append(Html.getAttribute("src", "Text/titlepage.xhtml"))
-		   .append("/>\n");
+				.append(Html.getAttribute("src", "Text/titlepage.xhtml"))
+				.append("/>\n");
 		b.append(tab(3)).append(NAVPOINT_END);
 		for (Object part : mainFrame.project.getList(Book.TYPE.PART)) {
 			for (Chapter c : mainFrame.project.chapters.find((Part) part)) {
 				b.append(tab(2)).append(navPoint("chapter", n));
 				b.append(tab(3)).append(Html.intoTag("navLabel",
-				   Html.intoTag("text", getChapterTitle(c))));
+						Html.intoTag("text", getChapterTitle(c))));
 				b.append(tab(3)).append("<content src=\"Text/")
-				   .append(getFilename(c)).append("\"/>\n");
+						.append(getFilename(c)).append("\"/>\n");
 				b.append(tab(2)).append(NAVPOINT_END);
 				n++;
 			}
 		}
 		if (!endnotes.isEmpty()) {
 			b.append(tab(2))
-			   .append(navPoint("chapter", n));
+					.append(navPoint("chapter", n));
 			b.append(tab(3)).append(Html.intoTag("navLabel",
-			   Html.intoTag("text", I18N.getMsg("endnotes"))));
+					Html.intoTag("text", I18N.getMsg("endnotes"))));
 			b.append(tab(3)).append("<content")
-			   .append(Html.getAttribute("src", "Text/endnotes.xhtml"))
-			   .append("/>\n");
+					.append(Html.getAttribute("src", "Text/endnotes.xhtml"))
+					.append("/>\n");
 			b.append(tab(2)).append(NAVPOINT_END);
 		}
 		b.append(tab(1)).append("</navMap>\n");
@@ -530,26 +534,26 @@ public class ExportBookToEpub extends AbstractExport {
 	private String getHead(String title) {
 		StringBuilder b = new StringBuilder();
 		b.append(XML_HEAD)
-		   .append(DOCTYPE)
-		   .append("  \"" + XHTML_DTD + "\">\n");
+				.append(DOCTYPE)
+				.append("  \"" + XHTML_DTD + "\">\n");
 		b.append(XHTML_TAG);
 		b.append(Html.HEAD_B);
 		b.append(Html.intoTag("title", title)).append("\n");
 		b.append("<style type=\"text/css\">\n");
 		if (mainFrame.project.book.info.scenarioGet()) {
 			b.append("body {font-family: monospace;}\n"
-			   + "p {"
-			   + MARGIN_LEFT
-			   + MARGIN_TOP
-			   + MARGIN_BOTTOM
-			   + "}\n");
+					+ "p {"
+					+ MARGIN_LEFT
+					+ MARGIN_TOP
+					+ MARGIN_BOTTOM
+					+ "}\n");
 		} else {
 			b.append("body {text-align: justify;}\n"
-			   + "p {"
-			   + MARGIN_LEFT
-			   + MARGIN_TOP
-			   + MARGIN_BOTTOM
-			   + "}\n");
+					+ "p {"
+					+ MARGIN_LEFT
+					+ MARGIN_TOP
+					+ MARGIN_BOTTOM
+					+ "}\n");
 		}
 		b.append(Html.STYLE_E);
 		b.append(Html.HEAD_E);
@@ -594,11 +598,11 @@ public class ExportBookToEpub extends AbstractExport {
 		}
 		if (layout.getChapterDescription()) {
 			b.append("<p style=\""
-			   + "text-align:justify;"
-			   + "margin-left: 1cm;"
-			   + "margin-right: 1cm;\">")
-			   .append(Html.intoI(chapter.getDescription()))
-			   .append(Html.P_E);
+					+ "text-align:justify;"
+					+ "margin-left: 1cm;"
+					+ "margin-right: 1cm;\">")
+					.append(Html.intoI(chapter.getDescription()))
+					.append(Html.P_E);
 		}
 	}
 
@@ -629,17 +633,19 @@ public class ExportBookToEpub extends AbstractExport {
 		writeSceneStart(b, scene);
 		String x = scene.getSummary();
 		if (mainFrame.project.book.info.scenarioGet()
-		   || mainFrame.project.book.info.markdownGet()) {
+				|| mainFrame.project.book.info.markdownGet()) {
 			Markdown md = new Markdown(TT, "text/plain", "");
 			md.setHeader(scene, book.info.scenarioGet());
 			md.setText(scene.getSummary());
 			x = md.getHtmlBody();
 		} else {
+			x = Html.cleanXHTML(x);
 		}
 		x = replaceEndnotes(scene, x);
 		x = replaceImages(x);
 		x = x.replace("<p align=\"center\">", "<p style=\"text-align:center;\">");
 		x = x.replace("&nbsp;", " ");
+		x = x.replace("<br>", "<br />");
 		x = Html.toXhtmlBody(x);
 		b.append(x);
 		writeSceneEnd(b, scene);
@@ -688,20 +694,20 @@ public class ExportBookToEpub extends AbstractExport {
 			String title = I18N.getMsg("endnotes");
 			StringBuilder buf = new StringBuilder();
 			buf.append(XML_HEAD)
-			   .append(DOCTYPE)
-			   .append("  \"" + XHTML_DTD + "\">\n");
+					.append(DOCTYPE)
+					.append("  \"" + XHTML_DTD + "\">\n");
 			buf.append(XHTML_TAG);
 			buf.append(Html.HEAD_B);
 			buf.append(Html.intoTag("title", title));
 			buf.append("<style")
-			   .append(Html.getAttribute("type", "text/css"))
-			   .append(">\n");
+					.append(Html.getAttribute("type", "text/css"))
+					.append(">\n");
 			buf.append("body {text-align: justify;}\n"
-			   + "p {"
-			   + MARGIN_LEFT
-			   + MARGIN_TOP
-			   + MARGIN_BOTTOM
-			   + "}\n");
+					+ "p {"
+					+ MARGIN_LEFT
+					+ MARGIN_TOP
+					+ MARGIN_BOTTOM
+					+ "}\n");
 			buf.append("</style>\n");
 			buf.append(Html.HEAD_E);
 			buf.append("<body id=\"x").append(title).append("\">\n");
@@ -709,12 +715,12 @@ public class ExportBookToEpub extends AbstractExport {
 			for (Endnote endnote : endnotes) {
 				if (endnote.getScene() == null) {
 					LOG.err("EpubExport.getNotes in the endnote n° "
-					   + endnote.getNumber() + " the scene is null");
+							+ endnote.getNumber() + " the scene is null");
 					continue;
 				}
 				if (endnote.getScene().getChapter() == null) {
 					LOG.err("EpubExport.getNotes in the endnote n° "
-					   + endnote.getNumber() + " the chapter is null");
+							+ endnote.getNumber() + " the chapter is null");
 					continue;
 				}
 				String link = endnote.getLinkToScene(getFilename(endnote.getScene().getChapter()));
@@ -738,7 +744,7 @@ public class ExportBookToEpub extends AbstractExport {
 		//LOG.printInfos(TT + ".copyImages()");
 		try {
 			String source = mainFrame.getProject().getPath()
-			   + File.separator + "Images";
+					+ File.separator + "Images";
 			String dest = epubDir + File.separator + OEBPS_IMAGES;
 			File srcDir = new File(source);
 			if (!srcDir.exists()) {
@@ -763,42 +769,42 @@ public class ExportBookToEpub extends AbstractExport {
 		StringBuilder bookid = new StringBuilder();
 		if (!book.getUUID().isEmpty()) {
 			bookid.append("<dc:identifier")
-			   .append(Html.getAttribute("id", "BookId"))
-			   .append(Html.getAttribute("opf:scheme", "uuid"))
-			   .append(">").append(book.getUUID()).append("</dc:identifier>\n");
+					.append(Html.getAttribute("id", "BookId"))
+					.append(Html.getAttribute("opf:scheme", "uuid"))
+					.append(">").append(book.getUUID()).append("</dc:identifier>\n");
 		}
 		if (!book.getISBN().isEmpty()) {
 			bookid.append("<dc:identifier")
-			   .append(Html.getAttribute("id", "BookId"))
-			   .append(Html.getAttribute("opf:scheme", "isbn"))
-			   .append(">").append(book.getISBN()).append("</dc:identifier>\n");
+					.append(Html.getAttribute("id", "BookId"))
+					.append(Html.getAttribute("opf:scheme", "isbn"))
+					.append(">").append(book.getISBN()).append("</dc:identifier>\n");
 		}
 		if (book.getUUID().isEmpty() && book.getISBN().isEmpty()) {
 			bookid.append("<dc:identifier")
-			   .append(Html.getAttribute("id", "BookId"))
-			   .append(Html.getAttribute("opf:scheme", "uuid"))
-			   .append(">").append(uuid).append("</dc:identifier>\n");
+					.append(Html.getAttribute("id", "BookId"))
+					.append(Html.getAttribute("opf:scheme", "uuid"))
+					.append(">").append(uuid).append("</dc:identifier>\n");
 		}
 		b.append(tab(2)).append("<metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n")
-		   .append(tab(3)).append(Html.intoTag("dc:title", book.getTitle())).append("\n");
+				.append(tab(3)).append(Html.intoTag("dc:title", book.getTitle())).append("\n");
 		b.append(tab(3)).append(bookid.toString()).append("\n");
 		b.append(tab(3)).append(
-		   Html.intoTag("dc:creator", book.getAuthor(), "opf:role=\"aut\""))
-		   .append("\n");
+				Html.intoTag("dc:creator", book.getAuthor(), "opf:role=\"aut\""))
+				.append("\n");
 		b.append(tab(3)).append(Html.intoTag("dc:language", book.getLanguage()))
-		   .append("\n");
+				.append("\n");
 		b.append(tab(3)).append(Html.intoTag("dc:type", "text"))
-		   .append("\n");
+				.append("\n");
 		b.append(tab(3)).append(
-		   Html.intoTag("dc:date",
-			  dateFormat.format(new Date()), "opf:event=\"creation\""))
-		   .append("\n");
+				Html.intoTag("dc:date",
+						dateFormat.format(new Date()), "opf:event=\"creation\""))
+				.append("\n");
 		b.append(tab(3))
-		   .append(Html.intoTag("dc:description", book.getBlurb()))
-		   .append("\n");
+				.append(Html.intoTag("dc:description", book.getBlurb()))
+				.append("\n");
 		b.append(tab(3)).append("<meta content=\"")
-		   .append(Const.getVersion())
-		   .append("\" name=\"oStorybook version\" />\n");
+				.append(Const.getVersion())
+				.append("\" name=\"oStorybook version\" />\n");
 		b.append(tab(2)).append("</metadata>\n");
 		b.append(writeManifest());
 		b.append(tab(2)).append("<spine toc=\"ncx\">\n");
@@ -813,9 +819,9 @@ public class ExportBookToEpub extends AbstractExport {
 		for (Object part : mainFrame.project.getList(Book.TYPE.PART)) {
 			for (Chapter c : mainFrame.project.chapters.find((Part) part)) {
 				b.append(tab(3))
-				   .append("<itemref idref=\"x")
-				   .append(getFilename(c).replace(".xhtml", ""))
-				   .append("\"/>\n");
+						.append("<itemref idref=\"x")
+						.append(getFilename(c).replace(".xhtml", ""))
+						.append("\"/>\n");
 			}
 		}
 		if (!endnotes.isEmpty()) {
@@ -823,12 +829,12 @@ public class ExportBookToEpub extends AbstractExport {
 		}
 		b.append(tab(2)).append("</spine>\n");
 		b.append(tab(2)).append(Html.intoTag("guide", "<reference "
-		   + "href=\"Text/coverpage.xhtml\" "
-		   + "title=\"Cover\" "
-		   + "type=\"cover\"/>"));
+				+ "href=\"Text/coverpage.xhtml\" "
+				+ "title=\"Cover\" "
+				+ "type=\"cover\"/>"));
 		b.append("</package>");
 		File f = new File(epubDir + File.separator
-		   + OEBPS + File.separator + "content.opf");
+				+ OEBPS + File.separator + "content.opf");
 		IOUtil.fileWriteString(f, b.toString());
 	}
 
@@ -845,7 +851,7 @@ public class ExportBookToEpub extends AbstractExport {
 		b.append(writeManifestChapters());
 		b.append(writeManifestEndnotes());
 		b.append(tab(3)).append("<item href=\"toc.ncx\" id=\"ncx\" ")
-		   .append("media-type=\"application/x-dtbncx+xml\"").append("/>\n");
+				.append("media-type=\"application/x-dtbncx+xml\"").append("/>\n");
 		b.append(writeManifestImages());
 		return b.toString();
 	}
@@ -856,10 +862,10 @@ public class ExportBookToEpub extends AbstractExport {
 			for (Chapter chapter : mainFrame.project.chapters.find((Part) part)) {
 				String chapterName = getFilename(chapter);
 				b.append(tab(3)).append("<item href=\"Text/")
-				   .append(chapterName).append("\" ")
-				   .append("id=\"x")
-				   .append(chapterName.replace(".xhtml", "")).append("\" ")
-				   .append("media-type=\"application/xhtml+xml\"/>\n");
+						.append(chapterName).append("\" ")
+						.append("id=\"x")
+						.append(chapterName.replace(".xhtml", "")).append("\" ")
+						.append("media-type=\"application/xhtml+xml\"/>\n");
 			}
 		}
 		return b.toString();
@@ -869,9 +875,9 @@ public class ExportBookToEpub extends AbstractExport {
 		StringBuilder b = new StringBuilder();
 		if (!endnotes.isEmpty()) {
 			b.append(tab(3))
-			   .append("<item href=\"Text/").append(ENDNOTE_FILE).append("\" ")
-			   .append("id=\"endnotes\" ")
-			   .append(TYPE_XHTML).append("/>\n");
+					.append("<item href=\"Text/").append(ENDNOTE_FILE).append("\" ")
+					.append("id=\"endnotes\" ")
+					.append(TYPE_XHTML).append("/>\n");
 		}
 		return b.toString();
 	}
@@ -883,14 +889,16 @@ public class ExportBookToEpub extends AbstractExport {
 		if (dir.exists()) {
 			for (File f : dir.listFiles()) {
 				String n = f.getAbsolutePath().replace(epubDir + File.separator
-				   + OEBPS + File.separator, "");
+						+ OEBPS + File.separator, "");
 				String nshort = "img_" + f.getName();
 				//nshort = nshort.replace(".", "_");
 				String ext = f.getName().substring(f.getName().lastIndexOf(".") + 1);
 				b.append(tab(3))
-				   .append("<item href=\"")
-				   .append(n).append("\" id=\"").append(nshort)
-				   .append("\" media-type=\"image/").append(ext).append("\"/>\n");
+						.append("<item href=\"")
+						.append(n).append("\" id=\"").append(nshort)
+						.append("\" media-type=\"image/")
+						.append((ext.equalsIgnoreCase("jpg") ? "jpeg" : ext))
+						.append("\"/>\n");
 			}
 		} else {
 			LOG.trace(dir.getAbsolutePath() + " dir not exists");
@@ -907,20 +915,20 @@ public class ExportBookToEpub extends AbstractExport {
 	private String writeManifestCommon() {
 		StringBuilder b = new StringBuilder();
 		b.append(tab(3)).append("<item href=\"Text/coverpage.xhtml\" ")
-		   .append("id=\"coverpage\" ")
-		   .append(TYPE_XHTML).append("/>\n");
+				.append("id=\"coverpage\" ")
+				.append(TYPE_XHTML).append("/>\n");
 		if (!book.getBlurb().isEmpty()) {
 			b.append(tab(3)).append("<item href=\"Text/coverback.xhtml\" ")
-			   .append("id=\"coverback\" ")
-			   .append(TYPE_XHTML).append("/>\n");
+					.append("id=\"coverback\" ")
+					.append(TYPE_XHTML).append("/>\n");
 		}
 		b.append(tab(3)).append("<item href=\"Text/titlepage.xhtml\" ")
-		   .append("id=\"titlepage\" ")
-		   .append(TYPE_XHTML).append("/>\n");
+				.append("id=\"titlepage\" ")
+				.append(TYPE_XHTML).append("/>\n");
 		if (SUMMARY) {
 			b.append(tab(3)).append("<item href=\"Text/summary.xhtml\" ")
-			   .append("id=\"summary\" ")
-			   .append(TYPE_XHTML).append("/>\n");
+					.append("id=\"summary\" ")
+					.append(TYPE_XHTML).append("/>\n");
 		}
 		return b.toString();
 	}
@@ -932,8 +940,8 @@ public class ExportBookToEpub extends AbstractExport {
 	private void writeTitlepage() {
 		StringBuilder b = new StringBuilder();
 		b.append(XML_HEAD).append(DOCTYPE).append("  \"" + XHTML_DTD + "\">\n")
-		   .append(XHTML_TAG)
-		   .append(Html.intoTag("head", Html.getHeadTitle(I18N.getMsg("epub.titlepage"))));
+				.append(XHTML_TAG)
+				.append(Html.intoTag("head", Html.getHeadTitle(I18N.getMsg("epub.titlepage"))));
 		b.append("<body class=\"ostorybook\" id=\"titlepage\">\n");
 		b.append(Html.toXhtml(ExportBookInfo.getTitle(book, true)));
 		b.append(ExportBookInfo.getDedication(book, 30));
@@ -971,9 +979,9 @@ public class ExportBookToEpub extends AbstractExport {
 	 */
 	private String navPoint(String classe, int n) {
 		return "<navPoint "
-		   + "class=\"" + classe + "\" "
-		   + "id=\"navPoint-" + n + "\" "
-		   + "playOrder=\"" + n + "\">\n";
+				+ "class=\"" + classe + "\" "
+				+ "id=\"navPoint-" + n + "\" "
+				+ "playOrder=\"" + n + "\">\n";
 	}
 
 	/**
@@ -985,9 +993,9 @@ public class ExportBookToEpub extends AbstractExport {
 	 */
 	private String getMeta(String name, String value) {
 		return tab(2)
-		   + "<meta "
-		   + Html.getAttribute("name", name)
-		   + Html.getAttribute("content", value) + "/>\n";
+				+ "<meta "
+				+ Html.getAttribute("name", name)
+				+ Html.getAttribute("content", value) + "/>\n";
 	}
 
 	/**

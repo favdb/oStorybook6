@@ -41,11 +41,10 @@ import storybook.ui.panel.AbstractPanel;
 import storybook.ui.panel.AbstractScenePanel;
 import storybook.ui.panel.book.BookPanel;
 import storybook.ui.panel.book.BookScenePanel;
-import storybook.ui.panel.chrono.ChronoPanel;
-import storybook.ui.panel.chrono.ChronoScenePanel;
-import storybook.ui.panel.chrono.StrandDateLabel;
-import storybook.ui.panel.manage.ManagePanel;
+import storybook.ui.panel.chrono.SceneSticker;
+import storybook.ui.panel.book.StrandDateLabel;
 import storybook.ui.panel.manage.ManageChapter;
+import storybook.ui.panel.manage.ManagePanel;
 import storybook.ui.panel.manage.ManageSceneDnd;
 
 /**
@@ -122,9 +121,9 @@ public class ViewUtil {
 			}
 			if (scene.getId().equals(sc.getId())) {
 				Rectangle rect = scenePanel.getBounds();
-				if (container instanceof ChronoPanel) {
+				/*if (container instanceof ChronoPanel) {
 					rect = SwingUtilities.convertRectangle(scenePanel.getParent(), rect, panel);
-				}
+				}*/
 				if (container instanceof ManagePanel) {
 					rect = SwingUtilities.convertRectangle(scenePanel.getParent(), rect, panel);
 				}
@@ -173,9 +172,10 @@ public class ViewUtil {
 			}
 			if (strand.getId().equals(s.getId()) && date.compareTo(d) == 0) {
 				JComponent comp;
-				if (container instanceof ChronoPanel) {
+				/*if (container instanceof ChronoPanel) {
 					comp = (JComponent) sdPanel.getParent();
-				} else if (container instanceof BookPanel) {
+				} else */
+				if (container instanceof BookPanel) {
 					comp = (JComponent) sdPanel.getParent().getParent();
 				} else {
 					break;
@@ -194,9 +194,9 @@ public class ViewUtil {
 	}
 
 	public static List<AbstractScenePanel> findScenePanels(Container cont) {
-		if (cont instanceof ChronoPanel) {
+		/*if (cont instanceof ChronoPanel) {
 			return findChronoScenePanels(cont);
-		}
+		}*/
 		if (cont instanceof BookPanel) {
 			return findBookScenePanels(cont);
 		}
@@ -219,7 +219,7 @@ public class ViewUtil {
 	private static List<AbstractScenePanel> findChronoScenePanels(Container cont) {
 		List<Component> components = new ArrayList<>();
 		components = SwingUtil.findComponentsByClass(cont,
-		   ChronoScenePanel.class, components);
+				SceneSticker.class, components);
 		List<AbstractScenePanel> panels = new ArrayList<>();
 		for (Component comp : components) {
 			panels.add((AbstractScenePanel) comp);

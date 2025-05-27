@@ -73,7 +73,6 @@ import storybook.ui.Ui;
 import static storybook.ui.Ui.MINIMUM_SIZE;
 import storybook.ui.panel.AbstractPanel;
 import storybook.ui.panel.book.BookPanel;
-import storybook.ui.panel.chrono.ChronoPanel;
 
 /**
  *
@@ -328,7 +327,7 @@ public class SearchDlg extends AbsDialog implements ItemListener {
 		doTitle(I18N.getMsg("scene"));
 		for (Scene entity : entities) {
 			if (searchWords(entity.toCsv(" ", " ", "\t"))
-			   || searchWordsHtml(entity.getSummary())) {
+					|| searchWordsHtml(entity.getSummary())) {
 				if (!finds) {
 					doNext();
 				}
@@ -577,9 +576,9 @@ public class SearchDlg extends AbsDialog implements ItemListener {
 	private JPanel initFindChapter() {
 		//LOG.printInfos(TT+".initFindChapter()");
 		JPanel p = new JPanel(
-		   new MigLayout(MIG.get(MIG.FILL, MIG.WRAP + " 2"),
-			  "[]10[grow]10[]",
-			  "[]10[]10[]"));
+				new MigLayout(MIG.get(MIG.FILL, MIG.WRAP + " 2"),
+						"[]10[grow]10[]",
+						"[]10[]10[]"));
 		JPanel px = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP1)));
 		px.add(new JLabel(I18N.getColonMsg("chapter")));
 		chapterCombo = new JComboBox();
@@ -628,7 +627,7 @@ public class SearchDlg extends AbsDialog implements ItemListener {
 	private JPanel initFindDate() {
 		//LOG.printInfos(TT+".initFindDate()");
 		JPanel p = new JPanel(
-		   new MigLayout(MIG.get(MIG.FILL, MIG.WRAP + " 2", MIG.HIDEMODE3)));
+				new MigLayout(MIG.get(MIG.FILL, MIG.WRAP + " 2", MIG.HIDEMODE3)));
 		JPanel px = new JPanel(new MigLayout());
 		px.add(new JLabel(I18N.getColonMsg("strand")), MIG.RIGHT);
 		strandCombo = new JComboBox();
@@ -703,10 +702,11 @@ public class SearchDlg extends AbsDialog implements ItemListener {
 		}
 		AbstractPanel container = null;
 		JPanel panel = null;
-		if (chrono) {
+		/*if (chrono) {
 			container = (ChronoPanel) view.getComponent();
 			panel = ((ChronoPanel) container).getPanel();
-		} else if (isBook) {
+		} else */
+		if (isBook) {
 			container = (BookPanel) view.getComponent();
 			panel = ((BookPanel) container).getPanel();
 		}
@@ -718,7 +718,7 @@ public class SearchDlg extends AbsDialog implements ItemListener {
 			delay += 100;
 		}
 		ScrollToStrandDateAction action = new ScrollToStrandDateAction(
-		   container, panel, strand, date, lbWarning);
+				container, panel, strand, date, lbWarning);
 		Timer timer = new Timer(delay, action);
 		timer.setRepeats(false);
 		timer.start();

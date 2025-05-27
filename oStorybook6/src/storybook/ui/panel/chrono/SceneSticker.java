@@ -53,10 +53,15 @@ import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractScenePanel;
 import storybook.ui.panel.EntityLinksPanel;
 
+/**
+ * Class JPanel viewing a scene as a sticker
+ *
+ * @author favdb
+ */
 @SuppressWarnings("serial")
-public class ChronoScenePanel extends AbstractScenePanel implements FocusListener {
+public class SceneSticker extends AbstractScenePanel implements FocusListener {
 
-	private static final String TT = "ChronoScenePanel";
+	private static final String TT = "SceneSticker.";
 
 	private static final String CN_TITLE = "taTitle",
 			CN_TEXT = "tcText",
@@ -68,10 +73,9 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 	private JLabel lbInformational, lbSceneNo, lbTime;
 	private Integer size;
 
-	public ChronoScenePanel(MainFrame mainFrame, Scene scene) {
+	public SceneSticker(MainFrame mainFrame, Scene scene) {
 		super(mainFrame, scene, true, Color.white, Strand.getJColor(scene.getStrand()));
-		init();
-		initUi();
+		initAll();
 	}
 
 	@Override
@@ -141,24 +145,23 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 
 	@Override
 	public void initUi() {
-		//LOG.trace(TT + ".initUi() for scene=" + scene.getName());
 		refresh();
 	}
 
 	@Override
 	public void refresh() {
-		//LOG.trace(TT + ".refresh() for scene=" + scene.getName());
+		//LOG.trace(TT + "refresh() for scene=" + scene.getName());
 		removeAll();
 		setLayout(new MigLayout(MIG.get(MIG.FILL, MIG.FLOWY, MIG.INS0, MIG.GAP0), "[]", "[][grow]"));
 		SwingUtil.setForcedSize(this, new Dimension(size, size));
-		//setPreferredSize(new Dimension(size, size));
 		setComponentPopupMenu(EntityUtil.createPopupMenu(mainFrame, scene, EntityUtil.WITH_CHRONO));
 		setFont(App.fonts.defGet());
+		this.setBackground(scene.getStrand().getJColor());
 		// set dotted border for scenes of other parts
-		//setBorder(SwingUtil.getBorderDefault());
+		setBorder(SwingUtil.getBorderDefault());
 		upperPanel = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0), "[][grow][]", "[top][top][top]"));
+		upperPanel.setBackground(scene.getStrand().getJColor());
 		upperPanel.setName(CN_UPPER_PANEL);
-		//upperPanel.setOpaque(false);
 		// button panel
 		JPanel buttonPanel = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0)));
 		buttonPanel.setName("buttonpanel");
@@ -188,9 +191,6 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 			lbInformational.setIcon(IconUtil.getIconSmall(ICONS.K.EMPTY));
 		}
 		upperPanel.add(lbInformational, MIG.GROWY);
-		// strand links
-		//StrandLinksPanel strandLinksPanel = new StrandLinksPanel(mainFrame, scene, true);
-		//upperPanel.add(strandLinksPanel, MIG.get(MIG.SPAN, MIG.RIGHT));
 		// person links
 		EntityLinksPanel personLinksPanel = new EntityLinksPanel(mainFrame, scene, Book.TYPE.PERSON, false);
 		JScrollPane scroller = new JScrollPane(personLinksPanel,
@@ -214,7 +214,6 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 			String tx = DateUtil.simpleDateTimeToString(scene.getScenets(), true);
 			lbTime.setText(tx);
 		}
-		//upperPanel.add(lbTime, MIG.get(MIG.NEWLINE, MIG.SPAN, MIG.RIGHT));
 		add(upperPanel, MIG.GROWX);
 		// title
 		taTitle = new UndoableTextArea();
@@ -227,10 +226,8 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 		taTitle.setCaretPosition(0);
 		taTitle.getUndoManager().discardAllEdits();
 		taTitle.addFocusListener(this);
-		//SwingUtil.addCtrlEnterAction(taTitle, new EntityEditAction(mainFrame, scene, true));
 		JScrollPane spTitle = new JScrollPane(taTitle);
 		spTitle.setPreferredSize(new Dimension(50, 35));
-		//add(spTitle, MIG.get(MIG.GROWX, "h 35!"));
 		// text
 		tcText = initHtmlField(CN_TEXT, scene);
 		JScrollPane spText = new JScrollPane(tcText);
@@ -241,7 +238,7 @@ public class ChronoScenePanel extends AbstractScenePanel implements FocusListene
 		repaint();
 	}
 
-	protected ChronoScenePanel getThis() {
+	protected SceneSticker getThis() {
 		return this;
 	}
 

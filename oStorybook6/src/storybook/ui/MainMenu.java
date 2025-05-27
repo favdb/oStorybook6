@@ -140,7 +140,6 @@ public class MainMenu implements MouseListener {
 	private JMenuItem fileExportBOOK,
 			fileExportOther,
 			fileExportXml,
-			//fileExportOptions,
 			fileExportStoryboard;
 	//private JMenu menuFileImport;
 	private JMenuItem fileImportXml;
@@ -264,7 +263,7 @@ public class MainMenu implements MouseListener {
 	private JMenuItem toolsVogler;
 
 	public MainMenu(MainFrame m) {
-		//LOG.printInfos("MainMenu(mainFrame)");
+		//LOG.trace("MainMenu(mainFrame)");
 		mainFrame = m;
 		init();
 		initUi();
@@ -277,7 +276,7 @@ public class MainMenu implements MouseListener {
 	}
 
 	private void init() {
-		//LOG.printInfos(TT+"init()");
+		//LOG.trace(TT+"init()");
 		UIManager.put("Menu.font", App.fonts.defGet());
 		if (toolBar == null) {
 			toolBar = new JToolBar();
@@ -383,7 +382,7 @@ public class MainMenu implements MouseListener {
 	 * initialize the file toolbar
 	 */
 	private void tbFileInit() {
-		//LOG.printInfos(TT+"initTbFile()");
+		//LOG.trace(TT+"initTbFile()");
 		btFileNew = initButton(K.F_NEW, "file.new",
 				evt -> App.getInstance().createNewProject());
 		toolBar.add(btFileNew);
@@ -407,7 +406,7 @@ public class MainMenu implements MouseListener {
 	 * initialize the news entity toolbar
 	 */
 	private void tbNewInit() {
-		//LOG.printInfos(TT+"initTbNew()");
+		//LOG.trace(TT+"initTbNew()");
 		btNewStrand = initButton(K.NEW_STRAND, "strand.new", evt -> mainFrame.newEntity(new Strand()));
 		toolBar.add(btNewStrand);
 
@@ -444,7 +443,7 @@ public class MainMenu implements MouseListener {
 	 * initialize the tables toolbar
 	 */
 	private void tbTabInit() {
-		//LOG.printInfos(TT+"initTbTab()");
+		//LOG.trace(TT+"initTbTab()");
 		btTabStrand = initButton(K.TABLE_STRANDS, "strands", evt -> mainFrame.showAndFocus(VIEWNAME.STRANDS));
 		toolBar.add(btTabStrand);
 
@@ -491,34 +490,39 @@ public class MainMenu implements MouseListener {
 	 * initialize the views toolbar
 	 */
 	private void tbViewInit() {
-		//LOG.printInfos(TT+"initTbView()");
-		btViewChrono = initButton(K.VW_CHRONO, "view.chrono", evt -> mainFrame.showAndFocus(VIEWNAME.CHRONO));
+		//LOG.trace(TT+"initTbView()");
+		btViewChrono = initButton(K.VW_CHRONO, "view.chrono",
+				evt -> mainFrame.showAndFocus(VIEWNAME.CHRONO));
 		btViewChrono.setEnabled(false);
 		toolBar.add(btViewChrono);
 
-		btViewTimeline = initButton(K.VW_TIMELINE, "view.timeline", evt -> mainFrame.showAndFocus(VIEWNAME.TIMELINE));
+		btViewTimeline = initButton(K.VW_TIMELINE, "view.timeline",
+				evt -> mainFrame.showAndFocus(VIEWNAME.TIMELINE));
 		toolBar.add(btViewTimeline);
-
-		btViewBook = initButton(K.VW_BOOK, "view.book", evt -> mainFrame.showAndFocus(VIEWNAME.BOOK));
+		btViewBook = initButton(K.VW_BOOK, "view.book",
+				evt -> mainFrame.showAndFocus(VIEWNAME.BOOK));
 		toolBar.add(btViewBook);
 
-		btViewManage = initButton(K.VW_MANAGE, "view.manage", evt -> mainFrame.showAndFocus(VIEWNAME.MANAGE));
+		btViewManage = initButton(K.VW_MANAGE, "view.manage",
+				evt -> mainFrame.showAndFocus(VIEWNAME.MANAGE));
 		toolBar.add(btViewManage);
 
 		btViewReading = initButton(K.VW_READING, "view.reading");
 		btViewReading.addActionListener(evt -> mainFrame.showAndFocus(VIEWNAME.READING));
 		toolBar.add(btViewReading);
 
-		btViewMemoria = initButton(K.VW_MEMORIA, "view.memoria", evt -> mainFrame.showAndFocus(VIEWNAME.MEMORIA));
+		btViewMemoria = initButton(K.VW_MEMORIA, "view.memoria",
+				evt -> mainFrame.showAndFocus(VIEWNAME.MEMORIA));
 		toolBar.add(btViewMemoria);
-		//btViewMemoria.setEnabled(App.isDev());
 
-		btViewStoryboard = initButton(K.STAMP, "view.storyboard", evt -> mainFrame.showAndFocus(VIEWNAME.STORYBOARD));
+		btViewStoryboard = initButton(K.STAMP, "view.storyboard",
+				evt -> mainFrame.showAndFocus(VIEWNAME.STORYBOARD));
 		toolBar.add(btViewStoryboard);
 
 		toolBar.addSeparator();
 
-		btViewTypist = initButton(K.VW_TYPIST, "typist", evt -> mainFrame.typistActivate());
+		btViewTypist = initButton(K.VW_TYPIST, "typist",
+				evt -> mainFrame.typistActivate());
 		toolBar.add(btViewTypist);
 
 	}
@@ -527,7 +531,7 @@ public class MainMenu implements MouseListener {
 	 * initalize the memo and idea toolbar
 	 */
 	private void tbMemoInit() {
-		//LOG.printInfos(TT+"initTbMemo()");
+		//LOG.trace(TT+"initTbMemo()");
 		btMemo = initButton(K.ENT_MEMO, "memos");
 		btMemo.addActionListener(evt -> mainFrame.showEditorAsDialog(new Memo()));
 		toolBar.add(btMemo);
@@ -704,7 +708,7 @@ public class MainMenu implements MouseListener {
 	 * initialize the file menu
 	 */
 	private void menuFileInit() {
-		//LOG.printInfos(TT+"initMenuFile()");
+		//LOG.trace(TT+"initMenuFile()");
 		menuFile = initMenu("file");
 
 		// create new project
@@ -849,7 +853,7 @@ public class MainMenu implements MouseListener {
 	 * initialize the edit menu
 	 */
 	private void menuEditInit() {
-		//LOG.printInfos(TT+"initMenuEdit()");
+		//LOG.trace(TT+"initMenuEdit()");
 		menuEdit = initMenu("edit");
 
 		editCopyBook = initMenuItem(K.EDIT_COPY, "book.copy.text", "bookCopy",
@@ -889,7 +893,7 @@ public class MainMenu implements MouseListener {
 	 * initialize the new entity menu
 	 */
 	private void menuNewInit() {
-		//LOG.printInfos(TT+"initMenuNew()");
+		//LOG.trace(TT+"initMenuNew()");
 		menuNewEntity = initMenu("new");
 		//ctrl alt D
 		newStrand = initScMenuItem(K.ENT_STRAND, "new.strand", "",
@@ -1012,7 +1016,7 @@ public class MainMenu implements MouseListener {
 	 * initialize the table menu
 	 */
 	private void menuTableInit() {
-		//LOG.printInfos(TT+"initMenuTable()");
+		//LOG.trace(TT+"initMenuTable()");
 		menuTables = initMenu("tables");
 		menuTablePrimaryInit();
 		menuTables.add(menuPrimaryObjects);
@@ -1120,7 +1124,7 @@ public class MainMenu implements MouseListener {
 	 * initialize the tools menu
 	 */
 	private void menuToolsInit() {
-		//LOG.printInfos(TT+"initMenuTools()");
+		//LOG.trace(TT+"initMenuTools()");
 		menuTools = initMenu("tools");
 
 		toolsChallenge = initScMenuItem("challenge", evt -> ChallengeDlg.show(mainFrame));
@@ -1266,7 +1270,7 @@ public class MainMenu implements MouseListener {
 	 * initialize the views menu
 	 */
 	private void menuViewInit() {
-		//LOG.printInfos(TT+"initMenuView()");
+		//LOG.trace(TT+"initMenuView()");
 		menuView = initMenu("view");
 
 		vueTypist = initMenuItem(K.VW_TYPIST, "typist", "",
@@ -1281,7 +1285,6 @@ public class MainMenu implements MouseListener {
 		vueTimeline = initMenuItem(K.VW_TIMELINE, "view.timeline", "",
 				evt -> mainFrame.showAndFocus(VIEWNAME.TIMELINE));
 		menuView.add(vueTimeline);
-
 		vueBook = initMenuItem(K.VW_BOOK, "view.book", "",
 				evt -> mainFrame.showAndFocus(VIEWNAME.BOOK));
 		menuView.add(vueBook);
@@ -1337,7 +1340,7 @@ public class MainMenu implements MouseListener {
 	 * initialize the charts menu
 	 */
 	private void menuChartsInit() {
-		//LOG.printInfos(TT+"initMenuCharts()");
+		//LOG.trace(TT+"initMenuCharts()");
 		menuCharts = initMenu("charts");
 
 		chartAttributes = initMenuItem(K.COLUMNS, "attribute.list", "",
@@ -1415,7 +1418,7 @@ public class MainMenu implements MouseListener {
 	 * initialize the help menu
 	 */
 	private void menuHelpInit() {
-		//LOG.printInfos(TT+"initMenuHelp()");
+		//LOG.trace(TT+"initMenuHelp()");
 		menuHelp = initMenu("help");
 
 		helpHome = initMenuItem("help.homepage",
@@ -1423,11 +1426,11 @@ public class MainMenu implements MouseListener {
 		menuHelp.add(helpHome);
 
 		helpDoc = initMenuItem("help.doc",
-				evt -> Net.openBrowser(Net.getI18nUrl(Net.KEY.HOME) + Net.KEY.DOC));
+				evt -> Net.openBrowser(Net.KEY.DOC.toString()));
 		menuHelp.add(helpDoc);
 
 		helpFaq = initMenuItem("help.faq",
-				evt -> Net.openBrowser(Net.getI18nUrl(Net.KEY.HOME) + Net.KEY.FAQ));
+				evt -> Net.openBrowser(Net.KEY.FAQ.toString()));
 		menuHelp.add(helpFaq);
 
 		helpReportBug = initMenuItem("help.bug",
@@ -1584,7 +1587,7 @@ public class MainMenu implements MouseListener {
 	 * set the visible menu for blank mainframe
 	 */
 	public void setMenuForBlank() {
-		//LOG.printInfos(TT+"initMenuForBlank()");
+		//LOG.trace(TT+"initMenuForBlank()");
 		// hide menus from MenuBar
 		JMenu menus[] = {
 			menuNewEntity, menuTables, menuPrimaryObjects, menuSecondaryObjects,
@@ -1629,7 +1632,7 @@ public class MainMenu implements MouseListener {
 	 * @param b
 	 */
 	public void enableSave(boolean b) {
-		//LOG.printInfos(TT+"enableSave()");
+		//LOG.trace(TT+"enableSave()");
 		if (fileSave != null) {
 			fileSave.setEnabled(b);
 		}
@@ -1663,7 +1666,7 @@ public class MainMenu implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent evt) {
-		//LOG.printInfos(TT+".mouseClicked(evt=" + evt.toPrint());
+		//LOG.trace(TT+".mouseClicked(evt=" + evt.toPrint());
 		if (SwingUtilities.isRightMouseButton(evt)) {
 			ToolBarDlg dlg = new ToolBarDlg(mainFrame);
 			dlg.setVisible(true);
@@ -1732,7 +1735,7 @@ public class MainMenu implements MouseListener {
 	}
 
 	public void setMenuCopy() {
-		//LOG.printInfos(TT + ".setMenuCopy()");
+		//LOG.trace(TT + ".setMenuCopy()");
 		int nb = App.getInstance().getMainFrames().size();
 		editCopyEntity.setVisible(nb > 1);
 	}
@@ -1756,7 +1759,7 @@ public class MainMenu implements MouseListener {
 	}
 
 	public void reloadRecentMenu() {
-		//LOG.printInfos(TT + ".reloadRecentMenu()");
+		//LOG.trace(TT + ".reloadRecentMenu()");
 		JMenu miRecent = menuFileRecent;
 		miRecent.removeAll();
 		App.preferences.recentFilesLoad();
@@ -1777,7 +1780,7 @@ public class MainMenu implements MouseListener {
 	}
 
 	public void reloadWindowMenu() {
-		//LOG.printInfos(TT+".reloadWindowMenu(" + menubar.getName() + ")");
+		//LOG.trace(TT+".reloadWindowMenu(" + menubar.getName() + ")");
 		JMenu miLoad = windowLoadLayout;
 		miLoad.removeAll();
 		File dir = new File(EnvUtil.getPrefDir().getAbsolutePath());

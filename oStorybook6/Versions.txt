@@ -1,5 +1,9 @@
 Versions :
 ==========
+6.04: 01/09/2025
+- correction export EPUB
+- correction vue Gestion
+- correction vues Chrono et Frise
 6.03a: 13/05/2025 correctif d'urgence
 6.03: 21/04/2025
 - correction anomalie codage des caractères

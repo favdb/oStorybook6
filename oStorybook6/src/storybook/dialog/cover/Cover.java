@@ -29,7 +29,6 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -94,6 +93,13 @@ public class Cover extends AbsDialog {
 			}
 			return "cover.margin_" + name().toLowerCase();
 		}
+	}
+
+	public static void generate(MainFrame m) {
+		Cover dlg = new Cover(m);
+		SwingUtilities.invokeLater(() -> {
+			dlg.save();
+		});
 	}
 
 	public static boolean show(MainFrame m) {
@@ -269,15 +275,10 @@ public class Cover extends AbsDialog {
 	 */
 	private JButton initBgButton(int n) {
 		JButton bt = new JButton();
-		Icon icon;
 		if (n != 0) {
 			bt.setName(templates[n]);
 			ImageIcon imageIcon = new ImageIcon(loadTemplate(templates[n]));
 			imageIcon = resizeIcon(imageIcon, IconUtil.getDefSize() * 3);
-			if (imageIcon == null) {
-				LOG.err("icon " + templates[n] + " not found");
-				icon = IconUtil.STATE.EMPTY.getIcon();
-			}
 			bt.setIcon(imageIcon);
 		} else {
 			bt.setName("none");

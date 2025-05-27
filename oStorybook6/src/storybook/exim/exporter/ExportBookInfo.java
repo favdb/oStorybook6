@@ -45,7 +45,7 @@ public class ExportBookInfo {
 	public static String getTitle(Book book, boolean isbn) {
 		//LOG.trace(TT + "getTitle(book)");
 		StringBuilder t = new StringBuilder();
-		t.append(Html.BR).append(Html.BR);
+		t.append(Html.P_B).append(Html.BR).append(Html.BR).append(Html.P_E);
 		t.append(Html.intoH(1, book.getTitle(), "text-align:center;"));
 		t.append(Html.P_CENTER);
 		if (!book.getSubtitle().isEmpty()) {
@@ -70,9 +70,9 @@ public class ExportBookInfo {
 		}
 		t.append(Html.P_CENTER);
 		t.append(
-		   Html.intoSmall(
-			  Html.intoI(I18N.getMsg("export.by") + " " + Const.getFullName())
-		   )
+				Html.intoSmall(
+						Html.intoI(I18N.getMsg("export.by") + " " + Const.getFullName())
+				)
 		);
 		t.append(Html.P_E);
 		return t.toString();
@@ -91,10 +91,10 @@ public class ExportBookInfo {
 		if (!book.getDedication().isEmpty()) {
 			b.append(Html.P_EMPTY);
 			b.append("<div style=\"")
-			   .append("padding-left: ").append(lmargin.toString()).append("%;")
-			   .append("text-align: justify;")
-			   .append("font-style: italic;")
-			   .append("\">");
+					.append("padding-left: ").append(lmargin.toString()).append("%;")
+					.append("text-align: justify;")
+					.append("font-style: italic;")
+					.append("\">");
 			b.append(book.getDedication());
 			b.append("</div>");
 			b.append(Html.P_EMPTY);

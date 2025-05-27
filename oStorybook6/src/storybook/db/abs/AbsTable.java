@@ -1111,12 +1111,14 @@ public abstract class AbsTable extends AbstractPanel implements
 	 * @return null if no row selected
 	 */
 	protected synchronized AbstractEntity getEntityFromRow(int row) {
-		//LOG.trace(ATT + "getEntityFromRow(row=" + row + ")");
+		LOG.trace(ATT + "getEntityFromRow(row=" + row + ")");
 		if (row == -1 || row > table.getRowCount() - 1) {
+			LOG.err("row out of table");
 			return null;
 		}
 		try {
 			if (table.getRowSorter() == null) {
+				LOG.err("table.getRowSorte() return null");
 				return null;
 			}
 			int col = 0;

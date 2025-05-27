@@ -106,11 +106,11 @@ public class Scene extends AbstractEntity {
 			scenario_end = 0, //0=NONE,1=CUT,2=FADE OUT,3=DISSOLVE TO
 			scenario_stage = 0 //0=none, else the index number of the stage
 			;
+	private Date dateRel;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public Scene() {
 		super(Book.TYPE.SCENE, "111");
-		//setDate(new Date());
 		setSummary("");
 		setNotes("");
 		setDescription("");
@@ -249,7 +249,7 @@ public class Scene extends AbstractEntity {
 	}
 
 	public int getDateType() {
-		if (hasDate()) {
+		if (hasScenets()) {
 			return 1;
 		}
 		if (hasRelativescene()) {
@@ -258,11 +258,16 @@ public class Scene extends AbstractEntity {
 		return 0;
 	}
 
+	/**
+	 * return the scenets as a Date
+	 *
+	 * @return
+	 */
 	public Date getDate() {
-		if (scenets == null) {
-			return null;
+		if (hasScenets()) {
+			return new Date(scenets.getTime());
 		}
-		return new Date(scenets.getTime());
+		return null;
 	}
 
 	/**
@@ -326,12 +331,25 @@ public class Scene extends AbstractEntity {
 		return formatter.format(scenets);
 	}
 
+	/**
+	 * set the scenets frol a Date
+	 *
+	 * @param date
+	 */
 	public void setDate(Date date) {
 		if (date == null) {
 			setScenets(null);
 		} else {
 			setScenets(new Timestamp(date.getTime()));
 		}
+	}
+
+	public void setDateRel(Date date) {
+		this.dateRel = date;
+	}
+
+	public Date getDateRel() {
+		return dateRel;
 	}
 
 	public void setScenets(Timestamp ts) {
@@ -377,13 +395,6 @@ public class Scene extends AbstractEntity {
 		return buf.toString();
 	}
 
-	public String getTitleText(boolean truncate, int length) {
-		if (title == null || title.isEmpty()) {
-			return getEllipsizedText(length);
-		}
-		return getName() + ": " + getEllipsizedText(length);
-	}
-
 	public String getChapterSceneNo() {
 		return getChapterSceneNo(true);
 	}
@@ -412,14 +423,11 @@ public class Scene extends AbstractEntity {
 			return "";
 		}
 		StringBuilder buf = new StringBuilder("<html>");
-		buf.append(I18N.getColonMsg("chapter"));
-		buf.append(" ").append(getChapter().toString());
-		buf.append("<br>");
 		if (getChapter().hasPart()) {
-			buf.append(I18N.getColonMsg("part"));
-			buf.append(" ").append(getChapter().getPart().toString());
+			buf.append(I18N.getColonMsg("part")).append(getChapter().getPart().toString());
 			buf.append("<br>");
 		}
+		buf.append(I18N.getColonMsg("chapter")).append(getChapter().toString());
 		return buf.toString();
 	}
 
@@ -804,23 +812,6 @@ public class Scene extends AbstractEntity {
 			SbDuration dur = new SbDuration(getRelativetime());
 			return dur.toText();
 		}
-	}
-
-	/**
-	 * get the relative date
-	 *
-	 * @param relativeScene
-	 * @return
-	 */
-	public Date getRelativedate(Scene relativeScene) {
-		if (relativeScene == null) {
-			return null;
-		}
-		Date date = relativeScene.getDate();
-		if ((date == null) || (this.relativetime == null || this.relativetime.isEmpty())) {
-			return null;
-		}
-		return DateUtil.add(date, relativetime);
 	}
 
 	/**

@@ -30,7 +30,8 @@ import javax.swing.TransferHandler;
 import storybook.db.scene.Scene;
 
 @SuppressWarnings("serial")
-public class ManageSceneDnd extends ManageScene implements MouseListener, MouseMotionListener, DropTargetListener {
+public class ManageSceneDnd extends ManageScene
+		implements MouseListener, MouseMotionListener, DropTargetListener {
 
 	private static final String TT = "DTScenePanel";
 
@@ -65,8 +66,6 @@ public class ManageSceneDnd extends ManageScene implements MouseListener, MouseM
 		manage.sceneSelect(this);
 		if (evt.getClickCount() == 2) {
 			mainFrame.showEditorAsDialog(scene);
-			/*EditEntityAction act = new EditEntityAction(mainFrame, scene, false);
-			act.actionPerformed(null);*/
 		}
 	}
 
@@ -103,15 +102,10 @@ public class ManageSceneDnd extends ManageScene implements MouseListener, MouseM
 
 		if (firstMouseEvent != null) {
 			e.consume();
-			int action = TransferHandler.MOVE;
-			/*int dx = Math.abs(e.getX() - firstMouseEvent.getX());
-			int dy = Math.abs(e.getY() - firstMouseEvent.getY());
-			if (dx > 5 || dy > 5) {*/
 			JComponent comp = (JComponent) e.getSource();
 			TransferHandler handler = comp.getTransferHandler();
-			handler.exportAsDrag(comp, firstMouseEvent, action);
+			handler.exportAsDrag(comp, firstMouseEvent, TransferHandler.MOVE);
 			firstMouseEvent = null;
-			//}
 		}
 	}
 
@@ -122,31 +116,31 @@ public class ManageSceneDnd extends ManageScene implements MouseListener, MouseM
 
 	@Override
 	public void dragEnter(DropTargetDragEvent evt) {
-		//LOG.trace(TT + ".dragEnter(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + "dragEnter(evt=" + evt.toString() + ")");
 		manage.sceneSetTarget(this);
 	}
 
 	@Override
 	public void dragOver(DropTargetDragEvent evt) {
-		//LOG.trace(TT + ".dragOver(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + "dragOver(evt=" + evt.toString() + ")");
 		manage.sceneSetTarget(this);
 	}
 
 	@Override
 	public void dropActionChanged(DropTargetDragEvent evt) {
-		//LOG.trace(TT + ".dropActionChanged(evt=" + evt.toString() + ")");
+		//empty
 	}
 
 	@Override
 	public void dragExit(DropTargetEvent evt) {
-		//LOG.trace(TT + ".dragExit(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + "dragExit(evt=" + evt.toString() + ")");
 		this.setBackground(bkcolor);
 		manage.sceneResetTarget(this);
 	}
 
 	@Override
 	public void drop(DropTargetDropEvent evt) {
-		//LOG.trace(TT + ".drop(evt=" + evt.toString() + ")");
+		//LOG.trace(TT + "drop(evt=" + evt.toString() + ")");
 		this.getTransferHandler().importData(this, evt.getTransferable());
 	}
 

@@ -49,7 +49,6 @@ import storybook.ui.SbView;
 import storybook.ui.Ui;
 import storybook.ui.panel.AbstractPanel;
 import storybook.ui.panel.book.BookPanel;
-import storybook.ui.panel.chrono.ChronoPanel;
 
 /**
  * @author martin
@@ -249,10 +248,11 @@ public class NavigationPanel extends AbstractPanel implements ItemListener {
 		}
 		AbstractPanel container = null;
 		JPanel panel = null;
-		if (chrono) {
+		/*if (chrono) {
 			container = (ChronoPanel) view.getComponent();
 			panel = ((ChronoPanel) container).getPanel();
-		} else if (isBook) {
+		} else */
+		if (isBook) {
 			container = (BookPanel) view.getComponent();
 			panel = ((BookPanel) container).getPanel();
 		}

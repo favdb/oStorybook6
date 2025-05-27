@@ -40,7 +40,7 @@ import storybook.db.tag.Tag;
  */
 public class GraphEntity {
 
-	private static final String TT = "GraphEntity";
+	private static final String TT = "GraphEntity.";
 
 	AbstractEntity vertex;
 	MemoriaPanel memoria;
@@ -60,7 +60,7 @@ public class GraphEntity {
 	}
 
 	public void initVertex(AbstractEntity entity) {
-		//LOG.trace(TT + ".initVertex(" + AbstractEntity.trace(entity)
+		//LOG.trace(TT + "initVertex(" + AbstractEntity.trace(entity)
 		// + ") to " + vertex.getObjType());
 		vertex.setName(" ");
 		memoria.graph.addVertex(vertex);
@@ -73,7 +73,7 @@ public class GraphEntity {
 	}
 
 	public void initMaster(AbstractEntity entity) {
-		//LOG.trace(TT + ".initMaster(" + AbstractEntity.trace(entity) + ")");
+		//LOG.trace(TT + "initMaster(" + AbstractEntity.trace(entity) + ")");
 		memoria.graphIndex = 0L;
 		if (!isInGraph(entity)) {
 			memoria.graph.addVertex(entity);
@@ -96,7 +96,7 @@ public class GraphEntity {
 
 	public void add(AbstractEntity master, AbstractEntity entity) {
 		if (entity != null) {
-			//LOG.trace(TT + ".add(master " + AbstractEntity.trace(master)
+			//LOG.trace(TT + "add(master " + AbstractEntity.trace(master)
 			// + ", entity " + AbstractEntity.trace(entity) + ")");
 			//add the entity vertex only if not exists in the graph
 			if (!isInGraph(entity)) {
@@ -125,7 +125,7 @@ public class GraphEntity {
 				try {
 					AbstractEntity e = (AbstractEntity) obj;
 					if (e.getObjType().equals(entity.getObjType())
-					   && e.getId().equals(entity.getId())) {
+							&& e.getId().equals(entity.getId())) {
 						return true;
 					}
 				} catch (Exception ex) {
@@ -233,7 +233,7 @@ public class GraphEntity {
 	}
 
 	public void createScene(AbstractEntity entity) {
-		//LOG.trace(TT+".createScene("+AbstractEntity.trace(entity)+")");
+		//LOG.trace(TT+"createScene("+AbstractEntity.trace(entity)+")");
 		if (entity == null) {
 			return;
 		}
@@ -286,7 +286,8 @@ public class GraphEntity {
 	}
 
 	public void addScenes(AbstractEntity master, List<Scene> scenes) {
-		//LOG.trace(TT + ".addScenes(scenes nb=" + scenes.size() + ", " + AbstractEntity.trace(master) + ")");
+		//LOG.trace(TT + "addScenes(scenes nb=" + scenes.size()
+		//+ ", " + AbstractEntity.trace(master) + ")");
 		if (!scenes.isEmpty()) {
 			AbstractEntity sub = initSub(master, Book.TYPE.SCENE);
 			for (Scene scene : scenes) {
@@ -296,7 +297,8 @@ public class GraphEntity {
 	}
 
 	public void addSceneItems(AbstractEntity master, List<Scene> scenes) {
-		//LOG.trace(TT + ".addSceneItems(" + AbstractEntity.trace(master) + ", scenes nb=" + scenes.size() + ")");
+		//LOG.trace(TT + "addSceneItems(" + LOG.trace(master)
+		//+ ", scenes nb=" + scenes.size() + ")");
 		List<Item> list = new ArrayList<>();
 		for (Scene scene : scenes) {
 			for (Item p : scene.getItems()) {
@@ -312,7 +314,8 @@ public class GraphEntity {
 	}
 
 	public void addItems(AbstractEntity master, List<Item> items) {
-		//LOG.trace(TT + ".addItems(" + AbstractEntity.trace(master) + ", items nb=" + items.size() + ")");
+		//LOG.trace(TT + "addItems(" + LOG.trace(master)
+		//+ ", items nb=" + items.size() + ")");
 		if (!items.isEmpty()) {
 			AbstractEntity sub = initSub(master, Book.TYPE.ITEM);
 			for (Item item : items) {
@@ -322,7 +325,8 @@ public class GraphEntity {
 	}
 
 	public void addSceneLocations(AbstractEntity master, List<Scene> scenes) {
-		//LOG.trace(TT + ".addSceneLocations(" + AbstractEntity.trace(master) + ", scenes nb=" + scenes.size() + ")");
+		//LOG.trace(TT + "addSceneLocations(" + LOG.trace(master)
+		//+ ", scenes nb=" + scenes.size() + ")");
 		List<Location> list = new ArrayList<>();
 		for (Scene scene : scenes) {
 			for (Location p : scene.getLocations()) {
@@ -338,7 +342,8 @@ public class GraphEntity {
 	}
 
 	public void addLocations(AbstractEntity master, List<Location> locations) {
-		//LOG.trace(TT + ".addLocations(" + AbstractEntity.trace(master) + ", locations nb=" + locations.size() + ")");
+		//LOG.trace(TT + "addLocations(" + LOG.trace(master)
+		//+ ", locations nb=" + locations.size() + ")");
 		if (!locations.isEmpty()) {
 			AbstractEntity sub = initSub(master, Book.TYPE.LOCATION);
 			for (Location location : locations) {
@@ -348,7 +353,8 @@ public class GraphEntity {
 	}
 
 	public void addScenePersons(AbstractEntity master, List<Scene> scenes) {
-		//LOG.trace(TT + ".addScenePersons(" + AbstractEntity.trace(master) + ", scenes nb=" + scenes.size() + ")");
+		//LOG.trace(TT + "addScenePersons(" + LOG.trace(master)
+		//+ ", scenes nb=" + scenes.size() + ")");
 		List<Person> persons = new ArrayList<>();
 		for (Scene scene : scenes) {
 			for (Person p : scene.getPersons()) {
@@ -364,7 +370,8 @@ public class GraphEntity {
 	}
 
 	public void addPersons(AbstractEntity master, List<Person> persons) {
-		//LOG.trace(TT + ".addPersons(" + AbstractEntity.trace(master) + ", persons nb=" + persons.size() + ")");
+		//LOG.trace(TT + "addPersons(" + AbstractEntity.trace(master)
+		//+ ", persons nb=" + persons.size() + ")");
 		if (!persons.isEmpty()) {
 			AbstractEntity sub = initSub(master, Book.TYPE.PERSON);
 			for (Person person : persons) {
@@ -376,7 +383,8 @@ public class GraphEntity {
 	}
 
 	public void addScenePlots(AbstractEntity master, List<Scene> scenes) {
-		//LOG.trace(TT + ".addScenePlots(" + AbstractEntity.trace(master) + ", scenes nb=" + scenes.size() + ")");
+		//LOG.trace(TT + "addScenePlots(" + LOG.trace(master)
+		//+ ", scenes nb=" + scenes.size() + ")");
 		List<Plot> list = new ArrayList<>();
 		for (Scene scene : scenes) {
 			for (Plot p : scene.getPlots()) {
@@ -392,7 +400,8 @@ public class GraphEntity {
 	}
 
 	public void addPlots(AbstractEntity master, List<Plot> plots) {
-		//LOG.trace(TT + ".addPlots(" + AbstractEntity.trace(master) + ", plots nb=" + plots.size() + ")");
+		//LOG.trace(TT + "addPlots(" + AbstractEntity.trace(master)
+		//+ ", plots nb=" + plots.size() + ")");
 		if (!plots.isEmpty()) {
 			AbstractEntity sub = initSub(master, Book.TYPE.PLOT);
 			for (Plot plot : plots) {
@@ -402,7 +411,7 @@ public class GraphEntity {
 	}
 
 	public void addRelations(AbstractEntity entity) {
-		//LOG.trace(TT + ".addRelations(" + AbstractEntity.trace(entity) + ")");
+		//LOG.trace(TT + "addRelations(" + LOG.trace(entity) + ")");
 		List<Relation> relations = memoria.mainFrame.project.relations.find(entity);
 		if (!relations.isEmpty()) {
 			AbstractEntity sub = initSub(entity, Book.TYPE.RELATION);
@@ -413,7 +422,8 @@ public class GraphEntity {
 	}
 
 	public void addSceneStrands(AbstractEntity master, List<Scene> scenes) {
-		//LOG.trace(TT + ".addSceneStrands(" + AbstractEntity.trace(master) + ", scenes nb=" + scenes.size() + ")");
+		//LOG.trace(TT + "addSceneStrands(" + LOG.trace(master)
+		//+ ", scenes nb=" + scenes.size() + ")");
 		List<Strand> list = new ArrayList<>();
 		for (Scene scene : scenes) {
 			if (scene.getStrand() != null) {
@@ -432,7 +442,8 @@ public class GraphEntity {
 	}
 
 	public void addStrands(AbstractEntity master, List<Strand> strands) {
-		//LOG.trace(TT + ".addStrands(" + AbstractEntity.trace(master) + ", strands nb=" + strands.size() + ")");
+		//LOG.trace(TT + "addStrands(" + LOG.trace(master)
+		//+ ", strands nb=" + strands.size() + ")");
 		if (!strands.isEmpty()) {
 			AbstractEntity sub = initSub(master, Book.TYPE.STRAND);
 			for (Strand strand : strands) {

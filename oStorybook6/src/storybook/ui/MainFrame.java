@@ -197,6 +197,7 @@ public class MainFrame extends JFrame implements IPaintable {
 	public void initProject() {
 		//LOG.trace(TT + "initProject()");
 		try {
+			//project.scenes.resetDates();
 			viewFactory = new SbViewFactory(this);
 			viewFactory.initBegin();
 			mainActions = new MainActions(this);

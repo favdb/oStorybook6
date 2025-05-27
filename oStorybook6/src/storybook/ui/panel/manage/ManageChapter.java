@@ -92,6 +92,9 @@ public class ManageChapter extends AbstractPanel implements MouseListener, IRefr
 				break;
 			case SCENE:
 				if (isUpdate(act)) {
+					if (newValue == null || oldValue == null) {
+						break;
+					}
 					Chapter newSceneChapter = ((Scene) newValue).getChapter();
 					Chapter oldSceneChapter = ((Scene) oldValue).getChapter();
 					if (newSceneChapter == null && chapter == null) {
@@ -126,7 +129,7 @@ public class ManageChapter extends AbstractPanel implements MouseListener, IRefr
 
 	@Override
 	public void init() {
-		LOG.trace(TT + ".init()");
+		//LOG.trace(TT + ".init()");
 		try {
 			setZoomedSize(App.preferences.manageGetZoom());
 		} catch (Exception e) {
@@ -137,7 +140,7 @@ public class ManageChapter extends AbstractPanel implements MouseListener, IRefr
 
 	@Override
 	public void initUi() {
-		LOG.trace(TT + ".initUI()");
+		//LOG.trace(TT + ".initUI()");
 		MigLayout layout = new MigLayout(MIG.get(MIG.INS0, MIG.GAP0));
 		if (isForUnassignedScene()) {
 			layout = new MigLayout(MIG.FLOWX, "[]", "[fill]");
@@ -196,11 +199,6 @@ public class ManageChapter extends AbstractPanel implements MouseListener, IRefr
 				SwingUtil.setForcedSize(begin, manage.sceneSize);
 			}
 			add(begin);
-			/*if (!mainFrame.getPref().manageGetVertical()) {
-				add(begin, MIG.GROWX);
-			} else {
-				add(begin, MIG.CENTER);
-			}*/
 			int i = 0;
 			for (Scene scene : scenes) {
 				// scene
@@ -245,7 +243,7 @@ public class ManageChapter extends AbstractPanel implements MouseListener, IRefr
 		}
 		requestFocusInWindow();
 		if (e.getClickCount() == 2) {
-			EntityUtil.createEntity(mainFrame, getChapter());
+			mainFrame.showEditorAsDialog(getChapter());
 		}
 	}
 

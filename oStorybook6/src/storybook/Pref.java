@@ -150,6 +150,7 @@ public class Pref {
 		BOOK_REVISION("BookRevision", "0"),
 		BOOK_ZOOM("BookZoom", "4"),
 		CHRONO_LAYOUT_DIRECTION("ChornoLayoutDirection", "1"),
+		CHRONO_LAYOUT_NODATES("ChornoLayoutNodates", "1"),
 		CHRONO_SHOW_DATE_DIFFERENCE("ChornoShowDateDiff", "0"),
 		CHRONO_ZOOM("ChronoZoom", "40"),
 		CONFIRM_EXIT("ConfirmExit", "1"),
@@ -726,6 +727,14 @@ public class Pref {
 
 	public boolean chronoGetLayoutDirection() {
 		return getBoolean(KEY.CHRONO_LAYOUT_DIRECTION);
+	}
+
+	public void chronoSetLayoutNodates(boolean val) {
+		setBoolean(KEY.CHRONO_LAYOUT_NODATES, val);
+	}
+
+	public boolean chronoGetLayoutNodates() {
+		return getBoolean(KEY.CHRONO_LAYOUT_NODATES);
 	}
 
 	public void chronoSetShowDateDiff(boolean val) {

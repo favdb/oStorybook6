@@ -58,7 +58,7 @@ import storybook.ui.MainFrame;
  */
 public class TimelineEntity extends JPanel implements MouseListener {
 
-	private static final String TT = "TimelineEntity";
+	private static final String TT = "TimelineEntity.";
 
 	private final MainFrame mainFrame;
 	AbstractEntity entity;
@@ -83,7 +83,7 @@ public class TimelineEntity extends JPanel implements MouseListener {
 	}
 
 	private void init() {
-		//LOG.trace(TT + ".init() for " + entity.getObjType().name() + "=" + entity.getName());
+		//LOG.trace(TT + "init() for " + entity.getObjType().name() + "=" + entity.getName());
 		setLayout(new MigLayout("ins 0"));
 		if (!LaF.isDark()) {
 			setBackground(Color.white);
@@ -98,7 +98,7 @@ public class TimelineEntity extends JPanel implements MouseListener {
 					strand = (Strand) mainFrame.project.strands.getFirst();
 				}
 				color.setBackground(Strand.getJColor(strand));
-				date = scene.getDate();
+				date = scene.getDateRel();
 				duration = scene.getSbDuration();
 				break;
 			case PERSON:
@@ -134,9 +134,9 @@ public class TimelineEntity extends JPanel implements MouseListener {
 	@Override
 	public String toString() {
 		return DateUtil.dateToString(date) + " -> "
-		   + this.name.getText()
-		   + " date=" + DateUtil.dateToString(date)
-		   + " width=" + this.color.getSize().width;
+				+ this.name.getText()
+				+ " date=" + DateUtil.dateToString(date)
+				+ " width=" + this.color.getSize().width;
 	}
 
 	public void setColorSize(TimelineScale scale) {
@@ -171,9 +171,9 @@ public class TimelineEntity extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		//LOG.trace(TT+".mouseClicked(e="+e.toString()+")");
+		//LOG.trace(TT + "mouseClicked(e=" + e.toString() + ")");
 		if (e.getClickCount() == 2) {
-			EntityUtil.createEntity(mainFrame, entity);
+			mainFrame.showEditorAsDialog(entity);
 		} else {
 			mainFrame.getBookController().infoSetTo(entity);
 		}
@@ -222,10 +222,10 @@ public class TimelineEntity extends JPanel implements MouseListener {
 		buf.append("<table width='300'>");
 		buf.append(Html.TR_B).append(Html.TD_B);
 		buf.append(Html.P_B).append("<b>")
-		   .append(I18N.getMsg(entity.getObjType().toString()))
-		   .append(": ")
-		   .append(entity.getName())
-		   .append("</b>").append(Html.P_E);
+				.append(I18N.getMsg(entity.getObjType().toString()))
+				.append(": ")
+				.append(entity.getName())
+				.append("</b>").append(Html.P_E);
 		buf.append(Html.TD_E).append(Html.TR_E);
 		buf.append(Html.TR_B).append(Html.TD_B);
 		switch (entity.getObjType()) {
@@ -248,9 +248,9 @@ public class TimelineEntity extends JPanel implements MouseListener {
 			buf.append(getInfo("notes", entity.getNotes(), true));
 		}
 		buf.append(Html.TD_E)
-		   .append(Html.TR_E)
-		   .append(Html.TABLE_E)
-		   .append(Html.HTML_E);
+				.append(Html.TR_E)
+				.append(Html.TABLE_E)
+				.append(Html.HTML_E);
 		this.setToolTipText(buf.toString());
 	}
 
@@ -260,8 +260,8 @@ public class TimelineEntity extends JPanel implements MouseListener {
 			b.append(Html.P_B);
 		}
 		b.append(Html.intoB(Html.intoI(I18N.getColonMsg(lib))))
-		   .append(Html.BR)
-		   .append(TextUtil.ellipsize(info, 64));
+				.append(Html.BR)
+				.append(TextUtil.ellipsize(info, 64));
 		if (withP) {
 			b.append(Html.P_E);
 		}
