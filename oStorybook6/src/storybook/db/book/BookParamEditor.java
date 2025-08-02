@@ -28,7 +28,7 @@ import static storybook.tools.xml.XmlUtil.*;
 public class BookParamEditor extends BookParamAbstract {
 
 	public enum KW {
-		MODLESS, XUSE, NAME, TEMPLATE, EXT;
+		MODLESS, NAME, TEMPLATE, EXT, XUSE;
 
 		@Override
 		public String toString() {

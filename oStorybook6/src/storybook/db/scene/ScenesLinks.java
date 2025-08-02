@@ -27,6 +27,7 @@ import storybook.db.book.Book;
 import storybook.db.item.Item;
 import storybook.db.location.Location;
 import storybook.db.person.Person;
+import storybook.db.plot.Plot;
 import storybook.exim.importer.ImportDocument;
 import storybook.tools.html.Html;
 import storybook.ui.MainFrame;
@@ -38,15 +39,14 @@ import storybook.ui.SbView;
  */
 public class ScenesLinks {
 
-	private static final String TT = "ScenesLinks", LINKS = "links.";
+	private static final String TT = "ScenesLinks.", LINKS = "links.";
 
 	public static boolean show(MainFrame mainFrame, Book.TYPE type) {
 		if (mainFrame.project.getList(type).isEmpty()) {
 			JOptionPane.showMessageDialog(mainFrame,
-			   I18N.getMsg(LINKS + type.toString().toLowerCase() + ".empty"),
-			   I18N.getMsg(LINKS + type.toString().toLowerCase()),
-			   JOptionPane.YES_OPTION);
-			//LOG.printInfos("empty list for " + type.toString());
+					I18N.getMsg(LINKS + type.toString().toLowerCase() + ".empty"),
+					I18N.getMsg(LINKS + type.toString().toLowerCase()),
+					JOptionPane.YES_OPTION);
 			return false;
 		}
 		ScenesLinks dlg = new ScenesLinks(mainFrame, type);
@@ -67,25 +67,24 @@ public class ScenesLinks {
 
 	@SuppressWarnings("unchecked")
 	private boolean init() {
-		//LOG.printInfos(TT + ".init()");
+		//LOG.trace(TT + ".init()");
 		List list = (List) mainFrame.project.getList(Book.TYPE.PERSON);
 		if (list.isEmpty()) {
 			JOptionPane.showMessageDialog(mainFrame,
-			   I18N.getMsg(LINKS + type.toString().toLowerCase() + ".empty"),
-			   I18N.getMsg(LINKS + type.toString().toLowerCase()),
-			   JOptionPane.YES_OPTION);
-			//LOG.printInfos("init: empty list for " + type.toString());
+					I18N.getMsg(LINKS + type.toString().toLowerCase() + ".empty"),
+					I18N.getMsg(LINKS + type.toString().toLowerCase()),
+					JOptionPane.YES_OPTION);
 			return false;
 		}
 		return JOptionPane.showConfirmDialog(mainFrame,
-		   I18N.getMsg(LINKS + type.toString().toLowerCase() + ".info"),
-		   I18N.getMsg(LINKS + type.toString().toLowerCase()),
-		   JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION;
+				I18N.getMsg(LINKS + type.toString().toLowerCase() + ".info"),
+				I18N.getMsg(LINKS + type.toString().toLowerCase()),
+				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION;
 	}
 
 	@SuppressWarnings("unchecked")
 	private boolean exec() {
-		//LOG.printInfos(TT + ".exec()");
+		//LOG.trace(TT + ".exec()");
 		xternal = mainFrame.getBook().isXeditorUse();
 		List<Scene> scenes = (List) mainFrame.project.getList(Book.TYPE.SCENE);
 		List entities;
@@ -114,8 +113,14 @@ public class ScenesLinks {
 		return true;
 	}
 
+	/**
+	 * update the links
+	 *
+	 * @param scene
+	 * @param entities
+	 */
 	private void update(Scene scene, List<AbstractEntity> entities) {
-		//LOG.printInfos(TT + ".write(session, scene)");
+		//LOG.trace(TT + ".update(scene="+", entites nb="+entities.size()+")");
 		switch (type) {
 			case ITEM:
 				updateItems(scene, entities);
@@ -126,13 +131,22 @@ public class ScenesLinks {
 			case PERSON:
 				updatePersons(scene, entities);
 				break;
+			case PLOT:
+				updatePlots(scene, entities);
+				break;
 			default:
 				break;
 		}
 	}
 
+	/**
+	 * update the items
+	 *
+	 * @param scene
+	 * @param entities
+	 */
 	private void updateItems(Scene scene, List<AbstractEntity> entities) {
-		//LOG.printInfos(TT + ".updateItems(session, scene)");
+		//LOG.trace(TT + ".updateItems(scene, entities)");
 		String text = Html.htmlToText(scene.getSummary());
 		if (xternal && !scene.getOdf().isEmpty()) {
 			ImportDocument doc = new ImportDocument(mainFrame, new File(scene.getOdf()));
@@ -151,8 +165,14 @@ public class ScenesLinks {
 		mainFrame.project.scenes.save(scene);
 	}
 
+	/**
+	 * update the locations
+	 *
+	 * @param scene
+	 * @param entities
+	 */
 	private void updateLocations(Scene scene, List<AbstractEntity> entities) {
-		//LOG.printInfos(TT + ".updateLocations(scene=" + scene.getName() + ") initial size=" + scene.getLocations().size());
+		//LOG.trace(TT + ".updateLocations(scene, entities)");
 		String text = Html.htmlToText(scene.getSummary());
 		if (xternal && !scene.getOdf().isEmpty()) {
 			ImportDocument doc = new ImportDocument(mainFrame, new File(scene.getOdf()));
@@ -173,8 +193,14 @@ public class ScenesLinks {
 		mainFrame.project.scenes.save(scene);
 	}
 
+	/**
+	 * update the persons
+	 *
+	 * @param scene
+	 * @param entities
+	 */
 	private void updatePersons(Scene scene, List<AbstractEntity> entities) {
-		//LOG.printInfos(TT + ".updatePersons(session, scene)");
+		//LOG.trace(TT + ".updatePersons(scene, entities)");
 		String text = Html.htmlToText(scene.getSummary());
 		if (xternal && !scene.getOdf().isEmpty()) {
 			ImportDocument doc = new ImportDocument(mainFrame, new File(scene.getOdf()));
@@ -199,6 +225,32 @@ public class ScenesLinks {
 			}
 		}
 		scene.setPersons(lp);
+		mainFrame.project.scenes.save(scene);
+	}
+
+	/**
+	 * update the plots
+	 *
+	 * @param scene
+	 * @param entities
+	 */
+	private void updatePlots(Scene scene, List<AbstractEntity> entities) {
+		//LOG.trace(TT + ".updatePlots(scene, entities)");
+		String text = Html.htmlToText(scene.getSummary());
+		if (xternal && !scene.getOdf().isEmpty()) {
+			ImportDocument doc = new ImportDocument(mainFrame, new File(scene.getOdf()));
+			if (doc.openDocument()) {
+				text = doc.getContentAsTxt();
+				doc.close();
+			}
+		}
+		List<Plot> lp = new ArrayList<>();
+		for (Object p : entities) {
+			if (text.contains(((Plot) p).getName())) {
+				lp.add((Plot) p);
+			}
+		}
+		scene.setPlots(lp);
 		mainFrame.project.scenes.save(scene);
 	}
 

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package storybook.ui.panel.timeline;
+package storybook.dialog.options;
 
 import api.mig.swing.MigLayout;
 import i18n.I18N;
@@ -33,19 +33,20 @@ import storybook.ui.MainFrame;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.*;
 import storybook.ui.panel.AbstractOptions;
+import storybook.ui.panel.timeline.TimelinePanel;
 
 /**
  *
  * @author favdb
  */
-public class TimelineOpt extends AbstractOptions implements ActionListener, ChangeListener {
+public class OptsTimeline extends AbstractOptions implements ActionListener, ChangeListener {
 
 	private JCheckBox ckScenes;
 	private JCheckBox ckPersons;
 	private JCheckBox ckEvents;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
-	public TimelineOpt(MainFrame m) {
+	public OptsTimeline(MainFrame m) {
 		super(m);
 		init();
 		initUi();

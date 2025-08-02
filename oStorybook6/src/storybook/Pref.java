@@ -210,7 +210,7 @@ public class Pref {
 		LASTOPEN_FILE("LastOpenFile", ""),
 		LAYOUT_LAST_USED("LastUsedLayout", ""),
 		MANAGE_COLUMNS("ManageColumns", "5"),
-		MANAGE_HIDE_UNASSIGNED("ManageHideUnassigned", "0"),
+		MANAGE_UNASSIGNED("ManageUnassigned", "0"),
 		MANAGE_VERTICAL("ManageVertical", "1"),
 		MANAGE_ZOOM("ManageZoom", "5"),
 		MEMO_LAYOUT_DIRECTION("MemoLayoutDirection", "1"),
@@ -317,6 +317,7 @@ public class Pref {
 		public String toString() {
 			return text;
 		}
+
 	}
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
@@ -821,12 +822,12 @@ public class Pref {
 		setInteger(KEY.MANAGE_COLUMNS, value);
 	}
 
-	public boolean manageGetHideUnassigned() {
-		return getBoolean(KEY.MANAGE_HIDE_UNASSIGNED);
+	public boolean manageGetUnassigned() {
+		return getBoolean(KEY.MANAGE_UNASSIGNED);
 	}
 
-	public void manageSetHideUnassgned(boolean value) {
-		setBoolean(KEY.MANAGE_HIDE_UNASSIGNED, value);
+	public void manageSetUnassgned(boolean value) {
+		setBoolean(KEY.MANAGE_UNASSIGNED, value);
 	}
 
 	public boolean manageGetVertical() {

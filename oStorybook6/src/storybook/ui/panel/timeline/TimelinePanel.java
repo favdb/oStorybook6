@@ -41,7 +41,7 @@ import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.person.Person;
 import storybook.db.scene.Scene;
-import storybook.dialog.OptionsDlg;
+import storybook.dialog.options.OptionsDlg;
 import storybook.tools.print.ComponentPrinter;
 import storybook.tools.swing.LaF;
 import storybook.tools.swing.SwingUtil;
@@ -290,7 +290,7 @@ public class TimelinePanel extends AbstractPanel implements ChangeListener {
 		if (!tlEntities.isEmpty()) {
 			tlEntities.clear();
 		}
-		mainFrame.project.scenes.relativeDateInit();
+		//mainFrame.project.scenes.relativeDateInit();
 		List<Scene> scenes = mainFrame.project.scenes.getWithDates();
 		if (scenes.size() < 2) {
 			return;

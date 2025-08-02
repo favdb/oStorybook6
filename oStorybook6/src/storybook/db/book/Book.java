@@ -480,6 +480,7 @@ public class Book {
 		info.reviewSet(val);
 	}
 
+	// todo SbCalendar
 	/*public static boolean isUseCalendar(Project project) {
 		return project.book.param.getParamCalendar().getUse();
 	}
@@ -513,88 +514,52 @@ public class Book {
 		p.setMonths(c.getListMonths());
 		p.setStartDay(c.startday);
 	}*/
-	/**
-	 * get number of Strands
-	 *
-	 * @param m
-	 * @return
-	 */
-	public static int getNbStrands(MainFrame m) {
-		return m.project.strands.getList().size();
-	}
-
-	/**
-	 * get number of Parts
-	 *
-	 * @param m
-	 * @return
-	 */
-	public static int getNbParts(MainFrame m) {
-		return m.project.parts.getList().size();
-	}
-
-	/**
-	 * get nummber of Chapters
-	 *
-	 * @param m
-	 * @return
-	 */
-	public static int getNbChapters(MainFrame m) {
-		return m.project.chapters.getList().size();
-	}
-
-	/**
-	 * get number of Scenes
-	 *
-	 * @param m
-	 * @return
-	 */
-	public static int getNbScenes(MainFrame m) {
-		return m.project.scenes.getList().size();
-	}
-
-	/**
-	 * get number of Scenes in the given Chapter
-	 *
-	 * @param mainFrame
-	 * @param chapter
-	 * @return
-	 */
-	public static int getNbScenesInChapter(MainFrame mainFrame, Chapter chapter) {
-		if (chapter == null) {
-			return (0);
+	//
+	public static int getNbOf(MainFrame mainFrame, TYPE type) {
+		Project proj = mainFrame.project;
+		switch (type) {
+			case ATTRIBUTE:
+				return proj.attributes.getList().size();
+			case CATEGORY:
+				return proj.categorys.getList().size();
+			case CHAPTER:
+				return proj.chapters.getList().size();
+			case ENDNOTE:
+				return proj.endnotes.getList().size();
+			case EPISODE:
+				return proj.episodes.getList().size();
+			case EVENT:
+				return proj.events.getList().size();
+			case GENDER:
+				return proj.genders.getList().size();
+			case IDEA:
+				return proj.ideas.getList().size();
+			case INTERNAL:
+				break;
+			case ITEM:
+				return proj.items.getList().size();
+			case LOCATION:
+				return proj.locations.getList().size();
+			case MEMO:
+				return proj.memos.getList().size();
+			case PART:
+				return proj.parts.getList().size();
+			case PERSON:
+				return proj.persons.getList().size();
+			case PLOT:
+				return proj.plots.getList().size();
+			case RELATION:
+				return proj.relations.getList().size();
+			case SCENE:
+				return proj.scenes.getList().size();
+			case STATUS:
+				return proj.statuss.getList().size();
+			case STRAND:
+				return proj.strands.getList().size();
+			case TAG:
+				return proj.tags.getList().size();
 		}
-		return mainFrame.project.scenes.find(chapter).size();
-	}
-
-	/**
-	 * get number of Persons
-	 *
-	 * @param mainFrame
-	 * @return
-	 */
-	public static int getNbPersons(MainFrame mainFrame) {
-		return mainFrame.project.getList(TYPE.PERSON).size();
-	}
-
-	/**
-	 * get number of Locations
-	 *
-	 * @param mainFrame
-	 * @return
-	 */
-	public static int getNbLocations(MainFrame mainFrame) {
-		return mainFrame.project.getList(TYPE.LOCATION).size();
-	}
-
-	/**
-	 * get number of Items
-	 *
-	 * @param mainFrame
-	 * @return
-	 */
-	public static int getNbItems(MainFrame mainFrame) {
-		return mainFrame.project.getList(TYPE.ITEM).size();
+		return 0;
 	}
 
 	/**

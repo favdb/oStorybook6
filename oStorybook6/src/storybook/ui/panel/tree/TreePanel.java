@@ -85,7 +85,7 @@ import storybook.db.status.AbstractStatus;
 import storybook.db.strand.Strand;
 import storybook.db.tag.Tag;
 import storybook.db.tag.TagCategory;
-import storybook.dialog.OptionsDlg;
+import storybook.dialog.options.OptionsDlg;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.TreeUtil;
 import storybook.ui.MIG;
@@ -110,11 +110,13 @@ public class TreePanel extends AbstractPanel implements
 			personsByGendersNode, locationsNode, itemsNode, tagsNode,
 			plotsNode, ideasNode, memosNode;
 	private JCheckBoxMenuItem mnuPart,
-			mnuChapter, mnuStrand, mnuPerson, mnuByGender,
+			//mnuChapter,
+			mnuStrand, mnuPerson, mnuByGender,
 			mnuLocation, mnuItem, mnuTag,
 			mnuPlot, mnuIdea;
 	private List<JCheckBoxMenuItem> mnuList;
 	private JMenuItem mnuOptions;
+	private DefaultTreeTransferHandler treeTransferHandler;
 
 	public TreePanel(MainFrame mainFrame) {
 		super(mainFrame);
@@ -159,7 +161,7 @@ public class TreePanel extends AbstractPanel implements
 		TreeNode root = (TreeNode) tree.getModel().getRoot();
 		List<Object> list = new ArrayList<>();
 		getPaths(tree, new TreePath(root), expanded, list);
-		return (TreePath[]) list.toArray(new TreePath[list.size()]);
+		return new TreePath[list.size()];
 	}
 
 	public void getPaths(Tree tree, TreePath parent, boolean expanded, List<Object> list) {
@@ -184,6 +186,7 @@ public class TreePanel extends AbstractPanel implements
 
 	@Override
 	public void initUi() {
+		//LOG.trace(TT + "initUi()");
 		setLayout(new MigLayout(MIG.get(MIG.WRAP, MIG.FILL, MIG.INS0)));
 		setFont(App.fonts.defGet());
 		setMinimumSize(new Dimension(280, 180));
@@ -193,7 +196,7 @@ public class TreePanel extends AbstractPanel implements
 		tree = new Tree(topNode);
 		tree.setFont(App.fonts.defGet());
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-		new DefaultTreeTransferHandler(this, DnDConstants.ACTION_MOVE);
+		treeTransferHandler = new DefaultTreeTransferHandler(this, DnDConstants.ACTION_MOVE);
 		ToolTipManager.sharedInstance().registerComponent(tree);
 		tree.setCellRenderer(new EntityTreeCellRenderer());
 		tree.setLargeModel(true);
@@ -214,28 +217,26 @@ public class TreePanel extends AbstractPanel implements
 		String str = App.preferences.getString(Pref.KEY.TREE_SHOW);
 		mnuList = new ArrayList<>();
 		JPopupMenu popupMenu = new JPopupMenu("Title");
-		mnuPart = initMenuItem("part", str.charAt(0) == '1');
+		int nc = 0;
+		mnuPart = initMenuItem("part", str.charAt(nc++) == '1');
 		mnuList.add(mnuPart);
-		mnuChapter = initMenuItem("chapter", str.charAt(1) == '1');//true for showing chapter only
-		mnuChapter.setText(I18N.getMsg("chapters.only"));
-		mnuList.add(mnuChapter);
-		mnuStrand = initMenuItem("strand", str.charAt(2) == '1');
+		mnuStrand = initMenuItem("strand", str.charAt(nc++) == '1');
 		mnuList.add(mnuStrand);
-		mnuPerson = initMenuItem("tree.persons.by.category", str.charAt(3) == '1');
+		mnuPerson = initMenuItem("tree.persons.by.category", str.charAt(nc++) == '1');
 		mnuPerson.setIcon(IconUtil.getIconSmall(ICONS.getIconKey("ent_person")));
 		mnuList.add(mnuPerson);
-		mnuByGender = initMenuItem("tree.persons.by.gender", str.charAt(3) == '1');
+		mnuByGender = initMenuItem("tree.persons.by.gender", str.charAt(nc++) == '1');
 		mnuByGender.setIcon(IconUtil.getIconSmall(ICONS.getIconKey("ent_person")));
 		mnuList.add(mnuByGender);
-		mnuLocation = initMenuItem("location", str.charAt(4) == '1');
+		mnuLocation = initMenuItem("location", str.charAt(nc++) == '1');
 		mnuList.add(mnuLocation);
-		mnuItem = initMenuItem("item", str.charAt(5) == '1');
+		mnuItem = initMenuItem("item", str.charAt(nc++) == '1');
 		mnuList.add(mnuItem);
-		mnuTag = initMenuItem("tag", str.charAt(6) == '1');
+		mnuTag = initMenuItem("tag", str.charAt(nc++) == '1');
 		mnuList.add(mnuTag);
-		mnuPlot = initMenuItem("plot", str.charAt(7) == '1');
+		mnuPlot = initMenuItem("plot", str.charAt(nc++) == '1');
 		mnuList.add(mnuPlot);
-		mnuIdea = initMenuItem("idea", str.charAt(8) == '1');
+		mnuIdea = initMenuItem("idea", str.charAt(nc++) == '1');
 		mnuList.add(mnuIdea);
 		for (JCheckBoxMenuItem m : mnuList) {
 			popupMenu.add(m);
@@ -301,28 +302,29 @@ public class TreePanel extends AbstractPanel implements
 	}
 
 	void treeRefresh() {
+		//LOG.trace(TT + "treeRefresh()");
 		tree.setFont(App.fonts.defGet());
 		List<String> treeState = TreeUtil.expansionSave(tree);
 		topNode.removeAllChildren();
 		if (mnuPart.isSelected()) {
 			partsNode = new EntityNode("parts", new Scene());
 			topNode.add(partsNode);
-			scenesRefresh();
+			refreshAllScenes();
 		}
 		if (mnuStrand.isSelected()) {
 			strandsNode = new EntityNode("strands", new Strand());
 			topNode.add(strandsNode);
-			strandsRefresh();
+			refreshStrands();
 		}
 		if (mnuPerson.isSelected()) {
 			personsByCategoryNode = new EntityNode("tree.persons.by.category", new Person());
 			topNode.add(personsByCategoryNode);
-			personsRefreshByCategory();
+			refreshPersonsByCategory();
 		}
 		if (mnuByGender.isSelected()) {
 			personsByGendersNode = new EntityNode("tree.persons.by.gender", new Gender());
 			topNode.add(personsByGendersNode);
-			personsRefreshByGender();
+			refreshPersonsByGender();
 		}
 		if (mnuLocation.isSelected()) {
 			locationsNode = new EntityNode("locations", new Location());
@@ -332,25 +334,25 @@ public class TreePanel extends AbstractPanel implements
 		if (mnuItem.isSelected()) {
 			itemsNode = new EntityNode("items", new Item());
 			topNode.add(itemsNode);
-			itemsRefresh();
+			refreshItems();
 		}
 		if (mnuTag.isSelected()) {
 			tagsNode = new EntityNode("tags", new Tag());
 			topNode.add(tagsNode);
-			tagsRefresh();
+			refreshTags();
 		}
 		if (mnuPlot.isSelected()) {
 			plotsNode = new EntityNode("plots", new Plot());
 			topNode.add(plotsNode);
-			plotsRefresh();
+			refreshPlots();
 		}
 		if (mnuIdea.isSelected()) {
 			ideasNode = new EntityNode("ideas.title", new Idea());
 			topNode.add(ideasNode);
-			ideasRefresh();
+			refreshIdeas();
 			memosNode = new EntityNode("memos", new Memo());
 			topNode.add(memosNode);
-			memosRefresh();
+			refreshMemos();
 		}
 		treeReloadTreeModel();
 		TreeUtil.expansionRestore(tree, treeState);
@@ -359,7 +361,7 @@ public class TreePanel extends AbstractPanel implements
 	private void treeSaveConfig() {
 		String str = "";
 		str += mnuPart.isSelected() ? "1" : "0";
-		str += mnuChapter.isSelected() ? "1" : "0";
+		//str += mnuChapter.isSelected() ? "1" : "0";
 		str += mnuStrand.isSelected() ? "1" : "0";
 		str += mnuPerson.isSelected() ? "1" : "0";
 		str += mnuByGender.isSelected() ? "1" : "0";
@@ -376,12 +378,11 @@ public class TreePanel extends AbstractPanel implements
 		model.reload();
 	}
 
-	private void strandsRefresh() {
+	private void refreshStrands() {
 		@SuppressWarnings("unchecked")
 		List<Strand> strands = mainFrame.project.strands.getList();
 		for (Strand strand : strands) {
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(strand);
-			strandsNode.add(node);
+			strandsNode.add(new DefaultMutableTreeNode(strand));
 		}
 	}
 
@@ -401,20 +402,19 @@ public class TreePanel extends AbstractPanel implements
 		return node;
 	}
 
-	private void ideasRefresh() {
+	private void refreshIdeas() {
 		IdeaStatusModel stateModel = new IdeaStatusModel();
 		for (AbstractStatus state : stateModel.getStates()) {
 			DefaultMutableTreeNode stateNode = new DefaultMutableTreeNode(state.getName());
 			ideasNode.add(stateNode);
 			List<Idea> ideas = mainFrame.project.ideas.findAllByStatus(state.getNumber());
 			for (Idea idea : ideas) {
-				DefaultMutableTreeNode node = new DefaultMutableTreeNode(idea);
-				stateNode.add(node);
+				stateNode.add(new DefaultMutableTreeNode(idea));
 			}
 		}
 	}
 
-	private void memosRefresh() {
+	private void refreshMemos() {
 		@SuppressWarnings("unchecked")
 		List<Memo> memos = mainFrame.project.memos.getList();
 		for (Memo memo : memos) {
@@ -422,7 +422,7 @@ public class TreePanel extends AbstractPanel implements
 		}
 	}
 
-	private void personsRefreshByCategory() {
+	private void refreshPersonsByCategory() {
 		Map<Category, DefaultMutableTreeNode> categoryMap = new HashMap<>();
 		@SuppressWarnings("unchecked")
 		List<Category> categories = (List<Category>) mainFrame.project.categorys.getList();
@@ -433,8 +433,7 @@ public class TreePanel extends AbstractPanel implements
 			DefaultMutableTreeNode categoryNode = categoryMap.get(category);
 			List<Person> persons = mainFrame.project.persons.findByCategory(category);
 			for (Person person : persons) {
-				DefaultMutableTreeNode personNode = new DefaultMutableTreeNode(person);
-				categoryNode.add(personNode);
+				categoryNode.add(new DefaultMutableTreeNode(person));
 			}
 		}
 	}
@@ -460,7 +459,7 @@ public class TreePanel extends AbstractPanel implements
 		return categoryNode;
 	}
 
-	private void personsRefreshByGender() {
+	private void refreshPersonsByGender() {
 		@SuppressWarnings("unchecked")
 		List<Gender> genders = mainFrame.project.genders.getList();
 		for (Gender gender : genders) {
@@ -468,8 +467,7 @@ public class TreePanel extends AbstractPanel implements
 			personsByGendersNode.add(genderNode);
 			List<Person> persons = mainFrame.project.persons.findByGender(gender);
 			for (Person person : persons) {
-				DefaultMutableTreeNode personNode = new DefaultMutableTreeNode(person);
-				genderNode.add(personNode);
+				genderNode.add(new DefaultMutableTreeNode(person));
 			}
 		}
 	}
@@ -533,37 +531,64 @@ public class TreePanel extends AbstractPanel implements
 		return locationNode;
 	}
 
-	private void scenesRefresh() {
-		//LOG.trace(TT + ".refreshScenes()");
-		// unassigned scenes
-		DefaultMutableTreeNode unassignedNode = new DefaultMutableTreeNode(new Chapter());
-		partsNode.add(unassignedNode);
-		List<Scene> scenes = mainFrame.project.scenes.findUnassignedScenes();
-		for (Scene scene : scenes) {
-			DefaultMutableTreeNode sceneNode = new DefaultMutableTreeNode(scene);
-			unassignedNode.add(sceneNode);
-		}
+	private void refreshAllScenes() {
+		//LOG.trace(TT + "refreshAllScenes()");
+		refreshUnassignedScenes();
+		refreshUnassignedChapters();
+		//refresh the parts
 		Map<Part, DefaultMutableTreeNode> partMap = new HashMap<>();
 		@SuppressWarnings("unchecked")
 		List<Part> parts = mainFrame.project.parts.getList();
 		for (Part part : parts) {
-			DefaultMutableTreeNode partNode = partCreateNode(partMap, part, partsNode);
-			List<Chapter> chapters = mainFrame.project.chapters.find(part);
-			for (Chapter chapter : chapters) {
-				DefaultMutableTreeNode chapterNode = new DefaultMutableTreeNode(chapter);
-				partNode.add(chapterNode);
-				if (!mnuChapter.getState()) {
-					scenes = mainFrame.project.scenes.find(chapter);
-					for (Scene scene : scenes) {
-						DefaultMutableTreeNode sceneNode = new DefaultMutableTreeNode(scene);
-						chapterNode.add(sceneNode);
-					}
-				}
+			refreshPart(partMap, part);
+		}
+	}
+
+	private void refreshUnassignedChapters() {
+		//LOG.trace(TT + "refreshUnassignedChapters()");
+		if (mainFrame.project.chapters.findNullPart().isEmpty()) {
+			return;
+		}
+		DefaultMutableTreeNode unode = new DefaultMutableTreeNode(new Part());
+		partsNode.add(unode);
+		List<Chapter> chapters = mainFrame.project.chapters.findNullPart();
+		for (Chapter chapter : chapters) {
+			DefaultMutableTreeNode chapNode = new DefaultMutableTreeNode(chapter);
+			unode.add(chapNode);
+			for (Scene scene : mainFrame.project.scenes.find(chapter)) {
+				chapNode.add(new DefaultMutableTreeNode(scene));
 			}
 		}
 	}
 
-	private void tagsRefresh() {
+	private void refreshUnassignedScenes() {
+		//LOG.trace(TT + "refreshUnassignedScenes()");
+		DefaultMutableTreeNode unassignedNode = new DefaultMutableTreeNode(new Chapter());
+		partsNode.add(unassignedNode);
+		List<Scene> scenes = mainFrame.project.scenes.findUnassigned();
+		for (Scene scene : scenes) {
+			unassignedNode.add(new DefaultMutableTreeNode(scene));
+		}
+	}
+
+	private void refreshPart(Map<Part, DefaultMutableTreeNode> partMap, Part part) {
+		DefaultMutableTreeNode partNode = partCreateNode(partMap, part, partsNode);
+		List<Chapter> chapters = mainFrame.project.chapters.find(part);
+		for (Chapter chapter : chapters) {
+			refreshChapter(partNode, chapter);
+		}
+	}
+
+	private void refreshChapter(DefaultMutableTreeNode partNode, Chapter chapter) {
+		DefaultMutableTreeNode chapterNode = new DefaultMutableTreeNode(chapter);
+		partNode.add(chapterNode);
+		List<Scene> scenes = mainFrame.project.scenes.find(chapter);
+		for (Scene scene : scenes) {
+			chapterNode.add(new DefaultMutableTreeNode(scene));
+		}
+	}
+
+	private void refreshTags() {
 		List<String> categories = mainFrame.project.tags.findCategories();
 		for (String category : categories) {
 			String categoryName = category;
@@ -576,13 +601,12 @@ public class TreePanel extends AbstractPanel implements
 			@SuppressWarnings("unchecked")
 			List<Tag> tags = (List) mainFrame.project.tags.findCategory(category);
 			for (Tag tag : tags) {
-				DefaultMutableTreeNode tagNode = new DefaultMutableTreeNode(tag);
-				categoryNode.add(tagNode);
+				categoryNode.add(new DefaultMutableTreeNode(tag));
 			}
 		}
 	}
 
-	private void itemsRefresh() {
+	private void refreshItems() {
 		List<String> categories = mainFrame.project.items.findCategories();
 		for (String category : categories) {
 			String categoryName = category;
@@ -595,18 +619,16 @@ public class TreePanel extends AbstractPanel implements
 			@SuppressWarnings("unchecked")
 			List<Item> items = (List) mainFrame.project.items.findCategory(category);
 			for (Item item : items) {
-				DefaultMutableTreeNode itemNode = new DefaultMutableTreeNode(item);
-				categoryNode.add(itemNode);
+				categoryNode.add(new DefaultMutableTreeNode(item));
 			}
 		}
 	}
 
-	private void plotsRefresh() {
+	private void refreshPlots() {
 		@SuppressWarnings("unchecked")
 		List<Plot> plots = mainFrame.project.plots.getList();
 		for (Plot entity : plots) {
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(entity);
-			plotsNode.add(node);
+			plotsNode.add(new DefaultMutableTreeNode(entity));
 		}
 	}
 
@@ -688,7 +710,7 @@ public class TreePanel extends AbstractPanel implements
 		try {
 			selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
 		} catch (Exception e) {
-			// ignore
+			return;
 		}
 		if (selectedNode == null) {
 			return;
@@ -696,12 +718,19 @@ public class TreePanel extends AbstractPanel implements
 		Object userObj = selectedNode.getUserObject();
 		if (userObj instanceof AbstractEntity) {
 			AbstractEntity entity = (AbstractEntity) userObj;
-			JPopupMenu menu = EntityUtil.createPopupMenu(mainFrame, entity, EntityUtil.WITH_CHRONO);
-			tree.setSelectionPath(selectedPath);
-			JComponent comp = (JComponent) tree.getComponentAt(evt.getPoint());
-			Point p = SwingUtilities.convertPoint(comp, evt.getPoint(), this);
-			menu.show(this, p.x, p.y);
-			evt.consume();
+			if (entity.getId() != -1L) {
+				JPopupMenu menu = EntityUtil.createPopupMenu(mainFrame, entity, EntityUtil.WITH_CHRONO);
+				tree.setSelectionPath(selectedPath);
+				Point p = new Point(0, 0);
+				JComponent comp = (JComponent) tree.getComponentAt(evt.getPoint());
+				if (comp != null) {
+					p = SwingUtilities.convertPoint(comp, evt.getPoint(), this);
+				}
+				if (menu != null) {
+					menu.show(this, p.x, p.y);
+				}
+				evt.consume();
+			}
 		}
 	}
 
@@ -719,23 +748,28 @@ public class TreePanel extends AbstractPanel implements
 		}
 		// double click: open show dialog for editing the node if it is a leaf
 		if (evt.getClickCount() == 2) {
-			TreePath selectedPath = tree.getPathForLocation(evt.getX(), evt.getY());
-			DefaultMutableTreeNode selectedNode;
+			TreePath path = tree.getPathForLocation(evt.getX(), evt.getY());
+			DefaultMutableTreeNode node;
 			try {
-				selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
-				if (selectedNode == null) {
+				node = (DefaultMutableTreeNode) path.getLastPathComponent();
+				if (node == null) {
 					return;
 				}
-				if (selectedNode.isLeaf()) {
-					Object object = selectedNode.getUserObject();
-					if (object instanceof Chapter) {
-						mainFrame.lastChapterSet((Chapter) object);
-					}
-					if (object instanceof Scene) {
-						mainFrame.lastSceneSet((Scene) object);
-					}
+				if (node.isLeaf()) {
+					Object object = node.getUserObject();
 					if (object instanceof AbstractEntity) {
-						mainFrame.showEditorAsDialog((AbstractEntity) object);
+						AbstractEntity entity = (AbstractEntity) object;
+						//setting last used
+						if (entity instanceof Chapter && entity.getId() != -1L) {
+							mainFrame.lastChapterSet((Chapter) entity);
+						}
+						if (entity instanceof Scene) {
+							mainFrame.lastSceneSet((Scene) entity);
+						}
+						//calling editor
+						if (entity.getId() != -1L) {
+							mainFrame.showEditorAsDialog((AbstractEntity) object);
+						}
 					}
 				}
 			} catch (Exception ex) {

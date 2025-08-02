@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
@@ -28,91 +29,96 @@ import storybook.ctrl.ActKey;
 import storybook.ctrl.Ctrl;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
-import storybook.db.person.Person;
 import storybook.db.scene.Scene;
-import storybook.db.strand.Strand;
 import storybook.tools.ListUtil;
 import storybook.tools.html.Html;
-import storybook.tools.swing.ColorIcon;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 
 /**
+ * class for a panel containing links to Persons, Locations, Items, Strands, Tags, Plots
  *
  * @author favdb
  */
 public class EntityLinksPanel extends AbstractPanel {
 
-	private static final String TT = "EntityLinksPanel";
+	private static final String TT = "EntityLinksPanel.";
 
 	private final Scene scene;
-	private final boolean withText;
 	private final Book.TYPE type;
+	private int iconSize;
 
-	public EntityLinksPanel(MainFrame mainFrame, Scene scene, Book.TYPE type, boolean withText) {
+	public EntityLinksPanel(MainFrame mainFrame, Scene scene, Book.TYPE type) {
+		this(mainFrame, scene, type, IconUtil.getDefSize());
+	}
+
+	public EntityLinksPanel(MainFrame mainFrame, Scene scene, Book.TYPE type, int iconSize) {
 		super(mainFrame);
 		this.scene = scene;
 		this.type = type;
-		this.withText = withText;
+		this.iconSize = iconSize;
 		initAll();
 	}
 
+	/**
+	 * initialize the class
+	 */
 	@Override
 	public void init() {
 	}
 
+	/**
+	 * initialize the user interface
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public void initUi() {
-		//LOG.trace(TT + ".initUi()");
-		setLayout(new MigLayout(MIG.get(MIG.FLOWX, MIG.INS1)));
+		//LOG.trace(TT + "initUi()");
+		setLayout(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0)));
 		setOpaque(false);
 		//setBorder(SwingUtil.getBorderDot());
+		Icon icon = IconUtil.getIconLarge(ICONS.K.UNKNOWN, iconSize);
 		List list = new ArrayList<>();
 		switch (type) {
 			case ITEM:
 				list = scene.getItems();
+				icon = IconUtil.getIcon(ICONS.K.ENT_ITEM, iconSize);
 				break;
 			case LOCATION:
 				list = scene.getLocations();
+				icon = IconUtil.getIcon(ICONS.K.ENT_LOCATION, iconSize);
 				break;
 			case PERSON:
 				list = scene.getPersons();
+				icon = IconUtil.getIcon(ICONS.K.ENT_PERSON, iconSize);
 				break;
 			case PLOT:
 				list = scene.getPlots();
+				icon = IconUtil.getIcon(ICONS.K.ENT_PLOT, iconSize);
 				break;
 			case STRAND:
 				list = scene.getStrands();
+				icon = IconUtil.getIcon(ICONS.K.ENT_STRAND, iconSize);
+				break;
+			case TAG:
+				list = scene.getTags();
+				icon = IconUtil.getIcon(ICONS.K.ENT_TAG, iconSize);
 				break;
 		}
 		if (list.isEmpty()) {
-			add(new JLabel(IconUtil.getIconSmall(ICONS.K.EMPTY)));
+			add(new JLabel(IconUtil.getIcon(ICONS.K.EMPTY, iconSize)));
 			return;
 		}
 		List<String> tooltip = new ArrayList<>();
 		for (Object obj : list) {
 			AbstractEntity entity = (AbstractEntity) obj;
-			JLabel lb = new JLabel(entity.getIcon());
-			lb.setOpaque(false);
-			if (entity instanceof Strand) {
-				lb.setIcon(new ColorIcon(((Strand) entity).getJColor(), IconUtil.getDefSize()));
-			}
-			if (withText || list.size() < 2) {
-				if (!(entity instanceof Person)) {
-					lb.setText(entity.getName());
-				}
-			}
-			lb.setToolTipText(entity.getFullName());
-			if (entity instanceof Person) {
-				lb.setBackground(((Person) entity).getJColor());
-			}
-			add(lb);
 			tooltip.add(entity.getName());
 		}
-		if (tooltip.size() > 1) {
-			this.setToolTipText(Html.intoHTML(ListUtil.join(tooltip, "<br>")));
+		JLabel lb = new JLabel(icon);
+		if (!tooltip.isEmpty()) {
+			lb.setToolTipText(Html.intoHTML(ListUtil.join(tooltip)));
 		}
+		add(lb);
 	}
 
 	@Override
@@ -132,6 +138,7 @@ public class EntityLinksPanel extends AbstractPanel {
 			case LOCATION:
 			case PERSON:
 			case PLOT:
+			case TAG:
 				if (Ctrl.PROPS.UPDATE.check(propName)) {
 					refresh();
 				}

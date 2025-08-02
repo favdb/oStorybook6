@@ -91,8 +91,9 @@ import static storybook.ui.Ui.*;
  */
 public class SceneEdit extends AbstractEditor implements CaretListener, ItemListener {
 
-	private static final String TT = "EditScene",
+	private static final String TT = "SceneEdit.",
 			INITIALES = I18N.getMsg("duration.initiales"),
+			BT_EXTERNAL = "btExternal",
 			BT_STAGE = "btStage",
 			RB_DATENONE = "date.none",
 			RB_DATEFIX = "date.fixed",
@@ -113,6 +114,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	private IntensityPanel pIntensity;
 	private List<Endnote> endnotes;
 	private JLabel lbXsize;
+	private int hashDate;
 
 	public SceneEdit(Editor m, AbstractEntity e) {
 		super(m, e, "111");
@@ -133,6 +135,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	@Override
 	@SuppressWarnings("unchecked")
 	public void initUpper() {
+		//LOG.trace(TT + "initUi()");
 		pMain = new JPanel(
 				new MigLayout(MIG.get(MIG.INS1, MIG.WRAP), "[50%][50%]"));
 		pLeft = new JPanel(
@@ -168,6 +171,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	}
 
 	private void initLeft() {
+		//LOG.trace(TT + "initLeft()");
 		//number
 		Ui.addLabel(pLeft, "number", false, MANDATORY);
 		tfNumber = Ui.getStringField(DATA.NUMBER, 5, scene.getSceneno().toString(), BNONE);
@@ -195,13 +199,14 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		//strand
 		cbStrand = Ui.getCB(pLeft, this, TYPE.STRAND, scene.getStrand(),
 				null, BMANDATORY + BNEW + BEMPTY);
-		if (scene.getStrand() == null) {
+		if (scene.getStrand() == null && cbStrand.getModel().getSize() > 1) {
 			cbStrand.setSelectedIndex(1);
 		}
 		cbStrand.addItemListener(this);
 	}
 
 	private void initRight() {
+		//LOG.trace(TT + "initRight()");
 		datePanel = initDatePanel();
 		pRight.add(datePanel, MIG.get(MIG.CENTER, MIG.SPAN));
 		//stage
@@ -222,7 +227,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	}
 
 	private JPanel initDatePanel() {
-		//LOG.trace(TT + ".initDatePanel() date type=" + scene.getDateType());
+		//LOG.trace(TT + "initDatePanel() date type=" + scene.getDateType());
 		JPanel gpDate = new JPanel(new MigLayout(MIG.get(MIG.HIDEMODE3, MIG.INS0)));
 		gpDate.setBorder(BorderFactory.createTitledBorder(I18N.getMsg("date")));
 		rbDatenone = Ui.initRadioButton(gpDate, RB_DATENONE, false, BNONE,
@@ -278,10 +283,12 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 			pDate.setVisible(false);
 			pRel.setVisible(false);
 		}
+		hashDate = scene.getRelativeHash();
 		return gpDate;
 	}
 
 	private void initScenario(JPanel p1) {
+		//LOG.trace(TT + "initScenario()");
 		pScenario = new ScenarioPanel(this);
 		if (book.info.scenarioGet()) {
 			//pScenario.setScene(scene);
@@ -296,6 +303,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	}
 
 	private void initSummary() {
+		//LOG.trace(TT + "initSummary()");
 		if (book.info.markdownGet()) {
 			mkTexte = new Markdown(TT, "text/plain", scene.getSummary());
 			mkTexte.setView(Markdown.VIEW.TEXT);
@@ -322,6 +330,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	}
 
 	private void initLinks() {
+		//LOG.trace(TT + "initLinks()");
 		JPanel links = new JPanel(new MigLayout(MIG.get(MIG.FILL, MIG.WRAP),
 				"[grow][grow][grow]"));
 		lPersons = Ui.initCkList(links, mainFrame, TYPE.PERSON,
@@ -344,6 +353,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 */
 	@Override
 	public void initBottom() {
+		//LOG.trace(TT + "initBottom()");
 		super.initBottom();
 		JPanel pxFile = new JPanel(new MigLayout(MIG.get(MIG.FILLX, MIG.FLOWX, MIG.INS0)));
 		String fname = IOUtil.fileToAbsolute(mainFrame.getProject().getPath(), scene.getOdf());
@@ -384,17 +394,18 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		pp.add(btExternal);
 		pxFile.add(pp, MIG.get(MIG.SG, MIG.RIGHT));
 		add(pxFile, MIG.GROWX);
-		setExportImport();
-		xfile.addCaretListener(this);
+		allowExportImport();
 		if (!book.isXeditorUse()) {
 			SwingUtil.setEnable(pxFile, false);
 		}
+		xfile.addCaretListener(this);
 	}
 
 	/**
-	 * allow or disallow the import button
+	 * allow or disallow the export/import button
 	 */
-	private void setExportImport() {
+	private void allowExportImport() {
+		//LOG.trace(TT + "allowExportImport()");
 		if (btImport != null) {
 			if (!xfile.getText().isEmpty()) {
 				File f = new File(IOUtil.fileToAbsolute(mainFrame.getProject().getPath(), xfile.getText()));
@@ -407,7 +418,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		if (btExternal != null) {
 			btExternal.setEnabled(!xfile.getText().isEmpty());
 		}
-		this.editor.setBtExternal(xfile.getText());
+		//editor.enableBtExternal(xfile.getText());
 		refeshXeditorSize();
 	}
 
@@ -437,6 +448,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 */
 	@Override
 	public boolean verifier() {
+		//LOG.trace(TT + "verifier()");
 		resetError();
 		@SuppressWarnings("unchecked")
 		List<Scene> scenes = (List) mainFrame.project.getList(Book.TYPE.SCENE);
@@ -509,7 +521,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 */
 	@Override
 	public void apply() {
-		//LOG.trace(TT + ".apply()");
+		//LOG.trace(TT + "apply()");
 		scene.setTitle(tfName.getText());
 		scene.setInformative(ckInformative.isSelected());
 		// apply for chapter
@@ -564,6 +576,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 			scene.setRelativetime(d.toString());
 			scene.setRelativesceneid(((EntityCbItem) cbRelScene.getSelectedItem()).getId());
 		}
+		mainFrame.project.scenes.changeDateRelative(hashDate == scene.getRelativeHash());
 		// aplly for scenario
 		if (book.info.scenarioGet()) {
 			pScenario.getScenarioData(scene);
@@ -614,6 +627,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 * set the date in a group data
 	 */
 	private void setGroupDate() {
+		//LOG.trace(TT + "setGroupDate()");
 		pRel.setVisible(false);
 		pDate.setVisible(false);
 		switch (scene.getDateType()) {
@@ -632,6 +646,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	}
 
 	private void importText() {
+		//LOG.trace(TT + "importText()");
 		File f = new File(xfile.getText());
 		if (f.exists()) {
 			if (!(Html.htmlToText(shefEditor.getText())).isEmpty()) {
@@ -679,7 +694,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 */
 	@Override
 	public void actionPerformed(ActionEvent evt) {
-		//App.traceEvent(TT+".actionPerformed", evt);
+		//LOG.trace(TT+"actionPerformed", evt);
 		if (evt.getSource() instanceof JButton) {
 			JButton bt = (JButton) evt.getSource();
 			switch (bt.getName()) {
@@ -711,6 +726,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 */
 	@Override
 	public void tempSave() {
+		//LOG.trace(TT + "tempSave()");
 		if (entity instanceof Scene) {
 			//EntityUtil.copyEntityProperties(mainFrame, entity, scene);
 			if (book.info.scenarioGet()) {
@@ -719,7 +735,6 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 				scene.setSummary(shefEditor.getText());
 			}
 			TempUtil.write(mainFrame, entity);
-			//EntityUtil.copyEntityProperties(mainFrame, scene, entity);
 		}
 	}
 
@@ -734,7 +749,8 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 
 	@Override
 	public void caretUpdate(CaretEvent e) {
-		setExportImport();
+		//LOG.trace(TT + "caretUpdate(e=" + e.toString() + ")");
+		allowExportImport();
 	}
 
 	/**
@@ -817,6 +833,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	@Override
 	@SuppressWarnings("unchecked")
 	public void itemStateChanged(ItemEvent e) {
+		//LOG.trace(TT + "itemStateChanged(e=" + e.toString() + ")");
 		if (e.getSource() instanceof JComboBox) {
 			JComboBox cb = (JComboBox) e.getSource();
 			if (cb.getName().equals(TYPE.STRAND.toString()) && cbStrand.getSelectedIndex() > 0) {
@@ -835,7 +852,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 * restore all endnotes and remove if not exists in text
 	 */
 	private String applyEndnotes() {
-		//LOG.trace(TT+".applyEndnotes()");
+		//LOG.trace(TT+"applyEndnotes()");
 		String text = getText();
 		for (Endnote en : endnotes) {
 			if (!text.contains(Endnote.linkTo("", en))) {
@@ -856,7 +873,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 */
 	@SuppressWarnings("unchecked")
 	private void initEndnote() {
-		//LOG.trace(TT + ".initEndnote()");
+		//LOG.trace(TT + "initEndnote()");
 		shefEditor.wysEditorGet().tb2Get().addSeparator();
 		// add create endnote button to SHEF toolbar
 		shefEditor.wysEditorGet().addEndnoteButtons(mainFrame, scene);
@@ -864,37 +881,10 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	}
 
 	/**
-	 * action for adding an Endnote
-	 *
-	 * @return
-	 */
-	/*private ActionBasic endnoteAdd() {
-	ActionBasic act = new ActionBasic("endnote_add", IconUtil.getIconSmall(ICONS.K.CHAR_ENDNOTE));
-	act.setAccelerator(Shortcuts.getKeyStroke("shef", "endnote_add"));
-	act.setShortDescription(Shortcuts.getTooltips("shef", "endnote_add"));
-	return act;
-    }*/
-	/**
-	 * action for showing an Endnote
-	 *
-	 * @return
-	 */
-	/*private AbstractAction endnoteShow() {
-	return new AbstractAction() {
-	    @Override
-	    public void actionPerformed(ActionEvent ae) {
-		if (endnotes.isEmpty()) {
-		    return;
-		}
-		EndnotesListDlg.showDlg(mainFrame, 0, scene);
-	    }
-	};
-    }
-	 */
-	/**
 	 * refresh size for the external editor label
 	 */
 	private void refeshXeditorSize() {
+		//LOG.trace(TT + "refeshXeditorSize()");
 		String szfile = "            ";
 		if (!xfile.getText().isEmpty()) {
 			File file = new File(xfile.getText());
@@ -910,7 +900,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 				szfile = String.format("%d (%d)", nbwords, nb);
 			}
 		}
-		this.lbXsize.setText(szfile);
+		lbXsize.setText(szfile);
 	}
 
 	/**
@@ -919,4 +909,5 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	public void setModified() {
 		this.modified = true;
 	}
+
 }

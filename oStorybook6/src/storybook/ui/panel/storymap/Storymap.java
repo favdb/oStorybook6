@@ -41,6 +41,7 @@ import storybook.db.strand.Strand;
 import storybook.exim.EXIM;
 import storybook.tools.LOG;
 import storybook.tools.print.ComponentPrinter;
+import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractPanel;
@@ -79,11 +80,12 @@ public class Storymap extends AbstractPanel implements ItemListener {
 	@Override
 	public void initUi() {
 		//LOG.trace(TT + ".initUi()");
-		setLayout(new MigLayout(MIG.get(MIG.INS0, MIG.FILL)));
+		setLayout(new MigLayout(MIG.get(MIG.INS0, MIG.FILLX)));
 		initToolbar();
 		add(toolbar, MIG.get(MIG.SPAN, MIG.GROWX));
 		graph = new StorymapGraph(this);
 		scroll = new JScrollPane(graph);
+		SwingUtil.setMaxPreferredSize(scroll);
 		add(scroll, MIG.get(MIG.GROW, MIG.SPAN));
 	}
 

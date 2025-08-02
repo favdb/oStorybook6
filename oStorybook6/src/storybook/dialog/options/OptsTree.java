@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package storybook.ui.panel.tree;
+package storybook.dialog.options;
 
 import api.mig.swing.MigLayout;
 import i18n.I18N;
@@ -34,12 +34,12 @@ import storybook.ui.panel.AbstractOptions;
  *
  * @author favdb
  */
-public class TreeOpt extends AbstractOptions implements CaretListener, ActionListener {
+public class OptsTree extends AbstractOptions implements CaretListener, ActionListener {
 
 	private JCheckBox cbChar;
 	private JTextField tfChar;
 
-	public TreeOpt(MainFrame m) {
+	public OptsTree(MainFrame m) {
 		super(m);
 		initAll();
 	}

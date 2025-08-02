@@ -14,18 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package storybook.ui.panel.manage;
+package storybook.dialog.options;
 
 import api.mig.swing.MigLayout;
 import i18n.I18N;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import resources.icons.ICONS;
 import storybook.App;
@@ -35,43 +33,37 @@ import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractOptions;
-import static storybook.ui.panel.manage.ManagePanel.*;
 
 /**
  *
  * @author favdb
  */
-public class ManageOpt extends AbstractOptions {
+public class OptsManage extends AbstractOptions {
 
-	private static final String CN_COLUMNS = "ColumnSlider",
-			HIDE_UNASSIGNED = "HideUnassigned",
+	private static final String HIDE_UNASSIGNED = "HideUnassigned",
 			VERTICAL = "Vertical";
-	private int columns;
 	private boolean hideUnassigned;
 	private JCheckBox ckHide;
 	private JCheckBox ckVertical;
-	private JSlider slider;
 	private JButton btZoomOut;
 	private JLabel lbZoom;
 	private JButton btZoomIn;
 
-	public ManageOpt(MainFrame m) {
+	public OptsManage(MainFrame m) {
 		super(m);
 		initAll();
 	}
 
 	@Override
 	public void init() {
-		setZoomMin(ManagePanel.ZOOM_MIN);
-		setZoomMax(ManagePanel.ZOOM_MAX);
+		setZoomMin(1);
+		setZoomMax(10);
 		try {
 			zoomValue = App.preferences.manageGetZoom();
-			columns = App.preferences.manageGetColumns();
-			hideUnassigned = App.preferences.manageGetHideUnassigned();
+			hideUnassigned = App.preferences.manageGetUnassigned();
 		} catch (Exception e) {
 			LOG.err(Arrays.toString(e.getStackTrace()));
 			zoomValue = Pref.KEY.MANAGE_ZOOM.getInteger();
-			columns = Pref.KEY.MANAGE_COLUMNS.getInteger();
 		}
 	}
 
@@ -82,7 +74,7 @@ public class ManageOpt extends AbstractOptions {
 		ckHide.setName(HIDE_UNASSIGNED);
 		ckHide.setSelected(hideUnassigned);
 		ckHide.addActionListener((ActionEvent evt) -> {
-			App.preferences.manageSetHideUnassgned(ckHide.isSelected());
+			App.preferences.manageSetUnassgned(ckHide.isSelected());
 			mainFrame.getBookController().manageSetHideUnassigned((Boolean) ckHide.isSelected());
 		});
 		add(ckHide);
@@ -90,22 +82,12 @@ public class ManageOpt extends AbstractOptions {
 		ckVertical.setName(VERTICAL);
 		ckVertical.setSelected(App.preferences.manageGetVertical());
 		ckVertical.addActionListener((ActionEvent evt) -> {
-			slider.setEnabled(ckVertical.isSelected());
 			App.preferences.manageSetVertical(ckVertical.isSelected());
 			mainFrame.getBookController().manageSetVertical((Boolean) ckVertical.isSelected());
 		});
 		add(ckVertical);
 		// columns
 		add(new JLabel(I18N.getColonMsg("columns")), MIG.get(MIG.SPLIT2));
-		slider = new JSlider(JSlider.HORIZONTAL, 1, 20, columns);
-		slider.setName(CN_COLUMNS);
-		slider.setMajorTickSpacing(10);
-		slider.setMinorTickSpacing(5);
-		slider.setOpaque(false);
-		slider.setPaintTicks(true);
-		slider.addChangeListener(this);
-		add(slider, MIG.get(MIG.GROWX));
-		slider.setEnabled(ckVertical.isSelected());
 		JPanel zoomPanel = new JPanel(new MigLayout());
 		zoomPanel.setOpaque(false);
 		zoomPanel.add(new JLabel(I18N.getColonMsg("zoom")));
@@ -117,11 +99,11 @@ public class ManageOpt extends AbstractOptions {
 
 	private void zoomAdjust(int n) {
 		zoomValue += n;
-		if (zoomValue < ZOOM_MIN) {
-			zoomValue = ZOOM_MIN;
+		if (zoomValue < 1) {
+			zoomValue = 1;
 		}
-		btZoomOut.setEnabled(zoomValue > ZOOM_MIN);
-		btZoomIn.setEnabled(zoomValue < ZOOM_MAX);
+		btZoomOut.setEnabled(zoomValue > 1);
+		btZoomIn.setEnabled(zoomValue < 10);
 		lbZoom.setText("" + zoomValue);
 		App.preferences.manageSetZoom(zoomValue);
 		mainFrame.getBookController().manageSetZoom(zoomValue);
@@ -129,16 +111,6 @@ public class ManageOpt extends AbstractOptions {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		Component comp = (Component) e.getSource();
-		if (CN_COLUMNS.equals(comp.getName())) {
-			JSlider js = (JSlider) e.getSource();
-			if (!js.getValueIsAdjusting()) {
-				int val = js.getValue();
-				App.preferences.manageSetColumns(val);
-				mainFrame.getBookController().manageSetColumns(val);
-				return;
-			}
-		}
 		super.stateChanged(e);
 	}
 

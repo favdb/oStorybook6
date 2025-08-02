@@ -42,6 +42,7 @@ public class DateUtil {
 		ds = DateUtil.setDays(ds, 0);
 		ds = DateUtil.setHours(ds, 0);
 		ds = DateUtil.setMinutes(ds, 0);
+		ds = DateUtil.setSeconds(ds, 0);
 		return ds;
 	}
 
@@ -49,17 +50,25 @@ public class DateUtil {
 		ds = DateUtil.setDays(ds, 0);
 		ds = DateUtil.setHours(ds, 0);
 		ds = DateUtil.setMinutes(ds, 0);
+		ds = DateUtil.setSeconds(ds, 0);
 		return ds;
 	}
 
 	public static Date forDay(Date ds) {
 		ds = DateUtil.setHours(ds, 0);
 		ds = DateUtil.setMinutes(ds, 0);
+		ds = DateUtil.setSeconds(ds, 0);
 		return ds;
 	}
 
 	public static Date forHour(Date ds) {
 		ds = DateUtil.setMinutes(ds, 0);
+		ds = DateUtil.setSeconds(ds, 0);
+		return ds;
+	}
+
+	public static Date forMinute(Date ds) {
+		ds = DateUtil.setSeconds(ds, 0);
 		return ds;
 	}
 
@@ -206,9 +215,9 @@ public class DateUtil {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		return cal.get(Calendar.HOUR_OF_DAY) == 0
-			&& cal.get(Calendar.MINUTE) == 0
-			&& cal.get(Calendar.SECOND) == 0
-			&& cal.get(Calendar.MILLISECOND) == 0;
+				&& cal.get(Calendar.MINUTE) == 0
+				&& cal.get(Calendar.SECOND) == 0
+				&& cal.get(Calendar.MILLISECOND) == 0;
 	}
 
 	public static Date getZeroTimeDate(Date date) {
@@ -301,9 +310,9 @@ public class DateUtil {
 		Date d = null;
 		try {
 			SimpleDateFormat formatter
-				= new SimpleDateFormat(
-					App.preferences.getString(Pref.KEY.DATEFORMAT)
-					+ " HH:mm:ss");
+					= new SimpleDateFormat(
+							App.preferences.getString(Pref.KEY.DATEFORMAT)
+							+ " HH:mm:ss");
 			ParsePosition pos = new ParsePosition(0);
 			d = formatter.parse(str, pos);
 		} catch (RuntimeException e) {

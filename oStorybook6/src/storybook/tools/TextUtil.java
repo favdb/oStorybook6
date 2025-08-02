@@ -143,11 +143,11 @@ public class TextUtil {
 				return str.substring(0, str.indexOf(" ")) + ELLIPSIS;
 			}
 		} else if (str.length() > max) {
-			for (int j = max; j > 0; j--) {
-				if (str.charAt(j) == ' ') {
+			/*for (int j = max; j > 0; j--) {
+				if (str.charAt(j) == ' ' || str.charAt(j) == '-' || str.charAt(j) == '(') {
 					return str.substring(0, j) + ELLIPSIS;
 				}
-			}
+			}*/
 			return str.substring(0, max) + ELLIPSIS;
 		}
 		return str;

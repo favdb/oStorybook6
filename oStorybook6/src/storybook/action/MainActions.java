@@ -34,7 +34,7 @@ import storybook.ui.MainMenu;
  */
 public class MainActions implements PropertyChangeListener {
 
-	private static final String TT = "MainActions";
+	private static final String TT = "MainActions.";
 
 	//private ActionManager actionManager;
 	private final MainFrame mainFrame;
@@ -46,10 +46,10 @@ public class MainActions implements PropertyChangeListener {
 	}
 
 	/**
-	 * init the main actions
+	 * initialize the main actions
 	 */
 	public void init() {
-		//LOG.trace(TT+".init()");
+		//LOG.trace(TT+"init()");
 		//initActions();
 		initUiFactory();
 		if (mainFrame.isBlank()) {
@@ -61,7 +61,7 @@ public class MainActions implements PropertyChangeListener {
 	 * initialize the UI
 	 */
 	private void initUiFactory() {
-		//LOG.trace(TT+".initUiFactory()");
+		//LOG.trace(TT+"initUiFactory()");
 		mainMenu = new MainMenu(mainFrame);
 		JMenuBar menubar = mainMenu.menuBar;
 		if (menubar != null) {
@@ -69,7 +69,7 @@ public class MainActions implements PropertyChangeListener {
 			mainMenu.reloadWindowMenu();
 			mainFrame.setJMenuBar(menubar);
 		} else {
-			LOG.err("*** General error : unable to load main menu");
+			LOG.err(TT + "initUiFactory() *** General error : unable to load main menu");
 		}
 		JToolBar toolBar = mainMenu.toolBar;
 		if (toolBar != null) {

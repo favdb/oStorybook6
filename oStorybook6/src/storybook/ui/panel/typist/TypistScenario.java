@@ -71,14 +71,14 @@ import storybook.ui.panel.AbstractPanel;
  */
 public class TypistScenario extends AbstractPanel implements ActionListener, IRefreshable {
 
-	private static final String TT = "TypistScenario";
+	private static final String TT = "TypistScenario.";
 
 	private Scene scene;
 	private JPanel left, leftPersons;
 	private boolean modified;
-	private int nbMod = 0, origine;
+	private int origine;
 	private JButton btNext, btPrevious, btScreen, btSave, btIgnore,
-	   btFirst, btLast, btHideLeft;
+			btFirst, btLast, btHideLeft;
 	private JTextArea taDescription, taNotes;
 	private JComboBox cbStage, cbScenes, cbStatus;
 	private JTextField tfName = new JTextField();
@@ -152,42 +152,42 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 
 	@Override
 	public void initUi() {
-		//LOG.printInfos(TT + ".initUi() for scene=" + LOG.printInfos(scene));
+		//LOG.trace(TT + ".initUi() for scene=" + LOG.trace(scene));
 		if (this.getComponentCount() > 0) {
 			this.removeAll();
 		}
 		this.setLayout(
-		   new MigLayout(MIG.get(MIG.WRAP, MIG.HIDEMODE3, MIG.TOP, MIG.INS1),
-			  "[][65%, grow 100][20%]"));
+				new MigLayout(MIG.get(MIG.WRAP, MIG.HIDEMODE3, MIG.TOP, MIG.INS1),
+						"[][65%, grow 100][20%]"));
 		//no part to select
 		initToolbar();
 		//combobox scene
 		cbScenes = Ui.initComboBox(CMD.CB_SCENES.toString(), "",
-		   (List) mainFrame.project.getList(Book.TYPE.SCENE), scene, !EMPTY, !ALL, this);
+				(List) mainFrame.project.getList(Book.TYPE.SCENE), scene, !EMPTY, !ALL, this);
 		toolbar.add(cbScenes);
 		toolbar.add(Ui.initButton(CMD.BT_SCENE_NEW.toString(), "",
-		   ICONS.K.NEW, "scene.new", this));
+				ICONS.K.NEW, "scene.new", this));
 		//navigation dans les scènes
 		//first scene
 		btFirst = Ui.initButton(CMD.BT_SCENE_FIRST.toString(), "",
-		   ICONS.K.NAV_FIRST, "export.nav.first", this);
+				ICONS.K.NAV_FIRST, "export.nav.first", this);
 		btFirst.setEnabled(!isSceneFirst());
 		toolbar.add(btFirst);
 		//previous scene
 		btPrevious = Ui.initButton(CMD.BT_SCENE_PREVIOUS.toString(), "",
-		   ICONS.K.NAV_PREV, "export.nav.previous", this);
+				ICONS.K.NAV_PREV, "export.nav.previous", this);
 		btPrevious.setEnabled(false);
 		toolbar.add(btPrevious);
 		btNext = Ui.initButton(CMD.BT_SCENE_NEXT.toString(), "",
-		   ICONS.K.NAV_NEXT, "export.nav.next", this);
-		int n = Book.getNbScenes(mainFrame);
+				ICONS.K.NAV_NEXT, "export.nav.next", this);
+		int n = Book.getNbOf(mainFrame, Book.TYPE.SCENE);
 		if (n < 1) {
 			btNext.setEnabled(false);
 		}
 		toolbar.add(btNext);
 		//dernière scène
 		btLast = Ui.initButton(CMD.BT_SCENE_LAST.toString(), "",
-		   ICONS.K.NAV_LAST, "export.nav.last", this);
+				ICONS.K.NAV_LAST, "export.nav.last", this);
 		btLast.setEnabled(!isSceneLast());
 		toolbar.add(btLast);
 		toolbar.add(new JToolBar.Separator());
@@ -259,7 +259,7 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 		left.add(btHideLeft, MIG.get(MIG.TOP, MIG.RIGHT));
 		leftPersons = new JPanel(new MigLayout(MIG.get(MIG.FILLX, MIG.HIDEMODE3)));
 		listPersons = Ui.initCkList(leftPersons, mainFrame, Book.TYPE.PERSON,
-		   scene.getPersons(), null, BBORDER);
+				scene.getPersons(), null, BBORDER);
 		left.add(leftPersons);
 		return left;
 	}
@@ -267,8 +267,8 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 	private void leftShow() {
 		leftPanelHide = !leftPanelHide;
 		btHideLeft.setIcon((leftPanelHide
-		   ? IconUtil.getIconSmall(ICONS.K.AR_RIGHT)
-		   : IconUtil.getIconSmall(ICONS.K.AR_LEFT)));
+				? IconUtil.getIconSmall(ICONS.K.AR_RIGHT)
+				: IconUtil.getIconSmall(ICONS.K.AR_LEFT)));
 		leftPersons.setVisible(!leftPanelHide);
 	}
 
@@ -284,7 +284,7 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 	}
 
 	private JPanel initRight() {
-		//LOG.printInfos(TT+".initRght()");
+		//LOG.trace(TT+".initRght()");
 		JPanel right = new JPanel(new MigLayout(MIG.get(MIG.FILLX, MIG.WRAP, MIG.HIDEMODE3)));
 		taDescription = initTextArea(right, "description", "");
 		taNotes = initTextArea(right, "notes", "");
@@ -292,7 +292,7 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 	}
 
 	private JPanel initFooter() {
-		//LOG.printInfos(TT+".initFooter()");
+		//LOG.trace(TT+".initFooter()");
 		return new JPanel(new MigLayout());
 	}
 
@@ -411,9 +411,9 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 	}
 
 	@Override
-	@SuppressWarnings({"unchecked", "unchecked"})
+	@SuppressWarnings({"unchecked"})
 	public void actionPerformed(ActionEvent evt) {
-		//LOG.printInfos(TT+".actionPerformed(evt=" + evt.toString() + ")");
+		//LOG.trace(TT+".actionPerformed(evt=" + evt.toString() + ")");
 		if (evt.getSource() instanceof JButton) {
 			JButton btn = (JButton) evt.getSource();
 			switch (getCMD(btn.getName())) {
@@ -494,7 +494,7 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 					Dimension pos = SwingUtil.getDlgPosition(entity);
 					Dimension size = SwingUtil.getDlgSize(entity);
 					dlg.setSize((size != null ? size.height : this.getWidth() / 2),
-					   (size != null ? size.width : 680));
+							(size != null ? size.width : 680));
 					if (pos != null) {
 						dlg.setLocation(pos.height, pos.width);
 					} else {
@@ -545,10 +545,10 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 			if (mdEdit.getText().length() > 32767) {
 				String str = I18N.getMsg("editor.text_too_large");
 				JOptionPane.showMessageDialog(
-				   this,
-				   str,
-				   I18N.getMsg("editor"),
-				   JOptionPane.ERROR_MESSAGE);
+						this,
+						str,
+						I18N.getMsg("editor"),
+						JOptionPane.ERROR_MESSAGE);
 				return (JOptionPane.CANCEL_OPTION);
 			}
 			modified = true;
@@ -623,7 +623,7 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 	}
 
 	public Scene scenarioGetData() {
-		//LOG.printInfos(TT + ".scenarioGetData()");
+		//LOG.trace(TT + ".scenarioGetData()");
 		scene.setStatus(cbStatus.getSelectedIndex());
 		scene.setPersons(personsGet());
 		scene.setScenario_stage(cbStage.getSelectedIndex());
@@ -653,10 +653,10 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 		if (mdEdit.getText().length() > 32767) {
 			String str = I18N.getMsg("editor.text_too_large");
 			JOptionPane.showMessageDialog(
-			   this,
-			   str,
-			   I18N.getMsg("editor"),
-			   JOptionPane.ERROR_MESSAGE);
+					this,
+					str,
+					I18N.getMsg("editor"),
+					JOptionPane.ERROR_MESSAGE);
 			return (JOptionPane.CANCEL_OPTION);
 		}
 		if (modified) {
@@ -685,7 +685,7 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 			s.setChapter(scene.getChapter());
 			s.setStrand(scene.getStrand());
 		}
-		s.setSceneno(Book.getNbScenes(mainFrame) + 1);
+		s.setSceneno(Book.getNbOf(mainFrame, Book.TYPE.SCENE) + 1);
 		String title = I18N.getMsg("scene") + " " + s.getSceneno();
 		s.setName(title);
 		s.setTitle(title);
@@ -704,10 +704,10 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 	}
 
 	private void personsLoad() {
-		//LOG.printInfos(TT + ".personLoad()");
+		//LOG.trace(TT + ".personLoad()");
 		leftPersons.removeAll();
 		listPersons = Ui.initCkList(leftPersons, mainFrame, Book.TYPE.PERSON,
-		   scene.getPersons(), null, BBORDER);
+				scene.getPersons(), null, BBORDER);
 		leftPersons.revalidate();
 	}
 
@@ -726,11 +726,6 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 	public void setModified() {
 		modified = true;
 		enableSave();
-		nbMod++;
-		if (nbMod > 10) {
-			//save();
-			nbMod = 0;
-		}
 	}
 
 	public void resetModified() {
@@ -746,7 +741,7 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 
 	@SuppressWarnings("unchecked")
 	public JComboBox initCbScenario(CMD action) {
-		//LOG.printInfos(TT+".initCbScenario("+action.toString()+")");
+		//LOG.trace(TT+".initCbScenario("+action.toString()+")");
 		String type = action.toString().toLowerCase().replaceFirst("cb_", "");
 		JComboBox cb = new JComboBox();
 		cb.setName(action.toString());
@@ -761,7 +756,7 @@ public class TypistScenario extends AbstractPanel implements ActionListener, IRe
 	}
 
 	public String scenarioFindKey(String type, int i) {
-		//LOG.printInfos(TT+".scenarioFindKey(type=" + type + ", i=" + i + ")");
+		//LOG.trace(TT+".scenarioFindKey(type=" + type + ", i=" + i + ")");
 		String key = "scenario." + type + "." + String.format("%02d", i);
 		try {
 			String msg = I18N.getMsg(key);

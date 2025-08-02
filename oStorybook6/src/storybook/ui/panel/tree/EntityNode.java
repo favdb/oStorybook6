@@ -17,15 +17,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.ui.panel.tree;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import i18n.I18N;
+import javax.swing.tree.DefaultMutableTreeNode;
 import storybook.db.abs.AbstractEntity;
 
 @SuppressWarnings("serial")
 public class EntityNode extends DefaultMutableTreeNode {
 
-	private String text;
-	private AbstractEntity entity;
+	private final String text;
+	private final AbstractEntity entity;
+
+	public EntityNode(AbstractEntity entity) {
+		super();
+		this.text = entity.getName();
+		this.entity = entity;
+	}
 
 	public EntityNode(String textKey, AbstractEntity entity) {
 		super();
@@ -33,7 +39,7 @@ public class EntityNode extends DefaultMutableTreeNode {
 		this.entity = entity;
 	}
 
-	public AbstractEntity getDbTable() {
+	public AbstractEntity getEntity() {
 		return entity;
 	}
 

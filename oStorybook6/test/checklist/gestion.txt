@@ -1,0 +1,14 @@
+Checklist des test pour la vue Gestion (Manage)
+
+1 Affichage
+1.1. option vertical
+1.2. option zoom
+2 Simple clic: sélection -> vue Info=OK
+3 Double-clic: edition + vue Info=OK
+4 Glisser/Déposé
+4.1 gliser la scène 02.01 du chapitre 2 dans les unassigned=OK
+4.2 glisser la scène 02.01 au début du chapitre 1=OK
+4.3 glisser la scène 02.01 au début du chapitre 2 (retour à l'initial)=OK
+4.4 glisser la scène 02.01 à la suite de la scène 02.04
+Recommencer le cycle 4 mais avec deux scènes pour vérifier la bonne gestion
+des unassigned.

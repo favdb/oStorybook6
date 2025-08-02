@@ -20,6 +20,7 @@ import java.util.List;
 import storybook.project.Project;
 
 /**
+ * Abstract for entities lists and methods
  *
  * @author favdb
  */

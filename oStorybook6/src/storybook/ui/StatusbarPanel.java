@@ -163,20 +163,20 @@ public class StatusbarPanel extends AbstractPanel implements ActionListener {
 
 	public void refreshStat() {
 		//LOG.trace(TT+".refreshStat()");
-		lbChapters.setText(Book.getNbChapters(mainFrame) + "");
-		lbScenes.setText(Book.getNbScenes(mainFrame) + "");
-		lbPersons.setText(Book.getNbPersons(mainFrame) + "");
-		lbLocations.setText(Book.getNbLocations(mainFrame) + "");
-		lbItems.setText(Book.getNbItems(mainFrame) + "");
+		lbChapters.setText(Book.getNbOf(mainFrame, Book.TYPE.CHAPTER) + "");
+		lbScenes.setText(Book.getNbOf(mainFrame, Book.TYPE.SCENE) + "");
+		lbPersons.setText(Book.getNbOf(mainFrame, Book.TYPE.PERSON) + "");
+		lbLocations.setText(Book.getNbOf(mainFrame, Book.TYPE.LOCATION) + "");
+		lbItems.setText(Book.getNbOf(mainFrame, Book.TYPE.ITEM) + "");
 		String strStat = String.format(" %,d (%,d) ",
 				BookUtil.getNbWords(mainFrame.project),
 				BookUtil.getNbChars(mainFrame.project));
 		lbWords.setText(strStat);
 		memPanel.repaint();
 		memPanel.setVisible(App.preferences.getBoolean(Pref.KEY.MEMORY) || App.isDev());
-		pPersons.setVisible(Book.getNbPersons(mainFrame) > 0);
-		pLocations.setVisible(Book.getNbLocations(mainFrame) > 0);
-		pItems.setVisible(Book.getNbItems(mainFrame) > 0);
+		pPersons.setVisible(Book.getNbOf(mainFrame, Book.TYPE.PERSON) > 0);
+		pLocations.setVisible(Book.getNbOf(mainFrame, Book.TYPE.LOCATION) > 0);
+		pItems.setVisible(Book.getNbOf(mainFrame, Book.TYPE.ITEM) > 0);
 		revalidate();
 		repaint();
 	}

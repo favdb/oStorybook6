@@ -494,7 +494,7 @@ public class WysiwygEditor extends AbstractPanel implements HyperlinkListener {
 	 */
 	private void initShortcuts() {
 		//LOG.trace(TT + ".initShortcuts()");
-		SwingUtil.setForcedSize(shortcut, new Dimension(1, 1));
+		SwingUtil.setFixedSize(shortcut, new Dimension(1, 1));
 		shortcut.add(initButton(actionList, new HTMLLineBreakAction(this)));
 		shortcut.add(initButton(actionList, new HTMLCadratinAction(this, UNBREAK)));
 		shortcut.add(initButton(actionList, new HTMLCadratinAction(this, CADRATIN)));

@@ -75,7 +75,7 @@ public class IconChooserPanel extends JPanel implements IRefreshable, MouseListe
 		tfIconFile = new JTextField();
 		tfIconFile.setText(startIconFile);
 		tfIconFile.setEditable(false);
-		SwingUtil.setForcedSize(tfIconFile, new Dimension(300, 20));
+		SwingUtil.setFixedSize(tfIconFile, new Dimension(300, 20));
 		tfIconFile.setCaretPosition(0);
 		// the icon chooser
 		btChooser = new IconButton("btChooser", ICONS.K.F_OPEN, getShowIconChooserAction());

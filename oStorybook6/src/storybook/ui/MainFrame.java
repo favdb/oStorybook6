@@ -1484,21 +1484,6 @@ public class MainFrame extends JFrame implements IPaintable {
 	}
 
 	/**
-	 * show the editor, not usable
-	 */
-	public void showEditor() {
-		//LOG.printInfos(TT+"showEditor()");
-		/*SwingUtilities.invokeLater(new Runnable() {
-		 @Override
-		 public void run() {
-		 LOG.printInfos(TT+"showEditor()-->run");
-		 SbView editorView = getView(VIEWNAME.EDITOR);
-		 editorView.cleverRestoreFocus();
-		 }
-		 });*/
-	}
-
-	/**
 	 * call the dialog editor
 	 *
 	 * @param entity
@@ -1508,7 +1493,7 @@ public class MainFrame extends JFrame implements IPaintable {
 	 */
 	public boolean showEditorAsDialog(AbstractEntity entity, JButton... bt) {
 		/*LOG.trace(TT + "showEditorAsDialog(entity=" + LOG.trace(entity)
-				+ (bt == null ? "" : ", upon bt")
+				+ ", bt=" + (bt == null ? "null" : bt.toString())
 				+ ")");*/
 		JDialog dlg;
 		if (isTypist) {
@@ -1550,6 +1535,11 @@ public class MainFrame extends JFrame implements IPaintable {
 		return editor.canceled;
 	}
 
+	/**
+	 * show external editor for the given entity
+	 *
+	 * @param entity
+	 */
 	public void showXeditor(AbstractEntity entity) {
 		//LOG.trace(TT + "actionPerformed(...) entity=" + entity.toString());
 		String name = XEditorFile.getFilePath(this, (Scene) entity);

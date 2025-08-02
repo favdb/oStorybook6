@@ -104,8 +104,8 @@ public class StoryboardScene extends AbstractGradientPanel implements FocusListe
 			return btEdit;
 		}
 		btEdit = Ui.initButton("btEdit", "", ICONS.K.EDIT, "edit",
-		   (evt -> mainFrame.showEditorAsDialog(scene)));
-		SwingUtil.setForcedSize(btEdit, IconUtil.getDefDim());
+				(evt -> mainFrame.showEditorAsDialog(scene)));
+		SwingUtil.setFixedSize(btEdit, IconUtil.getDefDim());
 		return btEdit;
 	}
 
@@ -114,8 +114,8 @@ public class StoryboardScene extends AbstractGradientPanel implements FocusListe
 			return btDelete;
 		}
 		btDelete = Ui.initButton("btDelete", "", ICONS.K.DELETE, "delete",
-		   e -> EntityUtil.delete(mainFrame, scene));
-		SwingUtil.setForcedSize(btDelete, IconUtil.getDefDim());
+				e -> EntityUtil.delete(mainFrame, scene));
+		SwingUtil.setFixedSize(btDelete, IconUtil.getDefDim());
 		return btDelete;
 	}
 
@@ -124,7 +124,7 @@ public class StoryboardScene extends AbstractGradientPanel implements FocusListe
 			return btNew;
 		}
 		btNew = Ui.initButton("btNew", "", ICONS.K.NEW, "new", (evt -> getNewAction()));
-		SwingUtil.setForcedSize(btNew, IconUtil.getDefDim());
+		SwingUtil.setFixedSize(btNew, IconUtil.getDefDim());
 		return btNew;
 	}
 
@@ -187,13 +187,13 @@ public class StoryboardScene extends AbstractGradientPanel implements FocusListe
 		//img = IconUtil.resizeIcon(img, IconUtil.getDefSize());
 		if (horizontal) {
 			setLayout(new MigLayout(
-			   MIG.get(MIG.FILL, MIG.FLOWY, MIG.INS0, MIG.GAP0),
-			   "[grow]"));
+					MIG.get(MIG.FILL, MIG.FLOWY, MIG.INS0, MIG.GAP0),
+					"[grow]"));
 			dim = new Dimension(img.getIconWidth(), img.getIconWidth());
 		} else {
 			setLayout(new MigLayout(
-			   MIG.get(MIG.FILL, MIG.FLOWX, MIG.INS0, MIG.GAP0),
-			   "[]", "[][grow]"));
+					MIG.get(MIG.FILL, MIG.FLOWX, MIG.INS0, MIG.GAP0),
+					"[]", "[][grow]"));
 			dim = new Dimension(img.getIconHeight(), img.getIconHeight());
 		}
 		setPreferredSize(dim);
@@ -208,8 +208,8 @@ public class StoryboardScene extends AbstractGradientPanel implements FocusListe
 
 	private JPanel initPanel() {
 		JPanel panel = new JPanel(new MigLayout(
-		   MIG.get(MIG.FILL, MIG.FLOWY, MIG.INS0, MIG.GAP0),
-		   "[]", "[][grow][]"));
+				MIG.get(MIG.FILL, MIG.FLOWY, MIG.INS0, MIG.GAP0),
+				"[]", "[][grow][]"));
 		panel.setOpaque(false);
 		panel.setBorder(SwingUtil.getBorderDefault(4));
 		panel.setMinimumSize(dim);
@@ -231,7 +231,7 @@ public class StoryboardScene extends AbstractGradientPanel implements FocusListe
 		lbTitle.setToolTipText(scene.getName());
 		lbTitle.setBorder(SwingUtil.getBorderDefault());
 		if (!Html.isEmpty(scene.getNotes())
-		   || !Html.isEmpty(scene.getDescription())) {
+				|| !Html.isEmpty(scene.getDescription())) {
 			lbTitle.setToolTipText(getToolTitle());
 		}
 		upperPanel.add(lbTitle, MIG.get(MIG.GROW, MIG.SPANX + " 2"));
@@ -256,26 +256,26 @@ public class StoryboardScene extends AbstractGradientPanel implements FocusListe
 		buttonPanel.add(btDelete);
 		btNew = getNewButton();
 		buttonPanel.add(btNew);
-		upperPanel.add(buttonPanel, MIG.get(MIG.SPAN + "y 4", MIG.WRAP, MIG.TOP));
+		//upperPanel.add(buttonPanel, MIG.get(MIG.SPAN + "y 4", MIG.WRAP, MIG.TOP));
 		// persons
 		ImageIcon img = IconUtil.getImageIcon("striph");
 		int w = img.getIconWidth() - (IconUtil.getDefSize() + (IconUtil.getDefSize() / 3));
-		EntityLinksPanel ep = new EntityLinksPanel(mainFrame, scene, Book.TYPE.PERSON, false);
+		EntityLinksPanel ep = new EntityLinksPanel(mainFrame, scene, Book.TYPE.PERSON);
 		ep.setMaximumSize(new Dimension(w, IconUtil.getDefSize()));
-		upperPanel.add(ep, MIG.get(MIG.SPANX, MIG.GROWX, MIG.WRAP));
+		upperPanel.add(ep, MIG.get(MIG.NEWLINE, MIG.SPANX, MIG.GROWX, MIG.WRAP));
 		//locations
-		upperPanel.add(new EntityLinksPanel(mainFrame, scene, Book.TYPE.LOCATION, false),
-		   MIG.get(MIG.SPANX, MIG.GROWX, MIG.WRAP));
+		upperPanel.add(new EntityLinksPanel(mainFrame, scene, Book.TYPE.LOCATION),
+				MIG.get(MIG.SPANX, MIG.GROWX, MIG.WRAP));
 		//items
-		upperPanel.add(new EntityLinksPanel(mainFrame, scene, Book.TYPE.ITEM, false),
-		   MIG.get(MIG.SPANX, MIG.GROWX, MIG.WRAP));
+		upperPanel.add(new EntityLinksPanel(mainFrame, scene, Book.TYPE.ITEM),
+				MIG.get(MIG.SPANX, MIG.GROWX, MIG.WRAP));
 		//plots
-		upperPanel.add(new EntityLinksPanel(mainFrame, scene, Book.TYPE.PLOT, false),
-		   MIG.get(MIG.SPANX, MIG.GROWX, MIG.WRAP));
+		upperPanel.add(new EntityLinksPanel(mainFrame, scene, Book.TYPE.PLOT),
+				MIG.get(MIG.SPANX, MIG.GROWX, MIG.WRAP));
 		// scene date-time
 		lbTime = new JLabel(" ");
 		if (scene.hasScenets() && !DateUtil.isZeroTimeDate(scene.getScenets())) {
-			lbTime.setText(DateUtil.simpleDateTimeToString(scene.getScenets(), false));
+			lbTime.setText(DateUtil.simpleDateTimeToString(scene.getScenets()));
 		}
 		Color fg = lbTime.getForeground();
 		if (ColorUtil.isDark(scene.getStrand().getJColor()) && ColorUtil.isDark(fg)) {

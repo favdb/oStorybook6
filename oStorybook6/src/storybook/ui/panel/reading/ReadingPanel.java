@@ -46,7 +46,7 @@ import storybook.ctrl.Ctrl;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.strand.Strand;
-import storybook.dialog.OptionsDlg;
+import storybook.dialog.options.OptionsDlg;
 import storybook.exim.exporter.ExportBookToHtml;
 import storybook.review.Review;
 import storybook.tools.ViewUtil;

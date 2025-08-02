@@ -355,7 +355,7 @@ public class Ui {
 		if (opt.contains(BNEW)) {
 			JPanel p = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0)));
 			JButton bt = new JButton(IconUtil.getIconSmall(ICONS.K.NEW));
-			SwingUtil.setForcedSize(bt, IconUtil.getDefDim());
+			SwingUtil.setFixedSize(bt, IconUtil.getDefDim());
 			bt.addActionListener((ActionEvent e) -> {
 				AbstractEntity newEntity = BookUtil.getNewEntity(null, objtype);
 				boolean rc = caller.mainFrame.showEditorAsDialog(newEntity, bt);
@@ -396,7 +396,7 @@ public class Ui {
 		if (opt.contains(BNEW)) {
 			JPanel p = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0)));
 			JButton bt = new JButton(IconUtil.getIconSmall(ICONS.K.NEW));
-			SwingUtil.setForcedSize(bt, IconUtil.getDefDim());
+			SwingUtil.setFixedSize(bt, IconUtil.getDefDim());
 			bt.addActionListener(e -> {
 				AbstractEntity newEntity = BookUtil.getNewEntity(null, type);
 				boolean rc = caller.mainFrame.showEditorAsDialog(newEntity, bt);
@@ -418,8 +418,8 @@ public class Ui {
 	/**
 	 * initialize a JCheckBox
 	 *
-	 * @param panel: JPanel where add the JCheckBox, if null the JCheckBox isn't added anywhere just
-	 * return the JCheckBox
+	 * @param panel: JComponent where to add the JCheckBox, if null the JCheckBox isn't added
+	 * anywhere just return the JCheckBox
 	 * @param name: internal name of the JCheckBox
 	 * @param text: text for the JCheckBox
 	 * @param sel: checkbox to be selected
@@ -434,6 +434,10 @@ public class Ui {
 		cb.setName(name);
 		cb.setText(I18N.getMsg(text));
 		cb.setSelected(sel);
+		String tip = I18N.getMsg(name + "_tip");
+		if (!tip.startsWith("!")) {
+			cb.setToolTipText(tip);
+		}
 		if (opt != null && opt.contains(BMANDATORY)) {
 			cb.setFont(FontUtil.getBold());
 		}
@@ -740,6 +744,7 @@ public class Ui {
 	@SuppressWarnings("unchecked")
 	public static JSCheckList initCkList(JPanel p, MainFrame mainFrame, Book.TYPE type,
 			List<?> ls, JTabbedPane tab, String opt) {
+		//LOG.trace(TT + "initCkList(...)");
 		JPanel p1 = new JPanel(new MigLayout(MIG.get(MIG.INS1, MIG.GAP0, MIG.FILLX), "[grow][]"));
 		if (opt.contains(BBORDER)) {
 			p1.setBorder(BorderFactory.createTitledBorder(I18N.getColonMsg(type.toString())));

@@ -50,15 +50,17 @@ public class ToolBarDlg extends AbsDialog {
 			VIEW = "view";
 
 	/* desciption des boutons
-	paramètre 1 = groupe (file,new, table, view
-	paramètre 2 =
-	paramètre 3 = nom de l'icone
-	paramètre 4 = texte du tooltips
+	paramètre 1 = group (file,new, table, view)
+	paramètre 2 = group number
+	paramètre 3 = icone name
+	paramètre 4 = tooltips I18N text
 	 */
 	String boutons[][] = {
+		//file buttons
 		{FILE, "0", ICONS.K.F_NEW.toString(), "file.new"},
 		{FILE, "0", ICONS.K.F_OPEN.toString(), "file.open"},
 		{FILE, "0", ICONS.K.F_SAVE.toString(), "file.save"},
+		//new buttons
 		{NEW, "0", ICONS.K.NEW_STRAND.toString(), "strand.new"},
 		{NEW, "0", ICONS.K.NEW_PART.toString(), "part.new"},
 		{NEW, "0", ICONS.K.NEW_CHAPTER.toString(), "chapter.new"},
@@ -68,11 +70,12 @@ public class ToolBarDlg extends AbsDialog {
 		{NEW, "1", ICONS.K.ENT_RELATION.toString(), "relation.new"},
 		{NEW, "2", ICONS.K.NEW_LOCATION.toString(), "location.new"},
 		{NEW, "3", ICONS.K.NEW_ITEM.toString(), "item.new"},
-		{NEW, "3", ICONS.K.ENT_ITEMLINK.toString(), "itemlink.new"},
+		//{NEW, "3", ICONS.K.ENT_ITEMLINK.toString(), "itemlink.new"},
 		{NEW, "4", ICONS.K.NEW_TAG.toString(), "tag.new"},
-		{NEW, "4", ICONS.K.ENT_TAGLINK.toString(), "taglink.new"},
+		//{NEW, "4", ICONS.K.ENT_TAGLINK.toString(), "taglink.new"},
 		{NEW, "5", ICONS.K.ENT_MEMO.toString(), "memo.new"},
 		{NEW, "6", ICONS.K.ENT_IDEA.toString(), "idea.new"},
+		//table buttons
 		{TABLE, "0", ICONS.K.TABLE_STRANDS.toString(), "strand"},
 		{TABLE, "0", ICONS.K.TABLE_PARTS.toString(), "part"},
 		{TABLE, "0", ICONS.K.TABLE_CHAPTERS.toString(), "chapter"},
@@ -82,11 +85,10 @@ public class ToolBarDlg extends AbsDialog {
 		{TABLE, "1", ICONS.K.TABLE_RELATIONS.toString(), "relationship"},
 		{TABLE, "2", ICONS.K.TABLE_LOCATIONS.toString(), "location"},
 		{TABLE, "3", ICONS.K.TABLE_ITEMS.toString(), "item"},
-		//{TABLE, "3", ICONS.K.TABLE_ITEMLINKS.toString(), "itemlinks"},
 		{TABLE, "4", ICONS.K.TABLE_TAGS.toString(), "tag"},
-		//{TABLE, "4", ICONS.K.TABLE_TAGLINKS.toString(), "taglinks"},
 		{TABLE, "5", ICONS.K.TABLE_MEMOS.toString(), "memo"},
 		{TABLE, "6", ICONS.K.TABLE_IDEAS.toString(), "idea"},
+		//view buttons
 		{VIEW, "0", ICONS.K.VW_CHRONO.toString(), "view.chrono"},
 		{VIEW, "0", ICONS.K.VW_TIMELINE.toString(), "view.timeline"},
 		{VIEW, "1", ICONS.K.VW_BOOK.toString(), "view.book"},

@@ -59,64 +59,6 @@ public class CategoryTable extends AbsTable {
 	}
 
 	@Override
-	protected void sendOrderUpEntity(int row) {
-		if (row == -1) {
-			return;
-		}
-		Category category = (Category) getEntityFromRow(row);
-		if (category != null) {
-			ctrl.orderUpCategory(category);
-		}
-	}
-
-	@Override
-	protected void sendOrderDownEntity(int row) {
-		if (row == -1) {
-			return;
-		}
-		Category category = (Category) getEntityFromRow(row);
-		if (category != null) {
-			ctrl.orderDownCategory(category);
-		}
-	}
-
-	@Override
-	protected void orderUpEntity(PropertyChangeEvent evt) {
-		/*AbstractEntity entity = (AbstractEntity) evt.getNewValue();
-		Category category = (Category) entity;
-		Model model = mainFrame.getBookModel();
-		Session session = model.beginTransaction();
-		CategoryDAO dao = new CategoryDAO(session);
-		dao.orderCategories();
-		model.commit();
-		session = model.beginTransaction();
-		dao = new CategoryDAO(session);
-		dao.orderUpCategory(category);
-		model.commit();
-		SbView view = mainFrame.getView(VIEWNAME.CATEGORIES);
-		mainFrame.getBookController().refresh(view);
-		sortByColumn(2);*/
-	}
-
-	@Override
-	protected void orderDownEntity(PropertyChangeEvent evt) {
-		/*AbstractEntity entity = (AbstractEntity) evt.getNewValue();
-		Category category = (Category) entity;
-		Model model = mainFrame.getBookModel();
-		Session session = model.beginTransaction();
-		CategoryDAO dao = new CategoryDAO(session);
-		dao.orderCategories();
-		model.commit();
-		session = model.beginTransaction();
-		dao = new CategoryDAO(session);
-		dao.orderDownCategory(category);
-		model.commit();
-		SbView view = mainFrame.getView(VIEWNAME.CATEGORIES);
-		mainFrame.getBookController().refresh(view);
-		sortByColumn(2);*/
-	}
-
-	@Override
 	protected AbstractEntity getEntity(Long id) {
 		Category category = (Category) mainFrame.project.get(Book.TYPE.CATEGORY, id);
 		return category;

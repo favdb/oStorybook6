@@ -60,6 +60,11 @@ import storybook.tools.swing.splash.Waiting;
 import storybook.tools.synonyms.Synonyms;
 import storybook.ui.MainFrame;
 
+/**
+ * class for the application
+ *
+ * @author favdb
+ */
 public class App extends Component {
 
 	private static final String TT = "App.";
@@ -136,9 +141,9 @@ public class App extends Component {
 	 */
 	public static void main(String[] args) {
 		//LOG.log("Starting main");
-		initArgs(args);//initialize args
-		initPref();//initialize Preferences
-		LaF.init();//initialize Look and Feel
+		initArgs(args);
+		initPref();
+		LaF.init();
 		fonts = new AppFont();//initialize Fonts
 		String tempDir = System.getProperty("java.io.tmpdir");
 		String fn = tempDir + File.separator + Const.getName() + Const.getVersion() + ".lck";
@@ -171,6 +176,11 @@ public class App extends Component {
 		});
 	}
 
+	/**
+	 * initialize for arguments
+	 *
+	 * @param args
+	 */
 	private static void initArgs(String[] args) {
 		String vargs = String.join(" ", args);
 		if (vargs.length() == 0) {
@@ -263,7 +273,7 @@ public class App extends Component {
 	 * @param toOpen
 	 */
 	private void initFile(File toOpen) {
-		LOG.trace(TT + "initFile(toOpen=" + (toOpen != null ? toOpen.toString() : "null") + ")");
+		//LOG.trace(TT + "initFile(toOpen=" + (toOpen != null ? toOpen.toString() : "null") + ")");
 		try {
 			// first start dialog
 			if (preferences.getBoolean(Pref.KEY.FIRST_START, true)) {
@@ -581,7 +591,7 @@ public class App extends Component {
 	}
 
 	/**
-	 * open the given Project
+	 * open the given Project to a new MainFrame
 	 *
 	 * @param project
 	 *
@@ -649,7 +659,6 @@ public class App extends Component {
 
 	/**
 	 * clear the recent files list
-	 *
 	 */
 	public void recentfilesClear() {
 		//LOG.printInfos(TT+"recentFilesClear()");
@@ -659,7 +668,6 @@ public class App extends Component {
 
 	/**
 	 * exit the application
-	 *
 	 */
 	public void exit() {
 		//LOG.printInfos(TT+"exit()");
@@ -683,7 +691,7 @@ public class App extends Component {
 	}
 
 	/**
-	 * refresh the data
+	 * refresh all opened MainFrames
 	 */
 	public void refresh() {
 		//LOG.printInfos(TT+"refresh()");
@@ -701,7 +709,7 @@ public class App extends Component {
 	}
 
 	/**
-	 * reload the menu bar
+	 * reload the menu bar for all MainFrames
 	 */
 	public void reloadMenuBars() {
 		//LOG.printInfos(TT + "reloadMenuBars()");
@@ -713,7 +721,7 @@ public class App extends Component {
 	}
 
 	/**
-	 * reload the status bar
+	 * reload the status bar for all MainFrames
 	 */
 	public void reloadStatusBars() {
 		for (MainFrame mainFrame : mainFrames) {
@@ -838,7 +846,7 @@ public class App extends Component {
 		});
 	}
 
-	/////// Copy/Paste functions
+	/////// Copy/Paste functions ////////
 	private boolean pasteOK = false;
 
 	public boolean pasteIsOK() {
@@ -857,7 +865,7 @@ public class App extends Component {
 			m.getMainMenu().enableCopyEntity(mainFrames.size() > 1);
 		}
 	}
-	/////// end Copy/Paste functions
+	/////// end Copy/Paste functions ///////////
 
 	/**
 	 * import a document as an OSBK project
@@ -875,6 +883,9 @@ public class App extends Component {
 		initNewFileEnd(newMainFrame, proj, hi.getTitle());
 	}
 
+	/**
+	 * refresh the user interface language
+	 */
 	public void refreshLanguage() {
 		JOptionPane.showMessageDialog(this,
 				I18N.getMsg("preferences.lang.change"),

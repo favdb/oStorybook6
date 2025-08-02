@@ -17,10 +17,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.db.status;
 
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
-import storybook.db.status.Status.STATUS;
 import resources.icons.IconUtil;
+import storybook.db.status.Status.STATUS;
 
 /**
  * @author martin
@@ -37,6 +38,7 @@ public class StatusButton extends JButton {
 		super(STATUS.values()[status].getIcon(sz));
 		this.setName("btStatus");
 		this.setToolTipText(STATUS.values()[status].getLabel());
+		this.setMargin(new Insets(0, 0, 0, 0));
 		this.addActionListener(listener);
 	}
 

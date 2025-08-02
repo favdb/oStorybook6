@@ -117,14 +117,14 @@ public class PrefCommon extends AbstractPanel {
 		btLanguage = new JButton();
 		btLanguage.setIcon(IconUtil.getIconSmall(ICONS.K.F_OPEN));
 		btLanguage.setToolTipText(I18N.getMsg("language.file_change"));
-		SwingUtil.setForcedSize(btLanguage, IconUtil.getDefDim());
+		SwingUtil.setFixedSize(btLanguage, IconUtil.getDefDim());
 		btLanguage.addActionListener((ActionEvent evt) -> changeLanguageFile());
 		add(btLanguage, "gap 0");
 
 		btLanguageReset = new JButton();
 		btLanguageReset.setIcon(IconUtil.getIconSmall(ICONS.K.CLEAR));
 		btLanguageReset.setToolTipText(I18N.getMsg("language.file_reset"));
-		SwingUtil.setForcedSize(btLanguageReset, IconUtil.getDefDim());
+		SwingUtil.setFixedSize(btLanguageReset, IconUtil.getDefDim());
 		btLanguageReset.addActionListener((ActionEvent evt) -> {
 			newMsgFile = null;
 			modifLanguage = true;

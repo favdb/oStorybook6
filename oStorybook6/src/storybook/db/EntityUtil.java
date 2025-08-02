@@ -18,7 +18,6 @@
 package storybook.db;
 
 import i18n.I18N;
-import java.awt.Component;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,6 @@ import javax.swing.JPopupMenu;
 import org.w3c.dom.Element;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import storybook.App;
 import storybook.ctrl.Ctrl;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.attribute.Attribute;
@@ -81,7 +79,7 @@ import storybook.ui.MainMenu;
  */
 public class EntityUtil {
 
-	private static final String TT = "EntityUtil",
+	private static final String TT = "EntityUtil.",
 			HTML_P_START = "<p style=\"padding-top:10px\">";
 	public static boolean WITH_CHRONO = true;
 
@@ -325,28 +323,26 @@ public class EntityUtil {
 	 */
 	public static void delete(MainFrame mainFrame, AbstractEntity entity) {
 		// check if read only
-		boolean allowed = true;
+		String msg = "";
 		List<Long> readOnlyIds = EntityUtil.getReadOnlyIds(entity);
 		if (readOnlyIds.contains(entity.getId())) {
-			allowed = false;
+			msg = I18N.getMsg("no.delete");
 		}
 		if (entity.getObjType() == Book.TYPE.STRAND
-				&& Book.getNbStrands(mainFrame) == 1) {
-			allowed = false;
+				&& Book.getNbOf(mainFrame, Book.TYPE.STRAND) < 2) {
+			msg = I18N.getMsg("project.delete_all");
 		}
 		if (entity.getObjType() == Book.TYPE.PART
-				&& Book.getNbParts(mainFrame) == 1) {
-			allowed = false;
+				&& Book.getNbOf(mainFrame, Book.TYPE.PART) < 2) {
+			msg = I18N.getMsg("project.delete_all");
 		}
 		if (entity.getObjType() == Book.TYPE.CHAPTER
-				&& Book.getNbChapters(mainFrame) == 1) {
-			allowed = false;
+				&& Book.getNbOf(mainFrame, Book.TYPE.CHAPTER) < 2) {
+			msg = I18N.getMsg("project.delete_all");
 		}
-		if (!allowed) {
+		if (!msg.isEmpty()) {
 			JOptionPane.showMessageDialog(mainFrame,
-					I18N.getMsg("no.delete"),
-					I18N.getMsg("warning"),
-					JOptionPane.ERROR_MESSAGE);
+					msg, I18N.getMsg("delete"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		ConfirmDeleteDlg dlg = new ConfirmDeleteDlg(mainFrame, entity);
@@ -363,6 +359,17 @@ public class EntityUtil {
 			mainFrame.lastPartSet(firstPart);
 		}
 		ctrl.deleteEntity(entity);
+	}
+
+	/**
+	 * check if multi delete is allowed
+	 *
+	 * @param mainFrame
+	 * @param entities
+	 * @return
+	 */
+	public static boolean deleteAllowed(MainFrame mainFrame, List<AbstractEntity> entities) {
+		return true;
 	}
 
 	/**
@@ -403,10 +410,8 @@ public class EntityUtil {
 		// show in view...
 		List<JMenuItem> lj = new ArrayList<>();
 		if (entity instanceof Scene || entity instanceof Chapter) {
-			if (withChrono) {
-				lj.add(MainMenu.initMenuItem("view.chrono", "",
-						e -> ctrl.chronoShow(entity)));
-			}
+			lj.add(MainMenu.initMenuItem("view.chrono", "",
+					e -> ctrl.chronoShow(entity)));
 			lj.add(MainMenu.initMenuItem("view.book", "",
 					e -> ctrl.bookShow(entity)));
 			lj.add(MainMenu.initMenuItem("view.manage", "",
@@ -431,16 +436,24 @@ public class EntityUtil {
 		menu.add(new JPopupMenu.Separator());
 		if (entity instanceof Chapter) {
 			menu.add(MainMenu.initMenuItem(ICONS.K.SORT, "order.time", "", ' ', "order.time",
-					e -> mainFrame.project.scenes.renumberByTime(mainFrame, (Chapter) entity)));
+					e -> {
+						if (mainFrame.project.scenes.renumberByTime((Chapter) entity) > 0) {
+							mainFrame.getBookController().updateEntity((Chapter) entity);
+						}
+					}));
 			menu.add(MainMenu.initMenuItem(ICONS.K.SORT, "re_sort", "", ' ', "re_sort",
-					e -> mainFrame.project.scenes.renumber(mainFrame, (Chapter) entity)));
+					e -> {
+						if (mainFrame.project.scenes.renumber((Chapter) entity) > 0) {
+							mainFrame.getBookController().updateEntity((Chapter) entity);
+						}
+					}));
 			menu.add(new JPopupMenu.Separator());
 		}
 
 		if (entity instanceof Scene) {
 			menu.add(Status.getMenu(mainFrame, (Scene) entity));
 		}
-
+		// menu for creating an entity
 		menu.add(MainMenu.initMenuItem(ICONS.K.NEW,
 				"entity.new", "", ' ', "new." + entity.getObjType().toString(),
 				e -> {
@@ -449,9 +462,10 @@ public class EntityUtil {
 						ctrl.setEditEntity(n);
 					}
 				}));
+		// menu for deleting an entity
 		menu.add(MainMenu.initMenuItem(ICONS.K.DELETE, "delete", "", ' ', "delete",
 				e -> EntityUtil.delete(mainFrame, entity)));
-
+		// menu for idea
 		if (entity instanceof Idea) {
 			JMenuItem item = new JMenuItem(I18N.getMsg("ideabox.copy_to"));
 			item.setIcon(IconUtil.getIconSmall(ICONS.K.IDEABOX));
@@ -463,6 +477,7 @@ public class EntityUtil {
 			});
 			menu.add(item);
 		}
+		// menu for Location
 		if (entity instanceof Location) {
 			menu.add(new JPopupMenu.Separator());
 			menu.add(MainMenu.initMenuItem(ICONS.K.WORLD, "openStreetMap", "", ' ', "!OpenStreetMap",
@@ -471,11 +486,11 @@ public class EntityUtil {
 		if (menu.getComponents().length == 0) {
 			return null;
 		}
-		for (Component comp : menu.getComponents()) {
+		/*for (Component comp : menu.getComponents()) {
 			if (comp instanceof JMenuItem) {
 				((JMenuItem) comp).setFont(App.fonts.defGet());
 			}
-		}
+		}*/
 		return menu;
 	}
 
@@ -958,7 +973,7 @@ public class EntityUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static String getNames(List<?> entities) {
-		//LOG.printInfos(TT+".getListName(entities nb="+(entities==null?"null":entities.size())+")");
+		//LOG.trace(TT+".getListName(entities nb="+(entities==null?"null":entities.size())+")");
 		if (entities == null || entities.isEmpty()) {
 			return ("");
 		}
@@ -967,6 +982,31 @@ public class EntityUtil {
 			list.add(e.getName());
 		}
 		return ListUtil.join(list);
+	}
+
+	/**
+	 * get a String containing the list of names of the given Entities
+	 *
+	 * @param name
+	 * @param entities
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static String getNamesToHtml(String name, List<?> entities) {
+		//LOG.trace(TT + ".getNamesToHtml("
+		//		+ "name=" + name
+		//		+ "entities nb=" + (entities == null ? "null" : entities.size()) + ")");
+		StringBuilder b = new StringBuilder("<p><b>").append(I18N.getColonMsg(name)).append(" </b>");
+		List<String> list = new ArrayList<>();
+		if (entities != null && !entities.isEmpty()) {
+			for (AbstractEntity e : (List<AbstractEntity>) entities) {
+				list.add(e.getName());
+			}
+		} else {
+			return "";
+		}
+		b.append(ListUtil.join(list, ", ")).append(("</p>"));
+		return b.toString();
 	}
 
 }

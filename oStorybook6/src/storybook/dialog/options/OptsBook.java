@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package storybook.db.book;
+package storybook.dialog.options;
 
 import api.mig.swing.MigLayout;
 import i18n.I18N;
@@ -35,11 +35,11 @@ import storybook.ui.panel.book.BookPanel;
  *
  * @author favdb
  */
-public class OptBook extends AbstractOptions {
+public class OptsBook extends AbstractOptions {
 
 	private final String ZOOM = "ZoomSlider";
 
-	public OptBook(MainFrame m) {
+	public OptsBook(MainFrame m) {
 		super(m);
 		init();
 		initUi();

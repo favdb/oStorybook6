@@ -20,7 +20,7 @@ import api.infonode.docking.View;
 import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.Color;
-import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -31,19 +31,16 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSlider;
 import javax.swing.JToolBar;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.UIManager;
+import resources.icons.IconUtil;
 import storybook.App;
 import storybook.ctrl.ActKey;
 import storybook.ctrl.Ctrl;
@@ -51,16 +48,14 @@ import static storybook.ctrl.Ctrl.PROPS.CHRONO_LAYOUTDIRECTION;
 import storybook.db.book.Book;
 import storybook.db.chapter.Chapter;
 import storybook.db.scene.Scene;
-import storybook.db.scene.Scenes;
-import storybook.db.strand.Strand;
-import storybook.db.strand.StrandLabel;
-import storybook.dialog.OptionsDlg;
+import storybook.db.scene.SceneSticker;
+import storybook.dialog.options.OptionsDlg;
 import storybook.tools.MessageLabel;
 import storybook.tools.ViewUtil;
-import storybook.tools.swing.ColorUtil;
+import storybook.tools.swing.FontUtil;
 import storybook.tools.swing.LaF;
 import storybook.tools.swing.PrintUtil;
-import storybook.tools.swing.SwingUtil;
+import storybook.tools.swing.js.JSZoomPanel;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.SbView;
@@ -69,146 +64,212 @@ import static storybook.ui.panel.AbstractPanel.setMinMax;
 import storybook.ui.panel.AbstractScrollPanel;
 
 /**
+ * class for ChronoPanel contains sub panels for nodate and for each date
  *
  * @author favdb
  */
 public class Chrono extends AbstractScrollPanel
-		implements Printable, MouseWheelListener, ItemListener, ChangeListener {
+		implements Printable, MouseWheelListener, ItemListener {
 
-	private static final String TT = "ChronoPanel";
+	private static final String TT = "Chrono.";
 
-	private final String CK_DIRECTION = "CbDirection", CK_NODATES = "CkNodates", SL_ZOOM = "SlZoom";
-	private static final String CLIENT_PROPERTY_STRAND_ID = "strand_id";
+	private final String CK_DIRECTION = "CkDirection",
+			CK_NODATES = "CkNodates",
+			ZOOM = "zoom";
 
-	public final static int ZOOM_MIN = 2;
-	public final static int ZOOM_MAX = 15;
-	private int zoom;
+	public final static int ZOOM_MIN = 1, ZOOM_MAX = 10;
 	public boolean vertical, nodates;
-	private List<StrandLabel> strandLabels = new ArrayList<>();
-	private JSlider sl_zoom;
 	private JCheckBox ckDirection, ckNodates;
-	private JPanel panelData;
+	private ChronoRow nodatePanel;
+	private JScrollPane nodateScroller;
+	//basic sizes
+	public int iconSize, fontSize;
+	//sizes for scene
+	public Dimension sceneSize;
+	public int textLen;
+	//sizes for row
+	public int rowWidth, rowHeight;
+	private SceneSticker selected;
 
 	public Chrono(MainFrame mainFrame) {
 		super(mainFrame);
 	}
 
-	@Override
-	protected void zoomSet(int val) {
-		zoom = val;
-		App.preferences.chronoSetZoom(val);
-		mainFrame.getBookController().chronoSetZoom(val);
-	}
-
-	@Override
-	protected int zoomGetValue() {
-		return zoom;
-	}
-
-	@Override
-	protected int zoomGetMin() {
-		return ZOOM_MIN;
-	}
-
-	@Override
-	protected int zoomGetMax() {
-		return ZOOM_MAX;
-	}
-
+	/**
+	 * initialize the class
+	 */
 	@Override
 	public void init() {
+		//LOG.trace(TT + "init()");
 		this.withPart = true;
-		zoom = setMinMax(ZOOM_MIN, ZOOM_MAX, App.preferences.chronoGetZoom());
+		zoom = setMinMax(App.preferences.chronoGetZoom(), ZOOM_MIN, ZOOM_MAX);
 		nodates = App.preferences.chronoGetLayoutNodates();
 		vertical = App.preferences.chronoGetLayoutDirection();
+		// standard sizes
+		iconSize = Math.max(8, Math.min(64, (int) (IconUtil.getDefSize() * (zoom / 5.0))));
+		fontSize = Math.max(6, Math.min(28, (int) (FontUtil.getDefault().getSize() * (zoom / 5.0))));
+		sceneSize = SceneSticker.getDefaultSize(zoom);
+		textLen = ((sceneSize.width * iconSize) * 3) / fontSize;
+		rowWidth = sceneSize.width
+				+ ((Integer) UIManager.get("ScrollBar.width"))
+				+ (FontUtil.getWidth() * 2);
+		rowHeight = sceneSize.height
+				+ ((Integer) UIManager.get("ScrollBar.width"))
+				+ (FontUtil.getHeight() * 2);
+		/* trace for options
+		StringBuilder b = new StringBuilder();
+		b.append("   ").append("zoom=").append(zoom)
+				.append(", nodates=").append(nodates ? "true" : "false")
+				.append(", vertical=").append(vertical ? "true" : "false").append("\n");
+		b.append("   ").append("iconSize=").append(iconSize)
+				.append(", fontSize=").append(fontSize).append("\n");
+		b.append("   ").append("leftWidth=").append(leftWidth)
+				.append(", leftHeight=").append(leftHeight).append("\n");
+		b.append("   ").append("scene width=").append(sceneSize.width)
+				.append(", scene height=").append(sceneSize.height).append("\n");
+		b.append("   ").append("textLen=").append(textLen).append("\n");
+		b.append("   ").append("rowWidth=").append(rowWidth)
+				.append(", rowHeight=").append(rowHeight).append("\n");
+		LOG.trace("Options:\n" + b.toString());*/
 	}
 
+	/**
+	 * initialize the user interface
+	 *
+	 */
 	@Override
 	public void initUi() {
-		setLayout(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0)));
+		//LOG.trace(TT + "initUi()");
+		setLayout(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0, MIG.HIDEMODE2, MIG.WRAP1)));
 		add(initToolbar(), MIG.get(MIG.SPAN, MIG.GROWX));
-		panel = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0), "", "[top]"));
-		if (!LaF.isDark()) {
-			panel.setBackground(SwingUtil.getBackgroundColor());
-		}
-		scroller = new JScrollPane(panel);
-		SwingUtil.setUnitIncrement(scroller);
-		SwingUtil.setMaxPreferredSize(scroller);
-		add(scroller, MIG.GROW);
-		registerKeyboardAction();
-		panel.addMouseWheelListener(this);
+		add(initNodates(), MIG.get(MIG.SPAN, MIG.GROWX));
+		add(initRows(), MIG.GROW);
 		refreshData();
 	}
 
+	/**
+	 * initialize the toolbar
+	 *
+	 * @return
+	 */
 	@Override
 	public JToolBar initToolbar() {
 		if (toolbar != null) {
 			return toolbar;
 		}
 		super.initToolbar();
-		ckNodates = Ui.initCheckBox(toolbar,
-				CK_NODATES, "view.chrono.nodates", nodates, null, this);
-		ckNodates.addItemListener(this);
-		toolbar.add(ckNodates);
-
-		ckDirection = Ui.initCheckBox(toolbar,
-				CK_DIRECTION, "vertical", vertical, null, this);
-		ckDirection.setToolTipText(I18N.getColonMsg("statusbar.change.layout.direction"));
-		ckDirection.addItemListener(this);
-		toolbar.add(ckDirection);
-
-		JPanel zp = new JPanel();
-		zp.setBorder(SwingUtil.getBorderDefault());
-		zp.setBackground(toolbar.getBackground());
-		zp.add(new JLabel(I18N.getColonMsg("zoom")));
-		sl_zoom = new JSlider(JSlider.HORIZONTAL, ZOOM_MIN, ZOOM_MAX, zoom);
-		sl_zoom.setName(SL_ZOOM);
-		sl_zoom.setMajorTickSpacing(5);
-		sl_zoom.setMinorTickSpacing(1);
-		sl_zoom.addChangeListener(this);
-		zp.add(sl_zoom);
-		toolbar.add(zp);
-		return (toolbar);
+		//ckNodates
+		toolbar.add(ckNodates = Ui.initCheckBox(toolbar,
+				CK_NODATES, "view.chrono.nodates", nodates, null,
+				e -> changeNodate()));
+		//ckDirection
+		toolbar.add(ckDirection = Ui.initCheckBox(toolbar,
+				CK_DIRECTION, "view.chrono.direction", vertical, null,
+				e -> changeDirection()));
+		//zoom panel to select the zoom factor
+		toolbar.add(new JSZoomPanel(this, ZOOM, ZOOM_MIN, ZOOM_MAX, zoom));
+		return toolbar;
 	}
 
+	/**
+	 * initialize for nodate panel/scroller
+	 *
+	 * @return
+	 */
+	public JScrollPane initNodates() {
+		//LOG.trace(TT + "initNodates()");
+		nodatePanel = new ChronoRow(this, null, 'X');
+		nodateScroller = new JScrollPane(nodatePanel);
+		nodateScroller.setBorder(BorderFactory.createTitledBorder(I18N.getMsg("scene.nodate")));
+		nodateScroller.setMinimumSize(
+				new Dimension(sceneSize.width, rowHeight));
+		/*nodateScroller.setPreferredSize(new Dimension(LaF.getScreenWidth(),
+				rowHeight));
+		nodateScroller.setMaximumSize(
+				new Dimension(LaF.getScreenWidth(), LaF.getScreenHeight()));*/
+		return nodateScroller;
+	}
+
+	/**
+	 * initialize for rows panel/scroller
+	 *
+	 * @return
+	 */
+	private JScrollPane initRows() {
+		//LOG.trace(TT + "initRows()");
+		if (rowsScroller != null) {
+			this.remove(rowsScroller);
+		}
+		if (rowsPanel != null) {
+			rowsPanel.removeMouseWheelListener(this);
+			this.remove(rowsPanel);
+		}
+		rowsPanel = new JPanel(new MigLayout());
+		rowsPanel.setMaximumSize(
+				new Dimension(LaF.getScreenWidth(), LaF.getScreenHeight()));
+		rowsScroller = new JScrollPane(rowsPanel);
+		rowsScroller.setMinimumSize(
+				new Dimension(rowWidth + (FontUtil.getWidth()),
+						rowHeight + (FontUtil.getHeight())));
+		rowsScroller.setPreferredSize(
+				new Dimension(LaF.getScreenWidth(), LaF.getScreenHeight()));
+		return rowsScroller;
+	}
+
+	/**
+	 * ask if vertical mode
+	 *
+	 * @return
+	 */
+	public boolean isVertical() {
+		return App.preferences.chronoGetLayoutDirection();
+	}
+
+	/**
+	 * refresh all data
+	 */
 	public void refreshData() {
-		if (panel == null) {
+		if (nodatePanel == null || rowsPanel == null) {
 			return;
 		}
-		mainFrame.project.scenes.relativeDateInit();
-		panel.removeAll();
-		panel.setLayout(new MigLayout(MIG.INS1, "", "[top]"));
-		if (vertical) {
-			panel.setLayout(new MigLayout(MIG.get(MIG.INS1, MIG.WRAP), "[]", "[top]"));
-		}
-		List<Scene> scenes = Scenes.find(mainFrame);
-		List<Date> dates = mainFrame.project.scenes.findDistinctDates(scenes, 'H');
-		Collections.sort(dates);
-		// check that there is at least one date
-		if (dates.isEmpty()) {
-			panel.add(new MessageLabel("warning.no.scenes", 2), MIG.get(MIG.SPAN, MIG.WRAP, MIG.GROWX));
-			panel.revalidate();
-			panel.repaint();
-			return;
-		}
-		panel.add(panelData = new JPanel(new MigLayout(MIG.get(MIG.INS0))));
-		if (!LaF.isDark()) {
-			panelData.setBackground(SwingUtil.getBackgroundColor());
-		}
-		String migVal = (vertical ? MIG.WRAP : MIG.TOP);
-		//panel for scene without date
-		if (nodates) {
-			panelData.add(new ChronoDate(this, null), migVal);
-		}
-		//panel for ChronoDate
-		for (Date date : dates) {
-			panelData.add(new ChronoDate(this, date), migVal);
-		}
-		panel.revalidate();
-		revalidate();
-		repaint();
+		//LOG.trace(TT + "refreshData()");
+		nodatePanel.refreshData();
+		refreshRows();
 	}
 
+	public void refreshRows() {
+		//LOG.trace(TT + "refreshRows()");
+		rowsPanel.removeAll();
+		String mig = (!vertical ? MIG.get(MIG.INS1, MIG.GAP1, MIG.WRAP1) : MIG.get(MIG.INS1, MIG.GAP1));
+		rowsPanel.setLayout(new MigLayout(mig));
+		// check that there is at least one date
+		if (mainFrame.project.scenes.getList().isEmpty()) {
+			rowsPanel.add(new MessageLabel("warning.no.scenes", 2), MIG.get(MIG.SPAN, MIG.WRAP, MIG.GROWX));
+			rowsPanel.revalidate();
+			rowsPanel.repaint();
+			return;
+		}
+		char period = 'H';
+		List<Date> dates = mainFrame.project.scenes.findDistinctDates(period);
+
+		//panel for all dates
+		for (Date date : dates) {
+			ChronoRow p = new ChronoRow(this, date, period);
+			if (p.getNbScenes() > 0) {
+				rowsPanel.add(p, MIG.TOP);
+			}
+		}
+		if (selected != null) {
+			selected.setSelected(true);
+		}
+		rowsScroller.repaint();
+	}
+
+	/**
+	 * model property change
+	 *
+	 * @param evt
+	 */
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
 		//LOG.trace(TT+"modelPropertyChange(evt=" + evt.toString() + ")");
@@ -228,8 +289,9 @@ public class Chrono extends AbstractScrollPanel
 				}
 				return;
 			case CHRONO_ZOOM:
-				zoom = setMinMax(ZOOM_MIN, ZOOM_MAX, (Integer) newValue);
-				sl_zoom.setValue(zoom);
+				zoom = setMinMax((Integer) newValue, ZOOM_MIN, ZOOM_MAX);
+				//sl_zoom.setValue(zoom);
+				refresh();
 				return;
 			case CHRONO_LAYOUTNODATES:
 				nodates = (Boolean) evt.getNewValue();
@@ -248,12 +310,12 @@ public class Chrono extends AbstractScrollPanel
 			case SHOWINFO:
 				if (newValue instanceof Scene) {
 					Scene scene = (Scene) newValue;
-					ViewUtil.scrollToScene(this, panel, scene);
+					ViewUtil.scrollToScene(this, rowsPanel, scene);
 					return;
 				}
 				if (newValue instanceof Chapter) {
 					Chapter chapter = (Chapter) newValue;
-					ViewUtil.scrollToChapter(this, panel, chapter);
+					ViewUtil.scrollToChapter(this, rowsPanel, chapter);
 					return;
 				}
 				return;
@@ -264,7 +326,7 @@ public class Chrono extends AbstractScrollPanel
 		switch (Book.getTYPE(act.type)) {
 			case PART:
 				if (Ctrl.PROPS.CHANGE.check(act.getCmd())) {
-					ViewUtil.scrollToTop(scroller);
+					ViewUtil.scrollToTop(rowsScroller);
 					refresh();
 				}
 				break;
@@ -320,16 +382,7 @@ public class Chrono extends AbstractScrollPanel
 				}
 				break;
 			case STRAND:
-				if (Ctrl.PROPS.UPDATE.check(act.getCmd())) {
-					for (StrandLabel lb : strandLabels) {
-						long id = (Long) lb.getClientProperty(CLIENT_PROPERTY_STRAND_ID);
-						Strand strand = (Strand) mainFrame.project.get(Book.TYPE.STRAND, id);
-						lb.setBackground(strand.getJColor());
-						if (!ColorUtil.isDark(strand.getJColor())) {
-							lb.setForeground(Color.BLACK);
-						}
-					}
-				}
+				refresh();
 				break;
 			default:
 				break;
@@ -341,6 +394,15 @@ public class Chrono extends AbstractScrollPanel
 		// empty
 	}
 
+	/**
+	 * printing this panel
+	 *
+	 * @param g
+	 * @param pageFormat
+	 * @param pageIndex
+	 * @return
+	 * @throws PrinterException
+	 */
 	@Override
 	public int print(Graphics g, PageFormat pageFormat, int pageIndex) throws PrinterException {
 		Graphics2D g2 = (Graphics2D) g;
@@ -351,7 +413,9 @@ public class Chrono extends AbstractScrollPanel
 		double pageWidth = pageFormat.getImageableWidth();
 		g2.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 		// bottom center
-		g2.drawString("Page: " + (pageIndex + 1), (int) pageWidth / 2 - 35, (int) (pageHeight + fontHeight - fontDesent));
+		g2.drawString("Page: " + (pageIndex + 1),
+				(int) pageWidth / 2 - 35,
+				(int) (pageHeight + fontHeight - fontDesent));
 		this.paint(g2);
 		if (pageIndex < 4) {
 			return Printable.PAGE_EXISTS;
@@ -359,6 +423,11 @@ public class Chrono extends AbstractScrollPanel
 		return Printable.NO_SUCH_PAGE;
 	}
 
+	/**
+	 * item state change for CbPart, CK_NODATES or CK_DIRECTION
+	 *
+	 * @param evt
+	 */
 	@Override
 	public void itemStateChanged(ItemEvent evt) {
 		//LOG.trace(TT + "itemStateChanged(evt=" + evt.toString() + ")");
@@ -367,34 +436,70 @@ public class Chrono extends AbstractScrollPanel
 			if (cb.getName().equals("cbPartFilter")) {
 				refresh();
 			}
-		} else if (evt.getSource() instanceof JCheckBox) {
-			JCheckBox cb = (JCheckBox) evt.getSource();
-			if (cb.getName().equals(CK_NODATES)) {
-				nodates = cb.isSelected();
-				App.preferences.chronoSetLayoutNodates(nodates);
-				refresh();
-			}
-			if (cb.getName().equals(CK_DIRECTION)) {
-				vertical = cb.isSelected();
-				App.preferences.chronoSetLayoutDirection(vertical);
-				refresh();
-			}
 		}
 	}
 
+	private void changeNodate() {
+		//LOG.trace(TT + "changeNodate()");
+		nodateScroller.setVisible(ckNodates.isSelected());
+		App.preferences.chronoSetLayoutNodates(ckNodates.isSelected());
+		revalidate();
+		repaint();
+	}
+
+	private void changeDirection() {
+		//LOG.trace(TT + "changeVertical()");
+		vertical = ckDirection.isSelected();
+		App.preferences.chronoSetLayoutDirection(vertical);
+		refreshRows();
+		revalidate();
+		//repaint();
+	}
+
+	//**************
+	//** zoom     **
+	//**************
 	@Override
-	public void stateChanged(ChangeEvent e) {
-		Component comp = (Component) e.getSource();
-		if (SL_ZOOM.equals(comp.getName())) {
-			JSlider slider = (JSlider) e.getSource();
-			if (!slider.getValueIsAdjusting()) {
-				int val = slider.getValue();
-				App.preferences.chronoSetZoom(val);
-				zoom = val;
-				//sl_zoom.setValue(val);
-				refresh();
-			}
+	protected void zoomSet(int val) {
+		zoom = val;
+		App.preferences.chronoSetZoom(val);
+		mainFrame.getBookController().chronoSetZoom(val);
+	}
+
+	@Override
+	protected int zoomGetValue() {
+		return zoom;
+	}
+
+	@Override
+	protected int zoomGetMin() {
+		return ZOOM_MIN;
+	}
+
+	@Override
+	protected int zoomGetMax() {
+		return ZOOM_MAX;
+	}
+
+	/**
+	 * save the zoom value to the preferences and refresh
+	 *
+	 * @param val
+	 */
+	public void zoomSave(int val) {
+		//LOG.trace(TT + "zoomSave(val=" + val + ")");
+		zoom = setMinMax(val, ZOOM_MIN, ZOOM_MAX);
+		App.preferences.chronoSetZoom(val);
+		refresh();
+	}
+
+	public void setSelected(SceneSticker sel) {
+		if (selected != null) {
+			selected.setSelected(false);
 		}
+		selected = sel;
+		sel.setSelected(true);
+		mainFrame.getBookController().infoShow(selected.getScene());
 	}
 
 }

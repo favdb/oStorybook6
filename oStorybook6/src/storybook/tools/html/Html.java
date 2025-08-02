@@ -36,7 +36,7 @@ import storybook.ui.MainFrame;
 
 public class Html {
 
-	private static final String TT = "Html";
+	private static final String TT = "Html.";
 
 	/**
 	 * static String, suffixed by: _B for starting the tag _E for ending the tag
@@ -835,6 +835,7 @@ public class Html {
 	 * @return
 	 */
 	public static String htmlToText(String src, boolean preserveNewLines) {
+		//LOG.trace(TT + "htmlToText(src, preserve=" + (preserveNewLines ? "true" : "false")+")");
 		if (src == null) {
 			return ("");
 		}

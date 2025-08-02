@@ -55,7 +55,7 @@ import storybook.db.EntityCbItem;
 import storybook.db.EntityUtil;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
-import storybook.dialog.OptionsDlg;
+import storybook.dialog.options.OptionsDlg;
 import storybook.exim.EXIM;
 import storybook.renderer.EntityLCR;
 import storybook.tools.LOG;

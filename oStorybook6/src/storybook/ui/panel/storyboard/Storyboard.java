@@ -130,12 +130,12 @@ public class Storyboard extends AbstractScrollPanel implements Printable, MouseW
 			case SHOWINFO:
 				if (newValue instanceof Scene) {
 					Scene scene = (Scene) newValue;
-					ViewUtil.scrollToScene(this, panel, scene);
+					ViewUtil.scrollToScene(this, rowsPanel, scene);
 					return;
 				}
 				if (newValue instanceof Chapter) {
 					Chapter chapter = (Chapter) newValue;
-					ViewUtil.scrollToChapter(this, panel, chapter);
+					ViewUtil.scrollToChapter(this, rowsPanel, chapter);
 					return;
 				}
 				break;
@@ -150,7 +150,7 @@ public class Storyboard extends AbstractScrollPanel implements Printable, MouseW
 				break;
 			case PART:
 				if (isChange(act) || isDelete(act)) {
-					ViewUtil.scrollToTop(scroller);
+					ViewUtil.scrollToTop(rowsScroller);
 					refresh();
 					return;
 				}
@@ -202,17 +202,17 @@ public class Storyboard extends AbstractScrollPanel implements Printable, MouseW
 		ckDirection = Ui.initCheckBox(null, "ckDirection", "view.storyboard.direction",
 				layoutDirection, BNONE, this);
 		toolbar.add(ckDirection);
-		panel = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0), "", "[top]"));
+		rowsPanel = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0), "", "[top]"));
 		if (!LaF.isDark()) {
-			panel.setBackground(SwingUtil.getBackgroundColor());
+			rowsPanel.setBackground(SwingUtil.getBackgroundColor());
 		}
-		scroller = new JScrollPane(panel);
-		SwingUtil.setUnitIncrement(scroller);
-		SwingUtil.setMaxPreferredSize(scroller);
-		add(scroller, "grow");
+		rowsScroller = new JScrollPane(rowsPanel);
+		SwingUtil.setUnitIncrement(rowsScroller);
+		SwingUtil.setMaxPreferredSize(rowsScroller);
+		add(rowsScroller, "grow");
 		refresh();
 		registerKeyboardAction();
-		panel.addMouseWheelListener(this);
+		rowsPanel.addMouseWheelListener(this);
 	}
 
 	@Override
@@ -224,18 +224,18 @@ public class Storyboard extends AbstractScrollPanel implements Printable, MouseW
 		}
 		List<Chapter> chapters;
 		chapters = mainFrame.project.chapters.findByNumber(part);
-		panel.removeAll();
+		rowsPanel.removeAll();
 		if (chapters.isEmpty()) {
-			panel.add(new JLabel(I18N.getMsg("warning.no.scenes")));
-			panel.revalidate();
-			panel.repaint();
+			rowsPanel.add(new JLabel(I18N.getMsg("warning.no.scenes")));
+			rowsPanel.revalidate();
+			rowsPanel.repaint();
 			return;
 		}
 		for (Chapter chapter : chapters) {
 			StoryboardChapter rowPanel = new StoryboardChapter(mainFrame, chapter);
-			panel.add(rowPanel, (layoutDirection ? "grow" : "wrap"));
+			rowsPanel.add(rowPanel, (layoutDirection ? "grow" : "wrap"));
 		}
-		panel.revalidate();
+		rowsPanel.revalidate();
 		revalidate();
 		repaint();
 	}
@@ -322,7 +322,7 @@ public class Storyboard extends AbstractScrollPanel implements Printable, MouseW
 	}
 
 	public JPanel getPanel() {
-		return panel;
+		return rowsPanel;
 	}
 
 	@Override

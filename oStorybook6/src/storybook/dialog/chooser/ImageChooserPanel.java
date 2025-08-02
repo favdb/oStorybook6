@@ -78,13 +78,13 @@ public class ImageChooserPanel extends JPanel implements IRefreshable, MouseList
 		// the icon chooser
 		IconButton btChooser = new IconButton("btChooser", ICONS.K.F_OPEN, "file.select", e -> getShowIconChooserAction());
 		btChooser.setBounds(0, 0, 0, 0);
-		SwingUtil.setForcedSize(btChooser, IconUtil.getDefDim());
+		SwingUtil.setFixedSize(btChooser, IconUtil.getDefDim());
 		add(btChooser);
 
 		// button to clear the icon and set it to default
 		IconButton btClear = new IconButton("btClear", ICONS.K.CLEAR, "file.clear", e -> getClearIconAction());
 		btClear.setBounds(0, 0, 0, 0);
-		SwingUtil.setForcedSize(btClear, IconUtil.getDefDim());
+		SwingUtil.setFixedSize(btClear, IconUtil.getDefDim());
 		add(btClear);
 		//set the lbIconFile
 		lbIcon = new JLabel(startIcon);

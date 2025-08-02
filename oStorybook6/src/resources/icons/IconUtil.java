@@ -195,7 +195,7 @@ public class IconUtil {
 
 	public static Icon getIcon(String key, int width, int height) {
 		Class<?> x = MainResources.class;
-		String path = DIR + key.toLowerCase().replace(".", "/") + ".png";
+		String path = DIR + LARGE + key.toLowerCase().replace(".", "/") + ".png";
 		if (x == null) {
 			return STATE.UNKNOWN.icon;
 		}
@@ -310,7 +310,7 @@ public class IconUtil {
 	}
 
 	public static ImageIcon createImageIcon(Class<?> c, String path) {
-		//App.trace("createImageIcon from " + path);
+		//LOG.trace("createImageIcon from " + path);
 		URL imgURL = c.getResource(path);
 		if (imgURL != null) {
 			return (new ImageIcon(imgURL));

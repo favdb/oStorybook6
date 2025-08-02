@@ -19,9 +19,7 @@ package storybook.db.book;
 
 import i18n.I18N;
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -94,58 +92,15 @@ public class BookUtil {
 	}
 
 	/**
-	 * compute the Book size
+	 * choose an existing Project file
 	 *
-	 * @param mainFrame
 	 * @return
 	 */
-	public static Map<Object, Integer> getBookSize(MainFrame mainFrame) {
-		Map<Object, Integer> sizes = new HashMap<>();
-		// Get scenes
-		sizes.clear();
-		List<Part> parts = mainFrame.project.parts.getRoots();
-		for (Part part : parts) {
-			appendPartSizes(mainFrame, part, sizes);
-		}
-		return sizes;
-	}
-
-	private static int appendPartSizes(MainFrame mainFrame, Part part,
-	   Map<Object, Integer> sizes) {
-		int ret = 0;
-		List<Part> subparts = mainFrame.project.parts.getParts(part);
-		@SuppressWarnings("unchecked")
-		List<Chapter> chapters = mainFrame.project.chapters.getList();
-		for (Part subpart : subparts) {
-			ret += appendPartSizes(mainFrame, subpart, sizes);
-		}
-		for (Chapter chapter : chapters) {
-			int chapterSize = appendChapterSizes(mainFrame, chapter, sizes);
-			ret += chapterSize;
-		}
-		sizes.put(part, ret);
-		return ret;
-	}
-
-	private static int appendChapterSizes(MainFrame mainFrame, Chapter chapter,
-	   Map<Object, Integer> sizes) {
-		int ret = 0;
-		@SuppressWarnings("unchecked")
-		List<Scene> scenes = mainFrame.project.scenes.find(chapter);
-		for (Scene scene : scenes) {
-			int sceneSize = scene.getWords();
-			sizes.put(scene, sceneSize);
-			ret += sceneSize;
-		}
-		sizes.put(chapter, ret);
-		return ret;
-	}
-
 	public static Project chooseProject() {
 		//LOG.trace(TT + "chooseProject()");
 		final JFileChooser fc = new JFileChooser();
 		fc.setCurrentDirectory(new File(App.preferences.getString(Pref.KEY.LASTOPEN_DIR,
-		   EnvUtil.getHomeDir().getAbsolutePath())));
+				EnvUtil.getHomeDir().getAbsolutePath())));
 		FileFilter filter = new FileFilter("osbk");
 		fc.addChoosableFileFilter(filter);
 		fc.setFileFilter(filter);
@@ -154,9 +109,9 @@ public class BookUtil {
 			File file = fc.getSelectedFile();
 			if (!file.exists()) {
 				JOptionPane.showMessageDialog(null,
-				   I18N.getMsg("project.not.exist.text", file),
-				   I18N.getMsg("project.not.exist.title"),
-				   JOptionPane.ERROR_MESSAGE);
+						I18N.getMsg("project.not.exist.text", file),
+						I18N.getMsg("project.not.exist.title"),
+						JOptionPane.ERROR_MESSAGE);
 				return (Project) null;
 			}
 			if (Project.isArchive(file)) {
@@ -167,13 +122,13 @@ public class BookUtil {
 				return new Project(file);
 			}
 			MessageDlg.show((JFrame) null,
-			   I18N.getMsg("project.not_ok", file.getAbsolutePath()), "project", true);
+					I18N.getMsg("project.not_ok", file.getAbsolutePath()), "project", true);
 		}
 		return (Project) null;
 	}
 
 	/**
-	 * get a new Entityforthe given MainFrame
+	 * get a new Entity for the given MainFrame
 	 *
 	 * @param mainFrame
 	 * @param objtype : type of entity
@@ -262,7 +217,7 @@ public class BookUtil {
 	}
 
 	/**
-	 * get number of characters for a list of Chapters
+	 * get number of characters for a list of Chapters in the given Project
 	 *
 	 * @param project
 	 * @param chapters
@@ -278,7 +233,7 @@ public class BookUtil {
 	}
 
 	/**
-	 * get number of characters for a given Chapter
+	 * get number of characters for a given Chapter in the given Project
 	 *
 	 * @param project
 	 * @param chapter
@@ -296,7 +251,7 @@ public class BookUtil {
 	}
 
 	/**
-	 * get number of characters for all scenes
+	 * get number of characters for all scenes of the given Project
 	 *
 	 * @param project
 	 *
@@ -313,7 +268,7 @@ public class BookUtil {
 	}
 
 	/**
-	 * get number of words in a list of Chapters
+	 * get number of words in a list of Chapters of the given Project
 	 *
 	 * @param project
 	 * @param chapters : the list of chapters
@@ -329,7 +284,7 @@ public class BookUtil {
 	}
 
 	/**
-	 * get number of words for the given Chapter
+	 * get number of words for the given Chapter in the given Project
 	 *
 	 * @param project
 	 * @param chapter
@@ -347,7 +302,7 @@ public class BookUtil {
 	}
 
 	/**
-	 * get number of words in all Scenes
+	 * get number of words in all Scenes for the given project
 	 *
 	 * @param project
 	 *
@@ -364,10 +319,10 @@ public class BookUtil {
 	}
 
 	/**
-	 * convert format for summary, description, notes (HTML<>Markdown, Marksown<>HTML
+	 * convert format for summary, description, notes (HTML to Markdown, Markdown to HTML
 	 *
 	 * @param mainFrame
-	 * @param b : true for HTML<>Marxkdown
+	 * @param b : true for HTML to Markdown
 	 */
 	public static void convertTo(MainFrame mainFrame, boolean b) {
 		// when b is true convert to Markdown else convert to HTML
@@ -381,7 +336,7 @@ public class BookUtil {
 	/**
 	 * convert format for summary, description, notes (HTML to Markdown, Marksown to HTML)
 	 *
-	 * @param b : true for HTML<>Marxkdown
+	 * @param b : true for HTML to Markdown
 	 * @param project
 	 * @param type
 	 */

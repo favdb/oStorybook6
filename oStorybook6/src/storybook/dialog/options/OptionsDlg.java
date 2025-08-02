@@ -14,21 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package storybook.dialog;
+package storybook.dialog.options;
 
 import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
 import resources.icons.IconUtil;
-import storybook.db.book.OptBook;
+import storybook.dialog.AbsDialog;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.SbView;
-import storybook.ui.panel.chrono.ChronoOpt;
-import storybook.ui.panel.manage.ManageOpt;
-import storybook.ui.panel.timeline.TimelineOpt;
-import storybook.ui.panel.tree.TreeOpt;
 
 /**
  *
@@ -37,11 +33,11 @@ import storybook.ui.panel.tree.TreeOpt;
 public class OptionsDlg extends AbsDialog {
 
 	private final String sbView;
-	private OptBook bookOpt;
-	private ChronoOpt chronoOpt;
-	private ManageOpt manageOpt;
-	private TimelineOpt timelineOpt;
-	private TreeOpt treeOpt;
+	private OptsBook optsBook;
+	private OptsChrono optsChrono;
+	private OptsManage optsManage;
+	private OptsTimeline optsTimeline;
+	private OptsTree optsTree;
 
 	public OptionsDlg(MainFrame m) {
 		super(m);
@@ -69,43 +65,43 @@ public class OptionsDlg extends AbsDialog {
 
 	@Override
 	public void initUi() {
-		bookOpt = new OptBook(mainFrame);
-		chronoOpt = new ChronoOpt(mainFrame);
-		manageOpt = new ManageOpt(mainFrame);
-		timelineOpt = new TimelineOpt(mainFrame);
-		treeOpt = new TreeOpt(mainFrame);
+		optsBook = new OptsBook(mainFrame);
+		optsChrono = new OptsChrono(mainFrame);
+		optsManage = new OptsManage(mainFrame);
+		optsTimeline = new OptsTimeline(mainFrame);
+		optsTree = new OptsTree(mainFrame);
 		//layout
 		setLayout(new MigLayout(MIG.get(MIG.FILL, MIG.WRAP1)));
 		setTitle(I18N.getMsg("options"));
 		setIconImage(IconUtil.getIconImage("icon"));
 		if (sbView == null) {
 			JTabbedPane tabbed = new JTabbedPane();
-			tabbed.add(I18N.getMsg("view.book"), bookOpt);
-			tabbed.add(I18N.getMsg("view.chrono"), chronoOpt);
-			tabbed.add(I18N.getMsg("view.manage"), manageOpt);
-			tabbed.add(I18N.getMsg("view.tree"), treeOpt);
+			tabbed.add(I18N.getMsg("view.book"), optsBook);
+			tabbed.add(I18N.getMsg("view.chrono"), optsChrono);
+			tabbed.add(I18N.getMsg("view.manage"), optsManage);
+			tabbed.add(I18N.getMsg("view.tree"), optsTree);
 			add(tabbed);
 		} else {
 			switch (SbView.getVIEW(sbView)) {
 				case BOOK:
 					setTitle(I18N.getMsg("view.book"));
-					add(bookOpt);
+					add(optsBook);
 					break;
 				case CHRONO:
 					setTitle(I18N.getMsg("view.chrono"));
-					add(chronoOpt);
+					add(optsChrono);
 					break;
 				case MANAGE:
 					setTitle(I18N.getMsg("view.manage"));
-					add(manageOpt);
+					add(optsManage);
 					break;
 				case TIMELINE:
 					setTitle(I18N.getMsg("view.timeline"));
-					add(timelineOpt);
+					add(optsTimeline);
 					break;
 				case TREE:
 					setTitle(I18N.getMsg("view.tree"));
-					add(treeOpt);
+					add(optsTree);
 					break;
 			}
 		}

@@ -41,11 +41,9 @@ import storybook.ui.panel.AbstractPanel;
 import storybook.ui.panel.AbstractScenePanel;
 import storybook.ui.panel.book.BookPanel;
 import storybook.ui.panel.book.BookScenePanel;
-import storybook.ui.panel.chrono.SceneSticker;
 import storybook.ui.panel.book.StrandDateLabel;
+import storybook.ui.panel.manage.Manage;
 import storybook.ui.panel.manage.ManageChapter;
-import storybook.ui.panel.manage.ManagePanel;
-import storybook.ui.panel.manage.ManageSceneDnd;
 
 /**
  * Provides tools around the views.
@@ -55,14 +53,22 @@ import storybook.ui.panel.manage.ManageSceneDnd;
  */
 public class ViewUtil {
 
+	private static final String TT = "ViewUtil.";
+
 	private ViewUtil() {
 		// empty
 	}
 
+	/**
+	 * scroll to the top
+	 *
+	 * @param scroller
+	 */
 	public static void scrollToTop(final JScrollPane scroller) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				//LOG.trace(TT + "scrollToTop(scroller=" + scroller.toString() + ")");
 				JViewport viewport = scroller.getViewport();
 				JComponent comp = (JComponent) viewport.getView();
 				if (comp instanceof JTextPane) {
@@ -75,6 +81,15 @@ public class ViewUtil {
 		});
 	}
 
+	/**
+	 * scroll the Strand panel to the given date
+	 *
+	 * @param container
+	 * @param panel
+	 * @param strand
+	 * @param date
+	 * @return
+	 */
 	public static boolean scrollToStrandDate(AbstractPanel container, JPanel panel, Strand strand, Date date) {
 		if (strand == null || date == null) {
 			return false;
@@ -82,8 +97,16 @@ public class ViewUtil {
 		return doScrolling(container, panel, strand, date);
 	}
 
+	/**
+	 * scroll the given Chapter
+	 *
+	 * @param container
+	 * @param panel
+	 * @param chapter
+	 * @return
+	 */
 	public static boolean scrollToChapter(AbstractPanel container, JPanel panel, Chapter chapter) {
-		if (container instanceof ManagePanel) {
+		if (container instanceof Manage) {
 			if (chapter == null) {
 				return false;
 			}
@@ -100,6 +123,14 @@ public class ViewUtil {
 		return scrollToScene(container, panel, scene);
 	}
 
+	/**
+	 * scroll to the given Scene
+	 *
+	 * @param container
+	 * @param panel
+	 * @param scene
+	 * @return
+	 */
 	public static boolean scrollToScene(AbstractPanel container, JPanel panel, Scene scene) {
 		if (scene == null) {
 			return false;
@@ -111,6 +142,14 @@ public class ViewUtil {
 		return action.isFound();
 	}
 
+	/**
+	 * scroll to the given Scene
+	 *
+	 * @param container
+	 * @param panel
+	 * @param scene
+	 * @return
+	 */
 	public static boolean doScrolling(AbstractPanel container, JPanel panel, Scene scene) {
 		boolean found = false;
 		List<AbstractScenePanel> panels = findScenePanels(container);
@@ -121,17 +160,12 @@ public class ViewUtil {
 			}
 			if (scene.getId().equals(sc.getId())) {
 				Rectangle rect = scenePanel.getBounds();
-				/*if (container instanceof ChronoPanel) {
-					rect = SwingUtilities.convertRectangle(scenePanel.getParent(), rect, panel);
-				}*/
-				if (container instanceof ManagePanel) {
+				if (container instanceof Manage) {
 					rect = SwingUtilities.convertRectangle(scenePanel.getParent(), rect, panel);
 				}
 				SwingUtil.expandRectangle(rect);
 				// scroll
 				panel.scrollRectToVisible(rect);
-				// flash the found component
-				//SwingUtil.flashComponent(scenePanel);
 				found = true;
 				break;
 			}
@@ -139,6 +173,14 @@ public class ViewUtil {
 		return found;
 	}
 
+	/**
+	 * scroll to the given Chapter in Manage
+	 *
+	 * @param container
+	 * @param panel
+	 * @param chapter
+	 * @return
+	 */
 	public static boolean doScrolling(AbstractPanel container, JPanel panel, Chapter chapter) {
 		boolean found = false;
 		List<ManageChapter> panels = findChapterPanels(container);
@@ -152,8 +194,6 @@ public class ViewUtil {
 				SwingUtil.expandRectangle(rect);
 				// scroll and repaint
 				panel.scrollRectToVisible(rect);
-				// flash the found component
-				//SwingUtil.flashComponent(scenePanel);
 				found = true;
 				break;
 			}
@@ -161,6 +201,15 @@ public class ViewUtil {
 		return found;
 	}
 
+	/**
+	 * scroll to te given Strand and Date
+	 *
+	 * @param container
+	 * @param panel
+	 * @param strand
+	 * @param date
+	 * @return
+	 */
 	public static boolean doScrolling(AbstractPanel container, JPanel panel, Strand strand, Date date) {
 		boolean found = false;
 		List<StrandDateLabel> panels = findStrandDateLabels(container);
@@ -172,9 +221,6 @@ public class ViewUtil {
 			}
 			if (strand.getId().equals(s.getId()) && date.compareTo(d) == 0) {
 				JComponent comp;
-				/*if (container instanceof ChronoPanel) {
-					comp = (JComponent) sdPanel.getParent();
-				} else */
 				if (container instanceof BookPanel) {
 					comp = (JComponent) sdPanel.getParent().getParent();
 				} else {
@@ -184,8 +230,6 @@ public class ViewUtil {
 				SwingUtil.expandRectangle(rect);
 				// scroll
 				panel.scrollRectToVisible(rect);
-				// flash the found component
-				//SwingUtil.flashComponent(comp);
 				found = true;
 				break;
 			}
@@ -193,33 +237,31 @@ public class ViewUtil {
 		return found;
 	}
 
+	/**
+	 * find all Scenes panel for the given Container
+	 *
+	 * @param cont
+	 * @return
+	 */
 	public static List<AbstractScenePanel> findScenePanels(Container cont) {
-		/*if (cont instanceof ChronoPanel) {
-			return findChronoScenePanels(cont);
-		}*/
 		if (cont instanceof BookPanel) {
 			return findBookScenePanels(cont);
 		}
-		if (cont instanceof ManagePanel) {
+		if (cont instanceof Manage) {
 			return findManageScenePanels(cont);
 		}
 		return new ArrayList<>();
 	}
 
+	/**
+	 * find all AbstractScenePanel for the given Container
+	 *
+	 * @param cont
+	 * @return
+	 */
 	private static List<AbstractScenePanel> findBookScenePanels(Container cont) {
 		List<Component> components = new ArrayList<>();
 		components = SwingUtil.findComponentsByClass(cont, BookScenePanel.class, components);
-		List<AbstractScenePanel> panels = new ArrayList<>();
-		for (Component comp : components) {
-			panels.add((AbstractScenePanel) comp);
-		}
-		return panels;
-	}
-
-	private static List<AbstractScenePanel> findChronoScenePanels(Container cont) {
-		List<Component> components = new ArrayList<>();
-		components = SwingUtil.findComponentsByClass(cont,
-				SceneSticker.class, components);
 		List<AbstractScenePanel> panels = new ArrayList<>();
 		for (Component comp : components) {
 			panels.add((AbstractScenePanel) comp);
@@ -235,7 +277,7 @@ public class ViewUtil {
 	 */
 	private static List<AbstractScenePanel> findManageScenePanels(Container cont) {
 		List<Component> components = new ArrayList<>();
-		components = SwingUtil.findComponentsByClass(cont, ManageSceneDnd.class, components);
+		components = SwingUtil.findComponentsByClass(cont, AbstractScenePanel.class, components);
 		List<AbstractScenePanel> panels = new ArrayList<>();
 		for (Component comp : components) {
 			panels.add((AbstractScenePanel) comp);
@@ -243,6 +285,12 @@ public class ViewUtil {
 		return panels;
 	}
 
+	/**
+	 * find all ManageChapter for the given Container
+	 *
+	 * @param cont
+	 * @return
+	 */
 	private static List<ManageChapter> findChapterPanels(Container cont) {
 		List<Component> components = new ArrayList<>();
 		components = SwingUtil.findComponentsByClass(cont, ManageChapter.class, components);
@@ -262,4 +310,5 @@ public class ViewUtil {
 		}
 		return labels;
 	}
+
 }

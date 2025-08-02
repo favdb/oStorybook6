@@ -68,7 +68,7 @@ public class EditorPlainText extends AbstractPanel implements CaretListener {
 		ta.setWrapStyleWord(true);
 		ta.addCaretListener(this);
 		ta.setMaximumSize(SwingUtil.getScreenSize());
-		SwingUtil.setForcedSize(ta, SwingUtil.getScreenSize());
+		SwingUtil.setFixedSize(ta, SwingUtil.getScreenSize());
 
 		scroller = new JScrollPane(ta);
 		ta.setMaximumSize(SwingUtil.getScreenSize());

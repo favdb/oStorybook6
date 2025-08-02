@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package storybook.ui.panel.chrono;
+package storybook.dialog.options;
 
 import api.mig.swing.MigLayout;
 import i18n.I18N;
@@ -27,12 +27,13 @@ import storybook.ui.MainFrame;
 import storybook.ui.Ui;
 import storybook.ui.panel.AbstractOptions;
 import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panel.chrono.Chrono;
 
 /**
  *
  * @author favdb
  */
-public class ChronoOpt extends AbstractOptions {
+public class OptsChrono extends AbstractOptions {
 
 	private static final String CK_DIRECTION = "ckDirection", CK_NODATES = "ckNodates", SL_ZOOM = "ZoomSlider";
 	private boolean vertical, nodates;
@@ -40,7 +41,7 @@ public class ChronoOpt extends AbstractOptions {
 	private JCheckBox ckDirection, ckNodates;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
-	public ChronoOpt(MainFrame m) {
+	public OptsChrono(MainFrame m) {
 		super(m);
 		init();
 		initUi();
@@ -50,8 +51,7 @@ public class ChronoOpt extends AbstractOptions {
 	public void init() {
 		setZoomMin(Chrono.ZOOM_MIN);
 		setZoomMax(Chrono.ZOOM_MAX);
-		zoomValue = AbstractPanel.setMinMax(Chrono.ZOOM_MIN, Chrono.ZOOM_MAX,
-				App.preferences.chronoGetZoom());
+		zoomValue = AbstractPanel.setMinMax(App.preferences.chronoGetZoom(), Chrono.ZOOM_MIN, Chrono.ZOOM_MAX);
 		vertical = App.preferences.chronoGetLayoutDirection();
 		nodates = App.preferences.chronoGetLayoutNodates();
 	}
@@ -63,7 +63,7 @@ public class ChronoOpt extends AbstractOptions {
 		ckDirection = Ui.initCheckBox(this,
 				CK_DIRECTION, "vertical", vertical, null, this);
 		ckDirection.addItemListener(e -> changeDirection());
-		ckDirection.setToolTipText(I18N.getColonMsg("statusbar.change.layout.direction"));
+		ckDirection.setToolTipText(I18N.getColonMsg("view.chrono.direction"));
 		add(ckDirection);
 		// show nodates
 		ckNodates = Ui.initCheckBox(this,

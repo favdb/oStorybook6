@@ -120,22 +120,22 @@ public class BookInfoPanel extends AbstractPanel {
 		lbDate.setOpaque(false);
 		add(lbDate, MIG.CENTER);
 		// person links
-		personLinksPanel = new EntityLinksPanel(mainFrame, scene, Book.TYPE.PERSON, false);
+		personLinksPanel = new EntityLinksPanel(mainFrame, scene, Book.TYPE.PERSON);
 		if (!scene.getPersons().isEmpty()) {
 			add(personLinksPanel, MIG.GROWX);
 		}
 		// location links
-		locationLinksPanel = new EntityLinksPanel(mainFrame, scene, Book.TYPE.LOCATION, false);
+		locationLinksPanel = new EntityLinksPanel(mainFrame, scene, Book.TYPE.LOCATION);
 		if (!scene.getLocations().isEmpty()) {
 			add(locationLinksPanel, MIG.GROWX);
 		}
 		// item links
-		itemLinksPanel = new EntityLinksPanel(mainFrame, scene, Book.TYPE.ITEM, false);
+		itemLinksPanel = new EntityLinksPanel(mainFrame, scene, Book.TYPE.ITEM);
 		if (!scene.getItems().isEmpty()) {
 			add(itemLinksPanel, MIG.GROWX);
 		}
 		// strand links
-		strandLinksPanel = new EntityLinksPanel(mainFrame, scene, Book.TYPE.STRAND, false);
+		strandLinksPanel = new EntityLinksPanel(mainFrame, scene, Book.TYPE.STRAND);
 		if (!scene.getStrands().isEmpty()) {
 			add(strandLinksPanel, MIG.GROWX);
 		}

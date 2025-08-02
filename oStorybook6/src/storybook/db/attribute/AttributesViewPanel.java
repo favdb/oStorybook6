@@ -58,15 +58,15 @@ public class AttributesViewPanel extends AbstractScrollPanel implements Printabl
 		attributePane = new JTextPane();
 		attributePane.setEditable(false);
 		attributePane.setContentType(Html.TYPE);
-		panel = new JPanel(new MigLayout(MIG.FLOWY, "[grow,left]", ""));
-		panel.add(attributePane);
+		rowsPanel = new JPanel(new MigLayout(MIG.FLOWY, "[grow,left]", ""));
+		rowsPanel.add(attributePane);
 		if (!LaF.isDark()) {
-			panel.setBackground(SwingUtil.getBackgroundColor());
+			rowsPanel.setBackground(SwingUtil.getBackgroundColor());
 		}
-		scroller = new JScrollPane(attributePane);
-		SwingUtil.setUnitIncrement(scroller);
-		scroller.setPreferredSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-		add(scroller, MIG.GROW);
+		rowsScroller = new JScrollPane(attributePane);
+		SwingUtil.setUnitIncrement(rowsScroller);
+		rowsScroller.setPreferredSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+		add(rowsScroller, MIG.GROW);
 		refresh();
 	}
 

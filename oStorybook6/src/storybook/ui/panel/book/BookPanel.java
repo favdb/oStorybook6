@@ -40,7 +40,7 @@ import storybook.db.book.Book;
 import storybook.db.chapter.Chapter;
 import storybook.db.part.Part;
 import storybook.db.scene.Scene;
-import storybook.dialog.OptionsDlg;
+import storybook.dialog.options.OptionsDlg;
 import storybook.tools.ViewUtil;
 import storybook.tools.swing.LaF;
 import storybook.tools.swing.SwingUtil;
@@ -62,7 +62,6 @@ public class BookPanel extends AbstractScrollPanel {
 
 	public static final int ZOOM_MIN = 2, ZOOM_MAX = 10;
 	private static final String BT_MINUS = "btMinus", BT_PLUS = "btPlus";
-	private int zoom;
 	private JButton btMinus, btPlus;
 
 	public BookPanel(MainFrame mainFrame) {
@@ -104,18 +103,18 @@ public class BookPanel extends AbstractScrollPanel {
 	public void initUi() {
 		setLayout(new MigLayout(MIG.get(MIG.FLOWY, MIG.INS0)));
 		initToolbar();
-		panel = new JPanel(new MigLayout());
+		rowsPanel = new JPanel(new MigLayout());
 		if (!LaF.isDark()) {
-			panel.setBackground(SwingUtil.getBackgroundColor());
+			rowsPanel.setBackground(SwingUtil.getBackgroundColor());
 		}
-		scroller = new JScrollPane(panel);
-		SwingUtil.setUnitIncrement(scroller);
-		SwingUtil.setMaxPreferredSize(scroller);
-		add(scroller, MIG.GROW);
+		rowsScroller = new JScrollPane(rowsPanel);
+		SwingUtil.setUnitIncrement(rowsScroller);
+		SwingUtil.setMaxPreferredSize(rowsScroller);
+		add(rowsScroller, MIG.GROW);
 		zoomSet(Integer.min(App.preferences.bookGetZoom(), ZOOM_MAX));
-		ViewUtil.scrollToTop(scroller);
+		ViewUtil.scrollToTop(rowsScroller);
 		registerKeyboardAction();
-		panel.addMouseWheelListener(this);
+		rowsPanel.addMouseWheelListener(this);
 	}
 
 	/**
@@ -194,12 +193,12 @@ public class BookPanel extends AbstractScrollPanel {
 				case SHOWINFO:
 					if (newValue instanceof Scene) {
 						Scene scene = (Scene) newValue;
-						ViewUtil.scrollToScene(this, panel, scene);
+						ViewUtil.scrollToScene(this, rowsPanel, scene);
 						return;
 					}
 					if (newValue instanceof Chapter) {
 						Chapter chapter = (Chapter) newValue;
-						ViewUtil.scrollToChapter(this, panel, chapter);
+						ViewUtil.scrollToChapter(this, rowsPanel, chapter);
 						return;
 					}
 					return;
@@ -244,7 +243,7 @@ public class BookPanel extends AbstractScrollPanel {
 				case PART:
 					if (PROPS.CHANGE.check(xcmd)) {
 						refresh();
-						ViewUtil.scrollToTop(scroller);
+						ViewUtil.scrollToTop(rowsScroller);
 						return;
 					}
 					break;
@@ -257,7 +256,7 @@ public class BookPanel extends AbstractScrollPanel {
 	}
 
 	/**
-	 * refresh this panel
+	 * refresh this rowsPanel
 	 *
 	 */
 	@Override
@@ -265,24 +264,24 @@ public class BookPanel extends AbstractScrollPanel {
 		//LOG.trace("BookPanel.refresh()");
 		Part part = getCbPart();
 		List<Chapter> chapters = mainFrame.project.chapters.findByNumber(part);
-		panel.removeAll();
+		rowsPanel.removeAll();
 		for (Chapter chapter : chapters) {
 			List<Scene> scenes = mainFrame.project.scenes.findBy(chapter);
 			for (Scene scene : scenes) {
 				BookScenePanel scenePanel = new BookScenePanel(mainFrame, scene);
-				panel.add(scenePanel.getInfoPanel(), MIG.get(MIG.TOP, MIG.GROW));
-				panel.add(scenePanel.getTextPanel(), MIG.get(MIG.TOP, MIG.GROWX));
-				panel.add(scenePanel.getCmdPanel(), MIG.get(MIG.TOP, MIG.WRAP));
+				rowsPanel.add(scenePanel.getInfoPanel(), MIG.get(MIG.TOP, MIG.GROW));
+				rowsPanel.add(scenePanel.getTextPanel(), MIG.get(MIG.TOP, MIG.GROWX));
+				rowsPanel.add(scenePanel.getCmdPanel(), MIG.get(MIG.TOP, MIG.WRAP));
 			}
 		}
-		if (panel.getComponentCount() == 0) {
-			panel.add(new JLabel(I18N.getMsg("warning.no.scenes")));
+		if (rowsPanel.getComponentCount() == 0) {
+			rowsPanel.add(new JLabel(I18N.getMsg("warning.no.scenes")));
 		}
-		panel.revalidate();
+		rowsPanel.revalidate();
 	}
 
 	/**
-	 * refresh the info panel
+	 * refresh the info rowsPanel
 	 *
 	 * @param cont
 	 * @param evt
@@ -297,7 +296,7 @@ public class BookPanel extends AbstractScrollPanel {
 	}
 
 	/**
-	 * refresh the text panel
+	 * refresh the text rowsPanel
 	 *
 	 * @param cont
 	 * @param evt
@@ -312,12 +311,12 @@ public class BookPanel extends AbstractScrollPanel {
 	}
 
 	/**
-	 * get the panel component
+	 * get the rowsPanel component
 	 *
 	 * @return
 	 */
 	public JPanel getPanel() {
-		return panel;
+		return rowsPanel;
 	}
 
 	/**

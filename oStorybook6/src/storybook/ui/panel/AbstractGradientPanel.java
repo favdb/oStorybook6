@@ -11,25 +11,31 @@ import storybook.ui.MainFrame;
 @SuppressWarnings("serial")
 public abstract class AbstractGradientPanel extends AbstractPanel {
 
-	private Color startBgColor = Color.white;
-	private Color endBgColor = Color.black;
-	private boolean showBgGradient = true;
+	private Color startColor = Color.white;
+	private Color endColor = Color.black;
+	private boolean showGradient = true;
 
 	public AbstractGradientPanel() {
-		showBgGradient = false;
+		showGradient = false;
 	}
 
 	public AbstractGradientPanel(MainFrame mainFrame) {
-		this();
-		this.mainFrame = mainFrame;
+		super(mainFrame);
 	}
 
 	public AbstractGradientPanel(MainFrame mainFrame, boolean showBgGradient,
 			Color startBgColor, Color endBgColor) {
-		this(mainFrame);
-		this.showBgGradient = showBgGradient;
-		this.startBgColor = startBgColor;
-		this.endBgColor = endBgColor;
+		super(mainFrame);
+		this.showGradient = showBgGradient;
+		this.startColor = startBgColor;
+		this.endColor = endBgColor;
+	}
+
+	public void setGradient(Color start, Color end) {
+		this.showGradient = true;
+		this.startColor = start;
+		this.endColor = end;
+		refresh();
 	}
 
 	@Override
@@ -47,13 +53,13 @@ public abstract class AbstractGradientPanel extends AbstractPanel {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		if (showBgGradient) {
+		if (showGradient) {
 			Graphics2D g2d = (Graphics2D) g;
 			GradientPaint gradient = new GradientPaint(0, 0,
-					startBgColor,
+					startColor,
 					this.getWidth(),
 					this.getHeight(),
-					ColorUtil.blend(Color.white, endBgColor));
+					ColorUtil.blend(Color.white, endColor));
 			g2d.setPaint(gradient);
 			g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		} else {
@@ -62,18 +68,18 @@ public abstract class AbstractGradientPanel extends AbstractPanel {
 	}
 
 	public Color getEndBgColor() {
-		return endBgColor;
+		return endColor;
 	}
 
 	public Color getStartBgColor() {
-		return startBgColor;
+		return startColor;
 	}
 
 	public void setStartBgColor(Color startBgColor) {
-		this.startBgColor = startBgColor;
+		this.startColor = startBgColor;
 	}
 
 	public void setEndBgColor(Color endBgColor) {
-		this.endBgColor = endBgColor;
+		this.endColor = endBgColor;
 	}
 }

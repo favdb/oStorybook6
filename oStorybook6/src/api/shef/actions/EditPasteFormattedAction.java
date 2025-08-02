@@ -38,7 +38,7 @@ import storybook.tools.html.Html;
  */
 public class EditPasteFormattedAction extends HTMLTextEditAction {
 
-	private static final String TT = "EditPasteFormattedAction";
+	private static final String TT = "EditPasteFormattedAction.";
 
 	/**
 	 * @param editor
@@ -53,14 +53,14 @@ public class EditPasteFormattedAction extends HTMLTextEditAction {
 				return false;
 			}
 			Transferable content
-			   = Toolkit.getDefaultToolkit().getSystemClipboard()
-				  .getContents(EditPasteFormattedAction.this);
+					= Toolkit.getDefaultToolkit().getSystemClipboard()
+							.getContents(EditPasteFormattedAction.this);
 			if (content == null) {
 				return false;
 			}
 			DataFlavor flv = DataFlavor.selectBestTextFlavor(content.getTransferDataFlavors());
 			return flv != null && (flv.getMimeType().contains("text/html")
-			   || flv.getMimeType().contains("String"));
+					|| flv.getMimeType().contains("String"));
 		});
 		putValue(Action.SHORT_DESCRIPTION, getValue(Action.NAME));
 		enabled = true;
@@ -73,7 +73,7 @@ public class EditPasteFormattedAction extends HTMLTextEditAction {
 
 	@Override
 	protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor) {
-		//LOG.trace(TT + ".wysiwygEditPerformed(e=" + e.toString() + ", editor)");
+		//LOG.trace(TT + "wysiwygEditPerformed(e=" + e.toString() + ", editor)");
 		String html = getHTMLFragment(editor);
 		if (html != null && !html.isEmpty()) {
 			CompoundManager.beginCompoundEdit(editor.getDocument());
@@ -96,7 +96,7 @@ public class EditPasteFormattedAction extends HTMLTextEditAction {
 	 * @throws IOException
 	 */
 	private String getHTMLFragment(JEditorPane editor) {
-		//LOG.trace("EditPasteFormattedAction.getFragment(editor)");
+		//LOG.trace(TT+"getFragment(editor)");
 		Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
 		Transferable trans = clip.getContents(this);
 		if (trans == null) {
@@ -137,20 +137,20 @@ public class EditPasteFormattedAction extends HTMLTextEditAction {
 	 * @return
 	 */
 	private String selectFlavor(JEditorPane editor, String html, DataFlavor[] flavors) {
-		//LOG.trace("selectFlavor");
+		//LOG.trace(TT+"selectFlavor(...)");
 		String choices[] = {
 			I18N.getMsg("paste.as_text"),
 			I18N.getMsg("paste.as_html")
 		};
 		int n = JOptionPane.showOptionDialog(
-		   SwingUtilities.getWindowAncestor(editor),
-		   I18N.getMsg("paste.as_prompt"),
-		   I18N.getMsg("paste.as_title"),
-		   JOptionPane.YES_NO_CANCEL_OPTION,
-		   JOptionPane.QUESTION_MESSAGE,
-		   null,
-		   choices,
-		   choices[1]);
+				SwingUtilities.getWindowAncestor(editor),
+				I18N.getMsg("paste.as_prompt"),
+				I18N.getMsg("paste.as_title"),
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				choices,
+				choices[1]);
 		switch (n) {
 			case 0:
 				return Html.htmlToText(html, enabled);

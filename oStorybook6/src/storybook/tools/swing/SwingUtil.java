@@ -17,6 +17,7 @@
  */
 package storybook.tools.swing;
 
+import api.mig.swing.MigLayout;
 import i18n.I18N;
 import java.awt.Color;
 import java.awt.Component;
@@ -91,6 +92,16 @@ public class SwingUtil {
 
 	private static final String TT = "SwingUtil";
 
+	private SwingUtil() {
+		// empty
+	}
+
+	/**
+	 * set the enable given value for the given JPanel and all dependend components
+	 *
+	 * @param panel
+	 * @param b
+	 */
 	public static void setEnable(JPanel panel, boolean b) {
 		//LOG.trace(TT + ".setEnable(panel, b=" + LOG.trace(b) + ")");
 		for (Component c : panel.getComponents()) {
@@ -103,68 +114,112 @@ public class SwingUtil {
 		panel.setEnabled(b);
 	}
 
+	/**
+	 * enable/disable a JToolNar
+	 *
+	 * @param panel
+	 * @param b
+	 */
 	public static void setEnable(JSToolBar panel, boolean b) {
 		//LOG.trace(TT + ".setEnable(panel, b=" + LOG.trace(b) + ")");
-		/*for (Component c : panel.getComponents()) {
-			if (c instanceof JPanel) {
-				setEnable((JPanel) c, b);
-			} else if (c != null) {
-				c.setEnabled(b);
-			}
-		}*/
 		panel.setEnabled(b);
 	}
 
+	/**
+	 * set the default size of the given JComboBox
+	 *
+	 * @param cb
+	 */
 	public static void setCBsize(JComboBox cb) {
 		int height = IconUtil.getDefSize() + (FontUtil.getHeight() / 4);
 		cb.setMinimumSize(new Dimension(height, height));
 	}
 
-	public static void setBoderDefault(JTextField tf) {
+	/**
+	 * set the default border for the given JComponent
+	 *
+	 * @param tf
+	 */
+	public static void setBoderDefault(JComponent tf) {
 		JTextField tfi = new JTextField();
 		tf.setBorder(tfi.getBorder());
 	}
 
+	/**
+	 * set the dimensions for the given JComponent (mini, maxi, pref)
+	 *
+	 * @param comp
+	 */
 	public static void setSizes(JComponent comp) {
 		comp.setMinimumSize(AbstractPanel.MINIMUM_SIZE);
 		comp.setPreferredSize(AbstractPanel.HALF_SIZE);
 		comp.setMaximumSize(AbstractPanel.MAXIMUM_SIZE);
 	}
 
-	private SwingUtil() {
-		// empty
-	}
-
+	/**
+	 * get set default selected background color
+	 *
+	 * @return
+	 */
 	public static Color getSelectedBGColor() {
 		return javax.swing.UIManager.getDefaults().getColor("List.selectionBackground");
 	}
 
+	/**
+	 * get set default selected foreground color
+	 *
+	 * @return
+	 */
 	public static Color getSelectedFGColor() {
 		return javax.swing.UIManager.getDefaults().getColor("List.selectionForeground");
 	}
 
+	/**
+	 * set the selected colors for the given JComponent
+	 *
+	 * @param comp
+	 */
 	public static void setSelectedColor(JComponent comp) {
 		comp.setForeground(getSelectedFGColor());
 		comp.setBackground(getSelectedBGColor());
 	}
 
-	public static boolean isLanguageOK(String x) {
+	/**
+	 * check if LanguageTool is OK for the given lang
+	 *
+	 * @param lang
+	 * @return
+	 */
+	public static boolean isLanguageOK(String lang) {
 		boolean rc = false;
-		if (x.contentEquals("none")) {
+		if (lang.contentEquals("none")) {
 			return (true);
 		}
-		File f = new File("languagetool" + File.separator + "rules" + File.separator + x.substring(0, x.indexOf("_")));
+		File f = new File("languagetool"
+				+ File.separator + "rules" + File.separator
+				+ lang.substring(0, lang.indexOf("_")));
 		if (f.isDirectory()) {
 			rc = true;
 		}
 		return (rc);
 	}
 
+	/**
+	 * set the unit increment to 20 for the given JScrollPane
+	 *
+	 * @param scroller
+	 */
 	public static void setUnitIncrement(JScrollPane scroller) {
 		scroller.getVerticalScrollBar().setUnitIncrement(20);
 		scroller.getHorizontalScrollBar().setUnitIncrement(20);
 	}
 
+	/**
+	 * showing the beta JDialog
+	 *
+	 * @param mainFrame
+	 * @return
+	 */
 	public static int showBetaDialog(MainFrame mainFrame) {
 		return JOptionPane.showConfirmDialog(mainFrame,
 				I18N.getMsg("beta.confirm"),
@@ -177,6 +232,9 @@ public class SwingUtil {
 		return String.format("%.1f %s", b / Math.pow(1000, e), sx[e]);
 	}
 
+	// **************************
+	// ** utilities for memory **
+	// **************************
 	public static void printMemoryUsage() {
 		LOG.log(getMemoryUsageHr());
 	}
@@ -208,37 +266,84 @@ public class SwingUtil {
 	public static long getMemoryTotal() {
 		return Runtime.getRuntime().totalMemory();
 	}
+	// **** end of utilities for memory ****
 
+	/**
+	 * get a JButton with a name as text
+	 *
+	 * @param name
+	 * @param action
+	 * @return
+	 */
 	public static JButton getIconButton(String name, Action action) {
 		JButton bt = new JButton(IconUtil.getIconSmall(ICONS.getIconKey(name)));
 		bt.setToolTipText(I18N.getMsg(name));
-		SwingUtil.setForcedSize(bt, IconUtil.getDefDim());
+		SwingUtil.setFixedSize(bt, IconUtil.getDefDim());
 		if (action != null) {
 			bt.addActionListener(action);
 		}
 		return bt;
 	}
 
+	/**
+	 * get a JButton with an icon without text
+	 *
+	 * @param name
+	 * @param action
+	 * @return
+	 */
 	public static JButton getIconButton(String name, ActionListener action) {
 		JButton bt = new JButton(IconUtil.getIconSmall(ICONS.getIconKey(name)));
 		bt.setToolTipText(I18N.getMsg(name));
-		SwingUtil.setForcedSize(bt, IconUtil.getDefDim());
+		SwingUtil.setFixedSize(bt, IconUtil.getDefDim());
 		if (action != null) {
 			bt.addActionListener(action);
 		}
 		return bt;
 	}
 
+	/**
+	 * create a JButton
+	 *
+	 * @param text of the button
+	 * @param icon
+	 * @param tips text tooltip
+	 * @param action the ActionListener, may be null
+	 *
+	 * @return
+	 */
 	public static JButton createButton(String text, ICONS.K icon, String tips,
 			ActionListener... action) {
 		return createButton(text, icon.toString(), tips, true, action);
 	}
 
+	/**
+	 * create a JButton
+	 *
+	 * @param text of the button
+	 * @param icon
+	 * @param tips text tooltip
+	 * @param nomargin margin to set
+	 * @param action the ActionListener, may be null
+	 *
+	 * @return
+	 */
 	public static JButton createButton(String text, ICONS.K icon, String tips,
 			boolean nomargin, ActionListener... action) {
 		return createButton(text, icon.toString(), tips, nomargin, action);
 	}
 
+	/**
+	 * create a JButton
+	 *
+	 * @param text of the button
+	 * @param icon
+	 * @param tips the text tooltip
+	 * @param nomargin set the margin
+	 * @param action to call
+	 *
+	 * @return
+	 */
 	public static JButton createButton(String text, String icon, String tips,
 			boolean nomargin, ActionListener... action) {
 		JButton bt = new JButton();
@@ -262,6 +367,32 @@ public class SwingUtil {
 		return (bt);
 	}
 
+	/**
+	 * create a zoom JPanel
+	 *
+	 * @param name
+	 * @param zoom
+	 * @param zoomin
+	 * @param zoomout
+	 * @return
+	 */
+	public static JPanel createZoomPanel(String name, int zoom,
+			ActionListener zoomin, ActionListener zoomout) {
+		JPanel zoomPanel = new JPanel(new MigLayout());
+		zoomPanel.setOpaque(false);
+		zoomPanel.add(new JLabel(I18N.getColonMsg(name)));
+		zoomPanel.add(SwingUtil.createButton("", ICONS.K.MINUS, "zoom.out", zoomin));
+		zoomPanel.add(new JLabel("" + (zoom + 1)));
+		zoomPanel.add(SwingUtil.createButton("", ICONS.K.PLUS, "zoom.in", zoomout));
+		return zoomPanel;
+	}
+
+	/**
+	 * create a HTML JTextComponent with the given Font
+	 *
+	 * @param font
+	 * @return
+	 */
 	public static JTextComponent createTextComponent(Font font) {
 		JTextComponent tc = new JEditorPane();
 		JEditorPane ep = (JEditorPane) tc;
@@ -276,6 +407,13 @@ public class SwingUtil {
 		return tc;
 	}
 
+	/**
+	 * create a JTextArea with the given width, without any scroll
+	 *
+	 * @param str
+	 * @param width
+	 * @return
+	 */
 	public static JTextArea createTextArea(String str, int... width) {
 		//LOG.trace(TT + ".initTextArea(str="+str+")");
 		JTextArea ta = new JTextArea();
@@ -292,6 +430,9 @@ public class SwingUtil {
 		return (ta);
 	}
 
+	/**
+	 * replace a component in the given Container by index
+	 */
 	public static void replaceComponent(Container cont, int index, Component comp) {
 		cont.remove(index);
 		cont.add(comp, index);
@@ -303,6 +444,14 @@ public class SwingUtil {
 		replaceComponent(cont, comp1, comp2, "");
 	}
 
+	/**
+	 * replace a component in a Container
+	 *
+	 * @param cont
+	 * @param comp1
+	 * @param comp2
+	 * @param constraints
+	 */
 	public static void replaceComponent(Container cont, Component comp1, Component comp2, String constraints) {
 		int index = -1;
 		int i = 0;
@@ -319,12 +468,22 @@ public class SwingUtil {
 		cont.repaint();
 	}
 
+	/**
+	 * forced revalidate for the given Component
+	 *
+	 * @param comp
+	 */
 	public static void forceRevalidate(Component comp) {
 		comp.invalidate();
 		comp.validate();
 		comp.repaint();
 	}
 
+	/**
+	 * expand a Rectangle
+	 *
+	 * @param rect
+	 */
 	public static void expandRectangle(Rectangle rect) {
 		Point p = rect.getLocation();
 		p.translate(-5, -5);
@@ -332,10 +491,21 @@ public class SwingUtil {
 		rect.grow(10, 10);
 	}
 
+	/**
+	 * get the background color for a JTable
+	 *
+	 * @return
+	 */
 	public static Color getTableBackgroundColor() {
 		return getTableBackgroundColor(false);
 	}
 
+	/**
+	 * get the background color for a JTable, if not colored option return standard color
+	 *
+	 * @param colored
+	 * @return
+	 */
 	public static Color getTableBackgroundColor(boolean colored) {
 		if (colored) {
 			return new Color(0xf4f4f4);
@@ -343,15 +513,31 @@ public class SwingUtil {
 		return UIManager.getColor("Table.background");
 	}
 
+	/**
+	 * set the Dimension for the given component to Short.MAX_VALUE
+	 *
+	 * @param comp
+	 */
 	public static void setMaxPreferredSize(JComponent comp) {
 		comp.setPreferredSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 	}
 
+	/**
+	 * set the Dimension for the given component to the given Dimension
+	 *
+	 * @param comp
+	 */
 	public static void setMaxPreferredSize(JComponent comp, Dimension dim) {
-		comp.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-		comp.setPreferredSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+		comp.setMaximumSize(dim);
+		comp.setPreferredSize(dim);
 	}
 
+	/**
+	 * set a fixed Dimension for the given component
+	 *
+	 * @param comp
+	 * @param dim
+	 */
 	public static void setFixedSize(JComponent comp, Dimension dim) {
 		//LOG.trace("setFixedSize(comp=" + comp.toString() + ", dim=" + dim.toString() + ")");
 		comp.setMinimumSize(dim);
@@ -359,14 +545,24 @@ public class SwingUtil {
 		comp.setPreferredSize(dim);
 	}
 
-	public static void setMaxWidth(JComponent comp, int width) {
-		comp.setMaximumSize(new Dimension(width, Short.MAX_VALUE));
+	/**
+	 * set the maximum width to the given value, the height will be Short.MAX_VALUE
+	 *
+	 * @param comp
+	 * @param v
+	 */
+	public static void setMaxWidth(JComponent comp, int v) {
+		comp.setMaximumSize(new Dimension(v, Short.MAX_VALUE));
 	}
 
-	public static void setForcedSize(Component comp, Dimension dim) {
-		comp.setMinimumSize(dim);
-		comp.setPreferredSize(dim);
-		comp.setMaximumSize(dim);
+	/**
+	 * set the maximum heigth to the given value, the width will be Short.MAX_VALUE
+	 *
+	 * @param comp
+	 * @param v
+	 */
+	public static void setMaxHeight(JComponent comp, int v) {
+		comp.setMaximumSize(new Dimension(Short.MAX_VALUE, v));
 	}
 
 	public static void printUIDefaults() {
@@ -957,6 +1153,14 @@ public class SwingUtil {
 	public static void setErrorForeground(JComponent comp, boolean b) {
 		JTextField tf = new JTextField();
 		comp.setForeground((b ? Color.red : tf.getForeground()));
+	}
+
+	public static void setBackground(JComponent panel, Color color) {
+		panel.setOpaque(true);
+		panel.setBackground(color);
+		if (ColorUtil.isDark(color)) {
+			panel.setForeground(Color.WHITE);
+		}
 	}
 
 }

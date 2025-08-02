@@ -57,8 +57,8 @@ import storybook.ui.panel.tree.Tree;
 @SuppressWarnings("serial")
 public class PlanningPanel extends AbstractPanel implements MouseListener {
 
-	//TODO print Planning
 	private static final String TT = "PlanningPanel.";
+
 	private JTree tree;
 	CircleProgressBar[] progress = new CircleProgressBar[5];
 	private Dataset dataset;
@@ -387,7 +387,7 @@ public class PlanningPanel extends AbstractPanel implements MouseListener {
 				break;
 		}
 		if (evt.getNewValue() instanceof View
-			&& (((View) evt.getNewValue()).getName().equals(SbView.VIEWNAME.PLANNING.toString()))) {
+				&& (((View) evt.getNewValue()).getName().equals(SbView.VIEWNAME.PLANNING.toString()))) {
 			switch (Ctrl.getPROPS(propName)) {
 				case REFRESH:
 					refreshValues();

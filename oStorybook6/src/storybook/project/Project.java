@@ -89,12 +89,13 @@ import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.xml.Xml;
-import storybook.tools.zip.XmlZipHandler;
+import storybook.tools.xml.XmlCleaner;
 import storybook.tools.zip.ZipUtil;
 import storybook.tools.zip.ZipXml;
 import storybook.ui.MainFrame;
 
 /**
+ * class for a Project
  *
  * @author favdb
  */
@@ -131,14 +132,27 @@ public class Project {
 	private String path, name, imageDir;
 	private boolean typist;
 
+	/**
+	 * empty Project
+	 */
 	public Project() {
-		// empty project
+		// empty
 	}
 
+	/**
+	 * Project for the given filename
+	 *
+	 * @param filename
+	 */
 	public Project(String filename) {
 		this(new File(filename));
 	}
 
+	/**
+	 * Project for the given file
+	 *
+	 * @param file
+	 */
 	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public Project(File file) {
 		this.file = file;
@@ -188,24 +202,35 @@ public class Project {
 		LOG.trace(file.getAbsolutePath() + " was created");
 	}
 
+	/**
+	 * initialize the default entities
+	 */
 	public void initDefaultEntities() {
 		//initialize the default Strand
 		Strand strand = new Strand(1,
 				I18N.getMsg("strand.name.init_value"), I18N.getMsg("strand.abbr.init_value"),
 				ColorUtil.PALETTE.LIGHT_BLUE.getRGB(), "");
 		strands.add(strand);
-		//initialize Categories
+		//initialize default Categories
 		categorys.add(new Category(1, I18N.getMsg("category.central_character"), null));
 		categorys.add(new Category(2, I18N.getMsg("category.minor_character"), null));
-		//initialize Genders
+		//initialize default Genders
 		genders.add(new Gender(I18N.getMsg("person.gender.male"), 6, 12, 18, 65));
 		genders.add(new Gender(I18N.getMsg("person.gender.female"), 6, 12, 18, 65));
 	}
 
+	/**
+	 * the the filename
+	 *
+	 * @return
+	 */
 	public String getFilename() {
 		return (file == null ? "empty file name" : file.getAbsolutePath());
 	}
 
+	/**
+	 * initalize the class
+	 */
 	private void init() {
 		//LOG.trace(TT + "init()");
 		if (file != null) {
@@ -214,9 +239,11 @@ public class Project {
 		}
 	}
 
+	/**
+	 * initalize default arrays data
+	 */
 	public void initData() {
 		//LOG.trace(TT + "initData()");
-		//challenge = new Challenge();
 		attributes = new Attributes(this);
 		categorys = new Categorys(this);
 		chapters = new Chapters(this);
@@ -239,6 +266,9 @@ public class Project {
 		book = new Book(this);
 	}
 
+	/**
+	 * load the data
+	 */
 	private void loadData() {
 		if (file != null) {
 			if (open()) {
@@ -247,6 +277,13 @@ public class Project {
 		}
 	}
 
+	/**
+	 * get an Entity of the given type for the given ID
+	 *
+	 * @param type
+	 * @param id
+	 * @return null if not find
+	 */
 	public AbstractEntity get(Book.TYPE type, Long id) {
 		switch (type) {
 			case ATTRIBUTE:
@@ -291,6 +328,13 @@ public class Project {
 		return null;
 	}
 
+	/**
+	 * find an entity of the given type for the given name
+	 *
+	 * @param type
+	 * @param text name to search
+	 * @return null if not find
+	 */
 	public AbstractEntity findByName(Book.TYPE type, String text) {
 		switch (type) {
 			case ATTRIBUTE:
@@ -335,6 +379,13 @@ public class Project {
 		return null;
 	}
 
+	/**
+	 * find an Entity into to the given entites list for the given name
+	 *
+	 * @param entities the entites list
+	 * @param text the name to search
+	 * @return
+	 */
 	private AbstractEntity findByName(AbsEntitys entities, String text) {
 		for (Object p : entities.getList()) {
 			if (((AbstractEntity) p).getName().equals(text)) {
@@ -344,6 +395,12 @@ public class Project {
 		return null;
 	}
 
+	/**
+	 * get the list of entites of the given type
+	 *
+	 * @param type
+	 * @return null if type is unknown
+	 */
 	@SuppressWarnings("unchecked")
 	public List<AbstractEntity> getList(Book.TYPE type) {
 		switch (type) {
@@ -422,7 +479,7 @@ public class Project {
 	}
 
 	/**
-	 * open XML file
+	 * open a XML Project file
 	 *
 	 * @return true if open is ok
 	 */
@@ -455,12 +512,12 @@ public class Project {
 	}
 
 	/**
-	 * int Document from current File
+	 * initialize the Document from current opened File
 	 *
 	 * @return
 	 */
 	public Document initDom() {
-		//LOG.printInfos(TT + "initDom()");
+		//LOG.trace(TT + "initDom()");
 		Document rc = null;
 		try {
 			rc = documentBuilder.parse(file);
@@ -475,11 +532,11 @@ public class Project {
 	}
 
 	/**
-	 * close XMLfile
+	 * close XML file
 	 *
 	 */
 	public void close() {
-		//LOG.printInfos(TT + "close()");
+		//LOG.trace(TT + "close()");
 		if (fileOpened) {
 			fileOpened = false;
 			document = null;
@@ -487,6 +544,11 @@ public class Project {
 		}
 	}
 
+	/**
+	 * load entities
+	 *
+	 * @return number of loaded entities
+	 */
 	private int loadEntities() {
 		//LOG.trace(TT + "loadEntities()");
 		int rc = -1;
@@ -497,9 +559,16 @@ public class Project {
 			setLinks(t);
 			this.changeHtmlLinks(t);
 		}
+		scenes.relativeDateInit();
 		return rc;
 	}
 
+	/**
+	 * load entities for the given type
+	 *
+	 * @param type
+	 * @return number of loaded entities
+	 */
 	private int loadEntities(Book.TYPE type) {
 		//LOG.trace(TT + "loadEntities(type=" + type.name() + ")");
 		int n = 0;
@@ -589,8 +658,13 @@ public class Project {
 		return n;
 	}
 
+	/**
+	 * set the links for the given entities
+	 *
+	 * @param type
+	 */
 	public void setLinks(Book.TYPE type) {
-		//LOG.printInfos(TT + "setLinks(type=" + type.name() + ")");
+		//LOG.trace(TT + "setLinks(type=" + type.name() + ")");
 		switch (type) {
 			case ATTRIBUTE:
 				attributes.setLinks();
@@ -651,8 +725,13 @@ public class Project {
 		}
 	}
 
+	/**
+	 * change HTML links for the given type
+	 *
+	 * @param type
+	 */
 	public void changeHtmlLinks(Book.TYPE type) {
-		//LOG.printInfos(TT + "setLinks(type=" + type.name() + ")");
+		//LOG.trace(TT + "setLinks(type=" + type.name() + ")");
 		String rpath = getPath();
 		switch (type) {
 			case ATTRIBUTE:
@@ -776,6 +855,11 @@ public class Project {
 		return save(this.file);
 	}
 
+	/**
+	 * write the given entity to save it
+	 *
+	 * @param entity
+	 */
 	public void write(AbstractEntity entity) {
 		//LOG.trace(TT + "write(entity=" + LOG.trace(entity) + ")");
 		switch (entity.getObjType()) {
@@ -838,6 +922,11 @@ public class Project {
 		}
 	}
 
+	/**
+	 * delete the given entity
+	 *
+	 * @param entity
+	 */
 	public void delete(AbstractEntity entity) {
 		switch (entity.getObjType()) {
 			case ATTRIBUTE:
@@ -899,8 +988,13 @@ public class Project {
 		}
 	}
 
+	/**
+	 * check if this project file is OK
+	 *
+	 * @return
+	 */
 	public boolean isOK() {
-		//LOG.printInfos("DbFile.isOK()");
+		//LOG.trace("DbFile.isOK()");
 		boolean rc = true;
 		// file doesn't exist
 		if (!file.exists()) {
@@ -922,8 +1016,13 @@ public class Project {
 		return rc;
 	}
 
+	/**
+	 * check if the file is allready opened
+	 *
+	 * @return
+	 */
 	public boolean isAlreadyOpened() {
-		//LOG.printInfos(TT+"isAlreadyOpened("+h2Name+")");
+		//LOG.trace(TT+"isAlreadyOpened("+h2Name+")");
 		boolean rc = false;
 		List<MainFrame> mainFrames = App.getInstance().getMainFrames();
 		if (!mainFrames.isEmpty()) {
@@ -941,43 +1040,82 @@ public class Project {
 		return (rc);
 	}
 
+	/**
+	 * get the name of the Project
+	 *
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * get the Project path name
+	 *
+	 * @return
+	 */
 	public String getPath() {
 		return path;
 	}
 
+	/**
+	 * set the Project path name
+	 */
 	public void setPath() {
 		if (file != null) {
 			this.path = file.getParent();
 		}
 	}
 
+	/**
+	 * get the Project file
+	 *
+	 * @return
+	 */
 	public File getFile() {
 		return file;
 	}
 
+	/**
+	 * set the Project file
+	 *
+	 * @param file
+	 */
 	public void setFile(File file) {
 		this.file = file;
 		setPath();
 	}
 
+	/**
+	 * get a standard OSBK filename from path and name
+	 *
+	 * @return
+	 */
 	public String getOSBK() {
 		return path + File.separator + name + ".osbk";
 	}
 
-	public void doRestore(File dir, File b) {
-		//TODO restore a backuped project
-	}
-
-	public void doRestore(File b) {
+	/**
+	 * restore a backuped Project from the given file to the given file
+	 *
+	 * @param srce
+	 * @param dest
+	 */
+	public void doRestore(File srce, File dest) {
 		//TODO restore a backuped project
 	}
 
 	/**
-	 * get formatted informations about the Project
+	 * restore a backuped Project from the given file
+	 *
+	 * @param srce
+	 */
+	public void doRestore(File srce) {
+		//TODO restore a backuped project
+	}
+
+	/**
+	 * get HTML formatted informations about the Project
 	 *
 	 * @param detailed
 	 * @return
@@ -1014,31 +1152,65 @@ public class Project {
 		//TODO remove the mainFrame for this project
 	}
 
+	/**
+	 * backup the Project
+	 */
 	public void doBackup() {
 		//TODO backup this Project
 	}
 
+	/**
+	 *
+	 * @param filename
+	 * @param increment
+	 */
 	public void doBackup(String filename, boolean increment) {
 		//TODO backup this Project to the given file name
 	}
 
+	/**
+	 * set/unset typist mode
+	 *
+	 * @param typist
+	 */
 	public void setTypist(boolean typist) {
 		this.typist = typist;
 	}
 
+	/**
+	 * get typist mode
+	 *
+	 * @return
+	 */
 	public boolean getTypist() {
 		return this.typist;
 	}
 
+	/**
+	 * set the image directory
+	 *
+	 * @param value
+	 */
 	public void setImageDir(String value) {
 		this.imageDir = value;
 	}
 
+	/**
+	 * get the image directory
+	 *
+	 * @return
+	 */
 	public String getImageDir() {
 		return this.imageDir;
 	}
 
-	public String printInfos(boolean html) {
+	/**
+	 * get the trace in HTML format
+	 *
+	 * @param html
+	 * @return
+	 */
+	public String trace(boolean html) {
 		StringBuilder b = new StringBuilder();
 		b.append(getInfo(true));
 		int textLength = BookUtil.getNbChars(this);
@@ -1087,7 +1259,7 @@ public class Project {
 	public boolean initDomFromZip(String filePath) throws IOException {
 		//LOG.trace(TT + "initDomFromZip(filePath=" + filePath + ")");
 		try {
-			String validPath = XmlZipHandler.validateAndFixZipIfNeeded(filePath);
+			String validPath = XmlCleaner.cleanZip(filePath);
 			//LOG.trace("validPath=" + validPath);
 			ZipXml zipXml = new ZipXml(new File(validPath));
 			ZipEntry entry = zipXml.open("db.xml");
@@ -1146,16 +1318,16 @@ public class Project {
 		byte[] data = new byte[2048];
 		File[] files = curDir.listFiles();
 		if (files != null) {
-			for (File file : files) {
-				if (file.isDirectory()) {
-					archiveProjectFiles(dir, file, zos, destZip);
-				} else if (!file.equals(destZip)) {
-					if (file.getAbsolutePath().endsWith(".osbk5")) {
+			for (File f : files) {
+				if (f.isDirectory()) {
+					archiveProjectFiles(dir, f, zos, destZip);
+				} else if (!f.equals(destZip)) {
+					if (f.getAbsolutePath().endsWith(".osbk5")) {
 						continue;
 					}
-					FileInputStream fi = new FileInputStream(file);
+					FileInputStream fi = new FileInputStream(f);
 					// creating structure and avoiding duplicate file names
-					String nx = file.getAbsolutePath().replace(dir.getAbsolutePath(), "");
+					String nx = f.getAbsolutePath().replace(dir.getAbsolutePath(), "");
 					ZipEntry entry = new ZipEntry(nx);
 					zos.putNextEntry(entry);
 					int count;
@@ -1169,6 +1341,12 @@ public class Project {
 		}
 	}
 
+	/**
+	 * check if the file is OSBK
+	 *
+	 * @param file
+	 * @return
+	 */
 	public static boolean isOsbk(File file) {
 		//LOG.trace(TT + "isOsbk(file=" + file.getAbsolutePath() + ")");
 		boolean rc = false;
@@ -1179,6 +1357,12 @@ public class Project {
 		return rc;
 	}
 
+	/**
+	 * check if the file is SQL
+	 *
+	 * @param file
+	 * @return
+	 */
 	public static boolean isSql(File file) {
 		//LOG.trace(TT + "isSql(file=" + file.getAbsolutePath() + ")");
 		boolean rc = false;
@@ -1189,6 +1373,12 @@ public class Project {
 		return rc;
 	}
 
+	/**
+	 * check if the file is archive TXT
+	 *
+	 * @param file
+	 * @return
+	 */
 	public static boolean isArchive(File file) {
 		//LOG.trace(TT + "isArchive(file=" + file.getAbsolutePath() + ")");
 		boolean rc = false;
@@ -1203,9 +1393,15 @@ public class Project {
 		return rc;
 	}
 
+	/**
+	 * select and load an archive TXT from the given file
+	 *
+	 * @param file
+	 * @return
+	 */
 	public static Project loadArchive(File file) {
 		LOG.trace(TT + "loadArchive(file=" + file.getAbsolutePath() + ")");
-		//select folder
+		//select the target folder
 		ChooseFolderDlg dlg = new ChooseFolderDlg((MainFrame) null, "project.select_folder");
 		dlg.setVisible(true);
 		if (dlg.isCanceled()) {
@@ -1227,10 +1423,6 @@ public class Project {
 			//unzip file into folder
 		}
 		return null;
-	}
-
-	private void challengeLoad() {
-
 	}
 
 }

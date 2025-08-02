@@ -197,8 +197,8 @@ public abstract class AbstractEditor extends AbstractPanel {
 	}
 
 	/**
-	 * initialize the foot part of the editor (for description, notes,
-	 * assistant) and buttons (assistant, write, cancel, ok)
+	 * initialize the foot part of the editor (for description, notes, assistant) and buttons
+	 * (assistant, write, cancel, ok)
 	 */
 	public void initFoot() {
 		pFoot = new JPanel(new MigLayout());
@@ -442,7 +442,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 		p.add(tfFile, MIG.GROWX);
 		Dimension sz = IconUtil.getDefDim();//new Dimension(20, 20);
 		JButton btChooseFile = new JButton(IconUtil.getIconSmall(ICONS.K.F_OPEN));
-		SwingUtil.setForcedSize(btChooseFile, sz);
+		SwingUtil.setFixedSize(btChooseFile, sz);
 		btChooseFile.addActionListener((ActionEvent arg0) -> {
 			JFileChooser fc = new JFileChooser(tfFile.getText());
 			if (tfFile.getText().isEmpty()) {
@@ -459,12 +459,12 @@ public abstract class AbstractEditor extends AbstractPanel {
 		btChooseFile.setToolTipText(I18N.getMsg("file.select"));
 		p.add(btChooseFile);
 		JButton btResetFile = new JButton(IconUtil.getIconSmall(ICONS.K.CLEAR));
-		SwingUtil.setForcedSize(btResetFile, sz);
+		SwingUtil.setFixedSize(btResetFile, sz);
 		btResetFile.setToolTipText(I18N.getMsg("file.clear"));
 		btResetFile.addActionListener((ActionEvent arg0) -> tfFile.setText(""));
 		p.add(btResetFile);
 		JButton btSetFile = new JButton(IconUtil.getIconSmall(ICONS.K.NEW_SCENE));
-		SwingUtil.setForcedSize(btSetFile, sz);
+		SwingUtil.setFixedSize(btSetFile, sz);
 		btSetFile.setToolTipText(I18N.getMsg("xeditor.create"));
 		btSetFile.addActionListener((ActionEvent arg0) -> {
 			tfFile.setText(XEditorFile.getDefaultFilePath(mainFrame, tfName.getText()));
@@ -584,7 +584,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 	 *
 	 */
 	public void setOrigine() {
-		apply();
+		//apply();
 		entityHash = entity.toText().hashCode();
 	}
 

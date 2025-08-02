@@ -40,7 +40,7 @@ public class XportScene extends XportAbs {
 	public String begin(AbstractEntity entity) {
 		set(entity);
 		if (xport.layout.getSceneTitle()
-			&& xport.getNbScenes((Scene) entity) > 1) {
+				&& xport.getNbScenes((Scene) entity) > 1) {
 			return getTitle();
 		}
 		return "";
@@ -48,13 +48,13 @@ public class XportScene extends XportAbs {
 
 	@Override
 	public String content() {
-		//todo
+		//empty
 		return "";
 	}
 
 	@Override
 	public String end() {
-		//todo
+		//empty
 		return "";
 	}
 

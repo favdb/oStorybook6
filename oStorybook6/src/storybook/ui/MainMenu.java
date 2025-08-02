@@ -311,18 +311,14 @@ public class MainMenu implements MouseListener {
 			btFileNew, btFileOpen, btFileSave, //3
 			btNewStrand, btNewPart, btNewChapter, btNewScene,//4
 			btNewPerson, btNewGender, btNewRelation,//3
-			btNewLocation,//1
-			btNewItem,//1
-			btNewTag,//1
+			btNewLocation, btNewItem, btNewTag,//3
 			btMemo, btIdea, //2
 			btTabStrand, btTabPart, btTabChapter, btTabScene,//4
 			btTabPerson, btTabGender, btTabRelation, //3
-			btTabLocation, //1
-			btTabItem,/* btTabItemlink,*///2
-			btTabTag,/* btTabTaglink,*/ //2
+			btTabLocation, btTabItem, btTabTag,//3
 			btTabMemo, btTabIdea,//2
-			btViewChrono, btViewTimeline, btViewBook, btViewManage,
-			btViewReading, btViewMemoria, btViewStoryboard, btViewTypist //6
+			btViewChrono, btViewTimeline, btViewBook, btViewManage,//4
+			btViewReading, btViewMemoria, btViewStoryboard, btViewTypist //4
 		}; // total 37
 		//load parameters as a single String
 		String param = App.preferences.getString(Pref.KEY.TOOLBAR);
@@ -1142,6 +1138,7 @@ public class MainMenu implements MouseListener {
 		});
 		toolsTypist.setVisible(false);
 		menuTools.add(toolsTypist);
+		//sub menu for story
 		JMenu submenu = initMenu("story");
 		toolsEpisodes = initMenuItem("episodes",
 				evt -> {
@@ -1170,17 +1167,17 @@ public class MainMenu implements MouseListener {
 		toolsVogler.setEnabled(Assistant.hasVogler());
 		submenu.add(toolsVogler);
 		menuTools.add(submenu);
-
+		// search tool
 		toolsSearch = initScMenuItem("find", evt -> SearchDlg.show(mainFrame));
 		menuTools.add(toolsSearch);
-
+		// replace tool
 		toolsReplace = initScMenuItem("replace", evt -> ReplaceDlg.show(mainFrame));
 		menuTools.add(toolsReplace);
-
+		// reorder chapters
 		toolsChaptersOrder = initMenuItem("chapters.order",
 				evt -> ChaptersOrderDlg.show(mainFrame));
 		menuTools.add(toolsChaptersOrder);
-
+		// renumber scenes
 		toolsScenesOrder = initMenuItem("scenes.renumber",
 				evt -> {
 					if (SceneRenumber.show(mainFrame)) {
@@ -1201,7 +1198,7 @@ public class MainMenu implements MouseListener {
 					}
 				});
 		menuTools.add(toolsScenesOrder);
-
+		//submenu for links
 		JMenu menuLinks = new JMenu(I18N.getMsg("links"));
 		toolsPersonsLinks = initMenuItem("links.person",
 				evt -> ScenesLinks.show(mainFrame, Book.TYPE.PERSON));
@@ -1213,7 +1210,7 @@ public class MainMenu implements MouseListener {
 				evt -> ScenesLinks.show(mainFrame, Book.TYPE.PERSON));
 		menuLinks.add(toolsItemsLinks);
 		menuTools.add(menuLinks);
-
+		// renumber the endnotes
 		toolsRenumberEndnotes = initMenuItem("endnotes.renumber",
 				evt -> {
 					if (Endnote.renumber(mainFrame, 0)) {
@@ -1222,7 +1219,7 @@ public class MainMenu implements MouseListener {
 					}
 				});
 		menuTools.add(toolsRenumberEndnotes);
-
+		// submenu for renaming
 		toolsRename = new JMenu(I18N.getMsg("tools.rename"));
 		toolsRename.setIcon(IconUtil.getIconSmall(K.RENAME));
 
@@ -1258,6 +1255,7 @@ public class MainMenu implements MouseListener {
 
 		separator3 = new JPopupMenu.Separator();
 		menuTools.add(separator3);
+		// tool for cover
 		toolsEpubCover = initMenuItem("cover.create",
 				evt -> Cover.show(mainFrame));
 		menuTools.add(toolsEpubCover);
@@ -1495,8 +1493,9 @@ public class MainMenu implements MouseListener {
 			testFunction = (devTest.getText().contains("Dev"));
 			devTest.setText((testFunction ? "Test in progress" : "Dev-Test"));
 			//function to test
-			System.out.println("résultat = " + (5 / 0));
-
+			if (App.isDev()) {
+				System.out.println("exec test");
+			}
 			//restore dev menu
 			devTest.setText((testFunction ? "Test in progress" : "Dev-Test"));
 		});
@@ -1704,9 +1703,9 @@ public class MainMenu implements MouseListener {
 		if (mainFrame == null || toolsPersonsLinks == null) {
 			return;
 		}
-		toolsPersonsLinks.setEnabled(Book.getNbPersons(mainFrame) > 0);
-		toolsLocationsLinks.setEnabled(Book.getNbLocations(mainFrame) > 0);
-		toolsItemsLinks.setEnabled(Book.getNbItems(mainFrame) > 0);
+		toolsPersonsLinks.setEnabled(Book.getNbOf(mainFrame, Book.TYPE.PERSON) > 0);
+		toolsLocationsLinks.setEnabled(Book.getNbOf(mainFrame, Book.TYPE.LOCATION) > 0);
+		toolsItemsLinks.setEnabled(Book.getNbOf(mainFrame, Book.TYPE.ITEM) > 0);
 	}
 
 	/**

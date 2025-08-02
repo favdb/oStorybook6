@@ -17,8 +17,9 @@ import storybook.ui.MainFrame;
 @SuppressWarnings("serial")
 public abstract class AbstractScrollPanel extends AbstractPanel implements MouseWheelListener {
 
-	protected JPanel panel;
-	protected JScrollPane scroller;
+	protected JPanel rowsPanel;
+	protected JScrollPane rowsScroller;
+	public int zoom;
 
 	abstract protected void zoomSet(int val);
 
@@ -38,38 +39,38 @@ public abstract class AbstractScrollPanel extends AbstractPanel implements Mouse
 	protected void registerKeyboardAction() {
 		//ALT+RIGHT
 		registerKeyboardAction(new ScrollToRightAction(),
-		   KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, Event.ALT_MASK),
-		   WHEN_IN_FOCUSED_WINDOW);
+				KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, Event.ALT_MASK),
+				WHEN_IN_FOCUSED_WINDOW);
 		//ALT+LEFT
 		registerKeyboardAction(new ScrollToLeftAction(),
-		   KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, Event.ALT_MASK),
-		   WHEN_IN_FOCUSED_WINDOW);
+				KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, Event.ALT_MASK),
+				WHEN_IN_FOCUSED_WINDOW);
 		//ALT+UP
 		registerKeyboardAction(new ScrollUpAction(),
-		   KeyStroke.getKeyStroke(KeyEvent.VK_UP, Event.ALT_MASK),
-		   WHEN_IN_FOCUSED_WINDOW);
+				KeyStroke.getKeyStroke(KeyEvent.VK_UP, Event.ALT_MASK),
+				WHEN_IN_FOCUSED_WINDOW);
 		//ALT+DOWN
 		registerKeyboardAction(new ScrollDownAction(),
-		   KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Event.ALT_MASK),
-		   WHEN_IN_FOCUSED_WINDOW);
+				KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Event.ALT_MASK),
+				WHEN_IN_FOCUSED_WINDOW);
 		//ALT+PLUS
 		registerKeyboardAction(new ZoomInAction(),
-		   KeyStroke.getKeyStroke(KeyEvent.VK_ADD, Event.CTRL_MASK),
-		   WHEN_IN_FOCUSED_WINDOW);
+				KeyStroke.getKeyStroke(KeyEvent.VK_ADD, Event.CTRL_MASK),
+				WHEN_IN_FOCUSED_WINDOW);
 		//ALT+MINUS
 		registerKeyboardAction(new ZoomOutAction(),
-		   KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, Event.CTRL_MASK),
-		   WHEN_IN_FOCUSED_WINDOW);
+				KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, Event.CTRL_MASK),
+				WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	protected void scrollHorizontal(int amount, int rotation) {
-		JScrollBar sb = scroller.getHorizontalScrollBar();
+		JScrollBar sb = rowsScroller.getHorizontalScrollBar();
 		int val = sb.getValue();
 		sb.setValue(val + amount * rotation * sb.getUnitIncrement());
 	}
 
 	protected void scrollVertical(int amount, int rotation) {
-		JScrollBar sb = scroller.getVerticalScrollBar();
+		JScrollBar sb = rowsScroller.getVerticalScrollBar();
 		int val = sb.getValue();
 		sb.setValue(val + amount * rotation * sb.getUnitIncrement());
 	}

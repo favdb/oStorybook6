@@ -41,9 +41,9 @@ public abstract class AbstractTreeTransferHandler
 	protected AbstractTreeTransferHandler(TreePanel treePanel, int action, boolean drawIcon) {
 		this.treePanel = treePanel;
 		this.tree = treePanel.getTree();
-		drawImage = drawIcon;
-		dragSource = new DragSource();
-		dragSource.createDefaultDragGestureRecognizer(tree, action, this);
+		this.drawImage = drawIcon;
+		this.dragSource = new DragSource();
+		this.dragSource.createDefaultDragGestureRecognizer(tree, action, this);
 		DropTarget dt = new DropTarget(tree, action, this);
 	}
 
@@ -191,7 +191,8 @@ public abstract class AbstractTreeTransferHandler
 			int action = dtde.getDropAction();
 			Transferable transferable = dtde.getTransferable();
 			Point pt = dtde.getLocation();
-			if (transferable.isDataFlavorSupported(TransferableNode.NODE_FLAVOR) && canPerformAction(tree, draggedNode, action, pt)) {
+			if (transferable.isDataFlavorSupported(TransferableNode.NODE_FLAVOR)
+					&& canPerformAction(tree, draggedNode, action, pt)) {
 				TreePath pathTarget = tree.getPathForLocation(pt.x, pt.y);
 				TreeNode node = (TreeNode) transferable.getTransferData(TransferableNode.NODE_FLAVOR);
 				TreeNode newParentNode = (TreeNode) pathTarget.getLastPathComponent();

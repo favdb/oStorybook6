@@ -1,6 +1,6 @@
 /*
 Storybook: Scene-based software for novelists and authors.
-Copyright (C) 2008 - 2011 Martin Mustun
+Copyright (C) 2025 favdb
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,215 +27,205 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import storybook.App;
-import storybook.Pref;
 import storybook.ctrl.ActKey;
 import storybook.ctrl.Ctrl;
 import storybook.db.EntityUtil;
 import storybook.db.book.Book;
 import storybook.db.chapter.Chapter;
 import storybook.db.scene.Scene;
-import storybook.model.Model;
-import storybook.tools.LOG;
-import storybook.tools.swing.FontUtil;
 import storybook.tools.swing.SwingUtil;
-import storybook.tools.swing.js.JSLabelVertical;
 import storybook.ui.MIG;
 import storybook.ui.interfaces.IRefreshable;
 import storybook.ui.panel.AbstractPanel;
 
+/**
+ * class for showing a Chapter for Manage view
+ *
+ * @author favdb
+ */
 @SuppressWarnings("serial")
 public class ManageChapter extends AbstractPanel implements MouseListener, IRefreshable {
 
 	private static final String TT = "ManageChapter.";
 
-	public ManagePanel manage;
-	private Chapter chapter;
-	private ManageSceneTransfer sceneTransferHandler;
-	private int prefWidth;
+	public Manage manage;
+	public Chapter chapter;
+	private ManageTransfer transferHandler;
+	private JPanel panel;
+	private JScrollPane scroll;
 
-	public ManageChapter(ManagePanel manage) {
+	public ManageChapter(Manage manage, Chapter chapter) {
 		super(manage.mainFrame);
 		this.manage = manage;
-	}
-
-	public ManageChapter(ManagePanel manage, Chapter chapter) {
-		this(manage);
 		this.chapter = chapter;
 		initAll();
 	}
 
-	@Override
-	public void modelPropertyChange(PropertyChangeEvent evt) {
-		Object newValue = evt.getNewValue();
-		Object oldValue = evt.getOldValue();
-		String propName = evt.getPropertyName();
-		if (Ctrl.PROPS.MANAGE_ZOOM.check(propName)) {
-			refresh();
-			return;
-		}
-		ActKey act = new ActKey(propName);
-		switch (Book.getTYPE(act.type)) {
-			case CHAPTER:
-				if (isUpdate(act)) {
-					if (chapter == null) {
-						return;
-					}
-					Chapter newChapter = (Chapter) newValue;
-					if (!newChapter.getId().equals(chapter.getId())) {
-						return;
-					}
-					chapter = newChapter;
-					refresh();
-				}
-				break;
-			case SCENE:
-				if (isUpdate(act)) {
-					if (newValue == null || oldValue == null) {
-						break;
-					}
-					Chapter newSceneChapter = ((Scene) newValue).getChapter();
-					Chapter oldSceneChapter = ((Scene) oldValue).getChapter();
-					if (newSceneChapter == null && chapter == null) {
-						refresh();
-						return;
-					}
-					if (chapter == null || newSceneChapter == null || oldSceneChapter == null) {
-						refresh();
-						return;
-					}
-					if (!newSceneChapter.getId().equals(chapter.getId())
-							&& !oldSceneChapter.getId().equals(chapter.getId())) {
-						return;
-					}
-					refresh();
-				}
-				break;
-			case STRAND:
-				if (isUpdate(act)) {
-					refresh();
-				}
-				break;
-			default:
-				break;
-		}
-
-	}
-
-	private void setZoomedSize(int zoomValue) {
-		prefWidth = 50 + zoomValue * 10;
-	}
-
+	/**
+	 * initialize the class
+	 */
 	@Override
 	public void init() {
-		//LOG.trace(TT + ".init()");
-		try {
-			setZoomedSize(App.preferences.manageGetZoom());
-		} catch (Exception e) {
-			LOG.err("ChapterPanel error", e);
-			setZoomedSize(Pref.KEY.MANAGE_ZOOM.getInteger());
-		}
+		// empty
 	}
 
+	/**
+	 * initialize the user interface
+	 */
 	@Override
 	public void initUi() {
-		//LOG.trace(TT + ".initUI()");
-		MigLayout layout = new MigLayout(MIG.get(MIG.INS0, MIG.GAP0));
+		setLayout(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0)));
+		transferHandler = new ManageTransfer(manage);
+		panel = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP0)));
+		scroll = new JScrollPane(panel);
+		scroll.setMinimumSize(manage.sceneSize);
+		add(scroll, MIG.GROW);
 		if (isForUnassignedScene()) {
-			layout = new MigLayout(MIG.FLOWX, "[]", "[fill]");
+			refreshUnassigned();
 		} else {
-			if (App.preferences.manageGetVertical()) {
-				layout = new MigLayout(MIG.get(MIG.GAP0, MIG.WRAP), "[grow]");
-			}
+			refreshChapter();
 		}
-		setLayout(layout);
-		setBorder(SwingUtil.getBorderDefault());
-		if (!isForUnassignedScene()) {
-			setPreferredSize(new Dimension(prefWidth, 80));
-		}
-		setComponentPopupMenu(EntityUtil.createPopupMenu(mainFrame, chapter, EntityUtil.WITH_CHRONO));
-		StringBuilder buf = new StringBuilder();
-		if (chapter == null) {
-			JLabel lbChapter = new JLabel(I18N.getMsg("scenes.unassigned"));
-			lbChapter.setUI(new JSLabelVertical(false));
-			add(lbChapter, MIG.get(MIG.TOP));
-		} else {
-			JLabel lbChapter = new JLabel();
-			buf.append(chapter.getChapternoStr());
-			buf.append(" ");
-			int tl = (manage.sceneSize.width / FontUtil.getWidth()) - 8;
-			buf.append(chapter.getTitle(tl));
-			lbChapter.setText(buf.toString());
-			lbChapter.setToolTipText(chapter.getName());
-			if (App.preferences.manageGetVertical()) {
-				add(lbChapter);
-			} else {
-				add(lbChapter, MIG.get(MIG.SPAN, MIG.WRAP));
-			}
-			this.setToolTipText(chapter.getName());
-		}
-		sceneTransferHandler = new ManageSceneTransfer(manage);
-		Model model = mainFrame.getBookModel();
-		List<Scene> scenes = mainFrame.project.scenes.findBy(chapter);
-		if (chapter == null) {
-			// show all unassigned scenes
-			for (Scene scene : scenes) {
-				ManageSceneDnd dtScene = new ManageSceneDnd(this, scene, ManageSceneDnd.TYPE.UNASSIGNED);
-				dtScene.setTransferHandler(sceneTransferHandler);
-				add(dtScene);
-			}
-			// to make a scene unassigned
-			ManageSceneDnd makeUnassigned = new ManageSceneDnd(this, null, ManageSceneDnd.TYPE.MAKE_UNASSIGNED);
-			makeUnassigned.setTransferHandler(sceneTransferHandler);
-			makeUnassigned.setMaximumSize(new Dimension(Short.MAX_VALUE, manage.sceneSize.height));
-			makeUnassigned.setMinimumSize(manage.sceneSize);
-			makeUnassigned.setPreferredSize(new Dimension(Short.MAX_VALUE, manage.sceneSize.height));
-			add(makeUnassigned, MIG.GROWX);
-		} else {
-			ManageSceneDnd begin = new ManageSceneDnd(this, null, ManageSceneDnd.TYPE.BEGIN);
-			begin.setTransferHandler(sceneTransferHandler);
-			if (scenes.isEmpty()) {
-				SwingUtil.setForcedSize(begin, manage.sceneSize);
-			}
-			add(begin);
-			int i = 0;
-			for (Scene scene : scenes) {
-				// scene
-				ManageSceneDnd dtScene = new ManageSceneDnd(this, scene);
-				dtScene.setTransferHandler(sceneTransferHandler);
-				add(dtScene, MIG.GROWX);
-				// move next
-				ManageSceneDnd next = new ManageSceneDnd(this, scene, ManageSceneDnd.TYPE.NEXT);
-				next.setTransferHandler(sceneTransferHandler);
-				add(next);
-				++i;
-			}
-		}
+		setTitle();
+		Dimension d = manage.getScrollSize();
+		d.height += manage.fontSize;
+		this.setMinimumSize(d);
 	}
 
+	/**
+	 * set the title of the chapter
+	 */
+	private void setTitle() {
+		StringBuilder buf = new StringBuilder();
+		MigLayout layout = new MigLayout(MIG.get(MIG.INS1, MIG.GAP1));
+		if (isForUnassignedScene()) {
+			layout = new MigLayout(MIG.get(MIG.INS0, MIG.GAP0));
+			buf.append(I18N.getMsg("scenes.unassigned"));
+		} else {
+			if (App.preferences.manageGetVertical()) {
+				layout = new MigLayout(MIG.get(MIG.INS0, MIG.GAP0, MIG.WRAP1), "[grow]");
+			}
+			buf.append(chapter.getName());
+			this.setToolTipText(chapter.getName());
+			setComponentPopupMenu(EntityUtil.createPopupMenu(mainFrame, chapter, EntityUtil.WITH_CHRONO));
+		}
+		setBorder(BorderFactory.createTitledBorder(buf.toString()));
+		panel.setLayout(layout);
+	}
+
+	/**
+	 * check if this is an unassigned scene
+	 *
+	 * @return
+	 */
 	public boolean isForUnassignedScene() {
 		return chapter == null;
 	}
 
+	/**
+	 * get this component
+	 *
+	 * @return
+	 */
 	protected ManageChapter getThis() {
 		return this;
 	}
 
+	/**
+	 * get the Chapter
+	 *
+	 * @return
+	 */
 	public Chapter getChapter() {
 		return chapter;
 	}
 
-	public List<ManageSceneDnd> getDTScenePanels() {
+	/**
+	 * get the scenes panel
+	 *
+	 * @return
+	 */
+	public List<ManageSceneDnd> getScenePanels() {
 		List<ManageSceneDnd> list = new ArrayList<>();
 		for (Component comp : getComponents()) {
-			if (comp instanceof ManageSceneDnd && ((ManageSceneDnd) comp).getScene() != null) {
+			if (comp instanceof ManageSceneDnd && ((ManageSceneDnd) comp).scene != null) {
 				list.add((ManageSceneDnd) comp);
 			}
 		}
 		return list;
 	}
 
+	/**
+	 * refresh the scenes in the chapter
+	 */
+	void refreshChapter() {
+		setBorder(BorderFactory.createTitledBorder(chapter.getName()));
+		setTitle();
+		panel.removeAll();
+		List<Scene> scenes = mainFrame.project.scenes.find(chapter);
+		ManageSceneDnd begin = new ManageSceneDnd(this, null,
+				ManageSceneDnd.TYPE.BEGIN, transferHandler);
+		if (scenes.isEmpty()) {
+			SwingUtil.setFixedSize(begin, manage.sceneSize);
+		}
+		panel.add(begin);
+		for (Scene scene : scenes) {
+			ManageSceneDnd dnd = new ManageSceneDnd(this, scene, transferHandler);
+			if (dnd.getTransferHandler() == null) {
+				dnd.setTransferHandler(transferHandler);
+			}
+			panel.add(dnd, MIG.GROWX);
+			ManageSceneDnd next = new ManageSceneDnd(this, scene,
+					ManageSceneDnd.TYPE.AFTER, transferHandler);
+			if (next.getTransferHandler() == null) {
+				next.setTransferHandler(transferHandler);
+			}
+			panel.add(next);
+		}
+		scroll.revalidate();
+		scroll.repaint();
+	}
+
+	/**
+	 * refresh the unassigned scenes
+	 */
+	void refreshUnassigned() {
+		panel.removeAll();
+		List<Scene> scenes = mainFrame.project.scenes.findUnassigned();
+		ManageSceneDnd udnd = new ManageSceneDnd(this, null,
+				ManageSceneDnd.TYPE.MAKE_UNASSIGNED, transferHandler);
+		if (udnd.getTransferHandler() == null) {
+			udnd.setTransferHandler(transferHandler);
+		}
+		if (scenes.isEmpty()) {
+			SwingUtil.setFixedSize(udnd, manage.sceneSize);
+		}
+		panel.add(udnd);
+		for (Scene scene : scenes) {
+			if (scene.getChapter() == null) {
+				ManageSceneDnd dnd = new ManageSceneDnd(this, scene,
+						ManageSceneDnd.TYPE.UNASSIGNED, transferHandler);
+				if (dnd.getTransferHandler() == null) {
+					dnd.setTransferHandler(transferHandler);
+				}
+				SwingUtil.setFixedSize(dnd, manage.sceneSize);
+				panel.add(dnd);
+				ManageSceneDnd nextUdnd = new ManageSceneDnd(this, null,
+						ManageSceneDnd.TYPE.MAKE_UNASSIGNED, transferHandler);
+				if (nextUdnd.getTransferHandler() == null) {
+					nextUdnd.setTransferHandler(transferHandler);
+				}
+				panel.add(nextUdnd);
+			}
+		}
+		scroll.revalidate();
+		scroll.repaint();
+	}
+
+	//// mouse gesture
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (getChapter() == null) {
@@ -243,7 +233,7 @@ public class ManageChapter extends AbstractPanel implements MouseListener, IRefr
 		}
 		requestFocusInWindow();
 		if (e.getClickCount() == 2) {
-			mainFrame.showEditorAsDialog(getChapter());
+			EntityUtil.createEntity(mainFrame, getChapter());
 		}
 	}
 
@@ -267,32 +257,56 @@ public class ManageChapter extends AbstractPanel implements MouseListener, IRefr
 		// empty
 	}
 
+	//// common methods
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// empty
 	}
 
-	void refreshUnassigned() {
-		this.removeAll();
-		JLabel lbChapter = new JLabel(I18N.getMsg("scenes.unassigned"));
-		lbChapter.setUI(new JSLabelVertical(false));
-		add(lbChapter);
-		List<Scene> scenes = mainFrame.project.scenes.findBy((Chapter) null);
-		for (Scene scene : scenes) {
-			if (scene.getChapter() == null) {
-				ManageSceneDnd dtScene = new ManageSceneDnd(this, scene, ManageSceneDnd.TYPE.UNASSIGNED);
-				dtScene.setTransferHandler(sceneTransferHandler);
-				SwingUtil.setForcedSize(dtScene, manage.sceneSize);
-				add(dtScene, MIG.GROWY);
-			}
+	@Override
+	public void modelPropertyChange(PropertyChangeEvent evt) {
+		Object newValue = evt.getNewValue();
+		String propName = evt.getPropertyName();
+		if (Ctrl.PROPS.MANAGE_ZOOM.check(propName)) {
+			refresh();
+			return;
 		}
-		// to make a scene unassigned
-		ManageSceneDnd unassigned = new ManageSceneDnd(this, null, ManageSceneDnd.TYPE.MAKE_UNASSIGNED);
-		unassigned.setTransferHandler(sceneTransferHandler);
-		unassigned.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-		unassigned.setMinimumSize(new Dimension(Short.MAX_VALUE, manage.sceneSize.height));
-		unassigned.setPreferredSize(manage.sceneSize);
-		add(unassigned, MIG.GROWX);
+		ActKey act = new ActKey(propName);
+		switch (Book.getTYPE(act.type)) {
+			case CHAPTER:
+				if (isUpdate(act)) {
+					if (isForUnassignedScene()) {
+						refreshUnassigned();
+						return;
+					}
+					Chapter newChapter = (Chapter) newValue;
+					if (!newChapter.getId().equals(chapter.getId())) {
+						return;
+					}
+					chapter = newChapter;
+					refreshChapter();
+				}
+				break;
+			case SCENE:
+				if (isUpdate(act)) {
+					Chapter newSceneChapter = ((Scene) newValue).getChapter();
+					if (newSceneChapter == null) {
+						refreshUnassigned();
+						return;
+					}
+					if (newSceneChapter.equals(chapter)) {
+						refreshChapter();
+					}
+				}
+				break;
+			case STRAND:
+				if (isUpdate(act)) {
+					refresh();
+				}
+				break;
+			default:
+				break;
+		}
 	}
 
 }

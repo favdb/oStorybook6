@@ -166,15 +166,35 @@ public class Chapters extends AbsEntitys {
 	 */
 	public List<Chapter> find(Part part) {
 		List<Chapter> ls = new ArrayList<>();
+		if (part == null) {
+			ls = chapters;
+		} else {
+			for (Chapter p : chapters) {
+				if (p.hasPart() && p.getPart().equals(part)) {
+					ls.add(p);
+				} else if (part == null) {
+					ls.add(p);
+				}
+			}
+		}
+		if (ls.size() > 1) {
+			Collections.sort(ls, (Chapter r1, Chapter r2)
+					-> r1.getChapterno().compareTo(r2.getChapterno()));
+		}
+		return ls;
+	}
+
+	public List<Chapter> findNullPart() {
+		List<Chapter> ls = new ArrayList<>();
 		for (Chapter p : chapters) {
-			if (part != null && p.hasPart() && p.getPart().equals(part)) {
-				ls.add(p);
-			} else if (part == null) {
+			if (!p.hasPart()) {
 				ls.add(p);
 			}
 		}
-		Collections.sort(ls, (Chapter r1, Chapter r2)
-				-> r1.getChapterno().compareTo(r2.getChapterno()));
+		if (ls.size() > 1) {
+			Collections.sort(ls, (Chapter r1, Chapter r2)
+					-> r1.getChapterno().compareTo(r2.getChapterno()));
+		}
 		return ls;
 	}
 
@@ -290,6 +310,48 @@ public class Chapters extends AbsEntitys {
 			}
 		}
 		return rc + 1;
+	}
+
+	/**
+	 * insert the given chapter before the given target chapter
+	 *
+	 * @param chapter
+	 * @param target
+	 */
+	public void insertBefore(Chapter chapter, Chapter target) {
+		int num = target.getChapterno();
+		chapter.setChapterno(num++);
+		//renumber others
+		List<Chapter> cc = find(target.getPart());
+		if (!cc.isEmpty()) {
+			Collections.sort(cc, (Chapter r1, Chapter r2)
+					-> r1.getChapterno().compareTo(r2.getChapterno()));
+			int idx = 0;
+			for (int i = 0; i < cc.size(); i++) {
+				if (cc.get(i).equals(target)) {
+					idx = i;
+				}
+			}
+			for (int i = idx; i < cc.size(); i++) {
+				cc.get(i).setChapterno(num++);
+			}
+		}
+	}
+
+	/**
+	 * insert the given chapter into the given part as last one of this part
+	 *
+	 * @param chapter
+	 * @param part
+	 */
+	public void insertInto(Chapter chapter, Part part) {
+		List<Chapter> cc = (part == null ? findNullPart() : find(part));
+		int num = 0;
+		if (!cc.isEmpty()) {
+			num = cc.get(cc.size() - 1).getChapterno();
+		}
+		chapter.setPart((part == null || part.getId() == -1L ? null : part));
+		chapter.setChapterno(num + 1);
 	}
 
 	@Override

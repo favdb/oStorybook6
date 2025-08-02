@@ -40,6 +40,7 @@ public class IconButton extends JButton {
 		if (icon != ICONS.K.NONE) {
 			setIcon(ic);
 		}
+		this.setMargin(new Insets(0, 0, 0, 0));
 	}
 
 	public IconButton(String name, ICONS.K icon, String tips, Action action) {
@@ -66,6 +67,16 @@ public class IconButton extends JButton {
 		}
 	}
 
+	public IconButton(String name, ICONS.K icon, int size, ActionListener action) {
+		super();
+		this.setName(name);
+		if (icon != ICONS.K.NONE) {
+			setIcon(IconUtil.getIcon(icon, size));
+		}
+		this.addActionListener(action);
+		this.setMargin(new Insets(0, 0, 0, 0));
+	}
+
 	public void setFlat() {
 		setBorderPainted(false);
 		setOpaque(false);
@@ -73,11 +84,11 @@ public class IconButton extends JButton {
 	}
 
 	public void set20x20() {
-		SwingUtil.setForcedSize(this, new Dimension(20, 20));
+		SwingUtil.setFixedSize(this, new Dimension(20, 20));
 	}
 
 	public void setControlButton() {
-		SwingUtil.setForcedSize(this, new Dimension(16, 16));
+		SwingUtil.setFixedSize(this, new Dimension(16, 16));
 		this.setBorder(null);
 	}
 }

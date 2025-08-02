@@ -39,29 +39,29 @@ import storybook.ui.interfaces.IRefreshable;
 
 @SuppressWarnings("serial")
 public abstract class AbstractPanel extends JPanel
-	implements ActionListener, IRefreshable, IPaintable {
+		implements ActionListener, IRefreshable, IPaintable {
 
 	private static final String TT = "AbstractPanel.",
-		CB_PART_FILTER = "cbPartFilter";
+			CB_PART_FILTER = "cbPartFilter";
 
 	public static Dimension MINIMUM_SIZE = new Dimension(400, 120),
-		MAXIMUM_SIZE = new Dimension(1024, 800),
-		PREF_SIZE = new Dimension(1024, 800),
-		HALF_SIZE = new Dimension(640, 400);
+			MAXIMUM_SIZE = new Dimension(1024, 800),
+			PREF_SIZE = new Dimension(1024, 800),
+			HALF_SIZE = new Dimension(640, 400);
 	public static boolean ADD = true, ALL = true,
-		EMPTY = true,
-		MANDATORY = true,
-		BORDER = true,
-		CENTER = true,
-		FULL = true,
-		GROW = true,
-		HIDE = true,
-		INFO = true,
-		NEW = true,
-		NEWTAB = true,
-		TIME = true,
-		TOP = true,
-		WRAP = true;
+			EMPTY = true,
+			MANDATORY = true,
+			BORDER = true,
+			CENTER = true,
+			FULL = true,
+			GROW = true,
+			HIDE = true,
+			INFO = true,
+			NEW = true,
+			NEWTAB = true,
+			TIME = true,
+			TOP = true,
+			WRAP = true;
 	public MainFrame mainFrame;
 	public Ctrl ctrl;
 	public Book book;
@@ -97,7 +97,7 @@ public abstract class AbstractPanel extends JPanel
 
 	@Override
 	public void refresh() {
-		//LOG.printInfos(TT+"refresh() panel="+this.getClass().getSimpleName());
+		//LOG.trace(TT + "refresh() panel=" + this.getClass().getSimpleName());
 		removeAll();
 		initAll();
 		invalidate();
@@ -177,7 +177,7 @@ public abstract class AbstractPanel extends JPanel
 		JTextArea ta = new JTextArea();
 		JTextComponent tcText = SwingUtil.createTextComponent(App.fonts.editorGet());
 		tcText.setFont(App.fonts.editorGet());
-		if (book.getMarkdown()) {
+		if (book != null && book.getMarkdown()) {
 			Markdown mark = new Markdown("BookTextPanel", Html.TYPE, "");
 			mark.setHeader(scene, book.info.scenarioGet());
 			mark.setText(scene.getSummary());
@@ -189,7 +189,6 @@ public abstract class AbstractPanel extends JPanel
 		}
 		tcText.setName(fieldName);
 		tcText.setDragEnabled(true);
-		//tcText.addFocusListener(this);
 		tcText.setCaretPosition(0);
 		tcText.setEditable(false);
 		tcText.setBackground(ta.getBackground());
@@ -243,7 +242,7 @@ public abstract class AbstractPanel extends JPanel
 	 */
 	public boolean isRefresh(PropertyChangeEvent evt, SbView.VIEWNAME xview) {
 		return (Ctrl.getPROPS(evt.getPropertyName()).equals(PROPS.REFRESH)
-			&& (evt.getNewValue() instanceof SbView && ((SbView) evt.getNewValue()).equals(xview)));
+				&& (evt.getNewValue() instanceof SbView && ((SbView) evt.getNewValue()).equals(xview)));
 	}
 
 }

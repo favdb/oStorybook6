@@ -22,11 +22,8 @@ import java.util.ArrayList;
 import storybook.db.abs.AbsTable;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
-import storybook.db.category.Category;
 import storybook.db.part.Part;
-import storybook.db.plot.Plot;
 import storybook.db.scene.SceneStatus;
-import storybook.db.strand.Strand;
 import storybook.exim.exporter.Exporter;
 import storybook.model.BlankModel;
 import storybook.model.Model;
@@ -35,6 +32,8 @@ import storybook.ui.MainFrame;
 import storybook.ui.SbView;
 
 /**
+ * class controler
+ *
  * @author martin
  *
  */
@@ -183,10 +182,9 @@ public class Ctrl extends AbstractCtrl {
 	}
 
 	public void export(SbView view) {
-		//LOG.trace("Ctrl.export(view=" + view.getName() + ")");
+		//LOG.trace(TT+"export(view=" + view.getName() + ")");
 		Exporter xp = new Exporter(mainFrame);
 		xp.exec(view);
-		//setModelProperty(PROPS.EXPORT.toString(), view);
 	}
 
 	/**
@@ -195,7 +193,6 @@ public class Ctrl extends AbstractCtrl {
 	 * @param entity
 	 */
 	public void infoSetTo(AbstractEntity entity) {
-		// si suppression de l'automatisme mettre la ligne en commentaire
 		setModelProperty(PROPS.SHOWINFO.toString(), entity);
 	}
 
@@ -217,16 +214,6 @@ public class Ctrl extends AbstractCtrl {
 	public void infoShow(Project entity) {
 		mainFrame.showView(SbView.VIEWNAME.INFO);
 		setModelProperty(PROPS.SHOWINFO.toString(), entity);
-	}
-
-	/**
-	 * show and focus the Memoria view for the given Entity
-	 *
-	 * @param entity
-	 */
-	public void memoriaShow(AbstractEntity entity) {
-		mainFrame.showView(SbView.VIEWNAME.MEMORIA);
-		setModelProperty(PROPS.SHOWINMEMORIA.toString(), entity);
 	}
 
 	public void unloadEditor() {
@@ -383,66 +370,55 @@ public class Ctrl extends AbstractCtrl {
 		setModelProperty(PROPS.READING_FONTSIZE.toString(), val);
 	}
 
-	// memoria view
+	/**
+	 * show and focus the Memoria view for the given Entity
+	 *
+	 * @param entity
+	 */
+	public void memoriaShow(AbstractEntity entity) {
+		mainFrame.showView(SbView.VIEWNAME.MEMORIA);
+		setModelProperty(PROPS.SHOWINMEMORIA.toString(), entity);
+	}
+
+	/**
+	 * set the layout for Memoria
+	 *
+	 * @param val
+	 */
 	public void memoriaSetLayout(int val) {
 		setModelProperty(PROPS.MEMORIA_LAYOUT.toString(), val);
 	}
 
 	// timeline view
+	/**
+	 * set the zoom for Timeline
+	 *
+	 * @param val
+	 */
 	public void timelineSetZoom(Integer val) {
 		setModelProperty(PROPS.TIMELINE_ZOOM.toString(), val);
 	}
 
+	/**
+	 * set options for Timeline
+	 *
+	 * @param val
+	 */
 	public void timelineSetOptions(String val) {
 		setModelProperty(PROPS.TIMELINE_OPTIONS.toString(), val);
 	}
 
-	// part
+	/**
+	 * change the current Part
+	 *
+	 * @param part
+	 */
 	public void changePart(Part part) {
-		String prop = new ActKey(Book.TYPE.PART, Ctrl.PROPS.CHANGE).toString();
+		String prop = new ActKey(Book.TYPE.PART, PROPS.CHANGE).toString();
 		setModelProperty(prop, part);
 	}
 
-	// plot
-	public void orderUpPlot(Plot entity) {
-		String prop = new ActKey(Book.TYPE.PLOT, Ctrl.PROPS.ORDERUP).toString();
-		setModelProperty(prop, entity);
-	}
-
-	public void orderDownPlot(Plot entity) {
-		String prop = new ActKey(Book.TYPE.PLOT, Ctrl.PROPS.ORDERDOWN).toString();
-		setModelProperty(prop, entity);
-	}
-
-	// category
-	public void orderUpCategory(Category entity) {
-		if (entity == null) {
-			return;
-		}
-		String prop = new ActKey(Book.TYPE.CATEGORY, Ctrl.PROPS.ORDERUP).toString();
-		setModelProperty(prop, entity);
-	}
-
-	public void orderDownCategory(Category entity) {
-		if (entity == null) {
-			return;
-		}
-		String prop = new ActKey(Book.TYPE.CATEGORY, Ctrl.PROPS.ORDERDOWN).toString();
-		setModelProperty(prop, entity);
-	}
-
-	// strands
-	public void orderUpStrand(Strand entity) {
-		String prop = new ActKey(Book.TYPE.STRAND, Ctrl.PROPS.ORDERUP).toString();
-		setModelProperty(prop, entity);
-	}
-
-	public void orderDownStrand(Strand entity) {
-		String prop = new ActKey(Book.TYPE.STRAND, Ctrl.PROPS.ORDERDOWN).toString();
-		setModelProperty(prop, entity);
-	}
-
-	// scenes
+	// filters for scenes
 	public void filterScenes(SceneStatus state) {
 		setModelProperty(PROPS.SCENE_FILTER_STATUS.toString(), state);
 	}

@@ -30,8 +30,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import resources.icons.ICONS;
 import storybook.db.book.BookParamWeb;
 import storybook.dialog.AbsDialog;
@@ -50,7 +48,7 @@ import storybook.ui.Ui;
  *
  * @author favdb
  */
-public class PropWebDlg extends AbsDialog implements ChangeListener {
+public class PropWebDlg extends AbsDialog {
 
 	private static final String TT = "PropWebDlg";
 
@@ -110,12 +108,12 @@ public class PropWebDlg extends AbsDialog implements ChangeListener {
 		panel.setBorder(BorderFactory.createTitledBorder(I18N.getMsg("web.home")));
 		// banner
 		ckBanner = Ui.initCheckBox(panel, "ckBanner", "web.banner", web.getBanner(), null,
-			(ActionListener) (ActionEvent e) -> {
-				slBanner.setVisible(ckBanner.isSelected());
-				pack();
-			});
+				(ActionListener) (ActionEvent e) -> {
+					slBanner.setVisible(ckBanner.isSelected());
+					pack();
+				});
 		slBanner = new JSFileSelector("slBanner", "", web.getBannerImg(), true,
-			I18N.getMsg("file.type.img") + " (*.jpg, *.jpeg)", "jpg");
+				I18N.getMsg("file.type.img") + " (*.jpg, *.jpeg)", "jpg");
 		slBanner.setVisible(ckBanner.isSelected());
 		panel.add(slBanner);
 		// header
@@ -131,9 +129,11 @@ public class PropWebDlg extends AbsDialog implements ChangeListener {
 		JPanel panel = new JPanel(new MigLayout(MIG.WRAP + " 2"));
 		panel.setBorder(BorderFactory.createTitledBorder(I18N.getMsg("web.summary")));
 		// titled
-		ckSummary = Ui.initCheckBox(panel, "ckSummary", "web.summary_titled", web.getSummary().getTitled(), null);
+		ckSummary = Ui.initCheckBox(panel,
+				"ckSummary", "web.summary_titled", web.getSummary().getTitled(), null);
 		// chapters only
-		summaryChapter = Ui.initCheckBox(panel, "summaryChapter", "web.summary_chapter", web.getSummary().getChapters(), null);
+		summaryChapter = Ui.initCheckBox(panel,
+				"summaryChapter", "web.summary_chapter", web.getSummary().getChapters(), null);
 		// color
 		panel.add(new JLabel(I18N.getMsg("web.summary_color")), MIG.get(MIG.SPAN, MIG.SPLIT2));
 		cbColor = new ColorPicker(web.getSummary().getColor());
@@ -149,9 +149,10 @@ public class PropWebDlg extends AbsDialog implements ChangeListener {
 			String nm = "h" + (i + 1);
 			px.add(new JLabel(nm));
 			px.add(lbCss.get(i));
-			px.add(Ui.initButton("bt" + nm, "change", ICONS.K.EMPTY, "", (ActionListener) (ActionEvent e) -> {
-				changeH(nm);
-			}));
+			px.add(Ui.initButton("bt" + nm,
+					"change", ICONS.K.EMPTY, "", (ActionListener) (ActionEvent e) -> {
+						changeH(nm);
+					}));
 		}
 		panel.add(new JLabel("   "), MIG.get(MIG.SPAN, MIG.SPLIT2));
 		panel.add(px);
@@ -164,11 +165,6 @@ public class PropWebDlg extends AbsDialog implements ChangeListener {
 	 */
 	public void initMain() {
 
-	}
-
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		// todo
 	}
 
 	@Override

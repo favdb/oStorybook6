@@ -45,14 +45,14 @@ import storybook.tools.html.Html;
 import storybook.tools.xml.XmlKey.XK;
 
 /**
- * utility class for setting/getting values from Xml
+ * utility class for setting/getting values to/from Xml String
  *
  * @author favdb
  */
 public class XmlUtil {
 
 	public XmlUtil() {
-
+		//empty not used as a class
 	}
 
 	/**

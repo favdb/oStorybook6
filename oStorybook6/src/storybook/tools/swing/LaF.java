@@ -21,7 +21,9 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.util.Enumeration;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
@@ -73,9 +75,9 @@ public class LaF {
 			try {
 				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			} catch (ClassNotFoundException
-			   | IllegalAccessException
-			   | InstantiationException
-			   | UnsupportedLookAndFeelException ex1) {
+					| IllegalAccessException
+					| InstantiationException
+					| UnsupportedLookAndFeelException ex1) {
 				LOG.err("unable to initialize default Laf");
 			}
 		}
@@ -105,6 +107,21 @@ public class LaF {
 				defaults.put(obj, App.fonts.defGet());
 			}
 		}
+	}
+
+	public static Dimension getScreen() {
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		dim.height -= (FontUtil.getHeight() * 2);
+		dim.width -= (FontUtil.getWidth() * 3);
+		return dim;
+	}
+
+	public static int getScreenHeight() {
+		return getScreen().height;
+	}
+
+	public static int getScreenWidth() {
+		return getScreen().width;
 	}
 
 }

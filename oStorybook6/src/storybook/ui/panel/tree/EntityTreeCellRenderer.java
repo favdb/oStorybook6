@@ -20,12 +20,15 @@ package storybook.ui.panel.tree;
 import i18n.I18N;
 import java.awt.Component;
 import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import storybook.App;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.chapter.Chapter;
+import storybook.db.part.Part;
 import storybook.db.person.Person;
 import storybook.db.scene.Scene;
 import storybook.db.status.Status;
@@ -43,74 +46,72 @@ class EntityTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
-		boolean sel, boolean expanded, boolean leaf, int row,
-		boolean hasFocus) {
+			boolean sel, boolean expanded, boolean leaf, int row,
+			boolean hasFocus) {
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 		Object object = node.getUserObject();
-		if (leaf) {
-			if (object instanceof Person && ((Person) object).getGender() != null) {
-				setLeafIcon(((Person) object).getGender().getIcon());
+		if (object instanceof AbstractEntity) {
+			JLabel lb = new JLabel();
+			AbstractEntity entity = ((AbstractEntity) object);
+			Icon icon = entity.getIcon();
+			String txt = setNodeText(entity);
+			if (entity instanceof Chapter && entity.getId() == -1L) {
+				txt = I18N.getMsg("scenes.unassigned");
+			} else if (entity instanceof Part && entity.getId() == -1L) {
+				txt = I18N.getMsg("chapters.no_part");
 			} else if (object instanceof Scene) {
-				setLeafIcon(Status.getStatusIcon(((Scene) object).getStatus()));
-			} else if (object instanceof AbstractEntity) {
-				Icon icon = ((AbstractEntity) object).getIcon();
-				setLeafIcon(icon);
-			} else {
-				setLeafIcon(null);
+				icon = Status.getStatusIcon(((Scene) object).getStatus());
+			} else if (object instanceof Person && ((Person) object).getGender() != null) {
+				icon = ((Person) object).getGender().getIcon();
 			}
+			lb.setIcon(icon);
+			lb.setText(txt);
+			setNotes(lb, object);
+			return lb;
 		}
-		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-		if (!leaf && object instanceof AbstractEntity) {
-			Icon icon = ((AbstractEntity) object).getIcon();
-			setIcon(icon);
-			setText(((AbstractEntity) object).getName());
-		} else if (leaf && object instanceof AbstractEntity) {
-			AbstractEntity entity = (AbstractEntity) object;
-			if (entity.getId() == -1L && object instanceof Chapter) {
-				setText(I18N.getMsg("scenes.unassigned"));
-			} else {
-				String txt = (entity.hasNotes() ? "*" : "") + entity.getName();
-				if (App.preferences.treeviewGetTrunc()) {
-					txt = TextUtil.ellipsize(txt, App.preferences.treeviewGetChar());
-				}
-				StringBuilder text = new StringBuilder();
-				String aspect = entity.getAspect();
-				if (!aspect.isEmpty()) {
-					switch (aspect.charAt(0)) {
-						case 'B':
-							text.append("<b>")
-								.append(String.format(SPAN_FORMAT, entity.getAspect().substring(1), txt))
-								.append("</b>");
-							break;
-						case 'I':
-							text.append("<i>")
-								.append(String.format(SPAN_FORMAT, entity.getAspect().substring(1), txt))
-								.append("</i>");
-							break;
-						default:
-							text.append(String.format(SPAN_FORMAT, entity.getAspect().substring(1), txt));
-							break;
-					}
-				} else {
-					text.append(txt);
-				}
-				setText("<html>" + text.toString() + "</html>");
-			}
-		}
-		setNotes(object);
 		return this;
 	}
 
-	private void setNotes(Object object) {
+	private String setNodeText(AbstractEntity entity) {
+		String txt = (entity.hasNotes() ? "*" : "") + entity.getName();
+		if (App.preferences.treeviewGetTrunc()) {
+			txt = TextUtil.ellipsize(txt, App.preferences.treeviewGetChar());
+		}
+		StringBuilder text = new StringBuilder();
+		String aspect = entity.getAspect();
+		if (!aspect.isEmpty()) {
+			switch (aspect.charAt(0)) {
+				case 'B':
+					text.append("<b>")
+							.append(String.format(SPAN_FORMAT, entity.getAspect().substring(1), txt))
+							.append("</b>");
+					break;
+				case 'I':
+					text.append("<i>")
+							.append(String.format(SPAN_FORMAT, entity.getAspect().substring(1), txt))
+							.append("</i>");
+					break;
+				default:
+					text.append(String.format(SPAN_FORMAT, entity.getAspect().substring(1), txt));
+					break;
+			}
+		} else {
+			text.append(txt);
+		}
+		return text.toString();
+	}
+
+	private void setNotes(JComponent comp, Object object) {
 		String texte = null;
 		if (object instanceof AbstractEntity) {
 			AbstractEntity entity = (AbstractEntity) object;
 			texte = entity.getNotes();
 		}
 		if (!Html.htmlToText(texte).equals("")) {
-			setToolTipText(Html.HTML_B + texte + Html.HTML_E);
+			comp.setToolTipText(Html.intoHTML(Html.intoI(texte)));
 		} else {
-			setToolTipText(null);
+			comp.setToolTipText(null);
 		}
 
 	}

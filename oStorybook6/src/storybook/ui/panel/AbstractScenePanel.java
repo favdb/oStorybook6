@@ -36,9 +36,7 @@ abstract public class AbstractScenePanel extends AbstractGradientPanel {
 
 	protected Scene scene;
 	protected AbstractAction newAction;
-	public JButton btNew;
-	public JButton btEdit;
-	public JButton btDelete;
+	public JButton btNew, btEdit, btDelete;
 
 	public AbstractScenePanel(MainFrame mainFrame, Scene scene) {
 		super(mainFrame);
@@ -46,10 +44,10 @@ abstract public class AbstractScenePanel extends AbstractGradientPanel {
 	}
 
 	public AbstractScenePanel(MainFrame mainFrame, Scene scene,
-			boolean showBgGradient, Color startBgcolor, Color endBgColor) {
-		super(mainFrame, showBgGradient, scene.getInformative() ? Color.white
-				: startBgcolor, scene.getInformative() ? Color.white
-				: endBgColor);
+			boolean showBgGradient, Color begBgCol, Color endBgCol) {
+		super(mainFrame, showBgGradient,
+				(scene.getInformative() ? Color.white : begBgCol),
+				(scene.getInformative() ? Color.white : endBgCol));
 		this.scene = scene;
 	}
 

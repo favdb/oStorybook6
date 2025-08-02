@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.db.strand;
 
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import resources.icons.IconUtil;
@@ -36,6 +37,7 @@ public class StrandButton extends JButton {
 		super(strand.getColorIcon(sz));
 		this.setName("btStrand");
 		this.setToolTipText(strand.getName());
+		this.setMargin(new Insets(0, 0, 0, 0));
 		this.addActionListener(listener);
 	}
 

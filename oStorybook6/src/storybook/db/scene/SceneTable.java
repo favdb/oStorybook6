@@ -98,7 +98,7 @@ public class SceneTable extends AbsTable implements ActionListener {
 	@Override
 	public void init() {
 		withPart = true;
-		mainFrame.project.scenes.relativeDateInit();
+		//mainFrame.project.scenes.relativeDateInit();
 	}
 
 	@SuppressWarnings({"unchecked"})

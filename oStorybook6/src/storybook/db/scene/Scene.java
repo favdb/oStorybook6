@@ -865,6 +865,18 @@ public class Scene extends AbstractEntity {
 		relativeDateDifference = null;
 	}
 
+	public int getRelativeHash() {
+		StringBuilder b = new StringBuilder();
+		if (this.hasScenets()) {
+			b.append("A").append(getScenets().toString()).append(" ");
+		}
+		if (this.hasRelativescene()) {
+			b.append("R").append(this.getRelativesceneid().toString()).append(" ");
+		}
+		b.append("D").append(this.getDuration());
+		return b.toString().hashCode();
+	}
+
 	/**
 	 * get the list of Person
 	 *
@@ -1052,6 +1064,27 @@ public class Scene extends AbstractEntity {
 		return this.narrator_id;
 	}
 
+	/**
+	 * get a scenario key for the given type and index
+	 *
+	 * @param type
+	 * @param i
+	 * @return
+	 */
+	public static String getScenarioKey(String type, int i) {
+		//LOG.trace(TT+".findKey(type=" + type + ", i=" + i + ")");
+		String key = "scenario." + type + "." + String.format("%02d", i);
+		try {
+			String msg = I18N.getMsg(key);
+			if (msg.equals("!" + key + "!")) {
+				return ("");
+			}
+			return (msg);
+		} catch (Exception ex) {
+			return ("");
+		}
+	}
+
 	public void setScenario_stage(Integer stage) {
 		this.scenario_stage = stage;
 	}
@@ -1086,7 +1119,7 @@ public class Scene extends AbstractEntity {
 		if (scenario_moment == null) {
 			return "";
 		}
-		return Scenes.scenarioKey("moment", getScenario_moment());
+		return getScenarioKey("moment", getScenario_moment());
 	}
 
 	public void setScenario_loc(Integer loc) {
@@ -1122,7 +1155,7 @@ public class Scene extends AbstractEntity {
 		if (scenario_start == null) {
 			return "";
 		}
-		return Scenes.scenarioKey("in", getScenario_start());
+		return getScenarioKey("in", getScenario_start());
 	}
 
 	public void setScenario_end(Integer end) {
@@ -1140,7 +1173,7 @@ public class Scene extends AbstractEntity {
 		if (scenario_start == null) {
 			return "";
 		}
-		return Scenes.scenarioKey("out", getScenario_start());
+		return getScenarioKey("out", getScenario_start());
 	}
 
 	@Override

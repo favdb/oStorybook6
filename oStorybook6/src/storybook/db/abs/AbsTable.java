@@ -48,6 +48,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -76,7 +77,7 @@ import resources.icons.IconUtil;
 import storybook.App;
 import storybook.ctrl.ActKey;
 import storybook.ctrl.Ctrl;
-import static storybook.ctrl.Ctrl.PROPS.UPDATE;
+import static storybook.ctrl.Ctrl.PROPS.*;
 import storybook.db.DB;
 import storybook.db.DB.DATA;
 import storybook.db.EntityUtil;
@@ -111,7 +112,7 @@ import storybook.ui.Ui;
 import storybook.ui.panel.AbstractPanel;
 
 /**
- * abstract tabe class contains an optional header, a JTable, an optional footer
+ * Aabstract table class containing an optional header, a JTable, an optional footer
  *
  * @author favdb
  */
@@ -119,7 +120,7 @@ import storybook.ui.panel.AbstractPanel;
 public abstract class AbsTable extends AbstractPanel implements
 		ActionListener, FocusListener, ListSelectionListener, TableModelListener {
 
-	private static final String ATT = "AbsTable.";
+	private static final String ATT = "AbsTable.";//class name for LOG
 
 	public static final String TABLE_HEADER = "Table",
 			BT_EDIT = "BtEdit",
@@ -180,7 +181,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * get entity columnns
+	 * get the columnns for the given entity
 	 *
 	 * @param e
 	 * @return
@@ -237,7 +238,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * get the entity with an ID
+	 * get the entity for the given ID
 	 *
 	 * @param id
 	 * @return
@@ -245,7 +246,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	protected abstract AbstractEntity getEntity(Long id);
 
 	/**
-	 * send an entity to edit from a row
+	 * send an entity to edit for the given row
 	 *
 	 * @param row
 	 */
@@ -260,7 +261,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * send an entity to edit from entity
+	 * send an entity to edit
 	 *
 	 * @param entity
 	 */
@@ -270,7 +271,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * send an entity to delete from a row
+	 * send an entity to delete for the given row
 	 *
 	 * @param row
 	 */
@@ -285,7 +286,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * send entities to delete from multiple rows
+	 * send entities to delete for given multiple rows
 	 *
 	 * @param entities
 	 */
@@ -298,7 +299,7 @@ public abstract class AbsTable extends AbstractPanel implements
 
 	/**
 	 * *
-	 * copy the given row for clipboard in bh and bt
+	 * copy the given row to clipboard in bh for HTML and bt for text only
 	 *
 	 * @param row
 	 * @param bh
@@ -322,7 +323,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * copy row to clipboard action
+	 * action to copy the given row to clipboard
 	 *
 	 * @param row
 	 */
@@ -352,22 +353,6 @@ public abstract class AbsTable extends AbstractPanel implements
 	protected abstract void modelPropertyChangeLocal(PropertyChangeEvent evt);
 
 	/**
-	 * action to sort up this entity row
-	 *
-	 * @param row
-	 */
-	protected void sendOrderUpEntity(int row) {
-	}
-
-	/**
-	 * action to sort down this entity row
-	 *
-	 * @param row
-	 */
-	protected void sendOrderDownEntity(int row) {
-	}
-
-	/**
 	 * get the current Part
 	 *
 	 * @return
@@ -380,11 +365,11 @@ public abstract class AbsTable extends AbstractPanel implements
 		} else {
 			currentPart = (Part) cbPartFilter.getSelectedItem();
 		}
-		return (currentPart);
+		return currentPart;
 	}
 
 	/**
-	 * get all entities
+	 * get all entities as a list of AbstractEntity
 	 *
 	 * @return
 	 */
@@ -446,12 +431,6 @@ public abstract class AbsTable extends AbstractPanel implements
 				case UPDATE:
 					updateEntity(evt);
 					break;
-				case ORDERUP:
-					orderUpEntity(evt);
-					break;
-				case ORDERDOWN:
-					orderDownEntity(evt);
-					break;
 				default:
 					break;
 			}
@@ -462,7 +441,6 @@ public abstract class AbsTable extends AbstractPanel implements
 
 	/**
 	 * initialize the user interface
-	 *
 	 */
 	@Override
 	public void initUi() {
@@ -548,7 +526,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * initialize the table object
+	 * initialize the table object with a standard DefaultTableModel
 	 */
 	private void initTable() {
 		List<String> colNames = getColumnNames();
@@ -588,7 +566,7 @@ public abstract class AbsTable extends AbstractPanel implements
 
 	/**
 	 * get the action to edit the current selected Entity.<br>
-	 * if multi selection then use the first one.
+	 * If multi selection then use the first one.
 	 *
 	 * @return
 	 */
@@ -605,24 +583,10 @@ public abstract class AbsTable extends AbstractPanel implements
 	 * copy the current Entity to clipboard
 	 */
 	private void copyEntityDo() {
-		//LOG.trace(ATT + "doCopyEntity()");
+		//LOG.trace(ATT + "copyEntityDo()");
 		int row = table.getSelectedRow();
 		AbstractEntity entity = getEntityFromRow(row);
 		table.copyToClipboard(mainFrame, entity);
-	}
-
-	/**
-	 * get the action to copy current selected rows into clipboard
-	 *
-	 * @return
-	 */
-	private AbstractAction copyRowsAction() {
-		return new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				copyRowsDo();
-			}
-		};
 	}
 
 	/**
@@ -669,7 +633,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * get action to duplicate the current selected Entity
+	 * get action to delete the current selected Entity
 	 *
 	 * @return
 	 */
@@ -677,6 +641,7 @@ public abstract class AbsTable extends AbstractPanel implements
 		return new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
+				LOG.trace(ATT + "deleteAciotn()");
 				deleteDo();
 			}
 		};
@@ -686,6 +651,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	 * delete the current selected Entity
 	 */
 	public void deleteDo() {
+		LOG.trace(ATT + "deleteDo()");
 		AbstractEntity e;
 		if (table.getSelectedRowCount() == 1) {
 			// delete one entity
@@ -696,7 +662,7 @@ public abstract class AbsTable extends AbstractPanel implements
 			return;
 		}
 		if (table.getSelectedRowCount() > 1) {
-			// delete multiple entities
+			LOG.trace("delete multi");
 			List<AbstractEntity> entities = new ArrayList<>();
 			int[] rows = table.getSelectedRows();
 			for (int row2 : rows) {
@@ -707,6 +673,42 @@ public abstract class AbsTable extends AbstractPanel implements
 						entities.add(entity);
 					}
 				}
+			}
+			//check to disallow delete all Strands, Parts, Chapters or Scenes
+			int nb = 0;
+			if (!entities.isEmpty()) {
+				switch (entities.get(0).getObjType()) {
+					case STRAND:
+						nb = mainFrame.project.strands.getList().size();
+						break;
+					case PART:
+						nb = mainFrame.project.parts.getList().size();
+						break;
+					case CHAPTER:
+						nb = mainFrame.project.chapters.getList().size();
+						break;
+					case GENDER:
+						nb = mainFrame.project.genders.getList().size();
+						break;
+					case SCENE:
+						nb = mainFrame.project.scenes.getList().size();
+						break;
+					default:
+						break;
+				}
+			} else {
+				JOptionPane.showMessageDialog(mainFrame,
+						I18N.getMsg("no.delete"),
+						I18N.getMsg("delete"),
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			if (nb > 0 && nb == rows.length) {
+				JOptionPane.showMessageDialog(mainFrame,
+						I18N.getMsg("project.delete_all"),
+						I18N.getMsg("delete"),
+						JOptionPane.ERROR_MESSAGE);
+				return;
 			}
 			ConfirmDeleteDlg dlg = new ConfirmDeleteDlg(mainFrame, entities);
 			showModalDialog(dlg, mainFrame, true);
@@ -754,6 +756,9 @@ public abstract class AbsTable extends AbstractPanel implements
 		}
 	}
 
+	/**
+	 * action for printing the table
+	 */
 	private void printAction() {
 		LOG.trace(ATT + "printAction()");
 		TablePrinter.pr(mainFrame, this.getTable(), "", "");
@@ -782,7 +787,6 @@ public abstract class AbsTable extends AbstractPanel implements
 
 	/**
 	 * initialize the cells renderers and comparators
-	 *
 	 */
 	private void initRenderer() {
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
@@ -840,7 +844,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	 * fill data in the table
 	 */
 	public void fillTable() {
-		//LOG.trace(ATT+".fillTable() for table="+this.getName());
+		//LOG.trace(ATT+"fillTable() for table="+this.getName());
 		if (table == null) {
 			return;
 		}
@@ -888,7 +892,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	 * @param evt
 	 */
 	protected void initTableModel(PropertyChangeEvent evt) {
-		//LOG.trace(ATT+".initTableModel("+evt.toString()+")");
+		//LOG.trace(ATT+"initTableModel("+evt.toString()+")");
 		table.putClientProperty("MainFrame", mainFrame);
 		fillTable();
 	}
@@ -948,13 +952,13 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * get the row content as a list of objects
+	 * get the row content for the given entity
 	 *
 	 * @param entity
 	 * @return
 	 */
 	public List<Object> getRow(AbstractEntity entity) {
-		//LOG.trace(ATT + ".getRow(" + AbstractEntity.printInfos(entity) + ") table=" + getName());
+		//LOG.trace(ATT + "getRow(" + AbstractEntity.printInfos(entity) + ") table=" + getName());
 		List<Object> cols = new ArrayList<>();
 		if (entity == null) {
 			return (cols);
@@ -989,7 +993,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * write the entity from an event
+	 * write the entity for the given event
 	 *
 	 * @param evt
 	 */
@@ -1000,12 +1004,12 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * write an entity
+	 * write the given entity
 	 *
 	 * @param entity
 	 */
 	protected void updateEntity(AbstractEntity entity) {
-		//LOG.trace(ATT + ".updateEntity(entity=" + entity.toString() + ")");
+		//LOG.trace(ATT + "updateEntity(entity=" + entity.toString() + ")");
 		int row = table.getSelectedRow();
 		fillTable();
 		if (row >= 0 && row < table.getRowCount()) {
@@ -1013,22 +1017,6 @@ public abstract class AbsTable extends AbstractPanel implements
 		} else {
 			table.selectRow(currentRow);
 		}
-	}
-
-	/**
-	 * sort this table in order up
-	 *
-	 * @param evt
-	 */
-	protected void orderUpEntity(PropertyChangeEvent evt) {
-	}
-
-	/**
-	 * sort this table in order down
-	 *
-	 * @param evt
-	 */
-	protected void orderDownEntity(PropertyChangeEvent evt) {
 	}
 
 	/**
@@ -1045,7 +1033,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * new entity action from an event
+	 * new entity action for the given event
 	 *
 	 * @param evt
 	 */
@@ -1074,7 +1062,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * delete entity action from an event
+	 * delete entity action for the given event
 	 *
 	 * @param evt
 	 */
@@ -1105,20 +1093,20 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * get the entity from given row
+	 * get the entity from the given row
 	 *
 	 * @param row
 	 * @return null if no row selected
 	 */
 	protected synchronized AbstractEntity getEntityFromRow(int row) {
-		LOG.trace(ATT + "getEntityFromRow(row=" + row + ")");
+		//LOG.trace(ATT + "getEntityFromRow(row=" + row + ")");
 		if (row == -1 || row > table.getRowCount() - 1) {
-			LOG.err("row out of table");
+			//LOG.err("row out of table");
 			return null;
 		}
 		try {
 			if (table.getRowSorter() == null) {
-				LOG.err("table.getRowSorte() return null");
+				//LOG.err(ATT+"getRowSorter() return null");
 				return null;
 			}
 			int col = 0;
@@ -1175,7 +1163,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	 */
 	@Override
 	public void focusGained(FocusEvent e) {
-		//SwingUtil.setEnable(footer, true);
+		//LOG.trace(TT+"focusGained(e="+e.toString+")");
 		boolean b = table.getSelectedRow() != -1;
 		btDelete.setEnabled(b);
 		btCopy.setEnabled(b);
@@ -1192,7 +1180,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	 */
 	@Override
 	public void focusLost(FocusEvent e) {
-		//SwingUtil.setEnable(footer, false);
+		//empty
 	}
 
 	/**
@@ -1202,7 +1190,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	 */
 	@Override
 	public void valueChanged(ListSelectionEvent evt) {
-		//LOG.trace(ATT + ".valueChanged(e=" + evt.toString() + ")");
+		//LOG.trace(ATT + "valueChanged(e=" + evt.toString() + ")");
 		if (evt.getValueIsAdjusting()) {
 			return;
 		}
@@ -1234,7 +1222,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * enable the button to call external editor
+	 * enable the button to call the external editor
 	 *
 	 * @param entity
 	 */
@@ -1251,7 +1239,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	 * @param row
 	 */
 	public void sendSetExternal(int row) {
-		//LOG.trace(ATT + ".sendSetLibreOffice(" + row + ")");
+		//LOG.trace(ATT + "sendSetExternal(" + row + ")");
 		Scene scene = (Scene) getEntityFromRow(row);
 		if (scene == null) {
 			return;
@@ -1334,7 +1322,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * add a JCombobox for categories
+	 * add a JCombobox for categories filtering
 	 *
 	 * @param categories
 	 * @param selected
@@ -1370,6 +1358,9 @@ public abstract class AbsTable extends AbstractPanel implements
 		}
 	}
 
+	/**
+	 * update the column headers of the table
+	 */
 	public void updateHeaders() {
 		TableColumnModel head = table.getTableHeader().getColumnModel();
 		AbstractEntity entity = BookUtil.getNewEntity(mainFrame, type);
@@ -1426,7 +1417,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * write table columns size and position
+	 * save the table columns size and position
 	 */
 	public void tableDesignSave() {
 		tableDesignSave(table);
@@ -1444,7 +1435,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * get TABCOLs for a given table as a String
+	 * get the tbale columns size and position as a String
 	 *
 	 * @return
 	 */
@@ -1471,7 +1462,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * load TABCOLs
+	 * load the table columns size and position
 	 */
 	public void tableDesignLoad() {
 		//LOG.trace(ATT + "loadTableDesign() for " + getName());
@@ -1479,7 +1470,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * load TABCOLs for a given table
+	 * load table columns size and position for the given table
 	 *
 	 * @param table
 	 * @param columns
@@ -1544,10 +1535,6 @@ public abstract class AbsTable extends AbstractPanel implements
 		}
 	}
 
-	/*private static void reinitColumns(JSTable table) {
-		AbstractEntity entity = BookUtil.getNewEntity(mainFrame, type);
-		columns = getColumns(entity);
-	}*/
 	/**
 	 * dump content of the given table columns (for dev only)
 	 *

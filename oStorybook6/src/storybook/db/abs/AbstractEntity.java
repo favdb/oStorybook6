@@ -51,26 +51,26 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
 	private static final String TT = "AbstractEntity.";
 
 	public static final String L_ID = "id",
-		L_NAME = "name",
-		L_CREATION = "creation",
-		L_MAJ = "maj",
-		L_DESCRIPTION = "description",
-		L_NOTES = "notes",
-		L_ASSISTANT = "assistant",
-		L_EMPTY = "empty",
-		L_STRING = "String";
+			L_NAME = "name",
+			L_CREATION = "creation",
+			L_MAJ = "maj",
+			L_DESCRIPTION = "description",
+			L_NOTES = "notes",
+			L_ASSISTANT = "assistant",
+			L_EMPTY = "empty",
+			L_STRING = "String";
 
 	private static Long transientIdCounter = 1L;
 	protected Long id = -1L, transientId = -1L;
 	private Book.TYPE objtype;
 	private String common = "000";//first=description, second=notes, third=assistant
 	public String name = "",
-		aspect = "",
-		creation = "",
-		maj = "",
-		desc = "",
-		notes = "",
-		assistant = "";
+			aspect = "",
+			creation = "",
+			maj = "",
+			desc = "",
+			notes = "",
+			assistant = "";
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public AbstractEntity(Book.TYPE objtype, String common) {
@@ -122,7 +122,7 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
 	public void doCopyTo(MainFrame m, AbstractEntity ne) {
 		//LOG.trace(TT + "copyTo(m, ne=" + LOG.trace(ne) + ")");
 		String newname = getName()
-			+ " (" + (m.project.getList(getObjType()).size() + 1) + ")";
+				+ " (" + (m.project.getList(getObjType()).size() + 1) + ")";
 		ne.setName(setNewname(m));
 		ne.setAspect(getAspect());
 		if (getCommon().charAt(0) == '1') {
@@ -214,6 +214,11 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
 		return (name == null ? "???" : name.trim());
 	}
 
+	/**
+	 * get full name
+	 *
+	 * @return
+	 */
 	public String getFullName() {
 		return (name == null ? "???" : name.trim());
 	}
@@ -289,7 +294,7 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
 		hash = hash * 31 + (id != null ? id.hashCode() : 0);
 		if (isTransient()) {
 			hash = hash * 31
-				+ (transientId != null ? transientId.hashCode() : 0);
+					+ (transientId != null ? transientId.hashCode() : 0);
 		}
 		hash = hash * 31 + (creation != null ? creation.hashCode() : 0);
 		hash = hash * 31 + (maj != null ? maj.hashCode() : 0);
@@ -433,8 +438,8 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
 	}
 
 	public static boolean equalsListNullValue(
-		List<? extends AbstractEntity> li1,
-		List<? extends AbstractEntity> li2) {
+			List<? extends AbstractEntity> li1,
+			List<? extends AbstractEntity> li2) {
 		if (li1 == null && li2 == null) {
 			return true;
 		}
@@ -849,10 +854,10 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
 	public String toXmlEnd() {
 		StringBuilder s = new StringBuilder();
 		if (!getClean(getDescription()).isEmpty()) {
-			s.append(setXmlChild(2, XK.DESCRIPTION, desc, false));
+			s.append(setXmlChild(2, XK.DESCRIPTION, desc, true));
 		}
 		if (!getClean(getNotes()).isEmpty()) {
-			s.append(setXmlChild(2, XK.NOTES, notes, false));
+			s.append(setXmlChild(2, XK.NOTES, notes, true));
 		}
 		if (!getClean(getAssistant()).isEmpty()) {
 			s.append(setXmlChild(2, XK.ASSISTANT, assistant, true));

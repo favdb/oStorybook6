@@ -65,7 +65,7 @@ import storybook.ui.SbView;
 import storybook.ui.SbView.VIEWNAME;
 import static storybook.ui.SbView.VIEWNAME.*;
 import storybook.ui.panel.book.BookPanel;
-import storybook.ui.panel.manage.ManagePanel;
+import storybook.ui.panel.manage.Manage;
 import storybook.ui.panel.reading.ReadingPanel;
 
 /**
@@ -376,9 +376,8 @@ public class Model extends AbstractModel {
 				return;
 			}
 			Component comp = view.getComponent();
-			if (/*comp instanceof ChronoPanel
-		    || */comp instanceof BookPanel
-					|| comp instanceof ManagePanel
+			if (comp instanceof BookPanel
+					|| comp instanceof Manage
 					|| comp instanceof ReadingPanel) {
 				// these views don't need a "fire again"
 				return;
@@ -477,7 +476,7 @@ public class Model extends AbstractModel {
 	 * @param view
 	 */
 	public void setExport(SbView view) {
-		//TODO set export the given SbView
+		//TODO set export for the given SbView
 	}
 
 	/**
@@ -545,7 +544,7 @@ public class Model extends AbstractModel {
 	 *
 	 * @param val : zoom level
 	 */
-	public void ManageZoom(Integer val) {
+	public void ManageWidth(Integer val) {
 		firePropertyChange(Ctrl.PROPS.MANAGE_ZOOM.toString(), null, val);
 	}
 
@@ -912,12 +911,14 @@ public class Model extends AbstractModel {
 		}*/
 	}
 
-	////// Event
+	// *****************
+	// **** Event     **
+	// *****************
 	public synchronized void EVENT_Delete(Event entity) {
 		if (entity.getId() == null) {
 			return;
 		}
-		mainFrame.project.events.save(entity);
+		mainFrame.project.events.delete(entity);
 		firePropertyChange(EVENT, DELETE, entity, null);
 	}
 
