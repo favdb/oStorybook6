@@ -1372,9 +1372,7 @@ public class MainFrame extends JFrame implements IPaintable {
 	}
 
 	/**
-	 * change all header columns of the tables
-	 *
-	 * @param curLang old language
+	 * change all header columns of the tables according to the current language
 	 */
 	public void updateLanguage() {
 		for (int i = 0; i < viewFactory.getViewMap().getViewCount(); ++i) {

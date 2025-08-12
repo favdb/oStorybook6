@@ -66,13 +66,18 @@ public class Ctrl extends AbstractCtrl {
 		attachModel(model);
 	}
 
+	/**
+	 * set the current row for tables
+	 *
+	 * @param e
+	 */
 	public void setTableRow(AbstractEntity e) {
 		SbView v = mainFrame.getView(e);
 		if (v == null || !v.isLoaded()) {
 			return;
 		}
 		if (v.getComponent() instanceof AbsTable) {
-			((AbsTable) v.getComponent()).setCurrentRow(e);
+			((AbsTable) v.getComponent()).selectRow(e);
 		}
 	}
 

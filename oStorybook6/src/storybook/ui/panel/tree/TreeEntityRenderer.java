@@ -35,15 +35,32 @@ import storybook.db.status.Status;
 import storybook.tools.TextUtil;
 import storybook.tools.html.Html;
 
+/**
+ * renderer class for the tree view
+ *
+ * @author favdb
+ */
 @SuppressWarnings("serial")
-class EntityTreeCellRenderer extends DefaultTreeCellRenderer {
+class TreeEntityRenderer extends DefaultTreeCellRenderer {
 
 	private static final String SPAN_FORMAT = "<span style='color:%s;'>%s</span>";
 
-	public EntityTreeCellRenderer() {
+	public TreeEntityRenderer() {
 		super();
 	}
 
+	/**
+	 * render itself
+	 *
+	 * @param tree
+	 * @param value
+	 * @param sel
+	 * @param expanded
+	 * @param leaf
+	 * @param row
+	 * @param hasFocus
+	 * @return
+	 */
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean sel, boolean expanded, boolean leaf, int row,
@@ -73,6 +90,12 @@ class EntityTreeCellRenderer extends DefaultTreeCellRenderer {
 		return this;
 	}
 
+	/**
+	 * set the node text for the given entity
+	 *
+	 * @param entity
+	 * @return
+	 */
 	private String setNodeText(AbstractEntity entity) {
 		String txt = (entity.hasNotes() ? "*" : "") + entity.getName();
 		if (App.preferences.treeviewGetTrunc()) {
@@ -102,6 +125,12 @@ class EntityTreeCellRenderer extends DefaultTreeCellRenderer {
 		return text.toString();
 	}
 
+	/**
+	 * set the notes information for the given object
+	 *
+	 * @param comp
+	 * @param object
+	 */
 	private void setNotes(JComponent comp, Object object) {
 		String texte = null;
 		if (object instanceof AbstractEntity) {
@@ -113,6 +142,5 @@ class EntityTreeCellRenderer extends DefaultTreeCellRenderer {
 		} else {
 			comp.setToolTipText(null);
 		}
-
 	}
 }

@@ -1,6 +1,7 @@
 Versions :
 ==========
 6.04: 01/09/2025
+- synchronisation Infos rapide, tableaux, Arbre
 - correction suppression multiple 
 - correction Couverture
 - correction export EPUB

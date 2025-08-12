@@ -1,0 +1,156 @@
+Menus
+key, m|n|s, icon, action
+where m=menu, n=without shortcut, s=with shortcut
+
+file, m
+file.new, m
+file.new.file, s, F_NEW, App.getInstance().createNewProject()
+file.new.doc, n, F_IMPORT, mainFrame.fileImportDoc()
+file.open, s, F_OPEN, App.getInstance().selectProject()
+file.recent,m
+file.properties, n, EMPTY, PropertiesDlg.show(mainFrame)
+file.save, s, F_SAVE, mainFrame.fileSave(true)
+file.saveas, n, F_SAVEAS, mainFrame.fileSaveAs()
+file.rename, n, F_RENAME, mainFrame.fileRename()
+file.close, s, CLOSE, mainFrame.close(false)
+separator
+file.backrest, m
+file.backrest.backup, n, BK_SAVE, mainFrame.backupNew(true)
+file.backrest.restore, n, BK_REST, mainFrame.backupRest()
+separator
+file.export, m
+file.export.storyboard, n, VW_STORYBOARD, ExportStoryboard.execute(mainFrame)
+file.export.book, n, VW_BOOK, ExportBookDlg.show(mainFrame)
+file.export.archive, n, COLUMNS, mainFrame.projectArchive()
+file.export.other, n, EXPAND, ExportDlg.show(mainFrame)
+separator
+file.exit, s, EXIT, App.getInstance().exit()
+
+edit
+edit.copy_text, n, ExportBookToHtml.toClipboard(mainFrame, (Part) null)
+edit.copy_blurb, n, Clip.to(mainFrame.getBook().getBlurb(), "txt")
+edit.copy, n, "copy.menu", EntityCopyDlg.show(mainFrame)
+edit.past, n, "edit.paste_as", mainFrame.pasteAs()
+edit.force_position, s, "editor.reset", SwingUtil.resetDlgPosition()
+separator
+edit.preferences, n, "preferences.title", PreferencesDlg.show(mainFrame)
+
+new
+new.strand
+new.part
+new.chapter
+new.scene
+new.multi
+new.multi.parts
+new.multi.chapters
+new.multi.scenes
+new.plot
+new.person
+new.gender
+new.category
+new.relation
+new.attribute
+new.location
+new.item
+new.tag
+new.foi
+new.idea
+new.memo
+
+table
+table.internal
+table.prim
+table.prim.strands
+table.prim.parts
+table.prim.chapters
+table.prim.scenes
+table.prim.plots
+table.prim.persons
+table.prim.locations
+table.prim.items
+table.sec
+table.sec.genders
+table.sec.categorys
+table.sec.relations
+table.sec.attributes
+table.sec.events
+table.sec.tags
+table.sec.endnotes
+table.sec.memos
+table.sec.ideas
+
+tools
+tools.challenge
+tools.typist
+tools.story
+tools.story.episodes
+tools.story.classic
+tools.story.freytag
+tools.story.vogler
+tools.find
+tools.replace
+tools.chapters_order
+tools.scenes_order
+tools.links
+tools.links.location
+tools.links.item
+tools.endnotes_renumber
+tools.rename
+tools.rename.country
+tools.rename.city
+tools.rename.item_category
+tools.rename.tag_category
+tools.cover
+
+view
+view.typist
+view.chrono
+view.timeline
+view.book
+view.reading
+view.manage
+view.memoria
+view.storyboard
+view.storymap
+view.plan
+view.tree
+view.info
+view.memos
+
+chart
+chart.attributes
+chart.characters_by_date
+chart.characters_by_scene
+chart.strands_by_date
+chart.wiww
+chart.occurence
+chart.occurence.persons
+chart.occurence.locations
+chart.occurence.items
+
+window
+window.refresh
+window.dock
+window.dock.load
+window.dock.save
+window.dock.reset
+window.dock.predef
+window.dock.predef.default
+
+help
+help.homepage
+help.doc
+help.faq
+help.bug
+help.shortcut
+help.about
+help.spelling
+help.assistant
+help.ideabox
+help.update
+help.trace
+help.dev
+help.log
+help.translate
+help.translate.assistant
+help.translate.ui

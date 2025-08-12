@@ -541,7 +541,7 @@ public class MainMenu implements MouseListener {
 	 * initialize a menu item with a shortcut
 	 *
 	 * @param shortcut : the value name of the shortcut
-	 * @param action
+	 * @param action : optional action
 	 *
 	 * @return
 	 */
@@ -550,30 +550,30 @@ public class MainMenu implements MouseListener {
 	}
 
 	/**
-	 * initialize a menu item for a shortcut
+	 * initialize a menu item with an icon and a shortcut
 	 *
 	 * @param icon
-	 * @param shortcut : the name of the shortcut
+	 * @param text : the name of the shortcut
 	 * @param tips
-	 * @param action
+	 * @param action : optional action
 	 *
 	 * @return
 	 */
-	public static JMenuItem initScMenuItem(K icon, String shortcut,
+	public static JMenuItem initScMenuItem(K icon, String text,
 			String tips, ActionListener... action) {
 		JMenuItem it = new JMenuItem();
-		it.setName(shortcut);
+		it.setName(text);
 		if (icon != K.EMPTY) {
 			it.setIcon(IconUtil.getIconSmall(icon));
 		}
 		it.setFont(App.fonts.defGet());
-		String text = I18N.getMsg("shortcut.i." + shortcut);
-		if (text.startsWith("!")) {
-			text = I18N.getMsg(shortcut);
+		String t = I18N.getMsg("shortcut.i." + text);
+		if (t.startsWith("!")) {
+			t = I18N.getMsg(text);
 		}
-		it.setText(text);
-		if (!Shortcuts.getKeyBinding(shortcut).isEmpty()) {
-			it.setAccelerator(Shortcuts.getKeyStroke(shortcut));
+		it.setText(t);
+		if (!Shortcuts.getKeyBinding(text).isEmpty()) {
+			it.setAccelerator(Shortcuts.getKeyStroke(text));
 		}
 		if (tips != null && !tips.isEmpty()) {
 			it.setToolTipText(I18N.getMsg(tips));
@@ -587,7 +587,7 @@ public class MainMenu implements MouseListener {
 	/**
 	 * initialize a menu item
 	 *
-	 * @param title
+	 * @param title : I18N key String
 	 * @param action
 	 * @return
 	 */
@@ -653,12 +653,12 @@ public class MainMenu implements MouseListener {
 	/**
 	 * initialize a menu item
 	 *
-	 * @param icon
-	 * @param key
-	 * @param mnemonic
-	 * @param text
+	 * @param icon icon key String
 	 * @param name
-	 * @param action
+	 * @param key: shortcut key String, may be empty
+	 * @param mnemonic may be space for no mnemonic
+	 * @param text: I18N text of the item, if start with ! the not an I18N
+	 * @param action: optional action
 	 * @return
 	 */
 	public static JMenuItem initMenuItem(String icon,
@@ -723,14 +723,8 @@ public class MainMenu implements MouseListener {
 		menuFile.add(menuFileCreate);
 
 		// open a project and open recent project
-		//fileOpen = initMenuItem(K.F_OPEN, Ui.CTRL + "O", 'O', "project.open", "open-command",
 		fileOpen = initScMenuItem(K.F_OPEN, "project.open", "",
-				evt -> {
-					mainFrame.cursorSetWaiting();
-					//App.getInstance().openProject();
-					App.getInstance().selectProject();
-					mainFrame.cursorSetDefault();
-				});
+				evt -> App.getInstance().selectProject());
 		menuFile.add(fileOpen);
 
 		menuFileRecent = new JMenu(I18N.getMsg("file.open.recent"));
@@ -779,9 +773,7 @@ public class MainMenu implements MouseListener {
 		menuFile.add(separator4);
 
 		fileExit = initScMenuItem(K.EXIT, "file.exit", "",
-				evt -> {
-					App.getInstance().exit();
-				});
+				evt -> App.getInstance().exit());
 		menuFile.add(fileExit);
 
 		menuBar.add(menuFile);
@@ -874,12 +866,8 @@ public class MainMenu implements MouseListener {
 
 		menuEdit.add(new JPopupMenu.Separator());
 
-		editPreferences = initMenuItem("preferences.title");
-		editPreferences.setIcon(IconUtil.getIconSmall(K.PREFERENCES));
-		editPreferences.addActionListener(evt -> {
-			PreferencesDlg dlg = new PreferencesDlg(mainFrame);
-			SwingUtil.showModalDialog(dlg, mainFrame);
-		});
+		editPreferences = initMenuItem(K.PREFERENCES, "preferences.title", "",
+				evt -> PreferencesDlg.show(mainFrame));
 		menuEdit.add(editPreferences);
 
 		menuBar.add(menuEdit);
@@ -1347,32 +1335,32 @@ public class MainMenu implements MouseListener {
 			menuCharts.add(chartAttributes);
 		}
 
-		chartPersonsByDate = initMenuItem(K.VW_CHART, "tools.charts.overall.character.date", "",
+		chartPersonsByDate = initMenuItem(K.VW_CHART, "charts.person_by_date", "",
 				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_PERSONS_BY_DATE));
 		menuCharts.add(chartPersonsByDate);
 
-		chartPersonsByScene = initMenuItem(K.VW_CHART, "tools.charts.part.character.scene", "",
+		chartPersonsByScene = initMenuItem(K.VW_CHART, "charts.person_by_scene", "",
 				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_PERSONS_BY_SCENE));
 		menuCharts.add(chartPersonsByScene);
 
-		chartWIWW = initMenuItem(K.VW_CHART, "tools.charts.overall.whoIsWhereWhen", "",
+		chartWIWW = initMenuItem(K.VW_CHART, "charts.wiww", "",
 				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_WIWW));
 		menuCharts.add(chartWIWW);
 
-		chartStrands = initMenuItem(K.VW_CHART, "tools.charts.overall.strand.date", "",
+		chartStrands = initMenuItem(K.VW_CHART, "charts.strand_by_date", "",
 				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_STRANDS_BY_DATE));
 		menuCharts.add(chartStrands);
 		menuCharts.add(new JPopupMenu.Separator());
 
-		chartPersons = initMenuItem(K.VW_CHART, "tools.charts.overall.character.occurrence", "",
+		chartPersons = initMenuItem(K.VW_CHART, "charts.person_occurrence", "",
 				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_OCCURRENCE_OF_PERSONS));
 		menuCharts.add(chartPersons);
 
-		chartLocations = initMenuItem(K.VW_CHART, "tools.charts.overall.location.occurrence", "",
+		chartLocations = initMenuItem(K.VW_CHART, "charts.location_occurrence", "",
 				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_OCCURRENCE_OF_LOCATIONS));
 		menuCharts.add(chartLocations);
 
-		chartItems = initMenuItem(K.VW_CHART, "tools.charts.overall.item.occurrence", "",
+		chartItems = initMenuItem(K.VW_CHART, "charts.item_occurrence", "",
 				evt -> mainFrame.showAndFocus(VIEWNAME.CHART_OCCURRENCE_OF_ITEMS));
 		menuCharts.add(chartItems);
 
@@ -1779,7 +1767,7 @@ public class MainMenu implements MouseListener {
 	}
 
 	public void reloadWindowMenu() {
-		//LOG.trace(TT+".reloadWindowMenu(" + menubar.getName() + ")");
+		//LOG.trace(TT+"reloadWindowMenu(" + menubar.getName() + ")");
 		JMenu miLoad = windowLoadLayout;
 		miLoad.removeAll();
 		File dir = new File(EnvUtil.getPrefDir().getAbsolutePath());

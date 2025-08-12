@@ -1,0 +1,19 @@
+PersonsByScene affiche un tableau des personnages par scènes.
+
+Lorsqu'un personnage apparaît dans une scène ça se matérialise via un petit
+ pavé de couleur, idéalement de la couleur du Strand).
+
+L'option cbShowUnusedPersons permet de montrer/cacher les personnages qui ne
+ sont pas utilisés (donc qui n'apparaissent dans aucune scène).
+
+Ce code est issue d'une procédure de "desobfuscation" d'où les noms un peu
+ fantaisiste et l'utilisation des iterators.
+
+Je voudrais une nouvelle version fonctionnant sans le système des iterators
+ et en utilisant des noms de données plus réalistes (sans verser dans des
+ noms à rallonge).
+
+À noter que l'en-tête des colonnes de scène doit disposer d'un tooltip
+ donnant le nom complet de la scène si celui-ci a été tronqué.
+
+La largeur des colonnes de scène est fixe et dépend du colSlider.

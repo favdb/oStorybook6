@@ -101,6 +101,11 @@ public class SceneTable extends AbsTable implements ActionListener {
 		//mainFrame.project.scenes.relativeDateInit();
 	}
 
+	/**
+	 * get all filtered scenes as a list of AbstractEntity, sorted by ???Id??? of unsorted
+	 *
+	 * @return a list of AbstractEntity
+	 */
 	@SuppressWarnings({"unchecked"})
 	@Override
 	public List<AbstractEntity> getAllEntities() {
@@ -145,7 +150,9 @@ public class SceneTable extends AbsTable implements ActionListener {
 				scenes.add(s);
 			}
 		}
-		return (scenes);
+		//Collections.sort(scenes,
+		//		(AbstractEntity r1, AbstractEntity r2) -> r1.getId().compareTo(r2.getId()));
+		return scenes;
 	}
 
 	@Override

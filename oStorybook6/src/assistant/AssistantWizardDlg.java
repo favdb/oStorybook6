@@ -118,8 +118,8 @@ public class AssistantWizardDlg extends AbsDialog implements ListSelectionListen
 		add(initLocalFile(), MIG.get(MIG.SPAN, MIG.GROWX));
 		// edit the assistant
 		btEdit = Ui.initButton("btEdit",
-		   "assistant.create", ICONS.K.EDIT, "",
-		   e -> AppAssistant.show("--sub"));
+				"assistant.create", ICONS.K.EDIT, "",
+				e -> AppAssistant.show("--sub"));
 		add(btEdit);
 		// validate assistant selection
 		btOK = Ui.initButton("btOK", "ok", ICONS.K.OK, "", e -> selectLocal());
@@ -172,7 +172,7 @@ public class AssistantWizardDlg extends AbsDialog implements ListSelectionListen
 		p.add(scroll, MIG.GROW);
 		// set the selected assistant as current assistant
 		btSelAssistant = Ui.initButton("btSelAssistant", "assistant.select",
-		   ICONS.K.ASSISTANT, "", e -> selectInstalled());
+				ICONS.K.ASSISTANT, "", e -> selectInstalled());
 		btSelAssistant.setEnabled(false);
 		p.add(btSelAssistant, MIG.CENTER);
 		refreshInstalled();
@@ -223,11 +223,11 @@ public class AssistantWizardDlg extends AbsDialog implements ListSelectionListen
 
 		// refresh the list
 		btRefresh = Ui.initButton("btRefresh", "assistant.refresh",
-		   ICONS.K.REFRESH, "", evt -> refreshAssistants());
+				ICONS.K.REFRESH, "", evt -> refreshAssistants());
 		p.add(btRefresh, MIG.get(MIG.SPLIT2, MIG.CENTER));
 		// download the selected item
 		btDownload = Ui.initButton("btDownload", "assistant.download",
-		   ICONS.K.AR_DOWN, "", evt -> downloadAssistant());
+				ICONS.K.AR_DOWN, "", evt -> downloadAssistant());
 		btDownload.setEnabled(false);
 		p.add(btDownload);
 		return p;
@@ -236,10 +236,10 @@ public class AssistantWizardDlg extends AbsDialog implements ListSelectionListen
 	private JPanel initLocalFile() {
 		JPanel p = new JPanel(new MigLayout(MIG.HIDEMODE3));
 		ckLocal = Ui.initCheckBox(null, "ckLocal", "assistant.external_prompt", false, BNONE,
-		   e -> {
-			   SwingUtil.setEnable(pLocal, ckLocal.isSelected());
-			   btEdit.setVisible(ckLocal.isSelected());
-		   });
+				e -> {
+					SwingUtil.setEnable(pLocal, ckLocal.isSelected());
+					btEdit.setVisible(ckLocal.isSelected());
+				});
 		p.add(ckLocal);
 		pLocal = new JPanel(new MigLayout(MIG.get(MIG.HIDEMODE3, MIG.WRAP, MIG.INS0, MIG.GAP1), "[][]"));
 		slAssistant = new JSFileSelector("slAssistant", "", "", true, "Assistant file (*.xml)", "xml");
@@ -250,7 +250,7 @@ public class AssistantWizardDlg extends AbsDialog implements ListSelectionListen
 
 	private void selectInstalled() {
 		String fileName = EnvUtil.getPrefDir() + File.separator + "Assistant"
-		   + File.separator + (String) lsInstalled.getSelectedValue();
+				+ File.separator + (String) lsInstalled.getSelectedValue();
 		App.preferences.setString(Pref.KEY.ASSISTANT, fileName);
 		App.getInstance().setAssistant(fileName);
 		dispose();
@@ -267,9 +267,9 @@ public class AssistantWizardDlg extends AbsDialog implements ListSelectionListen
 		frmMain = new JFrame();
 		frmMain.setUndecorated(true);
 		frmMain.getRootPane().setBorder(
-		   BorderFactory.createCompoundBorder(
-			  BorderFactory.createLoweredBevelBorder(),
-			  BorderFactory.createRaisedBevelBorder()));
+				BorderFactory.createCompoundBorder(
+						BorderFactory.createLoweredBevelBorder(),
+						BorderFactory.createRaisedBevelBorder()));
 		frmMain.setTitle(I18N.getMsg("dlg.build.build.progress"));
 		frmMain.setLocationRelativeTo(this);
 		frmMain.setSize(310, 100);
@@ -312,15 +312,15 @@ public class AssistantWizardDlg extends AbsDialog implements ListSelectionListen
 			LOG.err(TT + "refreshAssistants() exception", ex);
 			return;
 		}
-		String dico = "Assistant";
+		String f_assist = "Assistant";
 		List<String> remote = new ArrayList<>();
 		DefaultListModel installed = (DefaultListModel) lsInstalled.getModel();
 		try (@SuppressWarnings("null") BufferedReader in
-		   = new BufferedReader(new InputStreamReader(url.openStream()))) {
+				= new BufferedReader(new InputStreamReader(url.openStream()))) {
 			String inputLine;
 			while ((inputLine = in.readLine()) != null) {
-				if (inputLine.contains(dico) && inputLine.contains("xml")) {
-					String str = inputLine.substring(inputLine.indexOf(dico));
+				if (inputLine.contains(f_assist) && inputLine.contains("xml")) {
+					String str = inputLine.substring(inputLine.indexOf(f_assist));
 					if (str.contains("\"")) {
 						str = str.substring(0, str.indexOf("\""));
 					}
@@ -336,9 +336,9 @@ public class AssistantWizardDlg extends AbsDialog implements ListSelectionListen
 		}
 		if (remote.isEmpty()) {
 			JOptionPane.showMessageDialog(this,
-			   I18N.getMsg("assistant.no_more"),
-			   I18N.getMsg("warning"),
-			   JOptionPane.ERROR_MESSAGE);
+					I18N.getMsg("assistant.no_more"),
+					I18N.getMsg("warning"),
+					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		DefaultListModel model = new DefaultListModel();
@@ -370,7 +370,7 @@ public class AssistantWizardDlg extends AbsDialog implements ListSelectionListen
 					dir.mkdir();
 				}
 				destAssistant = new File(
-				   dir.getPath() + File.separator + file);
+						dir.getPath() + File.separator + file);
 				//LOG.trace(TT+"run() from url="
 				//   + urlAssistant.toString() + "\ndest=" + destAssistant.getAbsolutePath());
 				URLConnection connection = urlAssistant.openConnection();
@@ -379,9 +379,9 @@ public class AssistantWizardDlg extends AbsDialog implements ListSelectionListen
 				barDo.setStringPainted(true);
 				//LOG.trace(TT+"run() url content size=" + total);
 				BufferedInputStream inputStream
-				   = new BufferedInputStream(connection.getInputStream());
+						= new BufferedInputStream(connection.getInputStream());
 				try (BufferedOutputStream outStream
-				   = new BufferedOutputStream(new FileOutputStream(destAssistant))) {
+						= new BufferedOutputStream(new FileOutputStream(destAssistant))) {
 					int curent = 0;
 					int bytesRead;
 					barDo.setString(curent + "/" + total);

@@ -46,6 +46,12 @@ import storybook.tools.xml.XmlUtil;
 import static storybook.tools.xml.XmlUtil.*;
 import storybook.ui.MainFrame;
 
+/**
+ * abstract entity class
+ *
+ * @author favdb
+ */
+
 public abstract class AbstractEntity implements Serializable, Comparable<AbstractEntity> {
 
 	private static final String TT = "AbstractEntity.";

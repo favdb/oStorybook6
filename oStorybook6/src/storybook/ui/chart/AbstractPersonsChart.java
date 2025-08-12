@@ -56,6 +56,10 @@ public abstract class AbstractPersonsChart extends AbstractChartPanel {
 		refreshChart();
 	}
 
+	public List<Category> getSelectedCategories() {
+		return selectedCategories;
+	}
+
 	private void updateSelectedCategories() {
 		this.selectedCategories.clear();
 		for (JCheckBox cb : this.categoryCbList) {

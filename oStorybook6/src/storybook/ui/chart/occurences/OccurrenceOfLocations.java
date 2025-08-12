@@ -45,7 +45,7 @@ public class OccurrenceOfLocations extends AbstractChartPanel implements ActionL
 	private Dataset dataset;
 
 	public OccurrenceOfLocations(MainFrame mainFrame) {
-		super(mainFrame, "report.location.occurrence.title");
+		super(mainFrame, "charts.location_occurrence_title");
 	}
 
 	@Override

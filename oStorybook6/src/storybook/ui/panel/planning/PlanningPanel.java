@@ -46,7 +46,7 @@ import storybook.ui.chart.occurences.Dataset;
 import storybook.ui.chart.occurences.DatasetItem;
 import storybook.ui.chart.occurences.Occurence;
 import storybook.ui.panel.AbstractPanel;
-import storybook.ui.panel.tree.Tree;
+import storybook.ui.panel.tree.TreeEntity;
 
 /**
  * Panel for planification vision.
@@ -153,7 +153,7 @@ public class PlanningPanel extends AbstractPanel implements MouseListener {
 		// create panel
 		topNode = new DefaultMutableTreeNode(topSp);
 
-		tree = new Tree(topNode);
+		tree = new TreeEntity(topNode);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		tree.setCellRenderer(new PlanningTreeTCR());
 		treeScroll = new JScrollPane(tree);

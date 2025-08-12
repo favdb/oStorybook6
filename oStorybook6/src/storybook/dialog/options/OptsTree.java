@@ -72,8 +72,6 @@ public class OptsTree extends AbstractOptions implements CaretListener, ActionLi
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() instanceof JCheckBox) {
-		}
 		save();
 	}
 

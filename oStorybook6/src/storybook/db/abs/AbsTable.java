@@ -391,6 +391,13 @@ public abstract class AbsTable extends AbstractPanel implements
 		//LOG.trace(ATT + "modelPropertyChange(evt=" + evt.toString() + ")");
 		String propName = evt.getPropertyName();
 		ActKey act = new ActKey(evt);
+		if (Ctrl.getPROPS(propName) == Ctrl.PROPS.SHOWINFO
+				&& evt.getNewValue() instanceof AbstractEntity) {
+			AbstractEntity e = (AbstractEntity) evt.getNewValue();
+			if (e.getObjType() == this.type) {
+				selectRow(e);
+			}
+		}
 		if (evt.getNewValue() instanceof View) {
 			View newView = (View) evt.getNewValue();
 			View oldView = (View) getParent().getParent();
@@ -417,7 +424,7 @@ public abstract class AbsTable extends AbstractPanel implements
 				default:
 			}
 		}
-		if (getTableName().toLowerCase().contains(act.type.toLowerCase())) {
+		if (getTableName().toLowerCase().replace("table", "").contains(act.type.toLowerCase())) {
 			switch (Ctrl.getPROPS(act.getCmd())) {
 				case INIT:
 					initTableModel(evt);
@@ -651,7 +658,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	 * delete the current selected Entity
 	 */
 	public void deleteDo() {
-		LOG.trace(ATT + "deleteDo()");
+		//LOG.trace(ATT + "deleteDo()");
 		AbstractEntity e;
 		if (table.getSelectedRowCount() == 1) {
 			// delete one entity
@@ -662,7 +669,7 @@ public abstract class AbsTable extends AbstractPanel implements
 			return;
 		}
 		if (table.getSelectedRowCount() > 1) {
-			LOG.trace("delete multi");
+			//LOG.trace("delete multi");
 			List<AbstractEntity> entities = new ArrayList<>();
 			int[] rows = table.getSelectedRows();
 			for (int row2 : rows) {
@@ -760,7 +767,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	 * action for printing the table
 	 */
 	private void printAction() {
-		LOG.trace(ATT + "printAction()");
+		//LOG.trace(ATT + "printAction()");
 		TablePrinter.pr(mainFrame, this.getTable(), "", "");
 		refresh();
 	}
@@ -1067,8 +1074,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	 * @param evt
 	 */
 	protected synchronized void deleteEntity(PropertyChangeEvent evt) {
-		AbstractEntity entity = (AbstractEntity) evt.getOldValue();
-		deleteEntity(entity);
+		deleteEntity((AbstractEntity) evt.getOldValue());
 	}
 
 	/**
@@ -1261,16 +1267,31 @@ public abstract class AbsTable extends AbstractPanel implements
 	}
 
 	/**
-	 * set the current row
+	 * set the selected row to the given index
 	 *
-	 * @param entity
+	 * @param index
 	 */
-	public void setCurrentRow(AbstractEntity entity) {
-		for (int i = 0; i < tableModel.getRowCount(); i++) {
-			String id = (String) tableModel.getValueAt(i, 0);
-			if (id.equals(entity.getId().toString())) {
+	private void selectRow(int index) {
+		table.getSelectionModel().removeListSelectionListener(this);
+		table.setRowSelectionInterval(index, index);
+		table.scrollRectToVisible(table.getCellRect(index, 0, true));
+		table.getSelectionModel().addListSelectionListener(this);
+	}
+
+	/**
+	 * set the selected row to the given entity
+	 *
+	 * @param s
+	 */
+	public void selectRow(AbstractEntity s) {
+		//LOG.trace(ATT + "selectRow(s=" + LOG.trace(s) + ")");
+		int nb = tableModel.getRowCount();
+		for (int i = 0; i < nb; i++) {
+			AbstractEntity e = getEntityFromRow(i);
+			if (e.equals(s)) {
+				selectRow(i);
 				currentRow = i;
-				table.getSelectionModel().setSelectionInterval(currentRow, currentRow);
+				break;
 			}
 		}
 	}

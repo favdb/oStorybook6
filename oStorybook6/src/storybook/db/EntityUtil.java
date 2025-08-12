@@ -377,7 +377,7 @@ public class EntityUtil {
 	 *
 	 * @param mainFrame
 	 * @param entity
-	 * @param withChrono : boolean true i view chrono is required
+	 * @param withChrono : boolean true if view chrono is required
 	 *
 	 * @return
 	 */
@@ -435,7 +435,7 @@ public class EntityUtil {
 		}
 		menu.add(new JPopupMenu.Separator());
 		if (entity instanceof Chapter) {
-			menu.add(MainMenu.initMenuItem(ICONS.K.SORT, "order.time", "", ' ', "order.time",
+			/*menu.add(MainMenu.initMenuItem(ICONS.K.SORT, "order.time", "", ' ', "order.time",
 					e -> {
 						if (mainFrame.project.scenes.renumberByTime((Chapter) entity) > 0) {
 							mainFrame.getBookController().updateEntity((Chapter) entity);
@@ -447,7 +447,7 @@ public class EntityUtil {
 							mainFrame.getBookController().updateEntity((Chapter) entity);
 						}
 					}));
-			menu.add(new JPopupMenu.Separator());
+			menu.add(new JPopupMenu.Separator());*/
 		}
 
 		if (entity instanceof Scene) {
@@ -486,11 +486,6 @@ public class EntityUtil {
 		if (menu.getComponents().length == 0) {
 			return null;
 		}
-		/*for (Component comp : menu.getComponents()) {
-			if (comp instanceof JMenuItem) {
-				((JMenuItem) comp).setFont(App.fonts.defGet());
-			}
-		}*/
 		return menu;
 	}
 

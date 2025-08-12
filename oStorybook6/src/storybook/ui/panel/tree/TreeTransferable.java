@@ -4,13 +4,13 @@ import java.awt.datatransfer.*;
 import java.util.*;
 import javax.swing.tree.*;
 
-public class TransferableNode implements Transferable {
+public class TreeTransferable implements Transferable {
 
 	public static final DataFlavor NODE_FLAVOR = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType, "Node");
 	private final TreeNode node;
 	private final DataFlavor[] flavors = {NODE_FLAVOR};
 
-	public TransferableNode(TreeNode draggedNode) {
+	public TreeTransferable(TreeNode draggedNode) {
 		node = draggedNode;
 	}
 

@@ -45,7 +45,7 @@ public class OccurrenceOfItems extends AbstractChartPanel {
 	private Dataset dataset;
 
 	public OccurrenceOfItems(MainFrame mainFrame) {
-		super(mainFrame, "report.item.occurrence.title");
+		super(mainFrame, "charts.item_occurrence_title");
 	}
 
 	@Override

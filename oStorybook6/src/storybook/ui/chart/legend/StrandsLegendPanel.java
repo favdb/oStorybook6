@@ -34,7 +34,7 @@ public class StrandsLegendPanel extends AbstractLegendPanel {
 	@SuppressWarnings("unchecked")
 	public void initUi() {
 		setOpaque(false);
-		add(new JLabel(I18N.getMsg("report.caption.strands")));
+		add(new JLabel(I18N.getMsg("charts.caption.strands")));
 		for (Strand strand : (List<Strand>) mainFrame.project.strands.findOrderBySort()) {
 			JLabel label = new JLabel("    ", 0);
 			label.setToolTipText(strand.getName());

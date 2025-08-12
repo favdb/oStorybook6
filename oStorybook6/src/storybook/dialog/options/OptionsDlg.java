@@ -105,7 +105,7 @@ public class OptionsDlg extends AbsDialog {
 					break;
 			}
 		}
-		add(getCloseButton(), MIG.get(MIG.SPAN, MIG.SG, MIG.RIGHT));
+		add(getOkButton(), MIG.get(MIG.SPAN, MIG.SG, MIG.RIGHT));
 		pack();
 		setLocationRelativeTo(mainFrame);
 		setModal(true);

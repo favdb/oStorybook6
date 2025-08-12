@@ -126,6 +126,11 @@ public class Scenes extends AbsEntitys {
 		return null;
 	}
 
+	/**
+	 * add a scene to the list of scenes
+	 *
+	 * @param p
+	 */
 	@Override
 	public void add(AbstractEntity p) {
 		if (p.getId() == -1L) {
@@ -135,6 +140,11 @@ public class Scenes extends AbsEntitys {
 		relativeDateInit();
 	}
 
+	/**
+	 * update a scene
+	 *
+	 * @param scene
+	 */
 	public void update(Scene scene) {
 		for (int i = 0; i < scenes.size(); i++) {
 			Scene sx = scenes.get(i);
@@ -145,6 +155,11 @@ public class Scenes extends AbsEntitys {
 		}
 	}
 
+	/**
+	 * delete a scene
+	 *
+	 * @param p
+	 */
 	@Override
 	public void delete(AbstractEntity p) {
 		int n = getIdx(p.getId());
@@ -153,6 +168,11 @@ public class Scenes extends AbsEntitys {
 		}
 	}
 
+	/**
+	 * get the first scene of the list of scenes
+	 *
+	 * @return
+	 */
 	@Override
 	public AbstractEntity getFirst() {
 		if (scenes.isEmpty()) {
@@ -161,16 +181,31 @@ public class Scenes extends AbsEntitys {
 		return scenes.get(0);
 	}
 
+	/**
+	 * get the list of scenes
+	 *
+	 * @return
+	 */
 	@Override
 	public List getList() {
 		return scenes;
 	}
 
+	/**
+	 * get count of scenes
+	 *
+	 * @return
+	 */
 	@Override
 	public int getCount() {
 		return scenes.size();
 	}
 
+	/**
+	 * find a list of scenes sorted by name
+	 *
+	 * @return
+	 */
 	public List findByName() {
 		List<Scene> ls = new ArrayList<>();
 		for (Scene p : scenes) {
@@ -183,6 +218,12 @@ public class Scenes extends AbsEntitys {
 		return ls;
 	}
 
+	/**
+	 * find a scene which name is the given one
+	 *
+	 * @param name
+	 * @return
+	 */
 	public Scene findName(String name) {
 		for (Scene p : scenes) {
 			if (p.getName().equals(name)) {
@@ -192,6 +233,13 @@ public class Scenes extends AbsEntitys {
 		return null;
 	}
 
+	/**
+	 * find list of distinct dates of scenes
+	 *
+	 * @param mainFrame
+	 * @param strand
+	 * @return
+	 */
 	public List<Date> findDistinctDatesByStrand(MainFrame mainFrame, Strand strand) {
 		List<Date> list = new ArrayList<>();
 		for (Scene p : scenes) {
@@ -202,10 +250,12 @@ public class Scenes extends AbsEntitys {
 		return list;
 	}
 
-	public int count(MainFrame m) {
-		return scenes.size();
-	}
-
+	/**
+	 * get the list of scenes sorted by status
+	 *
+	 * @param status
+	 * @return
+	 */
 	public List<Scene> findByStatus(int status) {
 		List<Scene> ls = new ArrayList<>();
 		for (Scene p : scenes) {
@@ -221,13 +271,16 @@ public class Scenes extends AbsEntitys {
 	}
 
 	/**
-	 * get Scene list for the given Chapter
+	 * get list of Scene for the given Chapter
 	 *
 	 * @param chapter
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Scene> find(Chapter chapter) {
+		if (chapter == null) {
+			return findUnassigned();
+		}
 		List<Scene> ls = new ArrayList<>();
 		for (Scene p : scenes) {
 			if (p.hasChapter() && p.getChapter().equals(chapter)) {
@@ -236,11 +289,16 @@ public class Scenes extends AbsEntitys {
 		}
 		if (ls.size() > 1) {
 			Collections.sort(ls, (Scene r1, Scene r2)
-					-> r1.getSceneno().compareTo(r2.getSceneno()));
+					-> r1.getCCSS().compareTo(r2.getCCSS()));
 		}
 		return ls;
 	}
 
+	/**
+	 * find the list of unassigned scene
+	 *
+	 * @return
+	 */
 	public List<Scene> findUnassigned() {
 		List<Scene> ls = new ArrayList<>();
 		for (Scene s : scenes) {
@@ -255,6 +313,11 @@ public class Scenes extends AbsEntitys {
 		return ls;
 	}
 
+	/**
+	 * find scenes which have the given narrator
+	 *
+	 * @return
+	 */
 	public List<Person> findNarrators() {
 		List<Person> list = new ArrayList<>();
 		for (Scene p : scenes) {
@@ -332,7 +395,7 @@ public class Scenes extends AbsEntitys {
 	}
 
 	/**
-	 * find Scenes linked to the given Entity
+	 * find Scenes linked to the given Entity, sorted result by CC.SS
 	 *
 	 * @param entity
 	 * @return
@@ -345,8 +408,6 @@ public class Scenes extends AbsEntitys {
 					if (p.hasChapter() && p.getChapter().equals((Chapter) entity)) {
 						list.add(p);
 					}
-					Collections.sort(list, (Scene r1, Scene r2)
-							-> r1.getCCSS().compareTo(r2.getCCSS()));
 					break;
 				case SCENE:
 					if (p.hasRelativescene() && p.getRelativesceneid().equals(entity.getId())) {
@@ -398,6 +459,10 @@ public class Scenes extends AbsEntitys {
 				default:
 					break;
 			}
+		}
+		if (!list.isEmpty()) {
+			Collections.sort(list, (Scene r1, Scene r2)
+					-> r1.getCCSS().compareTo(r2.getCCSS()));
 		}
 		return list;
 	}
@@ -485,6 +550,12 @@ public class Scenes extends AbsEntitys {
 		return dates;
 	}
 
+	/**
+	 * find distinct dates for the given Part
+	 *
+	 * @param part
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Date> findDistinctDates(Part part) {
 		//LOG.trace(TT + "findDistinctDates(part=" + LOG.trace(part) + ")");
@@ -525,87 +596,7 @@ public class Scenes extends AbsEntitys {
 	}
 
 	/**
-	 * insert the given scene at the begining of the given chapter
-	 *
-	 * @param scene
-	 * @param chapter
-	 */
-	public void insertBegin(Scene scene, Chapter chapter) {
-		List<Scene> ls = (chapter == null ? findUnassigned() : find(chapter));
-		@SuppressWarnings("null")
-		int num = (ls.isEmpty() ? 1 : ls.get(0).getSceneno());
-		Chapter oldChapter = scene.getChapter();
-		scene.setSceneno(num);
-		scene.setChapter(chapter);
-		update(scene);
-		renumber(chapter);
-		if (oldChapter != null && chapter != null && !oldChapter.equals(chapter)) {
-			renumber(oldChapter);
-		}
-	}
-
-	/**
-	 * insert the given scene into the given chapter and set the number
-	 *
-	 * @param scene
-	 * @param chapter
-	 */
-	public void insertInto(Scene scene, Chapter chapter) {
-		LOG.trace(TT + "insertInto(scene=" + LOG.trace(scene) + ", chapter=" + LOG.trace(chapter) + ")");
-		List<Scene> sc = (chapter == null ? findUnassigned() : find(chapter));
-		int num = 1;
-		if (!sc.isEmpty()) {
-			Collections.sort(sc, (Scene r1, Scene r2)
-					-> r1.getSceneno().compareTo(r2.getSceneno()));
-			num = sc.get(sc.size() - 1).getSceneno() + 1;
-		}
-		scene.setChapter(chapter);
-		scene.setSceneno(num);
-		update(scene);
-	}
-
-	/**
-	 * insert a scene before the given target with renumber
-	 *
-	 * @param scene
-	 * @param target
-	 */
-	public void insertBefore(Scene scene, Scene target) {
-		LOG.trace(TT + "insertBefore(scene=" + LOG.trace(scene) + ", target=" + LOG.trace(target) + ")");
-		if (target == null) {
-			return;
-		}
-		int num = target.getSceneno();
-		List<Scene> sc = new ArrayList<>();
-		for (Scene s : scenes) {
-			if (Objects.equals(s.getChapter(), target.getChapter())) {
-				sc.add(s);
-			}
-		}
-		scene.setChapter(target.getChapter());
-		scene.setSceneno(num++);
-		int idx = -1;
-		//find first scene to change
-		for (int i = 0; i < sc.size(); i++) {
-			if (sc.get(i).equals(target)) {
-				idx = i;
-			}
-		}
-		if (idx == -1) {
-			return;
-		}
-		Collections.sort(sc, (Scene r1, Scene r2)
-				-> r1.getSceneno().compareTo(r2.getSceneno()));
-		//set the number and change others
-		for (int i = idx; i < sc.size(); i++) {
-			sc.get(i).setSceneno(num++);
-			update(sc.get(i));
-		}
-		update(scene);
-	}
-
-	/**
-	 * renumber all scenes
+	 * renumber all scenes by Chapter
 	 *
 	 * @param mainFrame
 	 */
@@ -616,6 +607,7 @@ public class Scenes extends AbsEntitys {
 		mainFrame.project.chapters.sortByNumber();
 		@SuppressWarnings("unchecked")
 		List<Chapter> chapters = (List<Chapter>) mainFrame.project.chapters.getList();
+		//renumber for each chapter
 		for (Chapter chapter : chapters) {
 			if (App.preferences.sceneIsRenumAuto()) {
 				renumberAuto(chapter);
@@ -640,8 +632,7 @@ public class Scenes extends AbsEntitys {
 	 * renumber the scenes of the given chapter
 	 *
 	 * @param chapter
-	 *
-	 * @return the number of modified scene
+	 * @return the last number used
 	 */
 	public int renumber(Chapter chapter) {
 		//LOG.trace(TT + "renumber(mainFrame, chapter=" + LOG.trace(chapter) + ")");
@@ -663,8 +654,7 @@ public class Scenes extends AbsEntitys {
 	 * automatic renumber scenes of the chapter
 	 *
 	 * @param chapter
-	 *
-	 * @return the number of modified scene
+	 * @return the number of renumber scenes
 	 */
 	public int renumberAuto(Chapter chapter) {
 		//LOG.trace(TT + ".renumberAuto(mainFrame, chapter=" + LOG.trace(chapter) + ")");
@@ -690,7 +680,7 @@ public class Scenes extends AbsEntitys {
 	}
 
 	/**
-	 * incremental renumber scenes of the chapter
+	 * incremental renumber scenes of the given Chapter
 	 *
 	 * @param chapter
 	 * @param start: starting number
@@ -707,21 +697,6 @@ public class Scenes extends AbsEntitys {
 			sceneNumber += inc;
 		}
 		return sceneNumber;
-	}
-
-	/**
-	 * renumber scenes by time
-	 *
-	 * @param chapter
-	 * @return the number of modified scene
-	 */
-	public int renumberByTime(Chapter chapter) {
-		int nb = 1;
-		for (Scene scene : scenes) {
-			scene.setSceneno(nb);
-			++nb;
-		}
-		return nb;
 	}
 
 	/**
@@ -794,7 +769,7 @@ public class Scenes extends AbsEntitys {
 	}
 
 	/**
-	 * get the tools tip for the given Scene
+	 * get the tools tip for the given Scene, contains chapter name and shorted summary
 	 *
 	 * @param buf
 	 * @param scene
@@ -859,7 +834,7 @@ public class Scenes extends AbsEntitys {
 	}
 
 	/**
-	 * find the scenes related to the given Person
+	 * find the scenes related to the given Person, without narrator
 	 *
 	 * @param entity
 	 * @return
@@ -907,7 +882,7 @@ public class Scenes extends AbsEntitys {
 	}
 
 	/**
-	 * find scenes related to the given strand
+	 * find scenes related to the given strand, included secondary strands
 	 *
 	 * @param entity
 	 * @return
@@ -973,6 +948,12 @@ public class Scenes extends AbsEntitys {
 		return n;
 	}
 
+	/**
+	 * find scenes of the given Part
+	 *
+	 * @param part
+	 * @return
+	 */
 	public List<Scene> findByPart(Part part) {
 		List<Scene> ls = new ArrayList<>();
 		for (Scene p : scenes) {
@@ -1045,6 +1026,13 @@ public class Scenes extends AbsEntitys {
 		return b.toString();
 	}
 
+	/**
+	 * get scenes between two dates
+	 *
+	 * @param tsStart
+	 * @param tsEnd
+	 * @return
+	 */
 	public List<Scene> getBetween(Timestamp tsStart, Timestamp tsEnd) {
 		List<Scene> ls = new ArrayList<>();
 		for (Scene s : scenes) {
@@ -1164,7 +1152,7 @@ public class Scenes extends AbsEntitys {
 		}
 		Scene sx = (Scene) get(sceneId);
 		if (sx == null) {
-			LOG.err("Scene not found: " + sceneId);
+			//LOG.err("Scene not found: " + sceneId);
 			return null;
 		}
 		visited.add(sceneId);
@@ -1209,7 +1197,12 @@ public class Scenes extends AbsEntitys {
 		Collections.sort(scenes, (Scene r1, Scene r2) -> r1.getSceneno().compareTo(r2.getSceneno()));
 	}
 
-	void changeDateRelative(boolean b) {
+	/**
+	 * changing relative date indicator
+	 *
+	 * @param b
+	 */
+	public void changeDateRelative(boolean b) {
 		changeDateRel = b;
 	}
 

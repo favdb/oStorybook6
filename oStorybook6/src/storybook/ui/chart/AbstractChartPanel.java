@@ -41,10 +41,13 @@ import storybook.tools.file.IOUtil;
 import storybook.tools.swing.PrintUtil;
 import storybook.tools.swing.ScreenImage;
 import storybook.tools.swing.SwingUtil;
+import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.panel.AbstractPanel;
 
 public abstract class AbstractChartPanel extends AbstractPanel implements ActionListener {
+
+	private static final String TT = "AbstractChartPanel.";
 
 	protected JPanel panel;
 	protected JPanel optionsPanel;
@@ -53,10 +56,11 @@ public abstract class AbstractChartPanel extends AbstractPanel implements Action
 	protected boolean needsFullRefresh = false;
 	private JScrollPane scroller;
 	private AbstractAction exportAction;
+	private static final String L_EXPORT = "export", L_PNG = ".png";
 
-	public AbstractChartPanel(MainFrame mainFrame, String param) {
+	public AbstractChartPanel(MainFrame mainFrame, String title) {
 		super(mainFrame);
-		this.chartTitle = I18N.getMsg(param);
+		this.chartTitle = I18N.getMsg(title);
 	}
 
 	protected abstract void initChart();
@@ -67,6 +71,83 @@ public abstract class AbstractChartPanel extends AbstractPanel implements Action
 
 	public String getTitle() {
 		return chartTitle;
+	}
+
+	@Override
+	public void init() {
+		try {
+			initChart();
+		} catch (Exception e) {
+			LOG.err(TT + "init() Exception" + e.getLocalizedMessage());
+		}
+	}
+
+	@Override
+	public void initUi() {
+		setLayout(new MigLayout(MIG.get(MIG.FLOWY, MIG.FILL, MIG.INS0), "", ""));
+		this.panel = new JPanel(new MigLayout(MIG.get(MIG.FLOWY, MIG.FILL, "ins 2"), "", "[][grow][]"));
+		initChartUi();
+		this.optionsPanel = new JPanel(new MigLayout(MIG.get(MIG.FLOWX, MIG.FILL)));
+		this.optionsPanel.setBorder(BorderFactory.createLineBorder(Color.gray));
+		initOptionsUi();
+		this.scroller = new JScrollPane(this.panel);
+		SwingUtil.setMaxPreferredSize(this.scroller);
+		add(this.scroller, MIG.GROW);
+		if (this.optionsPanel.getComponentCount() > 0) {
+			add(this.optionsPanel, MIG.GROWX);
+		} else {
+			add(new JLabel());
+		}
+	}
+
+	protected void refreshChart() {
+		this.panel.removeAll();
+		initChartUi();
+		this.panel.revalidate();
+		this.panel.repaint();
+	}
+
+	private AbstractChartPanel getThis() {
+		return this;
+	}
+
+	private AbstractAction getExportAction() {
+		if (this.exportAction == null) {
+			this.exportAction = new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent evt) {
+					try {
+						File f1 = new File(mainFrame.getBook().getParam().getParamExport().getDirectory());
+						JFileChooser fc = new JFileChooser(f1);
+						FileFilter filter = new FileFilter(FileFilter.TYPE.PNG);
+						fc.setFileFilter(filter);
+						fc.setApproveButtonText(I18N.getMsg(L_EXPORT));
+						String str = AbstractChartPanel.this.mainFrame.getProject().getName()
+								+ " - " + AbstractChartPanel.this.chartTitle;
+						str = IOUtil.filenameCleanup(str);
+						fc.setSelectedFile(new File(str));
+						int i = fc.showDialog(AbstractChartPanel.this.getThis(), I18N.getMsg(L_EXPORT));
+						if (i == 1) {
+							return;
+						}
+						File f2 = fc.getSelectedFile();
+						if (!f2.getName().endsWith(L_PNG)) {
+							f2 = new File(f2.getPath() + L_PNG);
+						}
+						ScreenImage.createImage(AbstractChartPanel.this.panel, f2.toString());
+						JOptionPane.showMessageDialog(AbstractChartPanel.this.getThis(),
+								I18N.getMsg(L_EXPORT + ".success"),
+								I18N.getMsg(L_EXPORT), 1);
+					} catch (HeadlessException | IOException localException) {
+					}
+				}
+			};
+		}
+		return this.exportAction;
+	}
+
+	public JPanel getPanelToExport() {
+		return (null);
 	}
 
 	@Override
@@ -104,88 +185,7 @@ public abstract class AbstractChartPanel extends AbstractPanel implements Action
 			} else {
 				refreshChart();
 			}
-			return;
 		}
-	}
-
-	@Override
-	public void init() {
-		try {
-			initChart();
-		} catch (Exception e) {
-			LOG.err("AbstractChartPanel.init() Exception" + e.getLocalizedMessage());
-		}
-	}
-
-	@Override
-	public void initUi() {
-		setLayout(new MigLayout("flowy,fill,ins 0", "", ""));
-		this.panel = new JPanel(new MigLayout("flowy,fill,ins 2", "", "[][grow][]"));
-		initChartUi();
-		this.optionsPanel = new JPanel(new MigLayout("flowx,fill"));
-		this.optionsPanel.setBorder(BorderFactory.createLineBorder(Color.gray));
-		initOptionsUi();
-		this.scroller = new JScrollPane(this.panel);
-		SwingUtil.setMaxPreferredSize(this.scroller);
-		add(this.scroller, "grow");
-		if (this.optionsPanel.getComponentCount() > 0) {
-			add(this.optionsPanel, "growx");
-		} else {
-			add(new JLabel());
-		}
-	}
-
-	protected void refreshChart() {
-		this.panel.removeAll();
-		initChartUi();
-		this.panel.revalidate();
-		this.panel.repaint();
-	}
-
-	private AbstractChartPanel getThis() {
-		return this;
-	}
-
-	private static final String L_EXPORT = "export";
-	private static final String L_PNG = ".png";
-
-	private AbstractAction getExportAction() {
-		if (this.exportAction == null) {
-			this.exportAction = new AbstractAction() {
-				@Override
-				public void actionPerformed(ActionEvent evt) {
-					try {
-						File f1 = new File(mainFrame.getBook().getParam().getParamExport().getDirectory());
-						JFileChooser fc = new JFileChooser(f1);
-						FileFilter filter = new FileFilter(FileFilter.TYPE.PNG);
-						fc.setFileFilter(filter);
-						fc.setApproveButtonText(I18N.getMsg(L_EXPORT));
-						String str = AbstractChartPanel.this.mainFrame.getProject().getName()
-						   + " - " + AbstractChartPanel.this.chartTitle;
-						str = IOUtil.filenameCleanup(str);
-						fc.setSelectedFile(new File(str));
-						int i = fc.showDialog(AbstractChartPanel.this.getThis(), I18N.getMsg(L_EXPORT));
-						if (i == 1) {
-							return;
-						}
-						File f2 = fc.getSelectedFile();
-						if (!f2.getName().endsWith(L_PNG)) {
-							f2 = new File(f2.getPath() + L_PNG);
-						}
-						ScreenImage.createImage(AbstractChartPanel.this.panel, f2.toString());
-						JOptionPane.showMessageDialog(AbstractChartPanel.this.getThis(),
-						   I18N.getMsg(L_EXPORT + ".success"),
-						   I18N.getMsg(L_EXPORT), 1);
-					} catch (HeadlessException | IOException localException) {
-					}
-				}
-			};
-		}
-		return this.exportAction;
-	}
-
-	public JPanel getPanelToExport() {
-		return (null);
 	}
 
 }

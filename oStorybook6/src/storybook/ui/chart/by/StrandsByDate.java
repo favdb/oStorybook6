@@ -43,7 +43,7 @@ public class StrandsByDate extends AbstractPersonsChart {
 	private Dataset dataset;
 
 	public StrandsByDate(MainFrame mainFrame) {
-		super(mainFrame, "tools.charts.overall.strand.date");
+		super(mainFrame, "charts.strand_by_date");
 		this.partRelated = true;
 	}
 

@@ -65,10 +65,10 @@ public class Shortcuts {
 
 	public static final String[] OSBK = {
 		// edit and tools
-		"help.shortcuts", "copy_full", "duplicate", "insert", "delete", "find", "replace",
+		"help.shortcut", "copy_full", "duplicate", "insert", "delete", "find", "replace",
 		"editor.reset",
 		// file
-		"project.new", "project.open", "project.close", "project.save",
+		"file.new", "project.open", "project.close", "project.save",
 		"file.exit", "file.refresh",
 		// new entity
 		"new.category", "new.chapter", "new.event", "new.gender", "new.idea", "new.item",
@@ -235,7 +235,7 @@ public class Shortcuts {
 	 * @return
 	 */
 	public static KeyStroke getKeyStroke(String key) {
-		//LOG.trace(".getKeyStroke(type='" + type + "', key='" + key + "')");
+		//LOG.trace("getKeyStroke(type='" + type + "', key='" + key + "')");
 		KeyStroke ks = getKeyStroke("shef", key);
 		if (ks == null) {
 			ks = getKeyStroke("osbk", key);

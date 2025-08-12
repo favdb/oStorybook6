@@ -54,6 +54,11 @@ public class PreferencesDlg extends AbsDialog implements ActionListener {
 	private boolean toRefresh;
 	private String curLang;
 
+	public static void show(MainFrame mainFrame) {
+		PreferencesDlg dlg = new PreferencesDlg(mainFrame);
+		dlg.setVisible(true);
+	}
+
 	public PreferencesDlg(MainFrame m) {
 		super(m);
 		initAll();

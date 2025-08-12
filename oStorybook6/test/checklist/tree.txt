@@ -1,0 +1,19 @@
+Tests pour la vue Arbre(Tree)
+
+1. Options:
+1.1. sélection de tous les types (show all)
+1.2. déselection de tous les types (show none)
+1.3. déselection d'un type, ou de plusieurs
+1.4. expand all
+1.5. collapse all
+1.6. modifier la troncature des noms
+2. Traitement de la sélection (vue Infos rapides)
+3. Traitement des expand/collapse
+4. Traitement DnD des chapitres
+4.1. vers les non assignés
+4.2. vers une autre partie
+5. Traitement DnD des scènes
+5.1. vers les non assignées
+5.2. vers un autre chapitre à la fin
+5.3. après une autre scène
+5.4. depuis les non assignées

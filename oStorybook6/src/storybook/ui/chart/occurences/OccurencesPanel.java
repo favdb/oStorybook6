@@ -33,8 +33,8 @@ import javax.swing.SwingConstants;
 public class OccurencesPanel extends JPanel {
 
 	private static final int DEFAULT_SIZE = GroupLayout.DEFAULT_SIZE,
-	   MAX_VALUE = Short.MAX_VALUE,
-	   PREFERRED_SIZE = GroupLayout.PREFERRED_SIZE;
+			MAX_VALUE = Short.MAX_VALUE,
+			PREFERRED_SIZE = GroupLayout.PREFERRED_SIZE;
 
 	private final String titre;
 	private final String titreX;
@@ -71,12 +71,12 @@ public class OccurencesPanel extends JPanel {
 		GroupLayout panelLayout = new GroupLayout(panel);
 		panel.setLayout(panelLayout);
 		panelLayout.setHorizontalGroup(
-		   panelLayout.createParallelGroup(Alignment.LEADING)
-			  .addGap(0, 0, MAX_VALUE)
+				panelLayout.createParallelGroup(Alignment.LEADING)
+						.addGap(0, 0, MAX_VALUE)
 		);
 		panelLayout.setVerticalGroup(
-		   panelLayout.createParallelGroup(Alignment.LEADING)
-			  .addGap(0, 0, MAX_VALUE)
+				panelLayout.createParallelGroup(Alignment.LEADING)
+						.addGap(0, 0, MAX_VALUE)
 		);
 
 		lbXaxis = new JLabel();
@@ -94,25 +94,25 @@ public class OccurencesPanel extends JPanel {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(
-		   layout.createParallelGroup(Alignment.LEADING)
-			  .addComponent(jTitre, DEFAULT_SIZE, 800, MAX_VALUE)
-			  .addComponent(lbXaxis, DEFAULT_SIZE, DEFAULT_SIZE, MAX_VALUE)
-			  .addGroup(Alignment.TRAILING, layout.createSequentialGroup()
-				 .addComponent(lbYaxis, PREFERRED_SIZE, 24, PREFERRED_SIZE)
-				 .addPreferredGap(ComponentPlacement.RELATED)
-				 .addComponent(panel, DEFAULT_SIZE, DEFAULT_SIZE, MAX_VALUE))
+				layout.createParallelGroup(Alignment.LEADING)
+						//.addComponent(jTitre, DEFAULT_SIZE, 800, MAX_VALUE)
+						.addComponent(lbXaxis, DEFAULT_SIZE, DEFAULT_SIZE, MAX_VALUE)
+						.addGroup(Alignment.TRAILING, layout.createSequentialGroup()
+								.addComponent(lbYaxis, PREFERRED_SIZE, 24, PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(panel, DEFAULT_SIZE, DEFAULT_SIZE, MAX_VALUE))
 		);
 		layout.setVerticalGroup(
-		   layout.createParallelGroup(Alignment.LEADING)
-			  .addGroup(layout.createSequentialGroup()
-				 .addComponent(jTitre)
-				 .addPreferredGap(ComponentPlacement.RELATED)
-				 .addComponent(lbXaxis)
-				 .addPreferredGap(ComponentPlacement.RELATED)
-				 .addGroup(layout.createParallelGroup(Alignment.LEADING)
-					.addComponent(panel, DEFAULT_SIZE, DEFAULT_SIZE, MAX_VALUE)
-					.addComponent(lbYaxis, DEFAULT_SIZE, 433, MAX_VALUE))
-				 .addContainerGap())
+				layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+								//.addComponent(jTitre)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lbXaxis)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(panel, DEFAULT_SIZE, DEFAULT_SIZE, MAX_VALUE)
+										.addComponent(lbYaxis, DEFAULT_SIZE, 433, MAX_VALUE))
+								.addContainerGap())
 		);
 	}
 

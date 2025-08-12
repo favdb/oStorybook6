@@ -17,39 +17,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.tools.swing.table;
 
+import api.mig.swing.MigLayout;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import api.mig.swing.MigLayout;
 
 public class TableColorCellRenderer extends TableStandardCellRenderer {
 
-    public TableColorCellRenderer() {
-	super();
-    }
-
-    public TableColorCellRenderer(boolean coloredRows) {
-	super(coloredRows);
-    }
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-	    boolean isSelected, boolean hasFocus, int row, int column) {
-	JLabel label = (JLabel) super.getTableCellRendererComponent(table,
-		value, isSelected, hasFocus, row, column);
-	if (value == null) {
-	    return label;
+	public TableColorCellRenderer() {
+		super();
 	}
-	Color color = (Color) value;
-	JPanel panel = new JPanel(new MigLayout("insets 2, fill"));
-	panel.setBackground(label.getBackground());
-	panel.setOpaque(true);
-	JLabel lbColor = new JLabel();
-	lbColor.setOpaque(true);
-	lbColor.setBackground(color);
-	panel.add(lbColor, "grow");
-	return panel;
-    }
+
+	public TableColorCellRenderer(boolean coloredRows) {
+		super(coloredRows);
+	}
+
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		JLabel label = (JLabel) super.getTableCellRendererComponent(table,
+				value, isSelected, hasFocus, row, column);
+		if (value == null) {
+			return label;
+		}
+		Color color = (Color) value;
+		JPanel panel = new JPanel(new MigLayout("insets 2, fill"));
+		panel.setBackground(label.getBackground());
+		panel.setOpaque(true);
+		JLabel lbColor = new JLabel();
+		lbColor.setOpaque(true);
+		lbColor.setBackground(color);
+		panel.add(lbColor, "grow");
+		return panel;
+	}
 }

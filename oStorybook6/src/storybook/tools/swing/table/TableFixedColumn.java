@@ -26,6 +26,11 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+/**
+ * class for a JTable fixed column size
+ *
+ * @author favdb
+ */
 @SuppressWarnings("serial")
 public class TableFixedColumn extends JScrollPane implements RowSorterListener {
 

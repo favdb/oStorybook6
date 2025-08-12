@@ -222,25 +222,25 @@ public class SbViewFactory {
 				break;
 
 			case CHART_PERSONS_BY_DATE:
-				title = "tools.charts.overall.strand.date";
+				title = "charts.strand_by_date";
 				break;
 			case CHART_PERSONS_BY_SCENE:
-				title = "tools.charts.part.character.scene";
+				title = "charts.person_by_scene";
 				break;
 			case CHART_WIWW:
-				title = "tools.charts.overall.whoIsWhereWhen";
+				title = "charts.wiww";
 				break;
 			case CHART_STRANDS_BY_DATE:
-				title = "tools.charts.overall.strand.date";
+				title = "charts.strand_by_date";
 				break;
 			case CHART_OCCURRENCE_OF_PERSONS:
-				title = "tools.charts.overall.character.occurrence";
+				title = "charts.person_occurrence";
 				break;
 			case CHART_OCCURRENCE_OF_LOCATIONS:
-				title = "tools.charts.overall.location.occurrence";
+				title = "charts.location_occurrence";
 				break;
 			case CHART_OCCURRENCE_OF_ITEMS:
-				title = "tools.charts.overall.item.occurrence";
+				title = "charts.item_occurrence";
 				break;
 		}
 		title = I18N.getMsg(title);
@@ -619,7 +619,7 @@ public class SbViewFactory {
 	public SbView getChartPersonsByDate() {
 		//LOG.trace(TT+"getChartPersonsByDate()");
 		if (isViewInitialized(VIEWNAME.CHART_PERSONS_BY_DATE)) {
-			SbView view = new SbView(getChartName("tools.charts.overall.character.date"));
+			SbView view = new SbView(getChartName("charts.person_by_date"));
 			view.setName(VIEWNAME.CHART_PERSONS_BY_DATE.toString());
 			addRefreshButton(view);
 			addPrintButton(view);
@@ -632,7 +632,7 @@ public class SbViewFactory {
 	public SbView getChartPersonsByScene() {
 		//LOG.trace(TT+"getChartPersonsByScene()");
 		if (isViewInitialized(VIEWNAME.CHART_PERSONS_BY_SCENE)) {
-			SbView view = new SbView(getChartName("tools.charts.part.character.scene"));
+			SbView view = new SbView(getChartName("charts.person_by_scene"));
 			view.setName(VIEWNAME.CHART_PERSONS_BY_SCENE.toString());
 			addRefreshButton(view);
 			addPrintButton(view);
@@ -645,7 +645,7 @@ public class SbViewFactory {
 	public SbView getChartWiWW() {
 		//LOG.trace(TT+"getChartWiWW()");
 		if (isViewInitialized(VIEWNAME.CHART_WIWW)) {
-			SbView view = new SbView(getChartName("tools.charts.overall.whoIsWhereWhen"));
+			SbView view = new SbView(getChartName("charts.wiww"));
 			view.setName(VIEWNAME.CHART_WIWW.toString());
 			addRefreshButton(view);
 			addPrintButton(view);
@@ -658,7 +658,7 @@ public class SbViewFactory {
 	public SbView getChartStrandsByDate() {
 		//LOG.trace(TT+"getChartStrandsByDate()");
 		if (isViewInitialized(VIEWNAME.CHART_STRANDS_BY_DATE)) {
-			SbView view = new SbView(getChartName("tools.charts.overall.strand.date"));
+			SbView view = new SbView(getChartName("charts.strand_by_date"));
 			view.setName(VIEWNAME.CHART_STRANDS_BY_DATE.toString());
 			addRefreshButton(view);
 			addPrintButton(view);
@@ -671,7 +671,7 @@ public class SbViewFactory {
 	public SbView getChartOccurrenceOfPersons() {
 		//LOG.trace(TT+"getChartOccurrenceOfPersons()");
 		if (isViewInitialized(VIEWNAME.CHART_OCCURRENCE_OF_PERSONS)) {
-			SbView view = new SbView(getChartName("tools.charts.overall.character.occurrence"));
+			SbView view = new SbView(getChartName("charts.person_occurrence"));
 			view.setName(VIEWNAME.CHART_OCCURRENCE_OF_PERSONS.toString());
 			addRefreshButton(view);
 			addPrintButton(view);
@@ -684,7 +684,7 @@ public class SbViewFactory {
 	public SbView getChartOccurrenceOfLocations() {
 		//LOG.trace(TT+"getChartOccurrenceOfLocations()");
 		if (isViewInitialized(VIEWNAME.CHART_OCCURRENCE_OF_LOCATIONS)) {
-			SbView view = new SbView(getChartName("tools.charts.overall.location.occurrence"));
+			SbView view = new SbView(getChartName("charts.location_occurrence"));
 			view.setName(VIEWNAME.CHART_OCCURRENCE_OF_LOCATIONS.toString());
 			addRefreshButton(view);
 			addPrintButton(view);
@@ -697,7 +697,7 @@ public class SbViewFactory {
 	public SbView getChartOccurrenceOfItems() {
 		//LOG.trace(TT+"getChartOccurrenceOfItems()");
 		if (isViewInitialized(VIEWNAME.CHART_OCCURRENCE_OF_ITEMS)) {
-			SbView view = new SbView(getChartName("tools.charts.overall.item.occurrence"));
+			SbView view = new SbView(getChartName("charts.item_occurrence"));
 			view.setName(VIEWNAME.CHART_OCCURRENCE_OF_ITEMS.toString());
 			addRefreshButton(view);
 			addPrintButton(view);
@@ -710,7 +710,7 @@ public class SbViewFactory {
 	public SbView getChartGantt() {
 		//LOG.trace(TT+"getChartGantt()");
 		if (isViewInitialized(VIEWNAME.CHART_GANTT)) {
-			SbView view = new SbView(getChartName("chart.gantt.characters.title"));
+			SbView view = new SbView(getChartName("chart.person_gantt"));
 			view.setName(VIEWNAME.CHART_GANTT.toString());
 			addRefreshButton(view);
 			addPrintButton(view);

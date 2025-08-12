@@ -38,7 +38,6 @@ import storybook.db.scene.Scene;
 import storybook.db.strand.Strand;
 import storybook.project.Project;
 import storybook.tools.swing.ColorUtil;
-import storybook.tools.swing.FontUtil;
 import storybook.tools.swing.ReadOnlyTable;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.table.TableColorCellRenderer;
@@ -46,6 +45,7 @@ import storybook.tools.swing.table.TableFixedColumn;
 import storybook.tools.swing.table.TableHeaderCellRenderer;
 import storybook.tools.swing.table.TableHeaderMouseListener;
 import storybook.tools.swing.table.ToolTipHeader;
+import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.chart.AbstractPersonsChart;
 import storybook.ui.chart.legend.StrandsLegendPanel;
@@ -58,21 +58,18 @@ public class PersonsByScene extends AbstractPersonsChart implements ChangeListen
 	private int colWidth = 50;
 
 	public PersonsByScene(MainFrame paramMainFrame) {
-		super(paramMainFrame, "report.person.scene.title");
+		super(paramMainFrame, "charts.person_by_scene");
 		this.partRelated = true;
 	}
 
 	@Override
 	protected void initChartUi() {
-		JLabel label = new JLabel(this.chartTitle);
-		label.setFont(FontUtil.getBold());
 		table = createTable();
 		table.setName(chartTitle);
-		TableFixedColumn localFixedColumnScrollPane = new TableFixedColumn(this.table, 1);
-		localFixedColumnScrollPane.getRowHeader().setPreferredSize(new Dimension(200, 20));
-		panel.setName(I18N.getMsg("report.person.scene.title"));
-		panel.add(label, "center");
-		panel.add(localFixedColumnScrollPane, "grow, h pref-20");
+		TableFixedColumn scroll = new TableFixedColumn(this.table, 1);
+		scroll.getRowHeader().setPreferredSize(new Dimension(200, 20));
+		panel.setName(I18N.getMsg("charts.person_by_scene"));
+		panel.add(scroll, MIG.get(MIG.GROW, "h pref-20"));
 		panel.add(new StrandsLegendPanel(this.mainFrame), "gap push");
 	}
 
@@ -81,7 +78,7 @@ public class PersonsByScene extends AbstractPersonsChart implements ChangeListen
 		super.initOptionsUi();
 		this.cbShowUnusedPersons = new JCheckBox();
 		this.cbShowUnusedPersons.setSelected(true);
-		this.cbShowUnusedPersons.setText(I18N.getMsg("chart.common.unused.characters"));
+		this.cbShowUnusedPersons.setText(I18N.getMsg("charts.common.unused.characters"));
 		this.cbShowUnusedPersons.setOpaque(false);
 		this.cbShowUnusedPersons.addActionListener(this);
 		this.optionsPanel.add(this.cbShowUnusedPersons, "right,gap push");
@@ -103,9 +100,9 @@ public class PersonsByScene extends AbstractPersonsChart implements ChangeListen
 		setTableColumnWidth();
 	}
 
+	//TODO charts.person_by_date à refaire
 	@SuppressWarnings("unchecked")
 	private JTable createTable() {
-		//TODO à refaire
 		Project project = mainFrame.project;
 		Part part = getCbPart();
 		List<Person> persons = project.persons.findByCategories(selectedCategories);

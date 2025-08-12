@@ -31,7 +31,7 @@ import javax.swing.tree.TreePath;
  */
 public class TreeUtil {
 
-	private static final String TT = "TreeUtil";
+	private static final String TT = "TreeUtil.";
 
 	private TreeUtil() {
 		// empty
@@ -65,7 +65,7 @@ public class TreeUtil {
 	 * @return
 	 */
 	public static String expansionStateGet(JTree tree, int row) {
-		//LOG.trace(TT + ".expansionStateGet(tree, row="+row+")");
+		//LOG.trace(TT + "expansionStateGet(tree, row="+row+")");
 		TreePath rowPath = tree.getPathForRow(row);
 		StringBuilder buf = new StringBuilder();
 		int rowCount = tree.getRowCount();
@@ -105,7 +105,7 @@ public class TreeUtil {
 	 * @return
 	 */
 	public static List<String> expansionSave(JTree tree) {
-		//LOG.trace(TT + ".expansionSave(tree)");
+		//LOG.trace(TT + "expansionSave(tree)");
 		List<String> list = new ArrayList<>();
 		int rowCount = tree.getRowCount();
 		for (int i = 0; i < rowCount; i++) {
@@ -124,7 +124,7 @@ public class TreeUtil {
 	 * @param list
 	 */
 	public static void expansionRestore(JTree tree, List<String> list) {
-		//LOG.trace(TT + ".expansionRestore(tree, list nb=" + list.size() + ")");
+		//LOG.trace(TT + "expansionRestore(tree, list nb=" + list.size() + ")");
 		int rowCount = tree.getRowCount();
 		for (String s : list) {
 			for (int i = 0; i < rowCount; i++) {

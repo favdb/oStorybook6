@@ -4,37 +4,28 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import javax.swing.JTree;
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
 /**
+ * class for the tree
+ *
  * @author jean
  *
  */
 @SuppressWarnings("serial")
-public class Tree extends JTree {
+public class TreeEntity extends JTree {
 
-	public Tree() {
-	}
-
-	public Tree(Object[] arg0) {
+	public TreeEntity(TreeNode arg0) {
 		super(arg0);
-	}
-
-	public Tree(TreeNode arg0) {
-		super(arg0);
-	}
-
-	public Tree(TreeModel arg0) {
-		super(arg0);
-	}
-
-	public Tree(TreeNode arg0, boolean arg1) {
-		super(arg0, arg1);
 	}
 
 	Insets autoscrollInsets = new Insets(20, 20, 20, 20); // insets
 
+	/**
+	 * automatic scroll to the given location
+	 *
+	 * @param cursorLocation
+	 */
 	public void autoscroll(Point cursorLocation) {
 		Insets insets = getAutoscrollInsets();
 		Rectangle outer = getVisibleRect();
@@ -47,6 +38,11 @@ public class Tree extends JTree {
 		}
 	}
 
+	/**
+	 * get the scroll insets
+	 *
+	 * @return
+	 */
 	public Insets getAutoscrollInsets() {
 		return autoscrollInsets;
 	}

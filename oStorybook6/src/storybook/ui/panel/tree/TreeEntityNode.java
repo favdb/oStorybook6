@@ -21,24 +21,45 @@ import i18n.I18N;
 import javax.swing.tree.DefaultMutableTreeNode;
 import storybook.db.abs.AbstractEntity;
 
+/**
+ * class for an AbstractEntity node in a JTree
+ *
+ * @author favdb
+ */
 @SuppressWarnings("serial")
-public class EntityNode extends DefaultMutableTreeNode {
+public class TreeEntityNode extends DefaultMutableTreeNode {
 
 	private final String text;
 	private final AbstractEntity entity;
 
-	public EntityNode(AbstractEntity entity) {
+	/**
+	 * initialize for a real entity
+	 *
+	 * @param entity
+	 */
+	public TreeEntityNode(AbstractEntity entity) {
 		super();
 		this.text = entity.getName();
 		this.entity = entity;
 	}
 
-	public EntityNode(String textKey, AbstractEntity entity) {
+	/**
+	 * initialize for a virtual entity
+	 *
+	 * @param textKey text for the node
+	 * @param entity
+	 */
+	public TreeEntityNode(String textKey, AbstractEntity entity) {
 		super();
 		this.text = I18N.getMsg(textKey);
 		this.entity = entity;
 	}
 
+	/**
+	 * get the entity
+	 *
+	 * @return
+	 */
 	public AbstractEntity getEntity() {
 		return entity;
 	}
@@ -47,5 +68,4 @@ public class EntityNode extends DefaultMutableTreeNode {
 	public String toString() {
 		return text;
 	}
-
 }

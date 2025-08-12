@@ -45,6 +45,11 @@ public class Chapters extends AbsEntitys {
 		super(project);
 	}
 
+	/**
+	 * get the last Chapter ID
+	 *
+	 * @return
+	 */
 	@Override
 	public Long getLast() {
 		Long n = 0L;
@@ -56,6 +61,11 @@ public class Chapters extends AbsEntitys {
 		return n;
 	}
 
+	/**
+	 * save the given Chapter in the list of Chapter
+	 *
+	 * @param entity
+	 */
 	@Override
 	public void save(AbstractEntity entity) {
 		//LOG.trace(TT + "save(entity=" + LOG.trace(entity) + ")");
@@ -67,6 +77,12 @@ public class Chapters extends AbsEntitys {
 		}
 	}
 
+	/**
+	 * get the index of the given Chapter
+	 *
+	 * @param id
+	 * @return
+	 */
 	@Override
 	public int getIdx(Long id) {
 		for (Chapter p : chapters) {
@@ -77,6 +93,12 @@ public class Chapters extends AbsEntitys {
 		return -1;
 	}
 
+	/**
+	 * get the Chapter for the given ID
+	 *
+	 * @param id
+	 * @return
+	 */
 	@Override
 	public Chapter get(Long id) {
 		for (Chapter p : chapters) {
@@ -87,6 +109,11 @@ public class Chapters extends AbsEntitys {
 		return null;
 	}
 
+	/**
+	 * get the last Chapter
+	 *
+	 * @return
+	 */
 	public Chapter getLastChapter() {
 		if (chapters == null) {
 			return null;
@@ -94,6 +121,11 @@ public class Chapters extends AbsEntitys {
 		return chapters.get(chapters.size() - 1);
 	}
 
+	/**
+	 * add the given Chapter to the list of chapters
+	 *
+	 * @param p
+	 */
 	@Override
 	public void add(AbstractEntity p) {
 		if (p.getId() == -1L) {
@@ -102,6 +134,11 @@ public class Chapters extends AbsEntitys {
 		chapters.add((Chapter) p);
 	}
 
+	/**
+	 * remove the given Chapter from the list of chapters
+	 *
+	 * @param p
+	 */
 	@Override
 	public void delete(AbstractEntity p) {
 		int n = getIdx(p.getId());
@@ -110,6 +147,11 @@ public class Chapters extends AbsEntitys {
 		}
 	}
 
+	/**
+	 * get the first Chapter
+	 *
+	 * @return
+	 */
 	@Override
 	public AbstractEntity getFirst() {
 		if (chapters.isEmpty()) {
@@ -118,11 +160,21 @@ public class Chapters extends AbsEntitys {
 		return chapters.get(0);
 	}
 
+	/**
+	 * get the list of chapters
+	 *
+	 * @return
+	 */
 	@Override
 	public List getList() {
 		return chapters;
 	}
 
+	/**
+	 * get number of chapters
+	 *
+	 * @return
+	 */
 	@Override
 	public int getCount() {
 		return chapters.size();
@@ -184,7 +236,12 @@ public class Chapters extends AbsEntitys {
 		return ls;
 	}
 
-	public List<Chapter> findNullPart() {
+	/**
+	 * find all unassigned Chapter, sorted by number
+	 *
+	 * @return
+	 */
+	public List<Chapter> findNoPart() {
 		List<Chapter> ls = new ArrayList<>();
 		for (Chapter p : chapters) {
 			if (!p.hasPart()) {
@@ -199,7 +256,7 @@ public class Chapters extends AbsEntitys {
 	}
 
 	/**
-	 * find first Chapterof the given Part
+	 * find first Chapter of the given Part
 	 *
 	 * @param part
 	 * @return
@@ -284,6 +341,9 @@ public class Chapters extends AbsEntitys {
 		return n;
 	}
 
+	/**
+	 * set the link to Part of the chapters
+	 */
 	@Override
 	public void setLinks() {
 		for (Chapter p : chapters) {
@@ -293,6 +353,11 @@ public class Chapters extends AbsEntitys {
 		}
 	}
 
+	/**
+	 * get a Xml String of the chapters
+	 *
+	 * @return
+	 */
 	@Override
 	public String toXml() {
 		StringBuilder b = new StringBuilder();
@@ -302,6 +367,11 @@ public class Chapters extends AbsEntitys {
 		return b.toString();
 	}
 
+	/**
+	 * get the next number for a Chapter
+	 *
+	 * @return
+	 */
 	public Integer getNextNumber() {
 		int rc = 0;
 		for (Chapter p : chapters) {
@@ -345,7 +415,7 @@ public class Chapters extends AbsEntitys {
 	 * @param part
 	 */
 	public void insertInto(Chapter chapter, Part part) {
-		List<Chapter> cc = (part == null ? findNullPart() : find(part));
+		List<Chapter> cc = (part == null ? findNoPart() : find(part));
 		int num = 0;
 		if (!cc.isEmpty()) {
 			num = cc.get(cc.size() - 1).getChapterno();
@@ -354,13 +424,19 @@ public class Chapters extends AbsEntitys {
 		chapter.setChapterno(num + 1);
 	}
 
+	/**
+	 * change the HTML link of the chapters
+	 *
+	 * @param path
+	 */
 	@Override
 	public void changeHtmlLinks(String path) {
-		for (Chapter p : chapters) {
-			p.changeHtmlLinks(path);
-		}
+		//empty
 	}
 
+	/**
+	 * sort the chapters by chapter number
+	 */
 	public void sortByNumber() {
 		Collections.sort(chapters, (Chapter r1, Chapter r2) -> r1.getChapterno().compareTo(r2.getChapterno()));
 	}

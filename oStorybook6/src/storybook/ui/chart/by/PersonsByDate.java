@@ -44,7 +44,7 @@ public class PersonsByDate extends AbstractPersonsChart {
 	private Dataset dataset;
 
 	public PersonsByDate(MainFrame mainFrame) {
-		super(mainFrame, "tools.charts.overall.character.date");
+		super(mainFrame, "charts.person_by_date");
 		this.partRelated = true;
 	}
 

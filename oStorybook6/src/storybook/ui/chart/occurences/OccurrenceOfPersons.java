@@ -36,7 +36,7 @@ public class OccurrenceOfPersons extends AbstractPersonsChart {
 	private Dataset dataset;
 
 	public OccurrenceOfPersons(MainFrame mainFrame) {
-		super(mainFrame, "report.person.occurrence.title");
+		super(mainFrame, "charts.person_occurrence");
 	}
 
 	@Override
