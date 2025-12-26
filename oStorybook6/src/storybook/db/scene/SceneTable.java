@@ -123,6 +123,7 @@ public class SceneTable extends AbsTable implements ActionListener {
 		if (cbNarrator.getSelectedIndex() > 0) {
 			fNarrator = (Person) cbNarrator.getSelectedItem();
 		}
+		mainFrame.project.scenes.sortById();
 		List<AbstractEntity> entities = (List) mainFrame.project.getList(getType());
 		List<AbstractEntity> scenes = new ArrayList<>();
 		for (AbstractEntity e : entities) {

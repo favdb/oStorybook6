@@ -31,51 +31,54 @@ import static storybook.ui.Ui.*;
  */
 public class AttributeEdit extends AbstractEditor {
 
-    private JTextField tfKey;
-    private JTextField tfValue;
+	private JTextField tfKey;
+	private JTextField tfValue;
 
-    public AttributeEdit(Editor m, AbstractEntity e) {
-        super(m, e, "110");
-        initAll();
-    }
+	public AttributeEdit(Editor m, AbstractEntity e) {
+		super(m, e, "110");
+		initAll();
+	}
 
-    @Override
-    public void initUpper() {
-        Attribute attribute = (Attribute) entity;
-        tfName.setEnabled(false);
-        tfKey = initStringField(pUpper, "attribute.key", 256, attribute.getKey(), BMANDATORY);
-        tfValue = initStringField(pUpper, "attribute.value", 256, attribute.getValue(), BMANDATORY);
-    }
+	@Override
+	public void initUpper() {
+		Attribute attribute = (Attribute) entity;
+		tfName.setEnabled(false);
+		tfKey = initStringField(pUpper, "attribute.key", 256, attribute.getKey(), BMANDATORY);
+		tfValue = initStringField(pUpper, "attribute.value", 256, attribute.getValue(), BMANDATORY);
+	}
 
-    @Override
-    public boolean verifier() {
-        resetError();
-        if (tfKey.getText().isEmpty()) {
-            errorMsg(tfKey, Const.ERROR_MISSING);
-        }
-        if (tfValue.getText().isEmpty()) {
-            errorMsg(tfValue, Const.ERROR_MISSING);
-        }
-        return (msgError.isEmpty());
-    }
+	@Override
+	public boolean verifier() {
+		if (tfName.getText().isEmpty()) {
+			tfName.setText("?");
+		}
+		resetError();
+		if (tfKey.getText().isEmpty()) {
+			errorMsg(tfKey, Const.ERROR_MISSING);
+		}
+		if (tfValue.getText().isEmpty()) {
+			errorMsg(tfValue, Const.ERROR_MISSING);
+		}
+		return msgError.isEmpty();
+	}
 
-    @Override
-    public void apply() {
-        Attribute attribute = (Attribute) entity;
-        attribute.setKey(tfKey.getText());
-        attribute.setValue(tfValue.getText());
-        tfName.setText(attribute.getKey() + " > " + attribute.getValue());
-        super.apply();
-    }
+	@Override
+	public void apply() {
+		Attribute attribute = (Attribute) entity;
+		attribute.setKey(tfKey.getText());
+		attribute.setValue(tfValue.getText());
+		tfName.setText(attribute.getKey() + " > " + attribute.getValue());
+		super.apply();
+	}
 
-    @Override
-    public void modelPropertyChange(PropertyChangeEvent evt) {
-        // empty
-    }
+	@Override
+	public void modelPropertyChange(PropertyChangeEvent evt) {
+		// empty
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // empty
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// empty
+	}
 
 }

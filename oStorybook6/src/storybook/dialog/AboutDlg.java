@@ -272,10 +272,10 @@ public class AboutDlg extends AbsDialog {
 		JEditorPane lbVersions = new JEditorPane();
 		lbVersions.setContentType("text/html");
 		lbVersions.setEditable(false);
-		lbVersions.setText("<html>please check the complete version file on <a href=\""
-				+ Net.KEY.HOME.toString()
-				+ "articles.php?lng=fr&pg=5&mnuid=1&tconfig=0\"> website</a>"
-				+ "</html>");
+		lbVersions.setText("<html>"
+				+ "please check the complete "
+				+ "<a href=\"" + Net.KEY.VERSIONS.toString() + "\">version file</a>"
+				+ ".</html>");
 		lbVersions.addHyperlinkListener(e -> openURL(e));
 		JLabel lb = new JLabel();
 		lbVersions.setForeground(lb.getForeground());

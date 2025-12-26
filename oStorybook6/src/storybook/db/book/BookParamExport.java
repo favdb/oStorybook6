@@ -21,6 +21,7 @@ package storybook.db.book;
 import java.util.ArrayList;
 import java.util.List;
 import static storybook.exim.exporter.AbstractExport.stringAttribute;
+import storybook.tools.LOG;
 import storybook.tools.ListUtil;
 import storybook.tools.StringUtil;
 import storybook.tools.file.IOUtil;
@@ -81,22 +82,22 @@ public class BookParamExport extends BookParamAbstract {
 	}
 
 	private String directory = "",
-		format = "",
-		htmlCss = "",
-		fileName = "",
-		csvQuote = "\"",
-		csvComma = ";",
-		txtSeparator = "";
+			format = "",
+			htmlCss = "",
+			fileName = "",
+			csvQuote = "\"",
+			csvComma = ";",
+			txtSeparator = "";
 	private boolean epubCover,
-		epubCoverNoText,
-		chapterBookTitle,
-		chapterBreakPage,
-		htmlAdvanced,
-		htmlNav,
-		htmlNavImage,
-		htmlMultiChapter,
-		htmlMultiScene,
-		txtTab;
+			epubCoverNoText,
+			chapterBookTitle,
+			chapterBreakPage,
+			htmlAdvanced,
+			htmlNav,
+			htmlNavImage,
+			htmlMultiChapter,
+			htmlMultiScene,
+			txtTab;
 	private int highlight = Html.EM_LEFTASIS;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
@@ -256,7 +257,7 @@ public class BookParamExport extends BookParamAbstract {
 		b.append(stringAttribute(0, KW.DIRECTORY.toString(), getDirectory()));
 		b.append(stringAttribute(0, KW.FORMAT.toString(), getFormat()));
 		b.append(stringAttribute(13, KW.HTML.toString(), getHtmlChapterTitle(), getHtmlChapterBreakPage(),
-			isMultiChapter(), isMultiScene(), getHtmlNav(), getHtmlNavImage(), getHtmlAdvanced())
+				isMultiChapter(), isMultiScene(), getHtmlNav(), getHtmlNavImage(), getHtmlAdvanced())
 		);
 		b.append(stringAttribute(0, KW.CSS.toString(), getHtmlCss()));
 		b.append(stringAttribute(13, KW.HIGHLIGHT.toString(), getHighlight()));
@@ -354,7 +355,7 @@ public class BookParamExport extends BookParamAbstract {
 
 	public String getTxt() {
 		if ((txtSeparator == null || txtSeparator.isEmpty())
-			&& (!txtTab)) {
+				&& (!txtTab)) {
 			return "";
 		}
 		StringBuilder b = new StringBuilder();
@@ -384,7 +385,7 @@ public class BookParamExport extends BookParamAbstract {
 
 	public String getCsv() {
 		if ((csvQuote == null || csvQuote.isEmpty())
-			&& (csvComma == null || csvComma.isEmpty())) {
+				&& (csvComma == null || csvComma.isEmpty())) {
 			return "";
 		}
 		StringBuilder b = new StringBuilder();
@@ -454,6 +455,18 @@ public class BookParamExport extends BookParamAbstract {
 		b.append("txtSeparator=").append(txtSeparator).append("|");
 		b.append("txtTab=").append(txtTab ? "1" : "0");
 		return b.toString();
+	}
+
+	public void trace() {
+		StringBuilder b = new StringBuilder();
+		b.append("dir=").append(directory).append("\n");
+		b.append("fileName=").append(fileName).append("\n");
+		b.append("format=").append(format).append(", ");
+		b.append("csvComma=").append(csvComma).append(", ");
+		b.append("csvQuote=").append(csvQuote).append(", ");
+		b.append("txtSeparator=").append((txtSeparator.isEmpty() ? "none" : txtSeparator)).append(", ");
+		b.append("txtTab=").append(txtTab ? "true" : "false");
+		LOG.trace("param trace:\n" + b.toString());
 	}
 
 }

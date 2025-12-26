@@ -117,7 +117,7 @@ public class Events extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Event r1, Event r2)
-		   -> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -149,6 +149,14 @@ public class Events extends AbsEntitys {
 			}
 		}
 		return ls;
+	}
+
+	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(events, (Event r1, Event r2) -> r1.getId().compareTo(r2.getId()));
 	}
 
 	@Override

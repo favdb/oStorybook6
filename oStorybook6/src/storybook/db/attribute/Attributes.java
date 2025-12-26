@@ -17,6 +17,7 @@
 package storybook.db.attribute;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import storybook.db.abs.AbsEntitys;
 import storybook.db.abs.AbstractEntity;
@@ -46,6 +47,14 @@ public class Attributes extends AbsEntitys {
 			}
 		}
 		return n;
+	}
+
+	/**
+	 * sort scenes by scene number
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(attributes, (Attribute r1, Attribute r2) -> r1.getId().compareTo(r2.getId()));
 	}
 
 	@Override

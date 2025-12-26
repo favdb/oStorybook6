@@ -197,7 +197,8 @@ public class PersonsByScene extends AbstractPersonsChart implements ChangeListen
 
 	@Override
 	public JPanel getPanelToExport() {
-		//TODO remplacer par génération code html
+		// remplacer par génération code html
+		// no export for this view?
 		return panel;
 	}
 

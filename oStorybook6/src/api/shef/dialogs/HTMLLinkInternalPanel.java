@@ -46,9 +46,7 @@ public class HTMLLinkInternalPanel extends JPanel {
 		this.setLayout(new BorderLayout(5, 5));
 		this.setSize(328, 218);
 		this.add(getHlinkPanel(), java.awt.BorderLayout.NORTH);
-
 		TextEditPopupManager popupMan = TextEditPopupManager.getInstance();
-		//popupMan.registerJTextComponent(urlField);
 		popupMan.registerJTextComponent(textField);
 	}
 

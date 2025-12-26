@@ -83,6 +83,8 @@ import storybook.tools.zip.ZipXml;
 import storybook.ui.MIG;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.*;
+import storybook.ui.panel.script.Script;
+import storybook.ui.panel.script.ScriptPanel;
 
 /**
  * panel editor for Scene
@@ -115,6 +117,10 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	private List<Endnote> endnotes;
 	private JLabel lbXsize;
 	private int hashDate;
+	private JButton btMode;
+	private JPanel txtPanel;
+	private JScrollPane textScroller;
+	private ScriptPanel scriptPanel;
 
 	public SceneEdit(Editor m, AbstractEntity e) {
 		super(m, e, "111");
@@ -129,13 +135,26 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		return scene;
 	}
 
+	public void initUi() {
+		//LOG.trace(TT + "initUi()");
+		super.initUi();
+		if (Html.isEmpty(scene.getSummary())) {
+			showScript(mainFrame.project.getScript());
+		} else {
+			boolean b = Script.isScript(scene.getSummary());
+			mainFrame.project.setScript(b);
+			showScript(b);
+		}
+		//LOG.trace(TT + "initUi()_end_of");
+	}
+
 	/**
 	 * initialize the upper datas
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public void initUpper() {
-		//LOG.trace(TT + "initUi()");
+		//LOG.trace(TT + "initUpper()");
 		pMain = new JPanel(
 				new MigLayout(MIG.get(MIG.INS1, MIG.WRAP), "[50%][50%]"));
 		pLeft = new JPanel(
@@ -147,8 +166,8 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		if (scene.getId() == -1 && scene.getChapter() == null) {
 			scene.setChapter(mainFrame.lastChapterGet());
 		}
+		headerAdd();
 		initLeft();
-		//date and duration
 		initRight();
 		pMain.add(pLeft);
 		pMain.add(pRight, MIG.TOP);
@@ -170,6 +189,22 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		initLinks();
 	}
 
+	private void headerAdd() {
+		//LOG.trace(TT + "headerAdd()");
+		//set text or script mode
+		pHead.add(btMode = Ui.initButton("btScript", "",
+				ICONS.K.LIST_UNORDERED,
+				"script.to_script",
+				e -> showScript(btMode.getName().equals("btScript"))));
+		//informative
+		ckInformative = Ui.initCheckBox(pHead, "ckInformative", "informative",
+				scene.getInformative(), BNONE);
+		ckInformative.setToolTipText(I18N.getMsg("informative.tip"));
+	}
+
+	/**
+	 * initialize the upper left panel
+	 */
 	private void initLeft() {
 		//LOG.trace(TT + "initLeft()");
 		//number
@@ -181,10 +216,6 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		}
 		//status
 		cbStatus = Ui.initStatus(pLeft, scene.getStatus(), BMANDATORY);
-		//informative
-		ckInformative = Ui.initCheckBox(pHead, "ckInformative", "informative",
-				scene.getInformative(), BNONE);
-		ckInformative.setToolTipText(I18N.getMsg("informative.tip"));
 		//intensity
 		Ui.addLabelNew(pLeft, "intensity", false, MANDATORY);
 		pIntensity = new IntensityPanel(scene.getIntensity().get());
@@ -205,19 +236,20 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		cbStrand.addItemListener(this);
 	}
 
+	/**
+	 * initialize the upper right panel
+	 */
 	private void initRight() {
 		//LOG.trace(TT + "initRight()");
 		datePanel = initDatePanel();
 		pRight.add(datePanel, MIG.get(MIG.CENTER, MIG.SPAN));
 		//stage
-		JPanel px = new JPanel(new MigLayout(MIG.INS1));
 		if (App.getAssistant().isExists("book")) {
 			cbStage = Ui.initCbStrings(pRight, this, "scenario.stage",
 					Assistant.getListOf("book", "step"),
 					scene.getScenariostage(), BEMPTY);
 			cbStage.setToolTipText(I18N.getMsg("scenario.stage_tips"));
 		}
-		//pRight.add(px, MIG.SPAN);
 		//narrator
 		if (!mainFrame.project.getList(TYPE.PERSON).isEmpty()) {
 			cbNarrator = Ui.initCbEntities(pRight, this, "scene.narrator", TYPE.PERSON,
@@ -226,18 +258,24 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		}
 	}
 
+	/**
+	 * initialize specific panel for date
+	 *
+	 * @return
+	 */
 	private JPanel initDatePanel() {
 		//LOG.trace(TT + "initDatePanel() date type=" + scene.getDateType());
-		JPanel gpDate = new JPanel(new MigLayout(MIG.get(MIG.HIDEMODE3, MIG.INS0)));
-		gpDate.setBorder(BorderFactory.createTitledBorder(I18N.getMsg("date")));
-		rbDatenone = Ui.initRadioButton(gpDate, RB_DATENONE, false, BNONE,
+		JPanel p = new JPanel(new MigLayout(MIG.get(MIG.HIDEMODE3, MIG.INS0)));
+		p.setBorder(BorderFactory.createTitledBorder(I18N.getMsg("date")));
+		//date none, fixed, relative options
+		rbDatenone = Ui.initRadioButton(p, RB_DATENONE, false, BNONE,
 				MIG.get(MIG.SPAN, MIG.SPLIT + " 3"));
-		rbAbs = Ui.initRadioButton(gpDate, RB_DATEFIX, false, BNONE);
-		rbRel = Ui.initRadioButton(gpDate, RB_DATEREL, false, BNONE, MIG.WRAP);
+		rbAbs = Ui.initRadioButton(p, RB_DATEFIX, false, BNONE);
+		rbRel = Ui.initRadioButton(p, RB_DATEREL, false, BNONE, MIG.WRAP);
 		//fixed date
 		pDate = new JPanel(new MigLayout());
 		dcDate = initSbDate(pDate, "date", scene.getScenets(), BNONE, 0);
-		gpDate.add(pDate, MIG.SPAN);
+		p.add(pDate, MIG.SPAN);
 		//relative date
 		pRel = new JPanel(new MigLayout(MIG.get(MIG.FILL, MIG.WRAP), "[][]"));
 		cbRelScene = new EntityCb(mainFrame, TYPE.SCENE, scene.getRelativesceneid(), scene, "10");
@@ -254,7 +292,17 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		fRelTime.setToolTipText(I18N.getMsg("duration.format")
 				+ "\n" + I18N.getMsg("duration.use"));
 
-		gpDate.add(pRel, MIG.SPAN);
+		p.add(pRel, MIG.SPAN);
+		//duration
+		String tDuration = "";
+		if (!scene.getDuration().isEmpty() || !scene.getDuration().equals("00-00-00_00:00:00")) {
+			SbDuration dur = new SbDuration(scene.getDuration());
+			tDuration = dur.toText(INITIALES);
+		}
+		tfDuration = Ui.initStringField(p, "duration", 16, tDuration, BNONE);
+		tfDuration.setToolTipText(I18N.getMsg("duration.format") + "\n" + I18N.getMsg("duration.use"));
+		tfDuration.addCaretListener(this);
+		// button group
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(rbDatenone);
 		bg.add(rbAbs);
@@ -263,14 +311,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		rbDatenone.addActionListener(this);
 		rbAbs.addActionListener(this);
 		rbRel.addActionListener(this);
-		//duration
-		String tDuration = "";
-		if (!scene.getDuration().isEmpty() || !scene.getDuration().equals("00-00-00_00:00:00")) {
-			SbDuration dur = new SbDuration(scene.getDuration());
-			tDuration = dur.toText(INITIALES);
-		}
-		tfDuration = Ui.initStringField(gpDate, "duration", 16, tDuration, BNONE);
-		tfDuration.setToolTipText(I18N.getMsg("duration.format") + "\n" + I18N.getMsg("duration.use"));
+		//visibility
 		if (!scene.getRelativetime().isEmpty()) {
 			rbRel.setSelected(true);
 			pDate.setVisible(false);
@@ -284,14 +325,38 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 			pRel.setVisible(false);
 		}
 		hashDate = scene.getRelativeHash();
-		return gpDate;
+		return p;
 	}
 
+	/**
+	 * get text of duration field
+	 *
+	 * @return
+	 */
+	public JTextField getTfDuration() {
+		return tfDuration;
+	}
+
+	/**
+	 * set text of duration field
+	 *
+	 * @param value
+	 */
+	public void setTfDuration(String value) {
+		tfDuration.removeCaretListener(this);
+		tfDuration.setText(value);
+		tfDuration.addCaretListener(this);
+	}
+
+	/**
+	 * initialize scenario data
+	 *
+	 * @param p1
+	 */
 	private void initScenario(JPanel p1) {
 		//LOG.trace(TT + "initScenario()");
 		pScenario = new ScenarioPanel(this);
 		if (book.info.scenarioGet()) {
-			//pScenario.setScene(scene);
 			JTabbedPane tb0 = new JTabbedPane();
 			tb0.add(I18N.getMsg("scenario"), pScenario);
 			tb0.add(I18N.getMsg("scene"), p1);
@@ -302,6 +367,9 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		}
 	}
 
+	/**
+	 * initalize summary text field
+	 */
 	private void initSummary() {
 		//LOG.trace(TT + "initSummary()");
 		if (book.info.markdownGet()) {
@@ -311,7 +379,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 			mkTexte.setPreferredSize(MINIMUM_SIZE);
 			tab1.add(mkTexte, I18N.getMsg("scene.summary"));
 		} else {
-			JPanel txtPanel = new JPanel(new MigLayout(MIG.get(MIG.FILL, MIG.INS0)));
+			txtPanel = new JPanel(new MigLayout(MIG.get(MIG.FILL, MIG.INS0, MIG.HIDEMODE3)));
 			shefEditor = new ShefEditor(mainFrame.project.getPath(), "lang_all, allow, colored", scene.getSummary());
 			shefEditor.setBase(mainFrame.getProject().getPath());
 			endnotes = mainFrame.project.endnotes.find(Endnote.TYPE.ENDNOTE, scene);
@@ -320,17 +388,35 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 			shefEditor.getWysiwyg().addSaveButton(mainFrame);
 			shefEditor.getWysiwyg().addImportButton(mainFrame);
 			shefEditor.getWysiwyg().addLinkInternalButton(mainFrame);
-			JScrollPane scroller = new JScrollPane(shefEditor);
-			SwingUtil.setUnitIncrement(scroller);
-			scroller.setPreferredSize(SwingUtil.getScreenSize());
-			txtPanel.add(scroller, MIG.GROW);
+			textScroller = new JScrollPane(shefEditor);
+			SwingUtil.setUnitIncrement(textScroller);
+			textScroller.setPreferredSize(SwingUtil.getScreenSize());
+			txtPanel.add(textScroller, MIG.GROW);
+			// initialize Script
+			scriptPanel = new ScriptPanel(mainFrame, new Script(scene), this);
+			scriptPanel.setVisible(false);
+			txtPanel.add(scriptPanel);
 			initEndnote();
 			tab1.add(txtPanel, I18N.getMsg("scene.summary"));
 		}
 	}
 
+	/**
+	 * initialize links panel
+	 */
 	private void initLinks() {
 		//LOG.trace(TT + "initLinks()");
+		JPanel plinks = new JPanel(new MigLayout(MIG.FILL, "[grow]"));
+		if (App.isTest()) {
+			plinks.add(initLinksNew(), MIG.GROW);
+		} else {
+			plinks.add(initLinksOld(), MIG.GROW);
+		}
+		tab1.add(plinks, I18N.getMsg("links"));
+	}
+
+	private JScrollPane initLinksOld() {
+		//LOG.trace(TT + "initLinksOld()");
 		JPanel links = new JPanel(new MigLayout(MIG.get(MIG.FILL, MIG.WRAP),
 				"[grow][grow][grow]"));
 		lPersons = Ui.initCkList(links, mainFrame, TYPE.PERSON,
@@ -345,7 +431,26 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 				scene.getStrands(), null, BBORDER);
 		lStrands.removeEntity(scene.getStrand());
 		JScrollPane scroll = new JScrollPane(links);
-		tab1.add(scroll, I18N.getMsg("links"));
+		return scroll;
+	}
+
+	private JScrollPane initLinksNew() {
+		//LOG.trace(TT + "initLinksNew()");
+		JPanel links = new JPanel(new MigLayout(MIG.get(MIG.FILL, MIG.WRAP),
+				"[grow][grow][grow]"));
+		lPersons = Ui.initCkList(links, mainFrame, TYPE.PERSON,
+				scene.getPersons(), null, BBORDER);
+		lLocations = Ui.initCkList(links, mainFrame, TYPE.LOCATION,
+				scene.getLocations(), null, BBORDER);
+		lItems = Ui.initCkList(links, mainFrame, TYPE.ITEM,
+				scene.getItems(), null, BBORDER);
+		lPlots = Ui.initCkList(links, mainFrame, TYPE.PLOT,
+				scene.getPlots(), null, BBORDER);
+		lStrands = Ui.initCkList(links, mainFrame, TYPE.STRAND,
+				scene.getStrands(), null, BBORDER);
+		lStrands.removeEntity(scene.getStrand());
+		JScrollPane scroll = new JScrollPane(links);
+		return scroll;
 	}
 
 	/**
@@ -372,13 +477,11 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		}
 		JPanel pp = new JPanel(new MigLayout());
 		btImport = SwingUtil.createButton("", "", "", true, this);
-		//btImport.setText(I18N.getMsg("import");
 		btImport.setIcon(IconUtil.getIconSmall(ICONS.K.BK_REST));
 		btImport.setToolTipText(I18N.getMsg("import.text"));
 		btImport.addActionListener(e -> importText());
 		pp.add(btImport, MIG.get(MIG.SG, MIG.RIGHT));
 		btExternal = SwingUtil.createButton("", "", "", true, this);
-		//btExternal.setText(book.getParamEditor().getName());
 		btExternal.setIcon(xicon);
 		btExternal.setToolTipText(I18N.getMsg("xeditor.launching")
 				+ " " + book.getParam().getParamEditor().getName());
@@ -394,7 +497,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		pp.add(btExternal);
 		pxFile.add(pp, MIG.get(MIG.SG, MIG.RIGHT));
 		add(pxFile, MIG.GROWX);
-		allowExportImport();
+		allowEXIM();
 		if (!book.isXeditorUse()) {
 			SwingUtil.setEnable(pxFile, false);
 		}
@@ -404,8 +507,8 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	/**
 	 * allow or disallow the export/import button
 	 */
-	private void allowExportImport() {
-		//LOG.trace(TT + "allowExportImport()");
+	private void allowEXIM() {
+		//LOG.trace(TT + "allowEXIM()");
 		if (btImport != null) {
 			if (!xfile.getText().isEmpty()) {
 				File f = new File(IOUtil.fileToAbsolute(mainFrame.getProject().getPath(), xfile.getText()));
@@ -418,7 +521,6 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		if (btExternal != null) {
 			btExternal.setEnabled(!xfile.getText().isEmpty());
 		}
-		//editor.enableBtExternal(xfile.getText());
 		refeshXeditorSize();
 	}
 
@@ -581,10 +683,17 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 		if (book.info.scenarioGet()) {
 			pScenario.getScenarioData(scene);
 		}
-		// apply for text
-		String text = getText();
-		if (!book.info.markdownGet()) {
-			text = applyEndnotes();
+		String text = "";
+		if (!isScript()) {
+			// apply for text
+			text = getText();
+			if (!book.info.markdownGet()) {
+				text = applyEndnotes();
+			}
+		} else if (scriptPanel != null) {
+			//apply for script
+			text = scriptPanel.getScript().recode();
+			scene.setDescription(scriptPanel.getDesc());
 		}
 		scene.setSummary(text);
 		if (cbStage != null && cbStage.getSelectedIndex() != -1) {
@@ -620,7 +729,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 */
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
-		// empty
+		//LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString() + ")");
 	}
 
 	/**
@@ -694,7 +803,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 */
 	@Override
 	public void actionPerformed(ActionEvent evt) {
-		//LOG.trace(TT+"actionPerformed", evt);
+		//LOG.trace(TT + "actionPerformed(evt=" + evt.toString() + ")");
 		if (evt.getSource() instanceof JButton) {
 			JButton bt = (JButton) evt.getSource();
 			switch (bt.getName()) {
@@ -728,7 +837,6 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	public void tempSave() {
 		//LOG.trace(TT + "tempSave()");
 		if (entity instanceof Scene) {
-			//EntityUtil.copyEntityProperties(mainFrame, entity, scene);
 			if (book.info.scenarioGet()) {
 				scene.setSummary(mkTexte.getText());
 			} else {
@@ -750,7 +858,16 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	@Override
 	public void caretUpdate(CaretEvent e) {
 		//LOG.trace(TT + "caretUpdate(e=" + e.toString() + ")");
-		allowExportImport();
+		if (e.getSource() instanceof JTextField) {
+			JTextField tf = (JTextField) e.getSource();
+			if (tf.getName().equalsIgnoreCase("scene.xfile")) {
+				allowEXIM();
+			} else if (tf.getName().equalsIgnoreCase("duration")) {
+				//tfDuration.removeCaretListener(this);
+				//scriptPanel.setScDuration(tfDuration.getText());
+				//tfDuration.addCaretListener(this);
+			}
+		}
 	}
 
 	/**
@@ -759,6 +876,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 * @return
 	 */
 	public List<Person> getPersons() {
+		//LOG.trace(TT + "getPersons()");
 		List<Person> ls = new ArrayList<>();
 		lPersons.getSelectedEntities().forEach((e) -> {
 			ls.add((Person) e);
@@ -772,6 +890,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 * @return
 	 */
 	public List<Location> getLocations() {
+		//LOG.trace(TT + "getLocations()");
 		List<Location> ls = new ArrayList<>();
 		lLocations.getSelectedEntities().forEach((e) -> {
 			ls.add((Location) e);
@@ -785,6 +904,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 * @return
 	 */
 	public List<Item> getItems() {
+		//LOG.trace(TT + "getItems()");
 		List<Item> ls = new ArrayList<>();
 		lItems.getSelectedEntities().forEach((e) -> {
 			ls.add((Item) e);
@@ -798,6 +918,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 * @return
 	 */
 	public List<Plot> getPlots() {
+		//LOG.trace(TT + "getPlots()");
 		List<Plot> ls = new ArrayList<>();
 		lPlots.getSelectedEntities().forEach((e) -> {
 			ls.add((Plot) e);
@@ -811,6 +932,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 * @return
 	 */
 	public List<Strand> getStrands() {
+		//LOG.trace(TT + "getStrands()");
 		List<Strand> ls = new ArrayList<>();
 		lStrands.getSelectedEntities().forEach((e) -> {
 			ls.add((Strand) e);
@@ -852,7 +974,7 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 * restore all endnotes and remove if not exists in text
 	 */
 	private String applyEndnotes() {
-		//LOG.trace(TT+"applyEndnotes()");
+		//LOG.trace(TT + "applyEndnotes()");
 		String text = getText();
 		for (Endnote en : endnotes) {
 			if (!text.contains(Endnote.linkTo("", en))) {
@@ -908,6 +1030,46 @@ public class SceneEdit extends AbstractEditor implements CaretListener, ItemList
 	 */
 	public void setModified() {
 		this.modified = true;
+	}
+
+	/**
+	 * check if mode is script
+	 *
+	 * @return
+	 */
+	private boolean isScript() {
+		return btMode.getName().equals("btText");
+	}
+
+	/**
+	 * show/hide the script mode
+	 *
+	 * @param b
+	 */
+	private void showScript(boolean b) {
+		if (b) {
+			btMode.setName("btText");
+			btMode.setToolTipText(I18N.getMsg("script.to_text"));
+			btMode.setIcon(IconUtil.getIconSmall(ICONS.K.EDIT));
+			if (textScroller != null) {
+				textScroller.setVisible(false);
+			}
+			scriptPanel.setVisible(true);
+			if (getDescription() != null) {
+				scriptPanel.setDesc(getDescription().getText());
+			}
+		} else {
+			btMode.setName("btScript");
+			btMode.setToolTipText(I18N.getMsg("script.to_script"));
+			btMode.setIcon(IconUtil.getIconSmall(ICONS.K.LIST_UNORDERED));
+			if (textScroller != null) {
+				textScroller.setVisible(true);
+			}
+			scriptPanel.setVisible(false);
+			if (getDescription() != null) {
+				getDescription().setText(scriptPanel.getDesc());
+			}
+		}
 	}
 
 }

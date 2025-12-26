@@ -142,8 +142,8 @@ public class ExportOptionsDlg extends AbsDialog implements ItemListener {
 					File f = new File(dir);
 					if (!(f.exists() && f.isDirectory())) {
 						JOptionPane.showMessageDialog(thisDlg,
-						   I18N.getMsg("export.dir.error"),
-						   I18N.getMsg("export"), 1);
+								I18N.getMsg("export.dir.error"),
+								I18N.getMsg("export"), 1);
 						return;
 					}
 				}
@@ -153,6 +153,7 @@ public class ExportOptionsDlg extends AbsDialog implements ItemListener {
 				String xs = (String) cbFormat.getSelectedItem();
 				param.setFormat(xs);
 				if (!ckParam.equals(param.toCheck())) {
+					mainFrame.project.save();
 					mainFrame.setUpdated();
 				}
 				dispose();

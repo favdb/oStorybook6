@@ -51,7 +51,6 @@ import storybook.ui.MainFrame;
  *
  * @author favdb
  */
-
 public abstract class AbstractEntity implements Serializable, Comparable<AbstractEntity> {
 
 	private static final String TT = "AbstractEntity.";
@@ -573,7 +572,7 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
 	 * @return
 	 */
 	public String getInfo(Integer det, DATA key, String value) {
-		if ((det == null || det < 3) && (value.isEmpty() || value.equals(I18N.getMsg("empty")))) {
+		if ((det == null || det < 3) && (value == null || value.isEmpty() || value.equals(I18N.getMsg("empty")))) {
 			return "";
 		}
 		if (det != null) {

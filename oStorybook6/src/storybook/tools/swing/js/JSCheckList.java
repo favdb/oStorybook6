@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import storybook.App;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.book.Book.TYPE;
@@ -48,21 +49,21 @@ public class JSCheckList extends AbstractPanel implements IRefreshable {
 
 	@Override
 	public void init() {
-		//LOG.printInfos(TT+".init() for search="+search);
+		//LOG.trace(TT+".init() for search="+search);
 		ckList = new ArrayList<>();
 		reload();
 	}
 
 	@Override
 	public void initUi() {
-		//LOG.printInfos(TT+".initUi()");
-		setLayout(new MigLayout(MIG.get(MIG.FILLX, MIG.WRAP, MIG.INS1)));
+		//LOG.trace(TT+".initUi()");
+		setLayout(new MigLayout(MIG.get(MIG.FILLX, MIG.WRAP, MIG.INS0, MIG.GAP0)));
 		setMaximumSize(new Dimension(1024, 1024));
 		refresh();
 	}
 
 	public void reload() {
-		//LOG.printInfos(TT+".reload()");
+		//LOG.trace(TT+".reload()");
 		ckList.clear();
 		@SuppressWarnings("unchecked")
 		List<AbstractEntity> ls = (List) mainFrame.project.getList(type);
@@ -78,7 +79,7 @@ public class JSCheckList extends AbstractPanel implements IRefreshable {
 	}
 
 	public void addEntity(AbstractEntity entity) {
-		//LOG.printInfos(TT+".addEntity(entity="+LOG.traceEntity(entity)+")");
+		//LOG.trace(TT+".addEntity(entity="+LOG.traceEntity(entity)+")");
 		EntityCB ckb = new EntityCB(entity);
 		ckb.getCB().addActionListener((ActionEvent evt) -> {
 			pointedEntity = entity;
@@ -88,7 +89,7 @@ public class JSCheckList extends AbstractPanel implements IRefreshable {
 	}
 
 	public void removeEntity(AbstractEntity entity) {
-		//LOG.printInfos(TT+".removeEntity(entity="+LOG.traceEntity(entity)+")");
+		//LOG.trace(TT+".removeEntity(entity="+LOG.traceEntity(entity)+")");
 		int z = -1;
 		if (entity == null) {
 			return;
@@ -107,27 +108,27 @@ public class JSCheckList extends AbstractPanel implements IRefreshable {
 
 	@Override
 	public void refresh() {
-		//LOG.printInfos(TT+".refresh()");
+		//LOG.trace(TT+".refresh()");
 		removeAll();
 		ckList.forEach(ecb -> {
-			add(ecb.cb, MIG.SPLIT2);
-			JLabel js = new JLabel();
-			Icon icon = ecb.entity.getIcon();
+			JLabel lb = new JLabel();
+			Icon icon = ecb.entity.getIcon(App.fonts.defGet().getSize());
 			if (ecb.entity.getObjType() == TYPE.ATTRIBUTE) {
 				icon = null;
 			}
-			js.setIcon(icon);
+			lb.setIcon(icon);
 			if (ecb.entity.getObjType() == TYPE.STRAND) {
-				js.setBackground(((Strand) ecb.entity).getJColor());
+				lb.setBackground(((Strand) ecb.entity).getJColor());
 			}
-			add(js);
+			add(ecb.cb, MIG.SPLIT2);
+			add(lb);
 		});
 		revalidate();
 		repaint();
 	}
 
 	public void selectEntity(AbstractEntity entity) {
-		//LOG.printInfos(TT+".selectEntity(entity="+LOG.traceEntity(entity)+")");
+		//LOG.trace(TT+".selectEntity(entity="+LOG.traceEntity(entity)+")");
 		JCheckBox cb = findCB(entity);
 		if (cb != null) {
 			cb.setSelected(true);
@@ -135,7 +136,7 @@ public class JSCheckList extends AbstractPanel implements IRefreshable {
 	}
 
 	private JCheckBox findCB(AbstractEntity ent) {
-		//LOG.printInfos(TT+".findCB(entity="+LOG.traceEntity(entity)+")");
+		//LOG.trace(TT+".findCB(entity="+LOG.traceEntity(entity)+")");
 		for (EntityCB ecb : ckList) {
 			if (ecb.entity.getId().equals(ent.getId())) {
 				return ecb.cb;
@@ -152,7 +153,7 @@ public class JSCheckList extends AbstractPanel implements IRefreshable {
 	}
 
 	public List<AbstractEntity> getSelectedEntities() {
-		//LOG.printInfos(TT+".getSelectedEntities()");
+		//LOG.trace(TT+".getSelectedEntities()");
 		ArrayList<AbstractEntity> ret = new ArrayList<>();
 		ckList.forEach((ecb) -> {
 			if (ecb.cb.isSelected()) {

@@ -1,0 +1,34 @@
+Définition du mode Script
+
+Le champ summary contient les éléments standards pour un script:
+- description: type de séquence, description de l'objectif, principes généraux
+- visuel: description de la partie visuelle
+- audio: description de la partie audio
+- texte: texte du narrateur
+Chaque élément est facultatif
+
+Codage:
+On conserve le principe du HTML doté d'un DIV "header":
+<div class="script">
+Les rubriques sont incluses dans des DIV ayant les classes "desc", "visual", 
+"audio", "text", "music".
+
+Utilisation:
+- Dans l'éditeur de Sceneon vérifie l'existance du "div". S'il existe alors on 
+ouvre l'interface spécifique au lieu du celle du texte.
+- Dans la vue Lecture, ajouter le traitement des Script (pas forcément 
+nécessaire puisque les div seront ignorés).
+- Dans la vue tableau vérifier qu'il n'y a pas d'impacte des Script.
+
+
+ToDo:
+- classe Script.java contenant le parser dédié au script.
+- classe ScritPanel.java pour l'affichage
+- classe ScriptUtil.java utilitaires pour le script (conversion de/vers HTML)
+
+Editeur de Scène:
+- ajouter un bouton pour convertir le texte de/vers un script
+- ajouter l'alternative script avec 4 SHEF: desc, audio, visual, text, music
+
+Classe Scene
+- traiter la suppression d'un "<p> </p>" en début au setSummary(...)

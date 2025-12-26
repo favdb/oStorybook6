@@ -17,6 +17,7 @@
  */
 package storybook.tools.net;
 
+import api.jsoup.internal.StringUtil;
 import i18n.I18N;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,7 +27,6 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Date;
 import javax.swing.SwingUtilities;
-import api.jsoup.internal.StringUtil;
 import storybook.App;
 import storybook.Const;
 import storybook.Pref;
@@ -70,7 +70,7 @@ public class Updater {
 		if (toDo || force) {
 			try {
 				// get version
-				URL url = new URL(Net.KEY.VERSION.toString());
+				URL url = new URL(Net.KEY.VERSIONS.toString());
 				String versionStr;
 				try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()))) {
 					String inputLine;
@@ -93,7 +93,7 @@ public class Updater {
 				//LOG.trace("updater: remoteVersion=" + versionStr + ", localVersion=" + Const.getVersion());
 				if (localVersion < remoteVersion) {
 					SwingUtilities.invokeLater(() -> {
-						String updateUrl = Net.KEY.VERSION.toString();
+						String updateUrl = Net.KEY.VERSIONS.toString();
 						BrowserDlg.show(updateUrl, I18N.getMsg("update.title"));
 					});
 					setDateUpdater();
@@ -109,7 +109,8 @@ public class Updater {
 	}
 
 	private static int calculateVersion(String str) {
-		//LOG.trace("Updater.calculateVersion("+str+")");
+		//LOG.trace(TT+"calculateVersion("+str+")");
+		int ret = 0;
 		String[] s = str.split("\\.");
 		if (str.contains(":")) {
 			String[] x = str.split(":");
@@ -118,16 +119,19 @@ public class Updater {
 		if (StringUtil.isNumeric(str)) {
 			return Integer.parseInt(str);
 		}
-		if (s.length == 3) {
-			int ret = 0;
+		if (s.length == 3
+				&& StringUtil.isNumeric(s[0])
+				&& StringUtil.isNumeric(s[1])
+				&& StringUtil.isNumeric(s[2])) {
 			ret += Integer.parseInt(s[0]) * 1000000;
 			ret += Integer.parseInt(s[1]) * 1000;
 			ret += Integer.parseInt(s[2]);
 			return ret;
 		}
-		int ret = 0;
-		ret += Integer.parseInt(s[0]) * 1000;
-		ret += Integer.parseInt(s[1]);
+		if (StringUtil.isNumeric(s[0]) && StringUtil.isNumeric(s[1])) {
+			ret += Integer.parseInt(s[0]) * 1000;
+			ret += Integer.parseInt(s[1]);
+		}
 		return ret;
 	}
 

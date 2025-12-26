@@ -92,6 +92,26 @@ public class SbDuration {
 	 * @return the formated String
 	 */
 	public String toText() {
+		if (seconds > 60) {
+			minutes += seconds / 60;
+			seconds = seconds % 60;
+		}
+		if (minutes > 60) {
+			hours += minutes / 60;
+			minutes = minutes % 60;
+		}
+		if (hours > 24) {
+			days += hours / 24;
+			hours = hours % 24;
+		}
+		if (days > 30) {
+			months += days / 30;
+			days = days % 30;
+		}
+		if (months > 12) {
+			years += months / 12;
+			months = months % 12;
+		}
 		return toText(I18N.getMsg("duration.initiales"));
 	}
 
@@ -226,7 +246,7 @@ public class SbDuration {
 	}
 
 	/**
-	 * get a SbDuration from words by 2.25 word by second source :
+	 * get a SbDuration from words ffor 2.25 word by second source :
 	 * https://www.cairn.info/revue-francaise-de-linguistique-appliquee-2015-2-page-63.htm
 	 *
 	 * @param words

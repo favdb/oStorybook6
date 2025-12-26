@@ -118,6 +118,14 @@ public class Persons extends AbsEntitys {
 		return persons;
 	}
 
+	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(persons, (Person r1, Person r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
 	@Override
 	public int getCount() {
 		return persons.size();
@@ -134,7 +142,7 @@ public class Persons extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Person r1, Person r2)
-		   -> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -168,7 +176,7 @@ public class Persons extends AbsEntitys {
 		List<Person> ls = new ArrayList<>();
 		for (Person p : persons) {
 			if (p.getCategory() != null && p.getCategory().equals(category)
-			   || p.getCategories().contains(category)) {
+					|| p.getCategories().contains(category)) {
 				ls.add(p);
 			}
 		}
@@ -179,7 +187,7 @@ public class Persons extends AbsEntitys {
 		@SuppressWarnings("unchecked")
 		List<Person> ls = getList();
 		Collections.sort(ls, (Person it1, Person it2)
-		   -> it1.getCategory().compareTo(it2.getCategory()));
+				-> it1.getCategory().compareTo(it2.getCategory()));
 		return ls;
 	}
 
@@ -226,7 +234,7 @@ public class Persons extends AbsEntitys {
 	 * @return
 	 */
 	public static List<JCheckBox> cbPersons(MainFrame mainFrame,
-	   List<JCheckBox> cbl, ActionListener comp) {
+			List<JCheckBox> cbl, ActionListener comp) {
 		List<JCheckBox> list = new ArrayList<>();
 		for (JCheckBox cb : cbl) {
 			if (cb.isSelected()) {

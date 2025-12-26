@@ -17,6 +17,7 @@
 package storybook.db.status;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import storybook.db.abs.AbsEntitys;
 import storybook.db.abs.AbstractEntity;
@@ -103,6 +104,14 @@ public class Statuss extends AbsEntitys {
 	@Override
 	public List getList() {
 		return statuss;
+	}
+
+	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(statuss, (Status r1, Status r2) -> r1.getId().compareTo(r2.getId()));
 	}
 
 	@Override

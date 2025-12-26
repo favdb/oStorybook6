@@ -478,7 +478,6 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel {
 		if (attribPanel == null) {
 			attribPanel = new JPanel();
 			attribPanel.setLayout(new GridBagLayout());
-
 			attribPanel.add(getWidthCK(), new GBC("0,0,anchor W,insets 0 0 5 5"));
 			attribPanel.add(getHeightCK(), new GBC("1,0,anchor W,ins 0 0 10 5"));
 			attribPanel.add(getBorderCK(), new GBC("2,0,anchor W,ins 0 0 10 5"));

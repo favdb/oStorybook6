@@ -61,8 +61,8 @@ public class Waiting extends JDialog {
 		lbText = new JLabel(text);
 		lbText.setFont(App.fonts.defGet());
 		panel.add(lbHg, MIG.get(MIG.CENTER, "gap bottom 10"));
-		panel.add(lbText);
-		add(panel);
+		panel.add(lbText, MIG.CENTER);
+		add(panel, MIG.CENTER);
 		pack();
 		this.setLocationRelativeTo(getParent());
 		setVisible(true);

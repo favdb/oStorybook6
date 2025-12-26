@@ -115,8 +115,8 @@ public class Html {
 		return p.toString();
 	}
 
-	public static boolean isEmpty(String notes) {
-		return htmlToText(notes).isEmpty();
+	public static boolean isEmpty(String html) {
+		return Jsoup.parse(html).text().isEmpty();
 	}
 
 	/**
@@ -356,7 +356,7 @@ public class Html {
 		// remove specific tags
 		String tags[] = {
 			"meta",
-			"div",
+			//"div",
 			"embed",
 			"span",
 			"form",
@@ -411,7 +411,7 @@ public class Html {
 		// remove new lines
 		html = html.replace(NL, "");
 		// replace empty div tags with paragraphs: "<div>\s*</div>"
-		html = html.replaceAll(DIV_B + "\\s*" + DIV_E, P_EMPTY);
+		//html = html.replaceAll(DIV_B + "\\s*" + DIV_E, P_EMPTY);
 		// body>(.*)</body
 		Pattern p = Pattern.compile("body>(.*)</body");
 		Matcher m = p.matcher(html);
@@ -1081,15 +1081,15 @@ public class Html {
 	public static String appendFormatedNotes(String buf, String notes, boolean shorten) {
 		String str = notes.replaceAll(REG_CRLF, "<br>");
 		if (str.isEmpty()) {
-			return (buf);
+			return buf;
 		}
-		String ret = "<hr style=\"margin:5pt\"/>";
+		StringBuilder ret = new StringBuilder("<hr style=\"margin:5pt\"/>");
 		if (shorten) {
-			ret += "<div style=\"width:300pt\">" + TextUtil.ellipsize(str, 300);
+			ret.append("<div style=\"width:300pt\">").append(TextUtil.ellipsize(str, 300)).append(DIV_E);
 		} else {
-			ret += DIV_B + str;
+			ret.append(DIV_B).append(str).append(DIV_E);
 		}
-		return (ret + DIV_E);
+		return buf + ret.toString();
 	}
 
 	/**
@@ -1358,6 +1358,9 @@ public class Html {
 		Elements links = doc.select("img[src]");
 		for (Element link : links) {
 			String oldSrc = link.attr("src");
+			if (!checkProtocol(oldSrc)) {
+				oldSrc = "file://" + oldSrc;
+			}
 			if (oldSrc.startsWith("file:")) {
 				try {
 					URL urlo = new URL(oldSrc);
@@ -1378,15 +1381,26 @@ public class Html {
 		return doc.body().html();
 	}
 
+	private static boolean checkProtocol(String src) {
+		String allowed[] = {"http", "https:", "file:"};
+		for (String a : allowed) {
+			if (src.startsWith(a)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * restore for linked file like images
 	 *
+	 * @param mainFrame
 	 * @param text
 	 *
 	 * @return the html String replacing local image links by workingDir+"Images"
 	 */
 	public static String checkImages(MainFrame mainFrame, String text) {
-		//LOG.trace(TT + ".checkLinks(text=\"" + text + "\")");
+		//LOG.trace(TT + "checkLinks(mainFrame, text=\"" + text + "\")");
 		if (!text.contains("<img")) {
 			return text;
 		}
@@ -1400,6 +1414,9 @@ public class Html {
 					dir.mkdir();
 				}
 				String src = el.attr("src");
+				if (!checkProtocol(src)) {
+					src = "file://" + src;
+				}
 				if (src.startsWith("file://")) {
 					src = src.replace("file://", "");
 					File f = new File(src);

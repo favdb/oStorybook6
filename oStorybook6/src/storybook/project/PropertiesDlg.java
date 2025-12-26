@@ -22,7 +22,6 @@ import i18n.I18N;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -40,11 +39,8 @@ import javax.swing.event.ChangeListener;
 import resources.icons.ICONS;
 import storybook.App;
 import storybook.Pref;
-import storybook.db.abs.AbstractEntity;
-import storybook.db.book.Book;
 import storybook.db.book.BookInfo;
 import storybook.db.book.BookUtil;
-import storybook.db.scene.Scene;
 import storybook.dialog.AbsDialog;
 import storybook.exim.exporter.ExportToPhpBB;
 import storybook.review.Review;
@@ -394,6 +390,7 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 		buf.append(Html.getRow2Cols("events", project.events.getCount()));
 		buf.append(Html.getRow2Cols("ideas", project.ideas.getCount()));
 		buf.append(Html.getRow2Cols("memos", project.memos.getCount()));
+		buf.append(Html.getRow2Cols("duration", project.getDuration()));
 		buf.append(Html.TABLE_E)
 				.append(Html.BODY_E)
 				.append(Html.HTML_E);
@@ -502,31 +499,7 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 	}*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() instanceof JButton) {
-			JButton bt = (JButton) e.getSource();
-			if (bt.getName().equals("btReplaceDiv")) {
-				for (Book.TYPE type : Book.getTypes()) {
-					replaceHtmlDiv(mainFrame.project, type);
-				}
-			}
-		}
-	}
-
-	private void replaceHtmlDiv(Project session, Book.TYPE type) {
-		List entities = session.getList(type);
-		if (entities == null || entities.isEmpty()) {
-			return;
-		}
-		String div = "div", p = "p";
-		for (Object entity : entities) {
-			AbstractEntity en = (AbstractEntity) entity;
-			if (type == Book.TYPE.SCENE) {
-				((Scene) en).setSummary(Html.replaceTags(((Scene) en).getSummary(), div, p));
-			}
-			en.setDescription(Html.replaceTags(en.getDescription(), div, p));
-			en.setNotes(Html.replaceTags(en.getNotes(), div, p));
-			mainFrame.getBookController().updateEntity(en);
-		}
+		//empty
 	}
 
 	@Override

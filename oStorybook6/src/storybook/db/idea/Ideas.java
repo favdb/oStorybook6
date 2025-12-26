@@ -109,6 +109,14 @@ public class Ideas extends AbsEntitys {
 		return ideas;
 	}
 
+	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(ideas, (Idea r1, Idea r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
 	@Override
 	public int getCount() {
 		return ideas.size();
@@ -120,7 +128,7 @@ public class Ideas extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Idea r1, Idea r2)
-		   -> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -156,8 +164,8 @@ public class Ideas extends AbsEntitys {
 		List<String> ls = new ArrayList<>();
 		for (Idea p : ideas) {
 			if (p.getCategory() != null
-			   && !p.getCategory().isEmpty()
-			   && !ls.contains(p.getCategory())) {
+					&& !p.getCategory().isEmpty()
+					&& !ls.contains(p.getCategory())) {
 				ls.add(p.getCategory());
 			}
 		}
@@ -170,7 +178,7 @@ public class Ideas extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Idea r1, Idea r2)
-		   -> r1.getStatus().compareTo(r2.getStatus()));
+				-> r1.getStatus().compareTo(r2.getStatus()));
 		return ls;
 	}
 

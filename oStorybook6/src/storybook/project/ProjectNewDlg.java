@@ -47,12 +47,12 @@ import static storybook.ui.Ui.*;
  */
 public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeListener {
 
-	private static final String TT = "NewProjectDlg";
-	private JTextField tfTitle, nbParts;
+	private static final String TT = "ProjectNewDlg.";
+
+	private JPanel objectivePanel;
+	private JTextField tfTitle, nbParts, nbChapters, nbScenes;
 	private JComboBox nature;
-	private JTextField nbChapters;
 	private JSDateChooser objective;
-	private JPanel panel;
 	private JCheckBox ckObjective;
 	private JLabel lbDate;
 
@@ -77,29 +77,33 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 		add(nature);
 
 		//objective panel
-		panel = new JPanel(new MigLayout(MIG.WRAP, "[][]"));
+		objectivePanel = new JPanel(new MigLayout(MIG.WRAP, "[][]"));
 		//nbparts
-		panel.add(new JLabel(I18N.getColonMsg("parts.generate.text")), MIG.get(MIG.SPAN, MIG.SPLIT2));
+		objectivePanel.add(new JLabel(I18N.getColonMsg("parts.generate.text")), MIG.get(MIG.SPAN, MIG.SPLIT2));
 		nbParts = Ui.getStringField(DB.DATA.NBPARTS, 1, "1", BNONE);
-		panel.add(nbParts);
+		objectivePanel.add(nbParts);
 		//nbChapters
-		panel.add(new JLabel(I18N.getColonMsg("chapters.generate.text")), MIG.get(MIG.SPAN, MIG.SPLIT2));
+		objectivePanel.add(new JLabel(I18N.getColonMsg("chapters.generate.text")), MIG.get(MIG.SPAN, MIG.SPLIT2));
 		nbChapters = Ui.getStringField(DB.DATA.NBCHAPTERS, 2, "1", BNONE);
-		panel.add(nbChapters);
+		objectivePanel.add(nbChapters);
+		//nbChapters
+		objectivePanel.add(new JLabel(I18N.getColonMsg("scenes.generate.text")), MIG.get(MIG.SPAN, MIG.SPLIT2));
+		nbScenes = Ui.getStringField(DB.DATA.NBSCENES, 2, "0", BNONE);
+		objectivePanel.add(nbScenes);
 		//objective
 		ckObjective = new JCheckBox(I18N.getMsg("objective"));
 		ckObjective.addChangeListener(this);
-		panel.add(ckObjective, MIG.SPLIT2);
+		objectivePanel.add(ckObjective, MIG.SPLIT2);
 		lbDate = new JLabel(I18N.getColonMsg("date"));
-		panel.add(lbDate, MIG.SPLIT2);
+		objectivePanel.add(lbDate, MIG.SPLIT2);
 		objective = new JSDateChooser(mainFrame, 1);
 		objective.setName("date");
 		objective.setVisible(false);
-		panel.add(objective);
+		objectivePanel.add(objective);
 		//objective panel
 		add(new JLabel(" "));
-		add(panel, MIG.SPAN);
-		panel.setVisible(false);
+		add(objectivePanel, MIG.SPAN);
+		objectivePanel.setVisible(false);
 		// ok/cancel
 		add(new JLabel(" "));
 		add(getCancelButton(), MIG.get(MIG.SPLIT2, MIG.RIGHT));
@@ -130,17 +134,33 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 		if (tfTitle.getText().isEmpty()) {
 			rc += I18N.getColonMsg("bool.title") + I18N.getMsg("error.missing") + "\n";
 		}
-		if (!StringUtil.isNumeric(nbParts.getText()) || Integer.parseInt(nbParts.getText()) > 9) {
-			rc += "book.nb_parts" + I18N.getMsg("err.value.too.long") + "\n";
-		}
-		if (!StringUtil.isNumeric(nbChapters.getText()) || Integer.parseInt(nbChapters.getText()) > 99) {
-			rc += "book.nb_Chapters" + I18N.getMsg("err.value.too.long") + "\n";
-		}
+		rc += checkValue("parts", nbParts, 1, 9);
+		rc += checkValue("chapters", nbChapters, 1, 9);
+		rc += checkValue("scenes", nbScenes, 0, 9);
 		if (rc.isEmpty()) {
-			return (true);
+			return true;
 		}
 		JOptionPane.showMessageDialog(this, rc, I18N.getMsg("error"), JOptionPane.OK_OPTION);
-		return (false);
+		return false;
+	}
+
+	/**
+	 * check if given JtextField is numeric and value is less than minv and greater than maxv
+	 *
+	 * @param tf
+	 * @param minv
+	 * @param maxv
+	 * @return
+	 */
+	private String checkValue(String key, JTextField tf, int minv, int maxv) {
+		if (StringUtil.isNumeric(tf.getText())) {
+			int v = Integer.parseInt(tf.getText());
+			if (v >= minv && v <= maxv) {
+				return "";
+			}
+			return I18N.getColonMsg(key) + " " + I18N.getMsg("error.wrong") + "\n";
+		}
+		return I18N.getColonMsg(key) + " " + I18N.getMsg("error.not_numeric") + "\n";
 	}
 
 	@Override
@@ -166,6 +186,13 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 		return Math.max(1, Integer.parseInt(nbChapters.getText()));
 	}
 
+	public int getNbScenes() {
+		if (nbScenes.getText().isEmpty()) {
+			return 1;
+		}
+		return Math.max(0, Integer.parseInt(nbScenes.getText()));
+	}
+
 	public Date getObjective() {
 		return objective.getDate();
 	}
@@ -173,7 +200,7 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (nature.getSelectedIndex() > 0) {
-			panel.setVisible(true);
+			objectivePanel.setVisible(true);
 			pack();
 		}
 	}

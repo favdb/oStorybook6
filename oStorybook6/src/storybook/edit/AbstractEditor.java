@@ -52,6 +52,7 @@ import storybook.db.item.Item;
 import storybook.db.location.Location;
 import storybook.db.person.Person;
 import storybook.db.plot.Plot;
+import storybook.db.relation.Relation;
 import storybook.db.scene.Scene;
 import storybook.db.strand.Strand;
 import storybook.db.tag.Tag;
@@ -131,7 +132,7 @@ public abstract class AbstractEditor extends AbstractPanel {
 	@Override
 	public void initUi() {
 		//LOG.trace(TT+"initUi() name=" + entity.getName());
-		setLayout(new MigLayout(MIG.get(MIG.WRAP, MIG.HIDEMODE3), "[][grow][]"));
+		setLayout(new MigLayout(MIG.get(MIG.WRAP, MIG.HIDEMODE3, MIG.INS1, MIG.GAP1), "[][grow][]"));
 		add(MainMenu.getHiddenMenu(this), MIG.SPAN);
 		entity = TempUtil.restore(mainFrame, entity);
 		setTitle(I18N.getColonMsg("editor") + " " + I18N.getMsg(entity.getObjType().toString()));
@@ -151,7 +152,9 @@ public abstract class AbstractEditor extends AbstractPanel {
 		initUpper();
 		initBottom();// tabs for description, notes, assistant
 		initFoot();// buttons for assistant call, write, cancel and ok
-		if (entity instanceof Endnote) {
+		if (entity instanceof Relation) {
+			hNotes.getWysiwyg().setShowHideTB(true);
+		} else if (entity instanceof Endnote) {
 			pHead.setVisible(false);
 			//hNotes.getWysEditor().setCaretPosition(0);
 			SwingUtilities.invokeLater(() -> {
@@ -227,7 +230,6 @@ public abstract class AbstractEditor extends AbstractPanel {
 
 	/**
 	 * initialize common data (Description, Notes, Assistant)
-	 *
 	 */
 	public void initBottom() {
 		//LOG.trace(TT + "initCommon()");
@@ -281,6 +283,10 @@ public abstract class AbstractEditor extends AbstractPanel {
 		hDescription = Ui.initHtmlEditor(panel,
 				DESCRIPTION, entity.getDescription(), tab, "");
 		hDescription.setBase(mainFrame.project.getPath());
+	}
+
+	public ShefEditor getDescription() {
+		return hDescription;
 	}
 
 	/**

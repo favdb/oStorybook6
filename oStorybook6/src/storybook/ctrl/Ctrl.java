@@ -148,12 +148,12 @@ public class Ctrl extends AbstractCtrl {
 	}
 
 	public synchronized void updateEntity(AbstractEntity entity) {
-		//LOG.trace(TT + "updateEntity(" + entity.getObjType() + ")");
+		//LOG.trace(TT + "updateEntity(" + LOG.trace(entity) + ")");
 		mainFrame.getBookModel().ENTITY_Update(entity);
 	}
 
 	public void deleteEntity(AbstractEntity entity) {
-		//LOG.trace("Ctrl.deleteEntity(" + entity.getObjType() + ")");
+		//LOG.trace(TT + "deleteEntity(" + LOG.trace(entity) + ")");
 		mainFrame.getBookModel().ENTITY_Delete(entity);
 	}
 

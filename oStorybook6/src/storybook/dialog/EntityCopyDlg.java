@@ -228,8 +228,8 @@ public class EntityCopyDlg extends AbsDialog {
 	 */
 	public void openProjectAction() {
 		mainFrame.cursorSetWaiting();
-		//App.getInstance().openProject();
-		App.getInstance().selectProject();
+		//App.getInstance().projectOpen();
+		App.getInstance().projectSelect();
 		SwingUtilities.invokeLater(() -> {
 			DefaultComboBoxModel<MainFrame> model
 					= (DefaultComboBoxModel<MainFrame>) fromCombo.getModel();

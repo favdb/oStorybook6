@@ -118,13 +118,13 @@ public class CopyDown {
 		String result = "";
 		for (Node child : node.element.childNodes()) {
 			CopyNode copyNodeChild = new CopyNode(child, node);
-			String replacement = "";
+			String rep = "";
 			if (NodeUtils.isNodeType3(child)) {
-				replacement = copyNodeChild.isCode() ? ((TextNode) child).text() : escape(((TextNode) child).text());
+				rep = copyNodeChild.isCode() ? ((TextNode) child).text() : escape(((TextNode) child).text());
 			} else if (NodeUtils.isNodeType1(child)) {
-				replacement = replacementForNode(copyNodeChild);
+				rep = replacementForNode(copyNodeChild);
 			}
-			result = join(result, replacement);
+			result = join(result, rep);
 		}
 		return result;
 	}
@@ -143,15 +143,13 @@ public class CopyDown {
 	private static final Pattern TRAILINGNEWLINEPATTERN = Pattern.compile("(\n*)$");
 
 	private String join(String string1, String string2) {
-		Matcher trailingMatcher = TRAILINGNEWLINEPATTERN.matcher(string1);
-		trailingMatcher.find();
-		Matcher leadingMatcher = LEADINGNEWLINEPATTERN.matcher(string2);
-		leadingMatcher.find();
-		int nNewLines = Integer.min(2, Integer.max(leadingMatcher.group().length(), trailingMatcher.group().length()));
-		String newLineJoin = String.join("", Collections.nCopies(nNewLines, "\n"));
-		return trailingMatcher.replaceAll("")
-				+ newLineJoin
-				+ leadingMatcher.replaceAll("");
+		Matcher matcher = TRAILINGNEWLINEPATTERN.matcher(string1);
+		matcher.find();
+		Matcher leading = LEADINGNEWLINEPATTERN.matcher(string2);
+		leading.find();
+		int nl = Integer.min(2, Integer.max(leading.group().length(), matcher.group().length()));
+		String nlj = String.join("", Collections.nCopies(nl, "\n"));
+		return matcher.replaceAll("") + nlj + leading.replaceAll("");
 	}
 
 	private String escape(String string) {
@@ -168,12 +166,12 @@ public class CopyDown {
 		public Rules() {
 			this.rules = new ArrayList<>();
 
-			addRule("blankReplacement", new Rule((element) -> CopyNode.isBlank(element), (content, element)
-					-> CopyNode.isBlock(element) ? "\n\n" : ""));
-			addRule("paragraph", new Rule("p", (content, element) -> {
+			addRule("blankReplacement", new Rule((el) -> CopyNode.isBlank(el), (content, el)
+					-> CopyNode.isBlock(el) ? "\n\n" : ""));
+			addRule("paragraph", new Rule("p", (content, el) -> {
 				return "\n\n" + content + "\n\n";
 			}));
-			addRule("br", new Rule("br", (content, element) -> {
+			addRule("br", new Rule("br", (content, el) -> {
 				return options.br + "\n";
 			}));
 			addRule("heading", new Rule(new String[]{"h1", "h2", "h3", "h4", "h5", "h6"}, (content, element) -> {
@@ -198,15 +196,15 @@ public class CopyDown {
 					return "\n\n" + content + "\n\n";
 				}
 			}));
-			addRule("listItem", new Rule("li", (content, element) -> {
+			addRule("listItem", new Rule("li", (content, el) -> {
 				content = content.replaceAll("^\n+", "") // remove leading new lines
 						.replaceAll("\n+$", "\n") // remove trailing new lines with just a single one
 						.replaceAll("(?m)\n", "\n    "); // indent
 				String prefix = options.bulletListMaker + "   ";
-				Element parent = (Element) element.parentNode();
+				Element parent = (Element) el.parentNode();
 				if (parent.nodeName().equals("ol")) {
 					String start = parent.attr("start");
-					int index = parent.children().indexOf(element);
+					int index = parent.children().indexOf(el);
 					int parsedStart = 1;
 					if (start.length() != 0) {
 						try {
@@ -218,24 +216,24 @@ public class CopyDown {
 					prefix = String.valueOf(parsedStart + index) + ".  ";
 				}
 				return prefix + content
-						+ (element.nextSibling() != null
+						+ (el.nextSibling() != null
 						&& !Pattern.compile("\n$").matcher(content).find() ? "\n" : "");
 			}));
-			addRule("indentedCodeBlock", new Rule((element) -> {
+			addRule("indentedCodeBlock", new Rule((el) -> {
 				return options.codeBlockStyle == BlockStyle.INDENTED
-						&& element.nodeName().equals("pre")
-						&& element.childNodeSize() > 0
-						&& element.childNode(0).nodeName().equals("code");
-			}, (content, element) -> {
-				return "\n\n    " + ((Element) element.childNode(0)).wholeText().replaceAll("\n", "\n    ");
+						&& el.nodeName().equals("pre")
+						&& el.childNodeSize() > 0
+						&& el.childNode(0).nodeName().equals("code");
+			}, (content, el) -> {
+				return "\n\n    " + ((Element) el.childNode(0)).wholeText().replaceAll("\n", "\n    ");
 			}));
 			addRule("fencedCodeBock", new Rule((element) -> {
 				return options.codeBlockStyle == BlockStyle.FENCED
 						&& element.nodeName().equals("pre")
 						&& element.childNodeSize() > 0
 						&& element.childNode(0).nodeName().equals("code");
-			}, (content, element) -> {
-				String childClass = element.childNode(0).attr("class");
+			}, (content, el) -> {
+				String childClass = el.childNode(0).attr("class");
 				if (childClass == null) {
 					childClass = "";
 				}
@@ -246,10 +244,10 @@ public class CopyDown {
 				}
 
 				String code;
-				if (element.childNode(0) instanceof Element) {
-					code = ((Element) element.childNode(0)).wholeText();
+				if (el.childNode(0) instanceof Element) {
+					code = ((Element) el.childNode(0)).wholeText();
 				} else {
-					code = element.childNode(0).outerHtml();
+					code = el.childNode(0).outerHtml();
 				}
 
 				String fenceChar = options.fence.substring(0, 1);
@@ -267,7 +265,7 @@ public class CopyDown {
 						+ "\n" + fence + "\n\n");
 			}));
 
-			addRule("horizontalRule", new Rule("hr", (content, element) -> {
+			addRule("horizontalRule", new Rule("hr", (content, el) -> {
 				return "\n\n" + options.hr + "\n\n";
 			}));
 			addRule("inlineLink", new Rule((element) -> {
@@ -286,31 +284,31 @@ public class CopyDown {
 				return options.linkStyle == LinkStyle.REFERENCED
 						&& element.nodeName().equals("a")
 						&& element.attr("href").length() != 0;
-			}, (content, element) -> {
-				String href = element.attr("href");
-				String title = cleanAttribute(element.attr("title"));
+			}, (content, el) -> {
+				String href = el.attr("href");
+				String title = cleanAttribute(el.attr("title"));
 				if (title.length() != 0) {
 					title = " \"" + title + "\"";
 				}
-				String replacement;
-				String reference;
+				String rep;
+				String ref;
 				switch (options.linkReferenceStyle) {
 					case COLLAPSED:
-						replacement = "[" + content + "][]";
-						reference = "[" + content + "]: " + href + title;
+						rep = "[" + content + "][]";
+						ref = "[" + content + "]: " + href + title;
 						break;
 					case SHORTCUT:
-						replacement = "[" + content + "]";
-						reference = "[" + content + "]: " + href + title;
+						rep = "[" + content + "]";
+						ref = "[" + content + "]: " + href + title;
 						break;
 					case DEFAULT:
 					default:
 						int id = references.size() + 1;
-						replacement = "[" + content + "][" + id + "]";
-						reference = "[" + id + "]: " + href + title;
+						rep = "[" + content + "][" + id + "]";
+						ref = "[" + id + "]: " + href + title;
 				}
-				references.add(reference);
-				return replacement;
+				references.add(ref);
+				return rep;
 			}, () -> {
 				String referenceString = "";
 				if (!references.isEmpty()) {
@@ -330,11 +328,11 @@ public class CopyDown {
 				}
 				return options.strongDelimiter + content + options.strongDelimiter;
 			}));
-			addRule("code", new Rule((element) -> {
-				boolean hasSiblings = element.previousSibling() != null || element.nextSibling() != null;
-				boolean isCodeBlock = element.parentNode().nodeName().equals("pre") && !hasSiblings;
-				return element.nodeName().equals("code") && !isCodeBlock;
-			}, (content, element) -> {
+			addRule("code", new Rule((el) -> {
+				boolean hasSiblings = el.previousSibling() != null || el.nextSibling() != null;
+				boolean isCodeBlock = el.parentNode().nodeName().equals("pre") && !hasSiblings;
+				return el.nodeName().equals("code") && !isCodeBlock;
+			}, (content, el) -> {
 				if (content.trim().length() == 0) {
 					return "";
 				}
@@ -376,7 +374,8 @@ public class CopyDown {
 				}
 				return "![" + alt + "]" + "(" + src + titlePart + ")";
 			}));
-			addRule("default", new Rule((element -> true), (content, element) -> CopyNode.isBlock(element) ? "\n\n" + content + "\n\n" : content));
+			addRule("default", new Rule((element -> true), (content, element)
+					-> CopyNode.isBlock(element) ? "\n\n" + content + "\n\n" : content));
 		}
 
 		public Rule findRule(Node node) {

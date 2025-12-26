@@ -85,6 +85,14 @@ public class Tags extends AbsEntitys {
 	}
 
 	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(tags, (Tag r1, Tag r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
+	/**
 	 * get the tools tip for the given Item/Tag
 	 *
 	 * @param buf
@@ -159,7 +167,7 @@ public class Tags extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Tag r1, Tag r2)
-		   -> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -167,8 +175,8 @@ public class Tags extends AbsEntitys {
 		List<String> ls = new ArrayList<>();
 		for (Tag p : tags) {
 			if (p.getCategory() != null
-			   && !p.getCategory().isEmpty()
-			   && !ls.contains(p.getCategory())) {
+					&& !p.getCategory().isEmpty()
+					&& !ls.contains(p.getCategory())) {
 				ls.add(p.getCategory());
 			}
 		}
@@ -191,7 +199,7 @@ public class Tags extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Tag r1, Tag r2)
-		   -> r1.getCategory().compareTo(r2.getCategory()));
+				-> r1.getCategory().compareTo(r2.getCategory()));
 		return ls;
 	}
 

@@ -86,7 +86,7 @@ public class StoryboardSpace extends AbstractPanel implements MouseListener {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					Ctrl ctrl = mainFrame.getBookController();
-					Scene scene = Scenes.create(mainFrame.project.scenes.getLast() + 1L, null, chapter);
+					Scene scene = Scenes.create(mainFrame.project.scenes.getLast() + 1L, 1, null, chapter);
 					scene.setChapter(chapter);
 					ctrl.setEditEntity(scene);
 				}

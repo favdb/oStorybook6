@@ -304,7 +304,7 @@ public class App extends Component {
 				mainFrame.initBlankUi();
 				addMainFrame(mainFrame);
 			} else {
-				this.openProject(dbFile);
+				this.projectOpen(dbFile);
 			}
 			// check for updates
 			Updater.checkForUpdate(false);
@@ -370,7 +370,7 @@ public class App extends Component {
 	 * @param mainFrame
 	 */
 	public void addMainFrame(MainFrame mainFrame) {
-		//LOG.printInfos(TT+"addMainFrame(mainFrame="+mainFrame.getName()+")");
+		//LOG.trace(TT+"addMainFrame(mainFrame="+mainFrame.getName()+")");
 		if (!mainFrames.contains(mainFrame)) {
 			mainFrames.add(mainFrame);
 		}
@@ -382,7 +382,7 @@ public class App extends Component {
 	 * @param mainFrame
 	 */
 	public void removeMainFrame(MainFrame mainFrame) {
-		//LOG.printInfos(TT+"removeMainFrame(mainFrame="+mainFrame.getName()+")");
+		//LOG.trace(TT+"removeMainFrame(mainFrame="+mainFrame.getName()+")");
 		if (mainFrame.getProject() != null) {
 			mainFrame.getProject().remove();
 		}
@@ -395,7 +395,7 @@ public class App extends Component {
 	 *
 	 */
 	public void closeBlank() {
-		//LOG.printInfos(TT+"closeBlank()");
+		//LOG.trace(TT+"closeBlank()");
 		for (MainFrame mainFrame : mainFrames) {
 			if (mainFrame.isBlank()) {
 				mainFrames.remove(mainFrame);
@@ -411,7 +411,7 @@ public class App extends Component {
 	 * @return
 	 */
 	public static String getFileName(String projtitle) {
-		//LOG.printInfos("LOG.getFileName()");
+		//LOG.trace("LOG.getFileName()");
 		String titlename = StringUtil.escapeTxt(projtitle);
 		String x[] = titlename.split(" ");
 		titlename = "";
@@ -437,7 +437,7 @@ public class App extends Component {
 	 * @return
 	 */
 	private MainFrame initNewFile(Project dbFile) {
-		//LOG.printInfos(TT+"initNewFile(dbFile=" + dbFile.getH2Name() + ", title=" + thetitle + ")");
+		//LOG.trace(TT+"initNewFile(dbFile=" + dbFile.getH2Name() + ", title=" + thetitle + ")");
 		MainFrame newMainFrame = new MainFrame(dbFile);
 		return newMainFrame;
 	}
@@ -467,7 +467,7 @@ public class App extends Component {
 	 * @param title
 	 */
 	private void initNewFileEnd(MainFrame m, Project project, String title) {
-		/*LOG.printInfos(TT+"initNewFileEnd(mainFrame"
+		/*LOG.trace(TT+"initNewFileEnd(mainFrame"
 			+ ", dbFile=" + dbFile.getH2Name()
 			+ ", title=" + thetitle + ")");*/
 		m.initUi();
@@ -488,8 +488,8 @@ public class App extends Component {
 	/**
 	 * create a new project file
 	 */
-	public void createNewProject() {
-		//LOG.trace(TT + "createNewFile()");
+	public void projectCreateNew() {
+		//LOG.trace(TT + "projectCreateNew()");
 		ProjectNewDlg dlg = new ProjectNewDlg(mainFrames.get(0));
 		dlg.setVisible(true);
 		if (dlg.isCanceled()) {
@@ -513,7 +513,7 @@ public class App extends Component {
 			IOUtil.fileDelete(fOsbk);
 		}
 		Project project = new Project(fOsbk, dlg);
-		openProject(project);
+		projectOpen(project);
 	}
 
 	/**
@@ -523,7 +523,7 @@ public class App extends Component {
 	 * @param outFile
 	 */
 	public void renameFile(final MainFrame mainFrame, File outFile) {
-		//LOG.printInfos(TT+"renameFile(mainFrame,outFile="+outFile.getAbsolutePath()+")");
+		//LOG.trace(TT+"renameFile(mainFrame,outFile="+outFile.getAbsolutePath()+")");
 		try {
 			File inFile = mainFrame.getProject().getFile();
 			mainFrame.close(false);
@@ -531,7 +531,7 @@ public class App extends Component {
 			Path outPath = outFile.toPath();
 			Files.move(inPath, outPath, REPLACE_EXISTING);
 			Project dbFile = new Project(outFile);
-			openProject(dbFile);
+			projectOpen(dbFile);
 		} catch (IOException e) {
 			LOG.err(TT + ".renameFile(" + mainFrame.getName() + "," + outFile.getName() + ")", e);
 		}
@@ -542,13 +542,13 @@ public class App extends Component {
 	 *
 	 * @return
 	 */
-	public boolean selectProject() {
-		//LOG.trace(TT + "selectProject()");
+	public boolean projectSelect() {
+		//LOG.trace(TT + "projectSelect()");
 		Project db = BookUtil.chooseProject();
 		if (db == null || db.getFilename() == null) {
 			return false;
 		}
-		return openProject(db);
+		return projectOpen(db);
 	}
 
 	/**
@@ -559,10 +559,10 @@ public class App extends Component {
 	 * @param newPath
 	 * @return
 	 */
-	public boolean openProject(final Project project, String oldPath, String newPath) {
-		//LOG.trace(TT + "openProject(project, oldPath=" + oldPath + ", newPath=" + newPath + ")");
-		boolean rc = openProject(project);
-		SwingUtilities.invokeLater(() -> App.changingProject(project, oldPath, newPath));
+	public boolean projectOpen(final Project project, String oldPath, String newPath) {
+		//LOG.trace(TT + "projectOpen(project, oldPath=" + oldPath + ", newPath=" + newPath + ")");
+		boolean rc = projectOpen(project);
+		SwingUtilities.invokeLater(() -> App.projectChanging(project, oldPath, newPath));
 		return rc;
 	}
 
@@ -573,17 +573,18 @@ public class App extends Component {
 	 * @param oldPath
 	 * @param newPath
 	 */
-	public static void changingProject(Project project, String oldPath, String newPath) {
+	public static void projectChanging(Project project, String oldPath, String newPath) {
+		//LOG.trace("change file project=" + project.getName()
+		//		+ ", oldPath=" + oldPath + ", newPath=" + newPath);
 		MainFrame mf = null;
 		for (MainFrame m : App.getInstance().mainFrames) {
-			//LOG.trace("changingDbFile h2File="
-			//		+ project.getName() + ", m.dbFile=" + m.getProject().getName());
 			if (m.getProject().equals(project)) {
 				mf = m;
+				break;
 			}
 		}
 		if (mf == null) {
-			//LOG.trace("changingDbFile mf=null");
+			//LOG.trace("changing to file=null");
 			return;
 		}
 		mf.changePath(oldPath, newPath);
@@ -597,9 +598,9 @@ public class App extends Component {
 	 *
 	 * @return : true if OK
 	 */
-	public boolean openProject(Project project) {
-		/*LOG.trace(TT + "openProject("
-		+ "project=" + (project == null ? "null" : project.getFilename()) + ")");*/
+	public boolean projectOpen(Project project) {
+		//LOG.trace(TT + "projectOpen("
+		//		+ "project=" + (project == null ? "null" : project.getFilename()) + ")");
 		if (project == null || !project.isOK()) {
 			return false;
 		}
@@ -608,7 +609,7 @@ public class App extends Component {
 		}
 		try {
 			setWaitCursor();
-			Waiting dlg = new Waiting(null, I18N.getMsg("loading", project.getFilename()));
+			Waiting dlg = new Waiting(null, I18N.getMsg("loading", project.getName()));
 			SwingUtilities.invokeLater(() -> {
 				try {
 					//LOG.trace(">>> open a Project");
@@ -632,7 +633,7 @@ public class App extends Component {
 				dlg.dispose();
 			});
 		} catch (HeadlessException e) {
-			LOG.err(TT + ".openFile(...)", e);
+			LOG.err(TT + "projectOpen(...)", e);
 		}
 		return true;
 	}
@@ -643,7 +644,7 @@ public class App extends Component {
 	 * @param project
 	 */
 	public void recentfilesUpdate(Project project) {
-		//LOG.printInfos(TT+"recentfilesUpdate(project='" + project.getName() + "'")");
+		//LOG.trace(TT+"recentfilesUpdate(project='" + project.getName() + "'")");
 		if (project == null) {
 			return;
 		}
@@ -661,7 +662,7 @@ public class App extends Component {
 	 * clear the recent files list
 	 */
 	public void recentfilesClear() {
-		//LOG.printInfos(TT+"recentFilesClear()");
+		//LOG.trace(TT+"recentFilesClear()");
 		preferences.recentFilesClear();
 		reloadMenuBars();
 	}
@@ -670,7 +671,7 @@ public class App extends Component {
 	 * exit the application
 	 */
 	public void exit() {
-		//LOG.printInfos(TT+"exit()");
+		//LOG.trace(TT+"exit()");
 		if (!mainFrames.isEmpty()) {
 			for (MainFrame m : mainFrames) {
 				if (m.askForSave() == 0) {
@@ -694,7 +695,7 @@ public class App extends Component {
 	 * refresh all opened MainFrames
 	 */
 	public void refresh() {
-		//LOG.printInfos(TT+"refresh()");
+		//LOG.trace(TT+"refresh()");
 		for (MainFrame mainFrame : mainFrames) {
 			int width = mainFrame.getWidth();
 			int height = mainFrame.getHeight();
@@ -712,7 +713,7 @@ public class App extends Component {
 	 * reload the menu bar for all MainFrames
 	 */
 	public void reloadMenuBars() {
-		//LOG.printInfos(TT + "reloadMenuBars()");
+		//LOG.trace(TT + "reloadMenuBars()");
 		for (MainFrame mainFrame : mainFrames) {
 			mainFrame.getMainMenu().reloadRecentMenu();
 			mainFrame.getMainMenu().reloadToolbar();
@@ -811,7 +812,7 @@ public class App extends Component {
 	 * refresh view for all MainFrame
 	 */
 	public void refreshViews() {
-		//LOG.printInfos("App.refreshViews()");
+		//LOG.trace(TT+"refreshViews()");
 		for (MainFrame mainFrame : mainFrames) {
 			mainFrame.refresh();
 		}
@@ -830,7 +831,7 @@ public class App extends Component {
 	 * initialize the dictaphone
 	 */
 	private static void dictaphoneInit() {
-		//LOG.printInfos(TT+"initDictaphone()");
+		//LOG.trace(TT+"initDictaphone()");
 		//Dictaphone.init();
 	}
 
@@ -873,7 +874,7 @@ public class App extends Component {
 	 * @param hi : the import document
 	 */
 	public void importBook(ImportDocument hi) {
-		//LOG.printInfos(TT+"importBook(hi)");
+		//LOG.trace(TT+"importBook(hi)");
 		Project proj = hi.getProject();
 		MainFrame newMainFrame = initNewFile(proj);
 		newMainFrame.getBookModel().initEntities(hi.getTitle());

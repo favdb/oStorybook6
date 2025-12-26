@@ -106,6 +106,14 @@ public class Parts extends AbsEntitys {
 		return parts;
 	}
 
+	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(parts, (Part r1, Part r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
 	@Override
 	public int getCount() {
 		return parts.size();
@@ -122,7 +130,7 @@ public class Parts extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Part r1, Part r2)
-			-> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 

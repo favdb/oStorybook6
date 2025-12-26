@@ -21,6 +21,7 @@ import i18n.I18N;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -33,11 +34,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import resources.icons.ICONS;
 import storybook.db.book.Book;
-import storybook.edit.Editor;
 import storybook.dialog.AbsDialog;
+import storybook.edit.Editor;
+import storybook.tools.LOG;
 import storybook.tools.html.Html;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
+import storybook.ui.MainFrame;
 import storybook.ui.Ui;
 
 /**
@@ -48,7 +51,7 @@ public class RelationsDlg extends AbsDialog implements ListSelectionListener {
 
 	private static final String BT_EXIT = "btExit";
 
-	private final Editor editor;
+	private Editor editor = null;
 	private JPanel listPanel, right;
 	private JList listbox;
 	public boolean modified = false;
@@ -58,6 +61,12 @@ public class RelationsDlg extends AbsDialog implements ListSelectionListener {
 	public RelationsDlg(Editor editor) {
 		super(editor.mainFrame);
 		this.editor = editor;
+		initAll();
+	}
+
+	public RelationsDlg(MainFrame mainFrame) {
+		super(mainFrame);
+		this.editor = null;
 		initAll();
 	}
 
@@ -79,15 +88,15 @@ public class RelationsDlg extends AbsDialog implements ListSelectionListener {
 		add(right, MIG.get(MIG.SPAN));
 		// pour terminer
 		add(Ui.initButton(BT_EXIT, "end", ICONS.K.EXIT, "", e -> dispose()),
-		   MIG.get(MIG.SPAN, MIG.RIGHT));
+				MIG.get(MIG.SPAN, MIG.RIGHT));
 		setPreferredSize(new Dimension(800, 600));
 		pack();
-		this.setLocationRelativeTo(editor);
+		this.setLocationRelativeTo(editor != null ? editor : mainFrame);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//LOG.trace(TT+".actionPerformed(e=" + e.toString() + ")");
+		//LOG.trace(TT+"actionPerformed(e=" + e.toString() + ")");
 		if (e.getSource() instanceof JButton) {
 			JButton bt = (JButton) e.getSource();
 			switch (bt.getName()) {
@@ -100,9 +109,9 @@ public class RelationsDlg extends AbsDialog implements ListSelectionListener {
 				case "btDelete":
 					Relation r = (Relation) listbox.getSelectedValue();
 					if (JOptionPane.showConfirmDialog(this,
-					   I18N.getMsg("ask.delete"),
-					   I18N.getMsg("delete"),
-					   JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+							I18N.getMsg("ask.delete"),
+							I18N.getMsg("delete"),
+							JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 						return;
 					}
 					mainFrame.getBookController().deleteEntity(r);
@@ -116,11 +125,23 @@ public class RelationsDlg extends AbsDialog implements ListSelectionListener {
 		}
 	}
 
+	/**
+	 * initalize the links
+	 */
 	private void initList() {
-		//LOG.trace(TT+".initList(panel)");
-		listPanel = Ui.initListBox((JPanel) this.getContentPane(),
-		   mainFrame, Book.TYPE.RELATION, "",
-		   mainFrame.project.relations.find(editor.entity), null, e -> relationAdd());
+		//LOG.trace(TT+"initList()");
+		//todo replace listpane by JSListe
+		if (editor != null) {
+			listPanel = Ui.initListPanel((JPanel) this.getContentPane(),
+					mainFrame, Book.TYPE.RELATION, "",
+					mainFrame.project.relations.find(editor.entity), null,
+					e -> relationAdd());
+		} else {
+			listPanel = Ui.initListPanel((JPanel) this.getContentPane(),
+					mainFrame, Book.TYPE.RELATION, "",
+					mainFrame.project.relations.getList(), null,
+					e -> relationAdd());
+		}
 		for (Object c : listPanel.getComponents()) {
 			if (c instanceof JButton) {
 				JButton bt = (JButton) c;
@@ -136,7 +157,7 @@ public class RelationsDlg extends AbsDialog implements ListSelectionListener {
 	}
 
 	private void initInfo(JPanel panel) {
-		//LOG.trace(TT+".initInfo(panel)");
+		//LOG.trace(TT+"initInfo(panel)");
 		if (listbox == null) {
 			return;
 		}
@@ -152,7 +173,7 @@ public class RelationsDlg extends AbsDialog implements ListSelectionListener {
 	}
 
 	private JList getList() {
-		//LOG.trace("RelationsDlg.getList()");
+		//LOG.trace(TT+"getList()");
 		JList ls = null;
 		for (Object c : listPanel.getComponents()) {
 			if (c instanceof JScrollPane) {
@@ -163,7 +184,7 @@ public class RelationsDlg extends AbsDialog implements ListSelectionListener {
 				break;
 			}
 		}
-		return (ls);
+		return ls;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -171,8 +192,14 @@ public class RelationsDlg extends AbsDialog implements ListSelectionListener {
 		listbox.removeListSelectionListener(this);
 		DefaultListModel model = (DefaultListModel) listbox.getModel();
 		model.removeAllElements();
-		for (Relation r : mainFrame.project.relations.find(editor.entity)) {
-			model.addElement(r);
+		if (editor != null) {
+			for (Relation r : mainFrame.project.relations.find(editor.entity)) {
+				model.addElement(r);
+			}
+		} else {
+			for (Relation r : (List<Relation>) mainFrame.project.relations.getList()) {
+				model.addElement(r);
+			}
 		}
 		listbox.setSelectedIndex(-1);
 		listbox.addListSelectionListener(this);
@@ -189,13 +216,23 @@ public class RelationsDlg extends AbsDialog implements ListSelectionListener {
 	}
 
 	private void relationAdd() {
-		if (mainFrame.showEditorAsDialog(new Relation())) {
-			reloadList();
-			modified = true;
+		if (editor != null) {
+			if (mainFrame.showEditorAsDialog(new Relation())) {
+				reloadList();
+				modified = true;
+			}
+		} else {
+			LOG.trace("select an entity to add to the list");
 		}
 	}
 
 	public static boolean show(Editor editor) {
+		RelationsDlg dlg = new RelationsDlg(editor);
+		dlg.setVisible(true);
+		return dlg.modified;
+	}
+
+	public static boolean show(MainFrame editor) {
 		RelationsDlg dlg = new RelationsDlg(editor);
 		dlg.setVisible(true);
 		return dlg.modified;

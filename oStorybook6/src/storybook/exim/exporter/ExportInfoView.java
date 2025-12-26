@@ -18,10 +18,7 @@ package storybook.exim.exporter;
 
 import assistant.Assistant;
 import i18n.I18N;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import storybook.db.abs.AbstractEntity;
@@ -156,8 +153,10 @@ public class ExportInfoView extends AbstractExport {
 			return false;
 		}
 		try {
-			outStream = new BufferedWriter(new FileWriter(param.getFileName()));
-		} catch (IOException ex) {
+			outBuffer = new StringBuilder();
+			outFile = new File(param.getFileName());
+			//outStream = new BufferedWriter(new FileWriter(param.getFileName()));
+		} catch (Exception ex) {
 			ExceptionDlg.show(this.getClass().getSimpleName()
 					+ ".openFile(...) outStream error", ex);
 			return (false);

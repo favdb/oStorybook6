@@ -32,6 +32,19 @@ public class TextUtil {
 		return str.substring(0, i);
 	}
 
+	/**
+	 * return a String containing only 0-9 A-Z a-z
+	 *
+	 * @param value
+	 * @return
+	 */
+	public static String toText(String value) {
+		if (value == null) {
+			return "?";
+		}
+		return value.replaceAll("[^A-Za-z0-9]", " ");
+	}
+
 	private TextUtil() {
 		//nothing
 	}

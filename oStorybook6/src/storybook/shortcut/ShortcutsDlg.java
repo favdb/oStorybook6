@@ -119,7 +119,7 @@ public class ShortcutsDlg extends JDialog {
 		ta.setWrapStyleWord(true);
 		add(ta, MIG.get(MIG.SPAN, MIG.GROW));
 		panelList = new JPanel(new MigLayout(MIG.get(MIG.FILLX, MIG.WRAP, MIG.INS0, MIG.GAP0),
-		   "[center]" + (FontUtil.getWidth() * 2) + "px" + "[80%]"));
+				"[center]" + (FontUtil.getWidth() * 2) + "px" + "[80%]"));
 		refresh();
 
 		// add the scroller
@@ -133,7 +133,7 @@ public class ShortcutsDlg extends JDialog {
 		// number of keys if dev mode
 		if (App.isDev()) {
 			add(new JLabel("<html><i>nb of keys=" + getNbKeys() + "</i></html>"),
-			   MIG.get(MIG.SPAN, MIG.RIGHT));
+					MIG.get(MIG.SPAN, MIG.RIGHT));
 		}
 
 		// sort button
@@ -227,7 +227,7 @@ public class ShortcutsDlg extends JDialog {
 			shortcutKeyInit("shef", k);
 		}
 		// for OSBK shortcuts
-		panelList.add(new JLabel(getSubtitle("view.table")), MIG.get(MIG.SPAN, MIG.LEFT));
+		panelList.add(new JLabel(getSubtitle("other")), MIG.get(MIG.SPAN, MIG.LEFT));
 		for (ShortcutsKey k : listOsbk) {
 			shortcutKeyInit("osbk", k);
 		}
@@ -243,11 +243,11 @@ public class ShortcutsDlg extends JDialog {
 	private void shortcutKeyInit(String type, ShortcutsKey k) {
 		//LOG.trace(TT + ".shortcutKeyInit(type=" + type + ", k=" + k.toString() + ")");
 		JButton bt = Ui.initButton("bt" + k.getId(), "", null, "",
-		   e -> shortcutChange(type, k));
+				e -> shortcutChange(type, k));
 		bt.setText(k.getKey().replace(" ", "+")
-		   .replace("shift", I18N.getMsg("shortcut.0.shift"))
-		   .replace("alt", I18N.getMsg("shortcut.0.alt"))
-		   .replace("ctrl", I18N.getMsg("shortcut.0.ctrl")));
+				.replace("shift", I18N.getMsg("shortcut.0.shift"))
+				.replace("alt", I18N.getMsg("shortcut.0.alt"))
+				.replace("ctrl", I18N.getMsg("shortcut.0.ctrl")));
 		bt.setIcon(null);
 		bt.setMinimumSize(new Dimension(FontUtil.getWidth() * 20, (int) (FontUtil.getHeight() * 1.5)));
 		if (k.getError()) {
@@ -380,9 +380,9 @@ public class ShortcutsDlg extends JDialog {
 		if (modified) {
 			if (shortcutsCheck()) {
 				JOptionPane.showMessageDialog(this,
-				   I18N.getMsg("shortcut.m.error"),
-				   I18N.getMsg("shortcut"),
-				   JOptionPane.ERROR_MESSAGE);
+						I18N.getMsg("shortcut.m.error"),
+						I18N.getMsg("shortcut"),
+						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			listSave();

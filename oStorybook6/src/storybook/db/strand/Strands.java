@@ -118,6 +118,14 @@ public class Strands extends AbsEntitys {
 		return lst;
 	}
 
+	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(strands, (Strand r1, Strand r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
 	@Override
 	public int getCount() {
 		return strands.size();
@@ -134,7 +142,7 @@ public class Strands extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Strand r1, Strand r2)
-		   -> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -159,7 +167,7 @@ public class Strands extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Strand r1, Strand r2)
-		   -> r1.getSort().compareTo(r2.getSort()));
+				-> r1.getSort().compareTo(r2.getSort()));
 		return ls;
 	}
 

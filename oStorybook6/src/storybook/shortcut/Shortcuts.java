@@ -36,7 +36,7 @@ import storybook.tools.file.IOUtil;
  */
 public class Shortcuts {
 
-	private static final String TT = "Shortcuts";
+	private static final String TT = "Shortcuts.";
 
 	private static Properties keyProps, userKeyProps;
 	private static File userKeyFile;
@@ -79,7 +79,8 @@ public class Shortcuts {
 		"menu",
 		//"file", "edit", "new", "tools", "help",
 		// FOI
-		"foi.title"
+		"foi.title",
+		"typist.full"
 	};
 
 	/**
@@ -99,7 +100,7 @@ public class Shortcuts {
 			try {
 				userKeyFile.createNewFile();
 			} catch (IOException e) {
-				LOG.err(TT + ".init() create user shortcuts file error"
+				LOG.err(TT + "init() create user shortcuts file error"
 						+ " Error: \n" + e.getLocalizedMessage());
 			}
 		}
@@ -107,7 +108,7 @@ public class Shortcuts {
 			userKeyProps = new Properties();
 			userKeyProps.load(new FileInputStream(userKeyFile.getAbsolutePath()));
 		} catch (IOException e) {
-			LOG.err(TT + ".init() usage of user shortcuts file error", e);
+			LOG.err(TT + "init() usage of user shortcuts file error", e);
 			userKeyProps = null;
 		}
 	}

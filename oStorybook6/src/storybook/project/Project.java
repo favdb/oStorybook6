@@ -85,6 +85,7 @@ import storybook.exim.importer.ImportSQL;
 import storybook.tools.DateUtil;
 import storybook.tools.LOG;
 import storybook.tools.ListUtil;
+import storybook.tools.SbDuration;
 import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
 import storybook.tools.swing.ColorUtil;
@@ -167,7 +168,7 @@ public class Project {
 	 * @param file
 	 * @param dlg
 	 */
-	@SuppressWarnings("OverridableMethodCallInConstructor")
+	@SuppressWarnings({"OverridableMethodCallInConstructor", "unchecked"})
 	public Project(File file, ProjectNewDlg dlg) {
 		setFile(file);
 		initData();
@@ -195,9 +196,19 @@ public class Project {
 			}
 			chapters.add(chapter);
 		}
-		Chapter chapter = (Chapter) chapters.getList().get(0);
-		// first scene
-		scenes.add(Scenes.create(scenes.getLast() + 1L, strand, chapter));
+		// scenes
+		if (dlg.getNbScenes() > 0) {
+			Long id = 1L;
+			for (Chapter chapter : (List<Chapter>) chapters.getList()) {
+				for (int i = 1; i < dlg.getNbScenes(); i++) {
+					scenes.add(Scenes.create(id++, (int) i, strand, chapter));
+				}
+			}
+
+		} else {
+			Chapter chapter = (Chapter) chapters.getList().get(0);
+			scenes.add(Scenes.create(scenes.getLast() + 1L, 1, strand, chapter));
+		}
 		save();
 		LOG.trace(file.getAbsolutePath() + " was created");
 	}
@@ -1083,6 +1094,7 @@ public class Project {
 	 */
 	public void setFile(File file) {
 		this.file = file;
+		this.name = file.getName();
 		setPath();
 	}
 
@@ -1423,6 +1435,32 @@ public class Project {
 			//unzip file into folder
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public String getDuration() {
+		int nbw = 0;
+		SbDuration sbd = new SbDuration();
+		for (Part p : (List<Part>) parts.getList()) {
+			List<Chapter> cs = chapters.find(p);
+			for (Chapter c : cs) {
+				List<Scene> sx = scenes.find(c);
+				for (Scene s : sx) {
+					sbd.add(s.getSbDuration());
+				}
+			}
+		}
+		return sbd.toText();
+	}
+
+	boolean script = false;
+
+	public void setScript(boolean b) {
+		this.script = b;
+	}
+
+	public boolean getScript() {
+		return script;
 	}
 
 }

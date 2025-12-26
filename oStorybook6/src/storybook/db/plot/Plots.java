@@ -24,6 +24,7 @@ import java.util.Objects;
 import storybook.db.abs.AbsEntitys;
 import storybook.db.abs.AbstractEntity;
 import storybook.project.Project;
+import storybook.tools.LOG;
 import storybook.tools.html.Html;
 
 /**
@@ -31,6 +32,8 @@ import storybook.tools.html.Html;
  * @author favdb
  */
 public class Plots extends AbsEntitys {
+
+	private static final String TT = "Plots.";
 
 	private final List<Plot> plots = new ArrayList<>();
 
@@ -52,19 +55,27 @@ public class Plots extends AbsEntitys {
 
 	@Override
 	public void save(AbstractEntity entity) {
-		if (entity.getId() < 0) {
-			entity.setId(getLast() + 1);
-			plots.add((Plot) entity);
-		} else {
-			plots.set(getIdx(entity.getId()), (Plot) entity);
+		if (entity instanceof Plot) {
+			if (entity.getId() < 0) {
+				entity.setId(getLast() + 1);
+				plots.add((Plot) entity);
+			} else {
+				try {
+					plots.set(getIdx(entity.getId()), (Plot) entity);
+				} catch (Exception ex) {
+					LOG.err(TT + "save(entity) error", ex);
+					return;
+				}
+			}
 		}
 	}
 
 	@Override
 	public int getIdx(Long id) {
-		for (Plot p : plots) {
-			if (p.getId().equals(id)) {
-				return plots.indexOf(p);
+		LOG.trace(TT + "getIdx(id=" + id.toString() + ")");
+		for (int i = 0; i < plots.size(); i++) {
+			if (plots.get(i).getId().equals(id)) {
+				return i;
 			}
 		}
 		return -1;
@@ -90,9 +101,12 @@ public class Plots extends AbsEntitys {
 
 	@Override
 	public void delete(AbstractEntity p) {
+		//LOG.trace(TT + "delete(p=" + LOG.trace(p) + ")");
 		int n = getIdx(p.getId());
 		if (n != -1) {
-			plots.remove((Plot) p);
+			plots.remove(n);
+		} else {
+			LOG.err(TT + "delete(p=" + LOG.trace(p) + ") not found");
 		}
 	}
 
@@ -109,6 +123,14 @@ public class Plots extends AbsEntitys {
 		return plots;
 	}
 
+	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(plots, (Plot r1, Plot r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
 	@Override
 	public int getCount() {
 		return plots.size();
@@ -120,7 +142,7 @@ public class Plots extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Plot r1, Plot r2)
-		   -> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -147,8 +169,8 @@ public class Plots extends AbsEntitys {
 		List<String> ls = new ArrayList<>();
 		for (Plot p : plots) {
 			if (p.getCategory() != null
-			   && !p.getCategory().isEmpty()
-			   && !ls.contains(p.getCategory())) {
+					&& !p.getCategory().isEmpty()
+					&& !ls.contains(p.getCategory())) {
 				ls.add(p.getCategory());
 			}
 		}
@@ -185,7 +207,7 @@ public class Plots extends AbsEntitys {
 		}
 		if (plot.getCategory() != null && !plot.getCategory().isEmpty()) {
 			buf.append(Html.intoB(I18N.getMsg("category"))).append(": ")
-			   .append(plot.getCategory()).append(Html.BR);
+					.append(plot.getCategory()).append(Html.BR);
 		}
 		if (plot.getDescription() != null && !plot.getDescription().isEmpty()) {
 			buf.append(plot.getDescription());

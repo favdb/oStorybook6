@@ -18,6 +18,7 @@ package storybook.db.relation;
 
 import i18n.I18N;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import storybook.db.abs.AbsEntitys;
 import storybook.db.abs.AbstractEntity;
@@ -116,6 +117,14 @@ public class Relations extends AbsEntitys {
 		return relations;
 	}
 
+	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(relations, (Relation r1, Relation r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
 	@Override
 	public int getCount() {
 		return relations.size();
@@ -126,7 +135,7 @@ public class Relations extends AbsEntitys {
 		List<Relation> ls = new ArrayList<>();
 		for (Relation rel : relations) {
 			if ((rel.getStartScene() != null && rel.getStartScene().equals(scene))
-			   || (rel.getEndScene() != null && rel.getEndScene().equals(scene))) {
+					|| (rel.getEndScene() != null && rel.getEndScene().equals(scene))) {
 				ls.add(rel);
 			}
 		}

@@ -697,10 +697,23 @@ public class Ui {
 		return (combo);
 	}
 
+	/**
+	 * initalize a list of check boxes for the given entity type as a JPanel, with buttons to add
+	 * and delete
+	 *
+	 * @param panel
+	 * @param mainFrame
+	 * @param type
+	 * @param title
+	 * @param list
+	 * @param tosel
+	 * @param actionAdd
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public static JPanel initListBox(JPanel panel, MainFrame mainFrame, Book.TYPE type,
-			String title, List<?> list, AbstractEntity tosel, ActionListener actionNew) {
-		/*LOG.trace(TT+".initListBox(panel, mainFrame"+
+	public static JPanel initListPanel(JPanel panel, MainFrame mainFrame, Book.TYPE type,
+			String title, List<?> list, AbstractEntity tosel, ActionListener actionAdd) {
+		/*LOG.trace(TT+".initListPanel(panel, mainFrame"+
 				", type="+type.toString()+
 				", title="+ title+
 				", list nb="+(list!=null?list.size():"null")+
@@ -721,12 +734,28 @@ public class Ui {
 		JScrollPane scroll = new JScrollPane(ls);
 		SwingUtil.setMaxPreferredSize(scroll);
 		p.add(scroll, MIG.get(MIG.SPAN, MIG.GROW));
-		if (actionNew != null) {
-			JButton bt = initButton("btAdd", "add", ICONS.K.ADD, "", actionNew);
+		if (actionAdd != null) {
+			JButton bt = initButton("btAdd", "add", ICONS.K.ADD, "", actionAdd);
 			p.add(bt, MIG.LEFT);
-			bt = initButton("btDelete", "delete", ICONS.K.DELETE, "", actionNew);
+			bt = initButton("btDelete", "delete", ICONS.K.DELETE, "", actionAdd);
 			p.add(bt, MIG.RIGHT);
 		}
+		return p;
+	}
+
+	/**
+	 * initalize a list of given entities as a JPanle, with buttons to add or remove an entity
+	 *
+	 * @param mainFrame
+	 * @param type
+	 * @param entities
+	 * @param actionAdd
+	 * @param actionRemove
+	 * @return
+	 */
+	public JPanel initList(MainFrame mainFrame, Book.TYPE type, List<AbstractEntity> entities,
+			ActionListener actionAdd, ActionListener actionRemove) {
+		JPanel p = new JPanel(new MigLayout(MIG.FILL, "[][]"));
 		return p;
 	}
 

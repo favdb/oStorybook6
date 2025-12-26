@@ -261,6 +261,7 @@ public class MainMenu implements MouseListener {
 	private JMenuItem toolsClassic;
 	private JMenuItem toolsFreytag;
 	private JMenuItem toolsVogler;
+	private JMenuItem toolsTypistFull;
 
 	public MainMenu(MainFrame m) {
 		//LOG.trace("MainMenu(mainFrame)");
@@ -380,14 +381,14 @@ public class MainMenu implements MouseListener {
 	private void tbFileInit() {
 		//LOG.trace(TT+"initTbFile()");
 		btFileNew = initButton(K.F_NEW, "file.new",
-				evt -> App.getInstance().createNewProject());
+				evt -> App.getInstance().projectCreateNew());
 		toolBar.add(btFileNew);
 
 		btFileOpen = initButton(K.F_OPEN, "file.open",
 				evt -> {
 					mainFrame.cursorSetWaiting();
-					//App.getInstance().openProject();
-					App.getInstance().selectProject();
+					//App.getInstance().projectOpen();
+					App.getInstance().projectSelect();
 					mainFrame.cursorSetDefault();
 				});
 		toolBar.add(btFileOpen);
@@ -712,7 +713,7 @@ public class MainMenu implements MouseListener {
 		menuFileCreate.setIcon(IconUtil.getIconSmall(K.PLUS));
 
 		fileNew = initScMenuItem(K.F_NEW, "file.new", "file.new_tip",
-				evt -> App.getInstance().createNewProject());
+				evt -> App.getInstance().projectCreateNew());
 		menuFileCreate.add(fileNew);
 
 		JMenuItem fileNewDoc = initMenuItem(K.F_IMPORT, "file.from_doc", "import-doc",
@@ -724,7 +725,7 @@ public class MainMenu implements MouseListener {
 
 		// open a project and open recent project
 		fileOpen = initScMenuItem(K.F_OPEN, "project.open", "",
-				evt -> App.getInstance().selectProject());
+				evt -> App.getInstance().projectSelect());
 		menuFile.add(fileOpen);
 
 		menuFileRecent = new JMenu(I18N.getMsg("file.open.recent"));
@@ -1247,6 +1248,10 @@ public class MainMenu implements MouseListener {
 		toolsEpubCover = initMenuItem("cover.create",
 				evt -> Cover.show(mainFrame));
 		menuTools.add(toolsEpubCover);
+		// full screen for Typist
+		toolsTypistFull = initScMenuItem("typist.full", evt -> mainFrame.typistFullSet());
+		menuTools.add(toolsTypistFull);
+		toolsTypistFull.setVisible(false);
 
 		menuBar.add(menuTools);
 
@@ -1478,14 +1483,12 @@ public class MainMenu implements MouseListener {
 		menuHelp.add(helpTrace);
 
 		devTest = initMenuItem("!Dev-test", evt -> {
-			testFunction = (devTest.getText().contains("Dev"));
-			devTest.setText((testFunction ? "Test in progress" : "Dev-Test"));
-			//function to test
-			if (App.isDev()) {
-				System.out.println("exec test");
-			}
+			//testFunction = (devTest.getText().contains("Dev"));
+			//devTest.setText((testFunction ? "Test in progress" : "Dev-Test"));
+			System.out.println("exec test");
+			test();
 			//restore dev menu
-			devTest.setText((testFunction ? "Test in progress" : "Dev-Test"));
+			//devTest.setText((testFunction ? "Dev-Test" : "Test in progress"));
 		});
 		if (App.isDev()) {
 			menuHelp.add(devTest);
@@ -1559,6 +1562,7 @@ public class MainMenu implements MouseListener {
 		}
 		toolsEpisodes.setVisible(!mainFrame.isEpisode);
 		toolsTypist.setVisible(mainFrame.isEpisode);
+		toolsTypistFull.setVisible(true);
 		menuFile.add(new JSeparator());
 		menuFile.add(menuEdit);
 		menuFile.add(menuNewEntity);
@@ -1757,7 +1761,7 @@ public class MainMenu implements MouseListener {
 				continue;
 			}
 			miRecent.add(initMenuItem("!" + p.title,
-					e -> App.getInstance().openProject(new Project(p.file))));
+					e -> App.getInstance().projectOpen(new Project(p.file))));
 		}
 		miRecent.addSeparator();
 		miRecent.add(initMenuItem("file.clear.recent",
@@ -1802,6 +1806,24 @@ public class MainMenu implements MouseListener {
 		menuBar.add(menuHelp);
 		menuBar.setMaximumSize(new Dimension(1, 1));
 		return menuBar;
+	}
+
+	private void test() {
+		App.setTest();
+		/*JDialog dl = new JDialog();
+		dl.setLayout(new MigLayout(MIG.FILL));
+		dl.setModal(true);
+		JSList ls = new JSList(mainFrame,
+				Book.TYPE.PERSON,
+				mainFrame.project.scenes.get(1L).getPersons());
+		dl.add(ls, MIG.GROW);
+		dl.setMinimumSize(new Dimension(800, 600));
+		dl.setMaximumSize(new Dimension(800, 600));
+		dl.setPreferredSize(new Dimension(800, 600));
+		dl.pack();
+		dl.setLocationRelativeTo(mainFrame);
+		dl.setVisible(true);
+		System.out.println("result='" + ls.getList().toString() + "'");*/
 	}
 
 }

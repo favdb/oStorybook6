@@ -493,7 +493,7 @@ public class WysiwygEditor extends AbstractPanel implements HyperlinkListener {
 	 * initialize phantom menu
 	 */
 	private void initShortcuts() {
-		//LOG.trace(TT + ".initShortcuts()");
+		//LOG.trace(TT + "initShortcuts()");
 		SwingUtil.setFixedSize(shortcut, new Dimension(1, 1));
 		shortcut.add(initButton(actionList, new HTMLLineBreakAction(this)));
 		shortcut.add(initButton(actionList, new HTMLCadratinAction(this, UNBREAK)));
@@ -506,9 +506,17 @@ public class WysiwygEditor extends AbstractPanel implements HyperlinkListener {
 	}
 
 	public void setHide(boolean hide) {
-		//LOG.trace(TT + ".setHide()");
+		//LOG.trace(TT + "setHide()");
 		tb1.setVisible(hide);
 		tb2.setVisible(hide);
+	}
+
+	public void setStatus(boolean b) {
+		statusbar.setVisible(b);
+	}
+
+	public boolean getHide() {
+		return tb1.isVisible() && tb2.isVisible();
 	}
 
 	public JToolBar getLinksBar() {
@@ -1088,6 +1096,19 @@ public class WysiwygEditor extends AbstractPanel implements HyperlinkListener {
 	 */
 	public void showHideTB() {
 		if (btShowHideTB.getText().equals("▲")) {
+			btShowHideTB.setText("▼");
+			toolbar.setMaximumSize(new Dimension(1, 1));
+		} else {
+			btShowHideTB.setText("▲");
+			toolbar.setMaximumSize(new Dimension(SwingUtil.getScreenSize()));
+		}
+	}
+
+	/**
+	 * show or hide the toolbar
+	 */
+	public void setShowHideTB(boolean b) {
+		if (b) {
 			btShowHideTB.setText("▼");
 			toolbar.setMaximumSize(new Dimension(1, 1));
 		} else {

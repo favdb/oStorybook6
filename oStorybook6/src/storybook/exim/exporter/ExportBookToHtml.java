@@ -61,6 +61,7 @@ import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
 import storybook.tools.html.HtmlHome;
 import storybook.ui.MainFrame;
+import storybook.ui.panel.script.Script;
 
 /**
  * Export the whole book to an HTML file (or multifile, or String)
@@ -86,7 +87,15 @@ public class ExportBookToHtml extends AbstractExport {
 	private Chapter lastChapter;
 	private BookParamLayout layout;
 	private BookParamWeb web;
-	private boolean advanced = false;
+	private boolean advanced = false, update = true;
+
+	public void updateSet(boolean value) {
+		update = value;
+	}
+
+	public boolean updateGet() {
+		return update;
+	}
 
 	private void setAdvanced() {
 		advanced = true;
@@ -168,7 +177,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @return true if done
 	 */
 	public static boolean toFile(MainFrame mainFrame, boolean adv) {
-		//LOG.trace(TT + "toFile(mainFrame)");
+		//LOG.trace(TT + "toFile(mainFrame, adv=" + (adv ? "true" : "false") + ")");
 		ExportBookToHtml exp = new ExportBookToHtml(mainFrame);
 		exp.withExternal = true;
 		if (adv) {
@@ -176,7 +185,7 @@ public class ExportBookToHtml extends AbstractExport {
 		}
 		boolean rc = exp.writeFile();
 		if (adv) {
-			// first copy the banner to the Images directory
+			// file copy the banner to the Images directory
 			if (exp.web.getBanner()
 					&& !exp.web.getBannerImg().isEmpty()) {
 				File src = new File(exp.web.getBannerImg());
@@ -213,7 +222,7 @@ public class ExportBookToHtml extends AbstractExport {
 	}
 
 	/**
-	 * create the summary.html for advanced
+	 * create the summary.html for advanced export
 	 *
 	 * @param exp
 	 * @param adv
@@ -233,6 +242,12 @@ public class ExportBookToHtml extends AbstractExport {
 
 	}
 
+	/**
+	 * create a CSS for the summary.html
+	 *
+	 * @param web
+	 * @return
+	 */
 	public static String getCssSummary(BookParamWeb web) {
 		StringBuilder b = new StringBuilder("<style>\n");
 		b.append("body {\n   font-family: sans-serif; font-size: 100%;\n}\n");
@@ -249,7 +264,7 @@ public class ExportBookToHtml extends AbstractExport {
 	}
 
 	/**
-	 * create the cover.html for advanced
+	 * create the cover.html for advanced export
 	 *
 	 * @param exp
 	 * @param adv
@@ -262,26 +277,16 @@ public class ExportBookToHtml extends AbstractExport {
 				.append(Html.HEAD_E)
 				.append(Html.BODY_B);
 		String title = "", subtitle = "";
-		//title
 		if (exp.web.getBanner() && !exp.web.getBannerImg().isEmpty()) {
 			title = exp.book.getTitle();
 			subtitle = exp.book.getSubtitle();
 		}
 		html.append(Html.intoH(1, title, "text-align:center;"));
 		html.append(Html.intoH(2, subtitle, "text-align:center;"));
-		// authors
-		html.append(Html.intoP(I18N.getColonMsg("author_s") + " " + exp.book.getAuthor(), "text-align:center;"));
-		// licence
-		html.append(Html.intoP(I18N.getColonMsg("copyright") + " " + exp.book.getCopyright(), "text-align:center;"));
-		// blurb
+		html.append(Html.intoPcenter(I18N.getColonMsg("author_s") + " " + exp.book.getAuthor()));
+		html.append(Html.intoPcenter(I18N.getColonMsg("copyright") + " " + exp.book.getCopyright()));
 		html.append(Html.intoP(exp.book.getBlurb()));
-		// dedication
 		html.append(ExportBookInfo.getDedication(exp.book, 20));
-		// realized with
-		/*html.append(Html.P_CENTER)
-			.append(
-				Html.intoSmall(Html.intoI(I18N.getMsg("export.by") + " " + Const.getFullName())))
-			.append(Html.P_E);*/
 		html.append(Html.BODY_E).append(Html.HTML_E);
 		IOUtil.fileWriteString(exp.param.getDirectory() + File.separator + "cover.html",
 				html.toString());
@@ -325,7 +330,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @return
 	 */
 	public static List<String> toPrintList(MainFrame mainFrame) {
-		//LOG.trace(TT + ".toPrint(mainFrame)");
+		//LOG.trace(TT + ".toPrintList(mainFrame)");
 		ExportBookToHtml exp = new ExportBookToHtml(mainFrame);
 		exp.tocLink = false;
 		exp.review = false;
@@ -424,12 +429,13 @@ public class ExportBookToHtml extends AbstractExport {
 	}
 
 	/**
-	 * get the book title part
+	 * get the book title
 	 *
 	 * @param adv
 	 * @return
 	 */
 	public String bookGetTitle(boolean adv) {
+		//LOG.trace(TT+"bookGetFile(adv="+LOG.trace(adv)+")");
 		StringBuilder b = new StringBuilder();
 		b.append(ExportBookInfo.getTitle(book, false));
 		if (adv) {
@@ -442,7 +448,7 @@ public class ExportBookToHtml extends AbstractExport {
 	}
 
 	/**
-	 * write a file
+	 * write to the file
 	 *
 	 * @return
 	 */
@@ -478,10 +484,10 @@ public class ExportBookToHtml extends AbstractExport {
 		closeFile(SILENT);
 		// copy used images the imageList was created by bookGetText
 		for (String src : imageList) {
-			File inFile = new File(src.replace("file:", ""));
-			if (inFile.exists()) {
-				File outFile = new File(imgdir + inFile.getName());
-				IOUtil.fileCopy(inFile, outFile);
+			File inF = new File(src.replace("file:", ""));
+			if (inF.exists()) {
+				File outF = new File(imgdir + inF.getName());
+				IOUtil.fileCopy(inF, outF);
 			}
 		}
 		JOptionPane.showMessageDialog(mainFrame,
@@ -606,6 +612,15 @@ public class ExportBookToHtml extends AbstractExport {
 		return (adv ? Html.intoH(level, b.toString()) : b.toString());
 	}
 
+	/**
+	 * get the title of the given name and text
+	 *
+	 * @param level
+	 * @param name
+	 * @param text
+	 * @param style
+	 * @return
+	 */
 	private String titleOf(int level, String name, String text, String... style) {
 		if (EXIM.getTitle(text).isEmpty()) {
 			return "";
@@ -621,7 +636,7 @@ public class ExportBookToHtml extends AbstractExport {
 	}
 
 	/**
-	 * get the Part table of content
+	 * get the Part table of content (toc)
 	 *
 	 * @param part
 	 * @param level
@@ -638,6 +653,12 @@ public class ExportBookToHtml extends AbstractExport {
 		}
 	}
 
+	/**
+	 * get the title for the given Part
+	 *
+	 * @param part
+	 * @return
+	 */
 	public String titlePart(Part part) {
 		if (layout.getPartTitle()) {
 			return titleOf(1, part.getIdent(), part.getName());
@@ -817,9 +838,9 @@ public class ExportBookToHtml extends AbstractExport {
 		return buffer.toString();
 	}
 
-	/* *************************** */
- /* ******** get Chapter ****** */
- /* *************************** */
+	//* *************************** */
+	//* ******** get Chapter ****** */
+	//* *************************** */
 	/**
 	 * get the begining Chapter context, open the file if it's needed
 	 *
@@ -992,6 +1013,9 @@ public class ExportBookToHtml extends AbstractExport {
 		return null;
 	}
 
+	//** ******************************* **//
+	//** ** get the Scene ************** **//
+	//** ******************************* **//
 	/**
 	 * check for Scene possible insertion
 	 *
@@ -1011,11 +1035,14 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @param scene
 	 */
 	private String sceneGetContent(Scene scene) {
-		//LOG.trace(TT + "sceneGetContent(scene=" + LOG.printInfos(scene) + ")");
+		//LOG.trace(TT + "sceneGetContent(scene=" + LOG.trace(scene) + ")");
 		StringBuilder sb = new StringBuilder();
 		sb.append(sceneBegin(scene));
 		String x = scene.getTextToHtml(param.isMulti());
-		if (withExternal) {
+		if (Script.isScript(x)) {
+			Script script = new Script(scene);
+			x = script.toHtml(scene);
+		} else if (withExternal) {
 			x = getTextExternal(scene, param.isMulti());
 		}
 		if (toFile) {
@@ -1322,6 +1349,9 @@ public class ExportBookToHtml extends AbstractExport {
 		}
 	}
 
+	//******************************************//
+	//** nav bar *******************************//
+	//******************************************//
 	/**
 	 * get nav bar for chapter and/or scene
 	 *
@@ -1463,6 +1493,9 @@ public class ExportBookToHtml extends AbstractExport {
 		return buf.toString();
 	}
 
+	//******************************************//
+	//** utilities methods                    **//
+	//******************************************//
 	/**
 	 * get the Chapter file name
 	 *
@@ -1495,7 +1528,9 @@ public class ExportBookToHtml extends AbstractExport {
 		return (endnotes != null && !endnotes.isEmpty());
 	}
 
-	/* **** get a Part **** */
+	//******************************************//
+	//** get Part                             **//
+	//******************************************//
 	/**
 	 * get the begining of a given Part
 	 *

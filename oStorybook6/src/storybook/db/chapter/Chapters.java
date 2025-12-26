@@ -435,6 +435,14 @@ public class Chapters extends AbsEntitys {
 	}
 
 	/**
+	 * sort chapters by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(chapters, (Chapter r1, Chapter r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
+	/**
 	 * sort the chapters by chapter number
 	 */
 	public void sortByNumber() {

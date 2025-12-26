@@ -299,7 +299,7 @@ public class MainFrame extends JFrame implements IPaintable {
 	 *
 	 */
 	public void typistActivate() {
-		//LOG.printInfos(TT+"activateTipist()=>" + (isTypist ? "true" : "false"));
+		//LOG.trace(TT+"typistActivate()=>" + (isTypist ? "true" : "false"));
 		if (isTypist) {
 			this.setVisible(true);
 			if (project.book.info.scenarioGet() || isScenario) {
@@ -1150,7 +1150,7 @@ public class MainFrame extends JFrame implements IPaintable {
 		}
 		Project newDB = new Project(outFile);
 		String newPath = newDB.getPath();
-		App.getInstance().openProject(newDB, oldPath, newPath);
+		App.getInstance().projectOpen(newDB, oldPath, newPath);
 	}
 
 	public void fileRename() {
@@ -1385,6 +1385,15 @@ public class MainFrame extends JFrame implements IPaintable {
 		}
 	}
 
+	public void typistFullSet() {
+		//LOG.trace(TT + "typistFullSet()");
+		if (typistScene != null) {
+			typistScene.setFull();;
+		} else {
+			LOG.err("not typist mode");
+		}
+	}
+
 	/**
 	 * class for dynamic view
 	 */
@@ -1613,7 +1622,7 @@ public class MainFrame extends JFrame implements IPaintable {
 			close(false);
 			project.doRestore(backup);
 		}
-		App.getInstance().openProject(project);
+		App.getInstance().projectOpen(project);
 	}
 
 	/**

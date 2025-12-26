@@ -35,7 +35,7 @@ public class Const {
 	public enum STORYBOOK {
 		NAME("oStorybook"),
 		VERSION_MAJOR("6"),
-		VERSION_MINOR("04"),
+		VERSION_MINOR("05"),
 		VERSION(VERSION_MAJOR + "." + VERSION_MINOR),
 		//replace alpha by empty string for a stable release
 		VERSION_ALPHA(""),

@@ -223,26 +223,30 @@ public class Assistant {
 	 */
 	public static List<String> getListOf(String section, String item) {
 		List<String> list = new ArrayList<>();
-		Assistant assist = App.getAssistant();
-		if (assist != null) {
-			Node node = xml.getSectionSingle(section);
-			if (node != null) {
-				NodeList childs = AssistantXml.getTab(node);
-				if (childs.getLength() > 0) {
-					NodeList cbx = childs.item(0).getChildNodes();
-					for (int i = 0; i < cbx.getLength(); i++) {
-						if (Xml.attributeGet(cbx.item(i), "name").equals(item)) {
-							NodeList elems = cbx.item(i).getChildNodes();
-							for (int j = 0; j < elems.getLength(); j++) {
-								String val = Xml.attributeGet(elems.item(j), "title");
-								if (val != null && !val.isEmpty()) {
-									list.add(val);
+		try {
+			Assistant assist = App.getAssistant();
+			if (assist != null) {
+				Node node = xml.getSectionSingle(section);
+				if (node != null) {
+					NodeList childs = AssistantXml.getTab(node);
+					if (childs.getLength() > 0) {
+						NodeList cbx = childs.item(0).getChildNodes();
+						for (int i = 0; i < cbx.getLength(); i++) {
+							if (Xml.attributeGet(cbx.item(i), "name").equals(item)) {
+								NodeList elems = cbx.item(i).getChildNodes();
+								for (int j = 0; j < elems.getLength(); j++) {
+									String val = Xml.attributeGet(elems.item(j), "title");
+									if (val != null && !val.isEmpty()) {
+										list.add(val);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
+		} catch (Exception ex) {
+			LOG.err("unable to get Assistant", ex);
 		}
 		return list;
 	}

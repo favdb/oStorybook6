@@ -288,6 +288,11 @@ public class ShefEditor extends JPanel {
 		return this.showStatus;
 	}
 
+	public void hideStatus(boolean b) {
+		showStatus = b;
+		getWysiwyg().setStatus(!b);
+	}
+
 	/**
 	 * print out the version
 	 *

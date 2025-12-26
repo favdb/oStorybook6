@@ -322,6 +322,7 @@ public class EntityUtil {
 	 * @param entity to delete
 	 */
 	public static void delete(MainFrame mainFrame, AbstractEntity entity) {
+		LOG.trace(TT + "delete(mainFrame, entity=" + LOG.trace(entity) + ")");
 		// check if read only
 		String msg = "";
 		List<Long> readOnlyIds = EntityUtil.getReadOnlyIds(entity);

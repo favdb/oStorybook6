@@ -63,7 +63,7 @@ public class Exporter {
 		}
 		if (SbViewFactory.isTable(view)) {
 			ExportSTable.export(mainFrame, view);
-			return (true);
+			return true;
 		}
 		if (!allowed()) {
 			//LOG.trace("view not allowed to export");
@@ -132,8 +132,8 @@ public class Exporter {
 
 	private void success(JPanel panel, String file) {
 		JOptionPane.showMessageDialog(panel,
-		   file + "\n" + I18N.getMsg("export.success"),
-		   I18N.getMsg("export"), 1);
+				file + "\n" + I18N.getMsg("export.success"),
+				I18N.getMsg("export"), 1);
 	}
 
 	/**
@@ -193,8 +193,8 @@ public class Exporter {
 				Object o = model.getValueAt(r, c);
 				if (o instanceof Color) {
 					b.append("    <td style=\"background-color:#")
-					   .append(ColorUtil.getHexName((Color) o))
-					   .append("\">");
+							.append(ColorUtil.getHexName((Color) o))
+							.append("\">");
 				} else {
 					b.append(Html.TD_B);
 				}

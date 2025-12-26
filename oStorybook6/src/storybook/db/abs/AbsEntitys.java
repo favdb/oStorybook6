@@ -54,6 +54,8 @@ public abstract class AbsEntitys {
 
 	public abstract int getCount();
 
+	public abstract void sortById();
+
 	public abstract void setLinks();
 
 	public abstract String toXml();

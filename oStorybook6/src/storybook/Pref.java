@@ -283,6 +283,8 @@ public class Pref {
 				+ "0"//storyboard
 				+ "1"//typist
 		),
+		TYPIST_FULL("TypistFull", "0"),
+		TYPIST_SHEF("TypistShef", "0"),
 		TYPIST_SHOWBAR("TypistShowBar", "1"),
 		TYPIST_SHOWINFO("TypistShowInfo", "0"),
 		TYPIST_USE("TypistUse", "0"),
@@ -578,6 +580,22 @@ public class Pref {
 
 	public boolean typistShowbarGet() {
 		return getBoolean(KEY.TYPIST_SHOWBAR);
+	}
+
+	public void typistFullSet(boolean b) {
+		setBoolean(KEY.TYPIST_FULL, b);
+	}
+
+	public boolean typistFullGet() {
+		return getBoolean(KEY.TYPIST_FULL);
+	}
+
+	public void typistShefSet(boolean b) {
+		setBoolean(KEY.TYPIST_SHEF, b);
+	}
+
+	public boolean typistShefGet() {
+		return getBoolean(KEY.TYPIST_SHEF);
 	}
 
 	public void typistShowinfoSet(boolean b) {

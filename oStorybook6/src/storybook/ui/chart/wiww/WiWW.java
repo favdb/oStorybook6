@@ -149,8 +149,8 @@ public class WiWW extends AbstractPersonsChart implements ChangeListener {
 
 	@Override
 	public JPanel getPanelToExport() {
-		//TODO à faire
-		return (null);
+		//no export for this view
+		return null;
 	}
 
 }

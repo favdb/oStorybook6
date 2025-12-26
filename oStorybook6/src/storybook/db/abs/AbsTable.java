@@ -648,7 +648,7 @@ public abstract class AbsTable extends AbstractPanel implements
 		return new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				LOG.trace(ATT + "deleteAciotn()");
+				//LOG.trace(ATT + "deleteAction()");
 				deleteDo();
 			}
 		};

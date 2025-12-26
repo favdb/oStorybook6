@@ -57,6 +57,14 @@ public class Genders extends AbsEntitys {
 		}
 	}
 
+	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(genders, (Gender r1, Gender r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
 	@Override
 	public int getIdx(Long id) {
 		for (Gender p : genders) {
@@ -117,7 +125,7 @@ public class Genders extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Gender r1, Gender r2)
-		   -> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 

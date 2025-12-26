@@ -50,7 +50,7 @@ public class Book {
 	}
 
 	public void load() {
-		//LOG.printInfos(TT + "load() " + (project.rootNode == null ? "rootNode null" : project.getFilename()));
+		//LOG.trace(TT + "load() " + (project.rootNode == null ? "rootNode null" : project.getFilename()));
 		if (project.rootNode != null) {
 			info.init();
 			param.init();

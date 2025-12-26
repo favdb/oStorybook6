@@ -56,7 +56,7 @@ import storybook.ui.MainFrame;
  */
 public class Scenes extends AbsEntitys {
 
-	private static final String TT = "Scenes.";
+	private static final String TT = "Scenes";
 	private final List<Scene> scenes = new ArrayList<>();
 	private boolean changeDateRel;
 
@@ -94,7 +94,7 @@ public class Scenes extends AbsEntitys {
 				try {
 					scenes.set(getIdx(entity.getId()), (Scene) entity);
 				} catch (Exception ex) {
-					LOG.err(TT + ".save(entity) error", ex);
+					LOG.err(TT + "save(entity) error", ex);
 					return;
 				}
 			}
@@ -332,19 +332,20 @@ public class Scenes extends AbsEntitys {
 	 * create a Scene and initialize the Strand and the Chapter
 	 *
 	 * @param id
+	 * @param number
 	 * @param strand
 	 * @param chapter
 	 * @return
 	 */
-	public static Scene create(Long id, Strand strand, Chapter chapter) {
+	public static Scene create(Long id, int number, Strand strand, Chapter chapter) {
 		Scene scene = new Scene();
 		scene.setId(id);
 		scene.setStrand(strand);
 		scene.setStatus(1);
 		scene.setChapter(chapter);
-		scene.setSceneno(1);
+		scene.setSceneno(number);
 		scene.setDate(null);
-		scene.setTitle(I18N.getMsg("scene") + " 1");
+		scene.setTitle(I18N.getMsg("scene") + " " + number);
 		scene.setSummary("<p></p>");
 		scene.setNotes("");
 		return scene;
@@ -1191,10 +1192,25 @@ public class Scenes extends AbsEntitys {
 	}
 
 	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(scenes, (Scene r1, Scene r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
+	/**
 	 * sort scenes by scene number
 	 */
 	public void sortByNumber() {
 		Collections.sort(scenes, (Scene r1, Scene r2) -> r1.getSceneno().compareTo(r2.getSceneno()));
+	}
+
+	/**
+	 * sort scenes by CCSS
+	 */
+	public void sortByCCSS() {
+		Collections.sort(scenes, (Scene r1, Scene r2) -> r1.getCCSS().compareTo(r2.getCCSS()));
 	}
 
 	/**

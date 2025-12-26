@@ -85,6 +85,14 @@ public class Memos extends AbsEntitys {
 	}
 
 	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(memos, (Memo r1, Memo r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
+	/**
 	 * get the tools tip for the given Memo/Tag
 	 *
 	 * @param buf
@@ -159,7 +167,7 @@ public class Memos extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Memo r1, Memo r2)
-		   -> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -167,8 +175,8 @@ public class Memos extends AbsEntitys {
 		List<String> ls = new ArrayList<>();
 		for (Memo p : memos) {
 			if (p.getCategory() != null
-			   && !p.getCategory().isEmpty()
-			   && !ls.contains(p.getCategory())) {
+					&& !p.getCategory().isEmpty()
+					&& !ls.contains(p.getCategory())) {
 				ls.add(p.getCategory());
 			}
 		}
@@ -191,7 +199,7 @@ public class Memos extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Memo r1, Memo r2)
-		   -> r1.getCategory().compareTo(r2.getCategory()));
+				-> r1.getCategory().compareTo(r2.getCategory()));
 		return ls;
 	}
 

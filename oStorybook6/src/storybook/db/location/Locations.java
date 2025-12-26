@@ -115,6 +115,14 @@ public class Locations extends AbsEntitys {
 		return locations;
 	}
 
+	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(locations, (Location r1, Location r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
 	@Override
 	public int getCount() {
 		return locations.size();
@@ -131,7 +139,7 @@ public class Locations extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Location r1, Location r2)
-		   -> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -186,8 +194,8 @@ public class Locations extends AbsEntitys {
 		List<String> ls = new ArrayList<>();
 		for (Location s : locations) {
 			if (s.hasCountry()
-			   && s.getCountry().equals(country)
-			   && !ls.contains(s.getCity())) {
+					&& s.getCountry().equals(country)
+					&& !ls.contains(s.getCity())) {
 				ls.add(s.getCity());
 			}
 		}
@@ -199,8 +207,8 @@ public class Locations extends AbsEntitys {
 		List<Location> ls = new ArrayList<>();
 		for (Location s : locations) {
 			if (s.hasCountry()
-			   && countries.contains(s.getCountry())
-			   && !ls.contains(s)) {
+					&& countries.contains(s.getCountry())
+					&& !ls.contains(s)) {
 				ls.add(s);
 			}
 		}
@@ -212,7 +220,7 @@ public class Locations extends AbsEntitys {
 		List<Location> ls = new ArrayList<>();
 		for (Location s : locations) {
 			if (s.hasCountry()
-			   && country.equals(s.getCountry())) {
+					&& country.equals(s.getCountry())) {
 				ls.add(s);
 			}
 		}
@@ -224,7 +232,7 @@ public class Locations extends AbsEntitys {
 		List<Location> ls = new ArrayList<>();
 		for (Location s : locations) {
 			if (s.hasCity()
-			   && city.equals(s.getCity())) {
+					&& city.equals(s.getCity())) {
 				ls.add(s);
 			}
 		}
@@ -236,7 +244,7 @@ public class Locations extends AbsEntitys {
 		List<Location> ls = new ArrayList<>();
 		for (Location s : locations) {
 			if (s.hasCountry() && country.equals(s.getCountry())
-			   && s.hasCity() && city.equals(s.getCity())) {
+					&& s.hasCity() && city.equals(s.getCity())) {
 				ls.add(s);
 			}
 		}
@@ -257,7 +265,7 @@ public class Locations extends AbsEntitys {
 		@SuppressWarnings("unchecked")
 		List<Location> ls = getList();
 		Collections.sort(ls, (Location it1, Location it2)
-		   -> it1.getCountryCity().compareTo(it2.getCountryCity()));
+				-> it1.getCountryCity().compareTo(it2.getCountryCity()));
 		return ls;
 	}
 

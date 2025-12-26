@@ -25,6 +25,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import storybook.Const;
 import storybook.db.abs.AbstractEntity;
@@ -75,26 +76,28 @@ public class RelationEdit extends AbstractEditor {
 		tfDescription = new JTextField(Html.htmlToText(relation.getDescription()));
 		pUpper.add(tfDescription, MIG.GROWX);
 
+		//todo replace check list by JSList
 		JPanel links = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.FILLX)));
 		lsPersons = Ui.initCkList(links, mainFrame, Book.TYPE.PERSON,
-		   relation.getPersons(), null, BBORDER);
+				relation.getPersons(), null, BBORDER);
 		lsLocations = Ui.initCkList(links, mainFrame, Book.TYPE.LOCATION,
-		   relation.getLocations(), null, BBORDER);
+				relation.getLocations(), null, BBORDER);
 		lsItems = Ui.initCkList(links, mainFrame, Book.TYPE.ITEM,
-		   relation.getItems(), null, BBORDER);
-		pUpper.add(links, MIG.get(MIG.NEWLINE, MIG.SPAN, MIG.GROW));
+				relation.getItems(), null, BBORDER);
+		JScrollPane scroll = new JScrollPane(links);
+		tab1.add(scroll, I18N.getMsg("links"));
 	}
 
 	@Override
 	public boolean verifier() {
 		resetError();
 		if (cbSceneStart.getSelectedItem() != null
-		   && cbSceneEnd.getSelectedItem() == null) {
+				&& cbSceneEnd.getSelectedItem() == null) {
 			errorMsg(cbSceneEnd, Const.ERROR_MISSING);
 		}
 		if (lsPersons.getSelectedEntities().isEmpty()
-		   && lsLocations.getSelectedEntities().isEmpty()
-		   && lsItems.getSelectedEntities().isEmpty()) {
+				&& lsLocations.getSelectedEntities().isEmpty()
+				&& lsItems.getSelectedEntities().isEmpty()) {
 			errorMsg(lsPersons, "error.must_select");
 		}
 		return (msgError.isEmpty());

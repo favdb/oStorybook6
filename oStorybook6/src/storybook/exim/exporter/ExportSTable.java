@@ -24,13 +24,12 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
-import storybook.App;
-import storybook.Pref;
+import storybook.db.abs.AbsTable;
 import storybook.tools.DateUtil;
 import storybook.tools.LOG;
+import storybook.tools.TextUtil;
 import storybook.ui.MainFrame;
 import storybook.ui.SbView;
-import storybook.db.abs.AbsTable;
 
 /**
  * Export only the visibles columns from a JSTable
@@ -41,7 +40,7 @@ import storybook.db.abs.AbsTable;
  */
 public class ExportSTable extends AbstractExport {
 
-	private static final String TT = "ExportSTable";
+	private static final String TT = "ExportSTable.";
 
 	private final JTable xtable;
 
@@ -51,7 +50,7 @@ public class ExportSTable extends AbstractExport {
 	 * @param view
 	 */
 	public ExportSTable(MainFrame mainFrame, SbView view) {
-		super(mainFrame, App.preferences.getString(Pref.KEY.EXP_FORMAT));
+		super(mainFrame, mainFrame.project.book.param.getParamExport().getFormat());
 		this.xtable = getSTable(view);
 	}
 
@@ -113,22 +112,24 @@ public class ExportSTable extends AbstractExport {
 	}
 
 	public static void export(MainFrame m, SbView view) {
-		//LOG.trace(TT + ".export(mainFrame, view=" + view.toString() + ")");
+		//LOG.trace(TT + "export(mainFrame, view=" + view.toString() + ")");
 		String viewName = I18N.getMsg(view.getName().toLowerCase());
 		if (getSTable(view) == null) {
-			LOG.err(TT + ".export(...) error view " + viewName + " doesn't contain a JSTable");
+			LOG.err(TT + "export(...) error view " + viewName + " doesn't contain a JSTable");
 			return;
 		}
-		if (ExportOptionsDlg.show(m)) {
+		ExportOptionsDlg dlg = new ExportOptionsDlg(m);
+		dlg.setVisible(true);
+		if (dlg.isCanceled()) {
 			return;
 		}
 		ExportSTable export = new ExportSTable(m, view);
 		String tname = "table_" + viewName;
 		if (export.askFileExists(tname)
-		   && JOptionPane.showConfirmDialog(m,
-			  I18N.getMsg("export.replace", export.param.getFileName()),
-			  I18N.getMsg(KW.EXPORT.toString()),
-			  JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
+				&& JOptionPane.showConfirmDialog(m,
+						I18N.getMsg("export.replace", export.param.getFileName()),
+						I18N.getMsg(KW.EXPORT.toString()),
+						JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
 			return;
 		}
 		if (!export.openFile(tname, false)) {
@@ -139,7 +140,7 @@ public class ExportSTable extends AbstractExport {
 	}
 
 	public void writeTable() {
-		//App.trace(TT+".writeTable() table="+name);
+		//LOG.trace(TT+"writeTable() table="+name);
 		if (!isOpened) {
 			return;
 		}
@@ -160,12 +161,12 @@ public class ExportSTable extends AbstractExport {
 					break;
 				case "xml":
 					writeText("<"
-					   + xtable.getName().toLowerCase().replace("table", "")
-					   + ">" + "\n");
+							+ xtable.getName().toLowerCase().replace("table", "")
+							+ ">" + "\n");
 					break;
 				case "csv":
 				case "txt":
-					//writeText("\n");
+					writeText("\n");
 					break;
 				default:
 					break;
@@ -176,7 +177,7 @@ public class ExportSTable extends AbstractExport {
 				if (obj == null) {
 					obj = "";
 				}
-				String value = obj.toString();
+				String value = TextUtil.toText(obj.toString()).trim();
 				if (value.startsWith("java.awt.Color")) {
 					value = convertColor(value);
 				} else if (obj instanceof Boolean) {
@@ -194,7 +195,7 @@ public class ExportSTable extends AbstractExport {
 							break;
 						case "csv":
 							writeText(beginField + value + endField
-							   + (j < headers.size() - 1 ? param.getCsvComma() : ""));
+									+ (j < headers.size() - 1 ? param.getCsvComma() : ""));
 							break;
 						case "txt":
 							writeText(value + (j < headers.size() - 1 ? param.getTxtSeparator() : ""));
@@ -210,8 +211,8 @@ public class ExportSTable extends AbstractExport {
 					break;
 				case "xml":
 					writeText("</"
-					   + xtable.getName().toLowerCase().replace("table", "")
-					   + ">" + "\n");
+							+ xtable.getName().toLowerCase().replace("table", "")
+							+ ">" + "\n");
 					break;
 				case "csv":
 				case "txt":
@@ -265,7 +266,7 @@ public class ExportSTable extends AbstractExport {
 						break;
 					case "csv":
 						writeText(param.getCsvQuote() + header.getName() + param.getCsvQuote()
-						   + param.getCsvComma() + (j < headers.size() - 1 ? param.getTxtSeparator() : ""));
+								+ param.getCsvComma() + (j < headers.size() - 1 ? param.getTxtSeparator() : ""));
 						break;
 					case "txt":
 						writeText(header.getName() + (j < headers.size() - 1 ? param.getTxtSeparator() : ""));

@@ -70,12 +70,14 @@
     nbproject/build-impl.xml file.
 
     -->
-    <property name="sb.version" value="6.04" />
+    <property name="sb.version" value="6.05" />
+    <property name="sb.version.next" value="6.06" />
     <property name="sb.distdir" value="${basedir}/distrib/${sb.version}" />
     <property name="sb.distzip" value="${sb.distdir}/oStorybook-${sb.version}.zip" />
     <property name="sb.file.name" value="oStorybook" />
     <property name="sb.jar.name" value="${sb.file.name}.jar" />
-    <property name="sb.linux.deployment.dir" value="${basedir}/deployment/linux" />
+    <property name="sb.deployment" value="${basedir}/deployment" />
+    <property name="sb.linux.deployment.dir" value="${sb.deployment}/linux" />
     <property name="sb.debian.distdir" value="${sb.distdir}/debian-package" />
     <property name="sb.debian.deployment.dir" value="${sb.linux.deployment.dir}/debian" />
     <property name="sb.debian.app" value="${sb.debian.distdir}/usr/share/ostorybook"/>
@@ -196,7 +198,7 @@
         <property name="sb.mac.installer.template" value="Storybook_template.dmg" />
         <property name="sb.macfile" value="${sb.distdir}/oStorybook" />
         <tar basedir="${sb.distdir}/${jarbundler.name}.app" destfile="${sb.macfile}.tar" />
-        <gzip src="${sb.macfile}.tar" destfile="${sb.macfile}-${sb.version}-macOSx.tar.gz"/>
+        <gzip src="${sb.macfile}.tar" destfile="${sb.macfile}-${sb.version}.tar.gz"/>
         <delete file="${sb.macfile}.tar"/>
         <delete dir="${sb.distdir}/${jarbundler.name}.app"/>
         <echo level="info" message="--- end of build-macosx"/>
@@ -289,13 +291,10 @@
     <!-- ===Build all packages============================================= -->
     <target name="app-all"
             depends="build-pre-compile, build-linux, build-appzip, build-macosx,
-                 build-windows, build-zipsrc, build-debian">
+                 build-windows, build-zipsrc, build-debian, build-checksums, app-download-content">
         <echo level="info" message="--- start of app-all"/>
         <copy file="Versions.txt" todir="${sb.distdir}" />
         <copy file="${basedir}/dist/oStorybook.jar" todir="${sb.distdir}" />
-        <!-- <exec executable="ls" failonerror="true">
-            <arg line=" -sh ${sb.distdir}"/>
-        </exec> -->
         <echo level="info" message="--- end of app-all"/>
     </target>
     <!-- ===Statistics===================================================== -->
@@ -347,5 +346,47 @@
         <echo level="info" message="--- start of -post-compile"/>
         <!-- <copy file="actions.xml" todir="${build.classes.dir}" /> -->
         <echo level="info" message="--- end of -post-compile"/>
+    </target>
+    <target name="build-checksums">
+        <echo level="info" message="--- start of build-checksums"/>
+        
+        <delete>
+            <fileset dir="${sb.distdir}">
+                <include name="oStorybook-*.sha256"/>
+            </fileset>
+        </delete>
+        
+        <checksum algorithm="SHA-256" 
+                  fileext=".sha256" 
+                  format="CHECKSUM">
+            <fileset dir="${sb.distdir}">
+                <include name="oStorybook-*.zip"/>
+                <include name="oStorybook-*.tar.gz"/>
+                <include name="oStorybook-*.exe"/>
+                <include name="oStorybook-*.deb"/>
+                <include name="oStorybook-*.rpm"/>
+                <include name="oStorybook-*.bin"/>
+            </fileset>
+        </checksum>
+        
+        <echo level="info" message="SHA-256 checksums generated in ${sb.checksum.file}"/>
+        <echo level="info" message="--- end of build-checksums"/>
+    </target>
+    <target name="app-download-content">
+        <echo level="info" message="--- start of generate-download-content"/>
+        
+        <filterset id="html.version.filters">
+            <filter token="current.version" value="${sb.version}"/>
+            <filter token="next.version" value="${sb.version.next}"/>
+        </filterset>
+
+        <copy file="${sb.deployment}/template_download.html" 
+              tofile="${sb.distdir}/index.html" 
+              encoding="utf-8" overwrite="true">
+            <filterset refid="html.version.filters"/>
+        </copy>
+        
+        <echo level="info" message="Download content HTML generated in ${sb.distdir}/index.html"/>
+        <echo level="info" message="--- end of generate-download-content"/>
     </target>
 </project>

@@ -87,7 +87,7 @@ public class XmlUtil {
 	 */
 	public static String setAttribute(int tab, XmlKey.XK key, String value) {
 		if (value == null) {
-			return null;
+			return "";
 		}
 		return setAttribute(tab, key.toString().toLowerCase(),
 				value.replace("&", "&amp;")
@@ -287,13 +287,20 @@ public class XmlUtil {
 		return getString(node, key.toString().toLowerCase());
 	}
 
-	public static String getString(Node node, String n) {
+	/**
+	 * get a String value of a node attribute, if not exists return ""
+	 *
+	 * @param node
+	 * @param key
+	 * @return
+	 */
+	public static String getString(Node node, String key) {
 		Element e = (Element) node;
-		String value = (e.getAttribute(n).trim());
+		String value = e.getAttribute(key);
 		if (value == null) {
 			return "";
 		}
-		return value.replace("&amp;", "&")
+		return value.trim().replace("&amp;", "&")
 				.replace("&lt;", "<")
 				.replace("&gt;", ">")
 				.replace("&quot;", "\"")

@@ -37,6 +37,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLConnection;
 import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -180,19 +182,27 @@ public class IOUtil {
 	}
 
 	/**
-	 * write a String to a File
+	 * write a String to the given File
 	 *
 	 * @param file
 	 * @param str
 	 * @return true if OK
 	 */
 	public static boolean fileWriteString(File file, String str) {
-		//LOG.printInfos(TT+".fileWriteString(file=" + file.getAbsolutePath() + ",str)");
+		//LOG.trace(TT+".fileWriteString(file=" + file.getAbsolutePath() + ",str)");
 		try {
+			if (file.exists()) {
+				String currentFileHash = getHash(file);
+				String newStringHash = getStringHash(str);
+				if (currentFileHash != null && currentFileHash.equals(newStringHash)) {
+					return true;
+				}
+			}
 			file.createNewFile();
 			try (BufferedWriter f = new BufferedWriter(new FileWriter(file))) {
 				f.write(str);
 				f.flush();
+				f.close();
 			}
 			return true;
 		} catch (IOException e) {
@@ -200,6 +210,27 @@ public class IOUtil {
 					+ ",str len=" + str.length() + ")", e);
 		}
 		return false;
+	}
+
+	/**
+	 * get digest for the give String
+	 *
+	 * @param str
+	 * @return
+	 */
+	private static String getStringHash(String str) {
+		try {
+			MessageDigest digest = MessageDigest.getInstance("MD5");
+			// On utilise UTF-8 pour être cohérent avec les standards actuels
+			byte[] hashBytes = digest.digest(str.getBytes("UTF-8"));
+			StringBuilder sb = new StringBuilder();
+			for (byte b : hashBytes) {
+				sb.append(String.format("%02x", b));
+			}
+			return sb.toString();
+		} catch (Exception ex) {
+			return null;
+		}
 	}
 
 	/**
@@ -279,6 +310,36 @@ public class IOUtil {
 	}
 
 	/**
+	 * get the digest for the given file
+	 *
+	 * @param file
+	 * @return
+	 */
+	private static String getHash(File file) {
+		if (!file.exists() || !file.isFile()) {
+			return "";
+		}
+		try (InputStream is = new FileInputStream(file)) {
+			MessageDigest digest = MessageDigest.getInstance("MD5");
+			byte[] buffer = new byte[8192];
+			int read;
+			while ((read = is.read(buffer)) > 0) {
+				digest.update(buffer, 0, read);
+			}
+			byte[] hashBytes = digest.digest();
+
+			// Conversion des octets en format hexadécimal
+			StringBuilder sb = new StringBuilder();
+			for (byte b : hashBytes) {
+				sb.append(String.format("%02x", b));
+			}
+			return sb.toString();
+		} catch (IOException | NoSuchAlgorithmException ex) {
+			return null;
+		}
+	}
+
+	/**
 	 * copy a File
 	 *
 	 * @param inFile: file to copy
@@ -288,6 +349,15 @@ public class IOUtil {
 	public static boolean fileCopy(File inFile, File outFile) {
 		/*LOG.printInfos(TT + ".fileCopy(inFile='" + inFile.getAbsolutePath()
 			+ "', outFile='" + outFile.getAbsolutePath() + "')");*/
+		if (outFile.exists()) {
+			if (inFile.length() == outFile.length()) {
+				String inHash = getHash(inFile);
+				String outHash = getHash(outFile);
+				if (inHash != null && inHash.equals(outHash)) {
+					return true;
+				}
+			}
+		}
 		try {
 			FileOutputStream os;
 			try (FileInputStream is = new FileInputStream(inFile)) {

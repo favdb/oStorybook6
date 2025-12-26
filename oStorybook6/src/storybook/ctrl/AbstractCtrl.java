@@ -231,7 +231,7 @@ public abstract class AbstractCtrl implements PropertyChangeListener {
 							}
 							return;
 						case EXPORT:
-							bookModel.setExport((SbView) newValue);
+							//bookModel.setExport((SbView) newValue);
 							return;
 						case PRINT:
 							bookModel.setPrint((SbView) newValue);

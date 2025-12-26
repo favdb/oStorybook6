@@ -141,7 +141,7 @@ public class Model extends AbstractModel {
 		}
 		Chapter chapter = (Chapter) mainFrame.project.chapters.getList().get(0);
 		// first scene
-		mainFrame.project.write(Scenes.create(mainFrame.project.scenes.getLast() + 1L, strand, chapter));
+		mainFrame.project.write(Scenes.create(mainFrame.project.scenes.getLast() + 1L, 1, strand, chapter));
 		// default genders
 		mainFrame.project.write(new Gender(I18N.getMsg("person.gender.male"), 6, 12, 18, 65));
 		mainFrame.project.write(new Gender(I18N.getMsg("person.gender.female"), 6, 12, 18, 65));
@@ -475,10 +475,9 @@ public class Model extends AbstractModel {
 	 *
 	 * @param view
 	 */
-	public void setExport(SbView view) {
-		//TODO set export for the given SbView
-	}
-
+	//public void setExport(SbView view) {
+	//empty
+	//}
 	/**
 	 * change the zoom of the Chrono
 	 *
@@ -665,6 +664,7 @@ public class Model extends AbstractModel {
 	 * @param entity
 	 */
 	public synchronized void ENTITY_Delete(AbstractEntity entity) {
+		LOG.trace(TT + "ENTITY_Delete(entity=" + LOG.trace(entity) + ")");
 		if (entity == null) {
 			return;
 		}
@@ -1080,17 +1080,27 @@ public class Model extends AbstractModel {
 	}
 
 	////// Plot
+	/**
+	 * detele a Plot
+	 *
+	 * @param entity
+	 */
 	public synchronized void PLOT_Delete(Plot entity) {
+		//LOG.trace(TT + "PLOT_Delete(entity=" + LOG.trace(entity) + ")");
 		if (entity.getId() == null) {
 			return;
 		}
 		// delete plot assignments
 		List<Scene> scenes = mainFrame.project.scenes.findPlot(entity);
-		for (Scene scene : scenes) {
-			scene.getPlots().remove(entity);
-			ENTITY_Update(scene);
+		if (!scenes.isEmpty()) {
+			for (Scene scene : scenes) {
+				if (scene.getPlots().contains(entity)) {
+					scene.getPlots().remove(entity);
+					ENTITY_Update(scene);
+				}
+			}
 		}
-		// delete plot
+		// delete the plot
 		mainFrame.project.plots.delete(entity);
 		firePropertyChange(PLOT, DELETE, entity, null);
 	}

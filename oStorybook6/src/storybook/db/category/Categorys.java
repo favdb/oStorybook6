@@ -102,6 +102,14 @@ public class Categorys extends AbsEntitys {
 		}
 	}
 
+	/**
+	 * sort scenes by scene number
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(categorys, (Category r1, Category r2) -> r1.getId().compareTo(r2.getId()));
+	}
+
 	@Override
 	public AbstractEntity getFirst() {
 		if (categorys.isEmpty()) {
@@ -131,7 +139,7 @@ public class Categorys extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Category r1, Category r2)
-		   -> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 

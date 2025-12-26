@@ -123,8 +123,8 @@ public class Endnotes extends AbsEntitys {
 	public Endnote find(int type, Scene scene, int number) {
 		for (Endnote p : endnotes) {
 			if (p.getType() == type
-			   && scene.equals(p.getScene())
-			   && number == p.getNumber()) {
+					&& scene.equals(p.getScene())
+					&& number == p.getNumber()) {
 				return p;
 			}
 		}
@@ -172,7 +172,7 @@ public class Endnotes extends AbsEntitys {
 			ls.add(p);
 		}
 		Collections.sort(ls, (Endnote r1, Endnote r2)
-		   -> r1.getName().compareTo(r2.getName()));
+				-> r1.getName().compareTo(r2.getName()));
 		return ls;
 	}
 
@@ -247,7 +247,7 @@ public class Endnotes extends AbsEntitys {
 		if (scene != null) {
 			for (Endnote p : endnotes) {
 				if (p.getType() == type.ordinal()
-				   && scene.equals(p.getScene())) {
+						&& scene.equals(p.getScene())) {
 					list.add(p);
 				}
 			}
@@ -259,7 +259,7 @@ public class Endnotes extends AbsEntitys {
 		List<Scene> list = new ArrayList<>();
 		for (Endnote p : endnotes) {
 			if (p.getType() == type.ordinal()
-			   && p.hasScene()) {
+					&& p.hasScene()) {
 				list.add(p.getScene());
 			}
 		}
@@ -322,6 +322,14 @@ public class Endnotes extends AbsEntitys {
 		for (Endnote p : endnotes) {
 			p.changeHtmlLinks(path);
 		}
+	}
+
+	/**
+	 * sort by Id
+	 */
+	@Override
+	public void sortById() {
+		Collections.sort(endnotes, (Endnote r1, Endnote r2) -> r1.getId().compareTo(r2.getId()));
 	}
 
 	public void sortByNumber() {

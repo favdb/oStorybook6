@@ -451,7 +451,7 @@ public class Scene extends AbstractEntity {
 			return ("<p></p>");
 		}
 		// suppression de codes HTML
-		String toRemove[] = {"html", "div", "body"};
+		String toRemove[] = {"html",/* "div",*/ "body"};
 		String text = this.summary;
 		if (text.contains("<head.*</head>")) {
 			text = text.replaceAll("<head.*</head>", "");
