@@ -24,7 +24,7 @@ import storybook.ui.MainFrame;
  */
 public class HTMLEndnoteAddAction extends HTMLTextEditAction {
 
-	private static final String TT = "HTMLEndnoteAddAction";
+	private static final String TT = "HTMLEndnoteAddAction.";
 	private final MainFrame mainFrame;
 	private final Scene scene;
 
@@ -38,21 +38,18 @@ public class HTMLEndnoteAddAction extends HTMLTextEditAction {
 	}
 
 	@Override
-	protected void wysiwygEditPerformed(ActionEvent evt, JEditorPane editorPane) {
-		//LOG.trace(TT + ".wysiwygEditPerformed(evt, editor) nbfun=" + nbfun);
-		int num = 1;
-		for (Endnote en : mainFrame.project.endnotes.find(Endnote.TYPE.ENDNOTE, scene)) {
-			num = Math.max(num, ((Endnote) en).getNumber() + 1);
-		}
-		Endnote en = new Endnote(Endnote.TYPE.ENDNOTE.ordinal(), scene, num);
-		en.setSort(editorPane.getCaretPosition());
+	protected void wysiwygEditPerformed(ActionEvent evt, JEditorPane editor) {
+		//LOG.trace(TT + "wysiwygEditPerformed(evt, editor)");
+		int num = mainFrame.project.endnotes.getNextNumber();
+		Endnote en = new Endnote(Endnote.TYPE.ENDNOTE.ordinal(), scene, num, "");
+		en.setSort(editor.getCaretPosition());
 		if (mainFrame.showEditorAsDialog(en)) {
 			return;
 		}
 		en = mainFrame.project.endnotes.find(Endnote.TYPE.ENDNOTE.ordinal(), scene, num);
 		String link = Endnote.linkTo("", en);
-		editorPane.replaceSelection("");
-		HtmlUtils.insertHTML(link, HTML.Tag.A, editorPane);
+		editor.replaceSelection("");
+		HtmlUtils.insertHTML(link, HTML.Tag.A, editor);
 		this.wysiwygEditor.btEndnoteShow.setEnabled(true);
 	}
 

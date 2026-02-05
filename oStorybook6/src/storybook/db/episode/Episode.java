@@ -16,8 +16,6 @@
  */
 package storybook.db.episode;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import org.w3c.dom.Node;
 import storybook.db.abs.AbstractEntity;
 import static storybook.db.abs.AbstractEntity.fromXmlBeg;
@@ -45,18 +43,6 @@ public class Episode extends AbstractEntity {
 
 	public Episode() {
 		super(Book.TYPE.EPISODE, "010");
-	}
-
-	public Episode(ResultSet rs) {
-		this();
-		try {
-			number = rs.getInt("number");
-			strand = rs.getObject("strand", Strand.class);
-			chapter = rs.getObject("chapter", Chapter.class);
-			scene = rs.getObject("scene", Scene.class);
-		} catch (SQLException ex) {
-			//empty
-		}
 	}
 
 	public Episode(int number) {

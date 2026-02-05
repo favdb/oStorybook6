@@ -664,7 +664,7 @@ public class Model extends AbstractModel {
 	 * @param entity
 	 */
 	public synchronized void ENTITY_Delete(AbstractEntity entity) {
-		LOG.trace(TT + "ENTITY_Delete(entity=" + LOG.trace(entity) + ")");
+		//LOG.trace(TT + "ENTITY_Delete(entity=" + LOG.trace(entity) + ")");
 		if (entity == null) {
 			return;
 		}

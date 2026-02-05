@@ -605,6 +605,10 @@ public class Scene extends AbstractEntity {
 		}
 	}
 
+	public boolean isScript() {
+		return false;
+	}
+
 	/**
 	 * get the status
 	 *
@@ -1101,7 +1105,7 @@ public class Scene extends AbstractEntity {
 	}
 
 	public String getScenario_pitch() {
-		return (scenario_pitch == null ? "" : scenario_pitch);
+		return (scenario_pitch == null || scenario_pitch.trim().isEmpty() ? "" : scenario_pitch);
 	}
 
 	public void setScenario_moment(Integer moment) {
@@ -1130,7 +1134,7 @@ public class Scene extends AbstractEntity {
 		if (scenario_loc == null) {
 			scenario_loc = 0;
 		}
-		return (scenario_loc);
+		return scenario_loc;
 	}
 
 	public String getScenario_locTxt() {
@@ -1281,11 +1285,7 @@ public class Scene extends AbstractEntity {
 			b.append(getInfo(detailed, DATA.SCENARIO_STAGE, getScenariostage()));
 		}
 		//scenario
-		if (!getScenario_pitch().isEmpty()
-				|| getScenario_loc() != 0
-				|| getScenario_moment() != 0
-				|| getScenario_start() != 0
-				|| getScenario_end() != 0) {
+		if (!getScenario_pitch().isEmpty() || detailed > 1) {
 			StringBuilder bx = new StringBuilder();
 			bx.append(Html.TABLE_B).append(Html.TR_B);
 			bx.append(getInfo(detailed, DATA.SCENARIO_PITCH, getScenario_pitch()));
@@ -1371,7 +1371,7 @@ public class Scene extends AbstractEntity {
 		b.append(">\n");
 		b.append(setXmlChild(2, XK.TEXT, this.getSummary(), true));
 		b.append(toXmlEnd());
-		return (b.toString());
+		return b.toString();
 	}
 
 	public String toStoryboard() {

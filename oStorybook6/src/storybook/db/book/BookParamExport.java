@@ -97,6 +97,8 @@ public class BookParamExport extends BookParamAbstract {
 			htmlNavImage,
 			htmlMultiChapter,
 			htmlMultiScene,
+			htmlAuthor,
+			htmlCopyright,
 			txtTab;
 	private int highlight = Html.EM_LEFTASIS;
 
@@ -217,6 +219,38 @@ public class BookParamExport extends BookParamAbstract {
 		htmlNavImage = d;
 	}
 
+	/**
+	 * get if author must be in HTML export cover
+	 *
+	 * @return
+	 */
+	public boolean getHtmlAuthor() {
+		return false;
+	}
+
+	/**
+	 * set if author must be in HTML export cover
+	 */
+	public void setHtmlAuthor(boolean b) {
+		htmlAuthor = b;
+	}
+
+	/**
+	 * get if copyright must be in HTML export cover
+	 *
+	 * @return
+	 */
+	public boolean getHtmlCopyright() {
+		return false;
+	}
+
+	/**
+	 * set if copyright must be in HTML export cover
+	 */
+	public void setHtmlCopyright(boolean b) {
+		htmlCopyright = b;
+	}
+
 	@Override
 	protected void init() {
 		if (node != null) {
@@ -228,7 +262,7 @@ public class BookParamExport extends BookParamAbstract {
 			}
 			setFormat(getString(node, KW.FORMAT.toString()));
 			String x = getString(node, KW.HTML.toString());
-			while (x.length() < 7) {
+			while (x.length() < 9) {
 				x += "0";
 			}
 			setHtmlChapterTitle(x.charAt(0) == '1');
@@ -238,6 +272,8 @@ public class BookParamExport extends BookParamAbstract {
 			setHtmlNav(x.charAt(4) == '1');
 			setHtmlNavImage(x.charAt(5) == '1');
 			setHtmlAdvanced(x.charAt(6) == '1');
+			setHtmlAuthor(x.charAt(7) == '1');
+			setHtmlCopyright(x.charAt(8) == '1');
 			setHtmlCss(getString(node, KW.CSS.toString()));
 			setHighlight(getInteger(node, KW.HIGHLIGHT.toString()));
 			setCsv(getString(node, KW.CSV.toString()));
@@ -256,8 +292,10 @@ public class BookParamExport extends BookParamAbstract {
 		StringBuilder b = new StringBuilder("        <export ");
 		b.append(stringAttribute(0, KW.DIRECTORY.toString(), getDirectory()));
 		b.append(stringAttribute(0, KW.FORMAT.toString(), getFormat()));
-		b.append(stringAttribute(13, KW.HTML.toString(), getHtmlChapterTitle(), getHtmlChapterBreakPage(),
-				isMultiChapter(), isMultiScene(), getHtmlNav(), getHtmlNavImage(), getHtmlAdvanced())
+		b.append(stringAttribute(13, KW.HTML.toString(), getHtmlChapterTitle(),
+				getHtmlChapterBreakPage(),
+				isMultiChapter(), isMultiScene(), getHtmlNav(), getHtmlNavImage(),
+				getHtmlAdvanced(), getHtmlAuthor(), getHtmlCopyright())
 		);
 		b.append(stringAttribute(0, KW.CSS.toString(), getHtmlCss()));
 		b.append(stringAttribute(13, KW.HIGHLIGHT.toString(), getHighlight()));
@@ -306,6 +344,12 @@ public class BookParamExport extends BookParamAbstract {
 		}
 		if (getHtmlAdvanced()) {
 			str.add("advanced HTML");
+		}
+		if (getHtmlAuthor()) {
+			str.add("author HTML");
+		}
+		if (getHtmlCopyright()) {
+			str.add("copyright HTML");
 		}
 		b.append("parameters=").append(ListUtil.join(str, ", "));
 		b.append("\ncss=").append(htmlCss);

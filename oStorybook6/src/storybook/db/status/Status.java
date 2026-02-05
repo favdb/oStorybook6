@@ -19,8 +19,6 @@ This file is part of oStorybook.
 package storybook.db.status;
 
 import i18n.I18N;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
@@ -49,16 +47,6 @@ public class Status extends AbstractEntity {
 
 	public Status() {
 		super(Book.TYPE.STATUS, "110");
-	}
-
-	public Status(ResultSet rs) {
-		super(Book.TYPE.STATUS, "110", rs);
-		try {
-			sup = rs.getObject("sup", Status.class);
-			icone = rs.getString("icone");
-		} catch (SQLException ex) {
-			//empty
-		}
 	}
 
 	public Status(Long id, String name) {

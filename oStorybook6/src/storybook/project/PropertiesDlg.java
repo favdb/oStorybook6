@@ -238,11 +238,17 @@ public class PropertiesDlg extends AbsDialog implements ChangeListener {
 			taBlurb.setCaretPosition(0);
 			ckScenario.setSelected(bookInfo.scenarioGet());
 			ckMarkdown.setSelected(bookInfo.markdownGet());
+			cbNature.setSelectedIndex(bookInfo.natureGet());
 		}
 		ckScenario.addChangeListener(this);
 		return panel;
 	}
 
+	/**
+	 * the cbNature is for type of the project (book, novel, ...)
+	 *
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static JComboBox initCbNature() {
 		//LOG.trace(TT + "initCbNature()");

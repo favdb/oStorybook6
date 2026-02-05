@@ -227,7 +227,7 @@ public class TreePanel extends AbstractPanel implements
 	}
 
 	/**
-	 * initalize an item menu
+	 * initalize a JCheckBoxMenuItem
 	 *
 	 * @param title
 	 * @param checked
@@ -501,7 +501,7 @@ public class TreePanel extends AbstractPanel implements
 	}
 
 	/**
-	 * refresj the persons by gender
+	 * refresh the persons by gender
 	 */
 	private void refreshPersonsByGender() {
 		@SuppressWarnings("unchecked")
@@ -920,7 +920,7 @@ public class TreePanel extends AbstractPanel implements
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//LOG.trace(TT + "actionPerformed(event=" + e.toString() + ")");
+		//LOG.trace(TT + "actionPerformed(e=" + e.toString() + ")");
 		String compName = ((Component) e.getSource()).getName();
 		if (compName == null || compName.isEmpty()) {
 			return;

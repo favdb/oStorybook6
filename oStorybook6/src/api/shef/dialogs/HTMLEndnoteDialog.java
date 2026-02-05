@@ -18,7 +18,7 @@ import resources.icons.ICONS;
 import resources.icons.IconUtil;
 
 /**
- * Dialogue pour la saisie d'une note de renvoi
+ * Dialog to enter an end note
  *
  * @author favdb
  */
@@ -32,10 +32,10 @@ public class HTMLEndnoteDialog extends HTMLOptionDialog {
 	private ShefEditor eNote;
 
 	/**
-	 * Constructeur si le parent est un Frame
+	 * Constructor if parent is a Frame
 	 *
-	 * @param parent: frame parent
-	 * @param text	: texte à initialiser
+	 * @param parent: parent frame
+	 * @param text	: text to initialize
 	 */
 	public HTMLEndnoteDialog(Frame parent, String text) {
 		super(parent, title, desc, icon);
@@ -43,10 +43,10 @@ public class HTMLEndnoteDialog extends HTMLOptionDialog {
 	}
 
 	/**
-	 * Constructeur si le parent est un Dialog
+	 * Constructor if the parent is a Dialog
 	 *
 	 * @param parent: dialog parent
-	 * @param text	: texte à initialiser
+	 * @param text	: text to initialize
 	 */
 	public HTMLEndnoteDialog(Dialog parent, String text) {
 		super(parent, title, desc, icon);
@@ -86,9 +86,9 @@ public class HTMLEndnoteDialog extends HTMLOptionDialog {
 	}
 
 	/**
-	 * retourne le texte de la note de renvoi
+	 * return the text of the endnote
 	 *
-	 * @return : le texte
+	 * @return : the text
 	 */
 	public String getText() {
 		return eNote.getText();

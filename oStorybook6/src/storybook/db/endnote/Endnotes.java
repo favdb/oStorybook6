@@ -23,6 +23,7 @@ import storybook.db.abs.AbsEntitys;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.scene.Scene;
 import storybook.project.Project;
+import storybook.ui.MainFrame;
 
 /**
  *
@@ -78,6 +79,11 @@ public class Endnotes extends AbsEntitys {
 		return null;
 	}
 
+	/**
+	 * add an Endnote for the given Scene
+	 *
+	 * @param p
+	 */
 	@Override
 	public void add(AbstractEntity p) {
 		if (p.getId() == -1L) {
@@ -86,6 +92,11 @@ public class Endnotes extends AbsEntitys {
 		endnotes.add((Endnote) p);
 	}
 
+	/**
+	 * delete all links to the given Scene
+	 *
+	 * @param p
+	 */
 	@Override
 	public void delete(AbstractEntity p) {
 		int n = getIdx(p.getId());
@@ -94,6 +105,11 @@ public class Endnotes extends AbsEntitys {
 		}
 	}
 
+	/**
+	 * get the first Endnote of the list
+	 *
+	 * @return
+	 */
 	@Override
 	public AbstractEntity getFirst() {
 		if (endnotes.isEmpty()) {
@@ -102,18 +118,28 @@ public class Endnotes extends AbsEntitys {
 		return endnotes.get(0);
 	}
 
+	/**
+	 * get the list of Endnotes
+	 *
+	 * @return
+	 */
 	@Override
 	public List getList() {
 		return endnotes;
 	}
 
+	/**
+	 * get count of Endnotes
+	 *
+	 * @return
+	 */
 	@Override
 	public int getCount() {
 		return endnotes.size();
 	}
 
 	/**
-	 * find an Endnote of the given number in the given Scene
+	 * find an Endnote of the given type with the given number in the given Scene
 	 *
 	 * @param type
 	 * @param scene
@@ -131,20 +157,33 @@ public class Endnotes extends AbsEntitys {
 		return null;
 	}
 
-	public List<Endnote> find(int ordinal, Scene scene) {
+	/**
+	 * find an Endnote for the given type and Scene
+	 *
+	 * @param type
+	 * @param scene
+	 * @return
+	 */
+	public List<Endnote> find(int type, Scene scene) {
 		List<Endnote> list = new ArrayList<>();
 		for (Endnote p : endnotes) {
-			if (p.getNumber() == ordinal && scene.equals(p.getScene())) {
+			if (p.getType() == type && scene.equals(p.getScene())) {
 				list.add(p);
 			}
 		}
 		return list;
 	}
 
-	public List<Endnote> findBySort(int ordinal) {
+	/**
+	 * finf all Endnote for the given type
+	 *
+	 * @param type
+	 * @return
+	 */
+	public List<Endnote> findByType(int type) {
 		List<Endnote> list = new ArrayList<>();
 		for (Endnote p : endnotes) {
-			if (p.getType() == ordinal) {
+			if (p.getType() == type) {
 				list.add(p);
 			}
 		}
@@ -166,6 +205,11 @@ public class Endnotes extends AbsEntitys {
 		return endnote.isInText();
 	}
 
+	/**
+	 * find all Endnote sorted by name
+	 *
+	 * @return
+	 */
 	public List findByName() {
 		List<Endnote> ls = new ArrayList<>();
 		for (Endnote p : endnotes) {
@@ -176,6 +220,12 @@ public class Endnotes extends AbsEntitys {
 		return ls;
 	}
 
+	/**
+	 * find an Endnote for the given name
+	 *
+	 * @param name
+	 * @return
+	 */
 	public Endnote findName(String name) {
 		for (Endnote entity : endnotes) {
 			if (entity.getName().equals(name)) {
@@ -185,6 +235,12 @@ public class Endnotes extends AbsEntitys {
 		return null;
 	}
 
+	/**
+	 * find all Endnote for the given Scene
+	 *
+	 * @param scene
+	 * @return
+	 */
 	public List<Endnote> findAll(Scene scene) {
 		List<Endnote> ls = new ArrayList<>();
 		for (Endnote p : endnotes) {
@@ -195,10 +251,20 @@ public class Endnotes extends AbsEntitys {
 		return ls;
 	}
 
+	/**
+	 * get next allowed number
+	 *
+	 * @return
+	 */
 	public int getNextNumber() {
 		return getMaxNumber() + 1;
 	}
 
+	/**
+	 * get max number
+	 *
+	 * @return
+	 */
 	public int getMaxNumber() {
 		int r = 0;
 		for (Endnote p : endnotes) {
@@ -209,6 +275,12 @@ public class Endnotes extends AbsEntitys {
 		return r;
 	}
 
+	/**
+	 * check if number exists
+	 *
+	 * @param number
+	 * @return
+	 */
 	public boolean checkIfNumberExists(int number) {
 		for (Endnote p : endnotes) {
 			if (p.getNumber() == number) {
@@ -255,6 +327,12 @@ public class Endnotes extends AbsEntitys {
 		return list;
 	}
 
+	/**
+	 * find all Scenes having the given Endote type
+	 *
+	 * @param type
+	 * @return
+	 */
 	List<Scene> findScenes(Endnote.TYPE type) {
 		List<Scene> list = new ArrayList<>();
 		for (Endnote p : endnotes) {
@@ -299,6 +377,9 @@ public class Endnotes extends AbsEntitys {
 		return null;
 	}
 
+	/**
+	 * set the Scene link with the scene ID
+	 */
 	@Override
 	public void setLinks() {
 		for (Endnote p : endnotes) {
@@ -308,6 +389,11 @@ public class Endnotes extends AbsEntitys {
 		}
 	}
 
+	/**
+	 * generate XML String of the Endnote
+	 *
+	 * @return
+	 */
 	@Override
 	public String toXml() {
 		StringBuilder b = new StringBuilder();
@@ -317,6 +403,11 @@ public class Endnotes extends AbsEntitys {
 		return b.toString();
 	}
 
+	/**
+	 * change HTML links to the given path
+	 *
+	 * @param path
+	 */
 	@Override
 	public void changeHtmlLinks(String path) {
 		for (Endnote p : endnotes) {
@@ -332,8 +423,60 @@ public class Endnotes extends AbsEntitys {
 		Collections.sort(endnotes, (Endnote r1, Endnote r2) -> r1.getId().compareTo(r2.getId()));
 	}
 
+	/**
+	 * sort by number
+	 */
 	public void sortByNumber() {
 		Collections.sort(endnotes, (Endnote r1, Endnote r2) -> r1.getNumber().compareTo(r2.getNumber()));
+	}
+
+	/**
+	 * remove all Endnotes of the given type
+	 *
+	 * @param mainFrame
+	 * @param type
+	 */
+	@SuppressWarnings("unchecked")
+	public static void removeAll(MainFrame mainFrame, Endnote.TYPE type) {
+		//LOG.printInfos(TT + ".removeAll(mainFrame, type="
+		//+ (type == 0 ? "endnote" : "comment") + ")");
+		for (Scene scene : (List<Scene>) mainFrame.project.scenes.getList()) {
+			remove(mainFrame, type, scene);
+		}
+	}
+
+	/**
+	 * remove all given type Endnote in the given Scene
+	 *
+	 * @param mainFrame
+	 * @param type
+	 * @param scene
+	 */
+	@SuppressWarnings("unchecked")
+	public static void remove(MainFrame mainFrame, Endnote.TYPE type, Scene scene) {
+		//LOG.trace(TT + ".remove(mainFrame, scene=" + AbstractEntity.printInfos(scene) + ")");
+		for (Endnote en : (List<Endnote>) mainFrame.project.endnotes.getList()) {
+			endnoteDelete(mainFrame, (Endnote) en);
+		}
+	}
+
+	/**
+	 * delete the given Endnote
+	 *
+	 * @param mainFrame
+	 * @param endnote
+	 */
+	public static void endnoteDelete(MainFrame mainFrame, Endnote endnote) {
+		//LOG.trace(TT + ".endnoteDelete(mainFrame, endnote=" + AbstractEntity.printInfos(endnote) + ")");
+		Scene scene = endnote.getScene();
+		if (scene != null) {
+			String link = endnote.getLinkToEndnote("");
+			if (!scene.getSummary().isEmpty()) {
+				scene.setSummary(scene.getSummary().replace(link, ""));
+				mainFrame.getBookModel().ENTITY_Update(scene);
+			}
+		}
+		mainFrame.getBookModel().ENTITY_Delete(endnote);
 	}
 
 }

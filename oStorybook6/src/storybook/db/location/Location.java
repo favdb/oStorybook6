@@ -17,8 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.db.location;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Node;
@@ -47,20 +45,6 @@ public class Location extends AbstractEntity {
 
 	public Location() {
 		super(Book.TYPE.LOCATION, "111");
-	}
-
-	public Location(ResultSet rs) {
-		super(Book.TYPE.LOCATION, "111", rs);
-		try {
-			address = rs.getString("address");
-			city = rs.getString("city");
-			country = rs.getString("country");
-			altitude = rs.getInt("altitude");
-			gps = rs.getString("gps");
-			site = rs.getObject("site", Location.class);
-		} catch (SQLException ex) {
-			//empty
-		}
 	}
 
 	public Location(String name, String address, String city, String country,

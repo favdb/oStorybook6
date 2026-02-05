@@ -71,7 +71,7 @@ public class EndnoteEdit extends AbstractEditor {
 
 	@Override
 	public void apply() {
-		//LOG.printInfos(TT + ".apply()");
+		//LOG.trace(TT + ".apply()");
 		tfName.setText(String.format("%03d", endnote.getNumber()));
 		entity.setNotes(hNotes != null ? Html.checkImages(mainFrame, hNotes.getText()) : "");
 	}

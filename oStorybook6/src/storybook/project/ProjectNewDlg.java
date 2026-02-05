@@ -132,7 +132,7 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 	private boolean checkData() {
 		String rc = "";
 		if (tfTitle.getText().isEmpty()) {
-			rc += I18N.getColonMsg("bool.title") + I18N.getMsg("error.missing") + "\n";
+			rc += I18N.getColonMsg("book.title") + I18N.getMsg("error.missing") + "\n";
 		}
 		rc += checkValue("parts", nbParts, 1, 9);
 		rc += checkValue("chapters", nbChapters, 1, 9);

@@ -1,0 +1,4 @@
+bernard 17/01/2026===============================================
+a) problème de duplaction du tag "style" lors de l'export HTML=fait
+
+b) finaliser et tester la possibilité d'un CSS spécifique

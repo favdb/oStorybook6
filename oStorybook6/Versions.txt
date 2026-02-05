@@ -1,9 +1,15 @@
 Versions :
 ==========
+6.06: 21/04/2026
+- correcion de ChaptersOrderDlg (plus rapide)
 6.05: 01/01/2026
+- ajout du template_download_en.html pour le build
+- ajout du SHA256 dans le build
+- correction mémorisation du type de projet
 - correction Attribut (nom)
 - ajout du mode Script
-- amélioration de lexport HTML
+- amélioration de l'export HTML
+- amélioration/correction de Note de renvoi et Commantaire de relecture
 6.04: 01/09/2025
 - correction Plot et liens dans Relation/Scene (apparence)
 - correction divers bugs

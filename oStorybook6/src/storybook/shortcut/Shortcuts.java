@@ -134,7 +134,8 @@ public class Shortcuts {
 				return I18N.getMsg("shortcut.i." + msg) + " (" + str.replace(" ", "+") + ")";
 			}
 		}
-		return "!" + type + "." + msg + "!";
+		return I18N.getMsg(type + "." + msg);
+		//return "!" + type + "." + msg + "!";
 	}
 
 	/**

@@ -18,8 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.db.category;
 
 import i18n.I18N;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Node;
@@ -111,16 +109,6 @@ public class Category extends AbstractEntity {
 
 	public Category() {
 		super(Book.TYPE.CATEGORY, "110");
-	}
-
-	public Category(ResultSet rs) {
-		super(Book.TYPE.CATEGORY, "110", rs);
-		try {
-			sort = rs.getInt("sort");
-			sup = rs.getObject("sup", Category.class);
-		} catch (SQLException ex) {
-			//empty
-		}
 	}
 
 	public Category(Integer sort, String name, Category sup) {

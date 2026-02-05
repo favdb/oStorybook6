@@ -172,7 +172,7 @@ public class ExportBookToEpub extends AbstractExport {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean create(String folder) {
-		//LOG.printInfos(TT + ".create()");
+		//LOG.trace(TT + "create()");
 		try {
 			Path tmpDir = Files.createTempDirectory("tmpEpub");
 			epubDir = tmpDir.toFile();
@@ -204,8 +204,8 @@ public class ExportBookToEpub extends AbstractExport {
 					+ "container.xml");
 			container.delete();
 			IOUtil.fileWriteString(container, CONTAINER);
-			copyImages();
 			endnotes = Endnote.find(mainFrame, Endnote.TYPE.ENDNOTE);
+			copyImages();
 			writeCover();
 			writeContentOpf();
 			writeTocNcx();
@@ -434,20 +434,20 @@ public class ExportBookToEpub extends AbstractExport {
 				.append(Html.intoB(I18N.getMsg("export.book.toc")))
 				.append(Html.P_E);
 		//b.append(Html.P_B);
-		String tb = "   ";
+		String tb = "&nbsp;&nbsp;&nbsp;";
 		for (Part part : (List<Part>) mainFrame.project.parts.getList()) {
 			chapters = mainFrame.project.chapters.find(part);
 			if (layout.getPartTitle() && book.nbParts() > 1) {
 				String link = ((Part) part).getNumberName();
 				if (!chapters.isEmpty()) {
 					link = Html.intoA("",
-							getFilename((Chapter) mainFrame.project.chapters.getList().get(0)), part.getName());
+							getFilename((Chapter) mainFrame.project.chapters.getList().get(0)), getTitle(part.getName()));
 				}
-				b.append(tb).append(Html.intoP(link));
+				b.append(tb).append(link).append(Html.BR);
 			}
 			for (Chapter chapter : mainFrame.project.chapters.find(part)) {
 				if (layout.getChapterTitle() && book.nbChapters() > 1) {
-					String link = Html.intoA("", getFilename(chapter), chapterGetTitle(chapter));
+					String link = Html.intoA("", getFilename(chapter), getTitle(chapter.getName()));
 					b.append(tb).append(tb).append(link).append(Html.BR);
 				}
 			}
@@ -561,11 +561,11 @@ public class ExportBookToEpub extends AbstractExport {
 	}
 
 	private void writeBook() {
-		//LOG.printInfos(TT + ".writeBook()");
+		//LOG.trace(TT + "writeBook()");
 		@SuppressWarnings("unchecked")
 		List<Part> parts = (List) mainFrame.project.getList(Book.TYPE.PART);
 		for (Part part : parts) {
-			String partTitle = (parts.size() > 1 && layout.getPartTitle() ? part.getName() : "");
+			String partTitle = (parts.size() > 1 && layout.getPartTitle() ? getTitle(part.getName()) : "");
 			chapters = mainFrame.project.chapters.find(part);
 			for (Chapter chapter : chapters) {
 				StringBuilder b = new StringBuilder();
@@ -617,7 +617,7 @@ public class ExportBookToEpub extends AbstractExport {
 			}
 			b.append(t).append(getTitle(chapter.getName()));
 		} else {
-			b.append(chapter.getName());
+			b.append(getTitle(chapter.getName()));
 		}
 		return b.toString();
 	}
@@ -740,8 +740,11 @@ public class ExportBookToEpub extends AbstractExport {
 		}
 	}
 
+	/**
+	 * copy all used images to EPUB images directory
+	 */
 	private void copyImages() {
-		//LOG.printInfos(TT + ".copyImages()");
+		//LOG.trace(TT + "copyImages()");
 		try {
 			String source = mainFrame.getProject().getPath()
 					+ File.separator + "Images";
@@ -762,7 +765,7 @@ public class ExportBookToEpub extends AbstractExport {
 	}
 
 	private void writeContentOpf() {
-		//LOG.printInfos(TT + ".writeContentOpf()");
+		//LOG.trace(TT + ".writeContentOpf()");
 		StringBuilder b = new StringBuilder(CONTENT_HEAD);
 		b.append(CONTENT_PACKAGE);
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -960,8 +963,8 @@ public class ExportBookToEpub extends AbstractExport {
 		final Document document = Jsoup.parse(x);
 		Elements nodes = document.getElementsByTag("img");
 		for (Element n : nodes) {
+			File src = new File(n.attr("src"));
 			if (!n.hasAttr("alt")) {
-				File src = new File(n.attr("src"));
 				n.attr("src", "../Images/" + src.getName());
 				n.attr("alt", src.getName().replace('.', '-'));
 			}

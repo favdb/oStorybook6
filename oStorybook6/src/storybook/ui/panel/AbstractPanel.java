@@ -25,6 +25,7 @@ import storybook.ctrl.Ctrl.PROPS;
 import storybook.db.book.Book;
 import storybook.db.part.Part;
 import storybook.db.scene.Scene;
+import storybook.project.Project;
 import storybook.tools.Markdown;
 import storybook.tools.html.Html;
 import storybook.tools.swing.FontUtil;
@@ -107,6 +108,10 @@ public abstract class AbstractPanel extends JPanel
 
 	public MainFrame getMainFrame() {
 		return mainFrame;
+	}
+
+	public Project getProject() {
+		return mainFrame.getProject();
 	}
 
 	public void setWithPart(boolean withPart) {

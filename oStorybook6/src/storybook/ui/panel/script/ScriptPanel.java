@@ -17,6 +17,7 @@
  */
 package storybook.ui.panel.script;
 
+import storybook.db.scene.SceneScript;
 import api.mig.swing.MigLayout;
 import api.shef.ShefEditor;
 import i18n.I18N;
@@ -42,12 +43,12 @@ import storybook.ui.panel.AbstractPanel;
  */
 public class ScriptPanel extends AbstractPanel implements CaretListener {
 
-	private Script script;
+	private SceneScript script;
 	private ShefEditor desc, audio, visual, voice;
 	private JTextField scDuration;
 	private SceneEdit editor;
 
-	public ScriptPanel(MainFrame mainFrame, Script script, SceneEdit editor) {
+	public ScriptPanel(MainFrame mainFrame, SceneScript script, SceneEdit editor) {
 		super(mainFrame);
 		this.script = script;
 		this.editor = editor;
@@ -119,8 +120,8 @@ public class ScriptPanel extends AbstractPanel implements CaretListener {
 		return desc.getText();
 	}
 
-	public Script getScript() {
-		Script s = new Script();
+	public SceneScript getScript() {
+		SceneScript s = new SceneScript();
 		s.setDesc(getScriptShef(desc));
 		s.setAudio(getScriptShef(audio));
 		s.setVisual(getScriptShef(visual));
@@ -136,8 +137,8 @@ public class ScriptPanel extends AbstractPanel implements CaretListener {
 	 */
 	private String getScriptShef(ShefEditor s) {
 		String v = s.getText().trim();
-		if (v.startsWith(Script.EMPTY_LINE)) {
-			v = v.substring(Script.EMPTY_LINE.length());
+		if (v.startsWith(SceneScript.EMPTY_LINE)) {
+			v = v.substring(SceneScript.EMPTY_LINE.length());
 		}
 		return v;
 	}

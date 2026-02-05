@@ -50,6 +50,7 @@ import storybook.dialog.options.OptionsDlg;
 import storybook.exim.exporter.ExportBookToHtml;
 import storybook.review.Review;
 import storybook.tools.ViewUtil;
+import storybook.tools.file.IOUtil;
 import storybook.tools.html.CSS;
 import storybook.tools.html.Html;
 import storybook.tools.net.Net;
@@ -282,6 +283,7 @@ public class ReadingPanel extends AbstractPanel implements HyperlinkListener {
 			}
 		};
 		SwingUtilities.invokeLater(() -> restoreAction.actionPerformed(null));
+		IOUtil.fileWriteString("traceHtml.html", buf.toString());
 	}
 
 	@Override

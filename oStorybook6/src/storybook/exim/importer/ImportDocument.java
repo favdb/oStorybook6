@@ -48,13 +48,13 @@ import storybook.tools.html.Html;
 import storybook.ui.MainFrame;
 
 /**
- * clas for importing a document file like DOCX, ODT or HTML
+ * class for importing a document file like DOCX, ODT or HTML
  *
  * @author favdb
  */
 public class ImportDocument {
 
-	private static final String TT = "ImportDocument";
+	private static final String TT = "ImportDocument.";
 	private File file = null;
 	private Document document;
 	private Project dbFile = null;
@@ -80,7 +80,7 @@ public class ImportDocument {
 	}
 
 	public boolean openDocument() {
-		LOG.trace(TT + ".openDocument() for file=\"" + file.getAbsolutePath() + "\"");
+		//LOG.trace(TT + "openDocument() for file=\"" + file.getAbsolutePath() + "\"");
 		if (file == null || !file.exists()) {
 			LOG.trace("file " + (file == null ? "null" : file.getAbsolutePath()) + " not exists");
 			return false;
@@ -105,16 +105,16 @@ public class ImportDocument {
 					break;
 				case "txt":
 					document = Jsoup.parse(
-					   Html.textToHTML(IOUtil.fileReadAsString(file)));
+							Html.textToHTML(IOUtil.fileReadAsString(file)));
 					break;
 				case "epub":
 					return true;
 				default:
-					LOG.err(TT + ".openDocument() unknown ext=\"" + ext + "\"");
+					LOG.err(TT + "openDocument() unknown ext=\"" + ext + "\"");
 					return false;
 			}
 		} catch (IOException | SAXException | ParserConfigurationException ex) {
-			LOG.err(TT + ".openDocument() ", ex);
+			LOG.err(TT + "openDocument() ", ex);
 			return false;
 		}
 		return (document != null);
@@ -166,7 +166,7 @@ public class ImportDocument {
 	 * @return
 	 */
 	public String getContentAsTxt() {
-		//LOG.printInfos(TT + ".getContentAsTxt()");
+		//LOG.trace(TT + "getContentAsTxt()");
 		return document.body().text();
 	}
 
@@ -176,7 +176,7 @@ public class ImportDocument {
 	 * @param session
 	 */
 	public void getAll(Project session) {
-		LOG.trace(TT + ".getAll()");
+		//LOG.trace(TT + "getAll()");
 		Strand strand = (Strand) mainFrame.project.strands.findOrderBySort().get(0);
 		Element bd = document.body();
 		Elements docNodes = document.body().getAllElements();
@@ -263,7 +263,7 @@ public class ImportDocument {
 	 * @return
 	 */
 	private Part getPart(Element el, int n) {
-		//LOG.printInfos(TT + ".getPart(el, n=" + n + ")");
+		//LOG.trace(TT + "getPart(el, n=" + n + ")");
 		Part part = new Part();
 		part.setName(el.text());
 		part.setNumber(n);
@@ -279,7 +279,7 @@ public class ImportDocument {
 	 * @return
 	 */
 	private Chapter getChapter(Part part, Element el, int n) {
-		//LOG.printInfos(TT + ".getScene(part=" + part.getName() + ", elChapter, n=" + n + ")");
+		//LOG.trace(TT + "getScene(part=" + part.getName() + ", elChapter, n=" + n + ")");
 		Chapter chapter = new Chapter();
 		chapter.setTitle(el.text());
 		chapter.setChapterno(n);
@@ -300,7 +300,7 @@ public class ImportDocument {
 	 * @return
 	 */
 	private int getScenes(Project session, Strand strand, Chapter chapter, List<String> texts) {
-		/*LOG.printInfos(TT + ".getScenes(session,"
+		/*LOG.trace(TT + "getScenes(session,"
 				+ " strand=" + strand.getName()
 				+ ", chapter=" + chapter.getName()
 				+ "texts nb=" + texts.size() + ")");*/
@@ -363,7 +363,7 @@ public class ImportDocument {
 	 * @return
 	 */
 	public Scene getScene(Chapter chapter, int n, String text) {
-		/*LOG.printInfos(TT + ".getScene(chapter=" + chapter.getName()
+		/*LOG.trace(TT + "getScene(chapter=" + chapter.getName()
 				+ ", n=" + n
 				+ ", text len=" + text.length() + ")");*/
 		Scene scene = new Scene();
@@ -393,7 +393,7 @@ public class ImportDocument {
 	 * @return
 	 */
 	public File selectFile() {
-		//LOG.printInfos(TT + ".fileSelect()");
+		//LOG.trace(TT + "selectFile()");
 		final JFileChooser fc = new JFileChooser();
 		//fc.setCurrentDirectory(new File(file.getAbsolutePath()));
 		FileFilter filter = new FileFilter("book");
@@ -404,9 +404,9 @@ public class ImportDocument {
 			File f = fc.getSelectedFile();
 			if (!f.exists()) {
 				JOptionPane.showMessageDialog(null,
-				   I18N.getMsg("project.not.exist.text", f),
-				   I18N.getMsg("project.not.exist.title"),
-				   JOptionPane.ERROR_MESSAGE);
+						I18N.getMsg("project.not.exist.text", f),
+						I18N.getMsg("project.not.exist.title"),
+						JOptionPane.ERROR_MESSAGE);
 				return null;
 			}
 			this.file = f;
@@ -430,14 +430,14 @@ public class ImportDocument {
 	 * @return
 	 */
 	public boolean openDB() {
-		//LOG.printInfos(TT + ".importDB()");
+		//LOG.trace(TT + "openDB()");
 		dbFile = null;
 		thetitle = JOptionPane.showInputDialog(I18N.getMsg("title"));
 		if (thetitle == null) {
 			return false;
 		}
 		if (thetitle.isEmpty()) {
-			LOG.trace("properties title empty, file import ignored");
+			LOG.trace(TT + "openDB() properties title empty, file import ignored");
 			return false;
 		}
 		String filename = App.getFileName(StringUtil.escapeTxt(thetitle));
@@ -454,9 +454,9 @@ public class ImportDocument {
 		File fMvdb = new File(filename + Const.STORYBOOK.FILE_EXT_MVDB.toString());
 		if (fOsbk.exists() || fMvdb.exists()) {
 			int ret = JOptionPane.showConfirmDialog(null,
-			   I18N.getMsg("file.exists", filename),
-			   I18N.getMsg("file.save.overwrite.title"),
-			   JOptionPane.YES_NO_OPTION);
+					I18N.getMsg("file.exists", filename),
+					I18N.getMsg("file.save.overwrite.title"),
+					JOptionPane.YES_NO_OPTION);
 			if (ret == JOptionPane.NO_OPTION) {
 				return false;
 			}

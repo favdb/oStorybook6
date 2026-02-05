@@ -21,6 +21,12 @@ package storybook.db.book;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+/**
+ * class for Book parameters
+ *
+ * @author favdb
+ */
+
 public class BookParam {
 
 	private static final String TT = "BookParam.";

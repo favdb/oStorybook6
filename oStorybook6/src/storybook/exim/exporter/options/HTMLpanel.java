@@ -42,6 +42,7 @@ import storybook.ui.MIG;
 import storybook.ui.Ui;
 
 /**
+ * JPanel to show/select export options
  *
  * @author favdb
  */

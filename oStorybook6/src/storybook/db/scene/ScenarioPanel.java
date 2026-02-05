@@ -224,8 +224,8 @@ public class ScenarioPanel extends AbstractPanel {
 		scene.setScenario_loc((rbLocInt.isSelected() ? 1 : 2));
 		scene.setScenario_start(cbStart.getSelectedIndex());
 		scene.setScenario_end(cbEnd.getSelectedIndex());
-		if (scenePanel != null && scenePanel.getMkTexte() != null) {
-			scenePanel.getMkTexte().setHeader(scene, book.info.scenarioGet());
+		if (scenePanel != null && scenePanel.getMarkdown() != null) {
+			scenePanel.getMarkdown().setHeader(scene, book.info.scenarioGet());
 		}
 		if (scenePanel != null) {
 			scenePanel.setModified();

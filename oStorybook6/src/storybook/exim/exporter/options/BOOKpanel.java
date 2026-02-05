@@ -97,6 +97,7 @@ public class BOOKpanel extends JPanel implements ChangeListener {
 	public void apply(BookParamExport p) {
 		//LOG.trace(TT + ".apply(p)");
 		p.setMultiChapter(rbMultiChapter.isSelected());
+		p.setHtmlChapterTitle(ckChapterBooktitle.isSelected());
 		p.setMultiScene(rbMultiScene.isSelected());
 		int x = 0;
 		if (rbSuppress.isSelected()) {

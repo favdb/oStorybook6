@@ -18,8 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.db.strand;
 
 import java.awt.Color;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
@@ -47,17 +45,6 @@ public class Strand extends AbstractEntity {
 
 	public Strand() {
 		super(Book.TYPE.STRAND, "111");
-	}
-
-	public Strand(ResultSet rs) {
-		super(Book.TYPE.STRAND, "111", rs);
-		try {
-			abbreviation = rs.getString("abbreviation");
-			color = rs.getInt("color");
-			sort = rs.getInt("sort");
-		} catch (SQLException ex) {
-			//empty
-		}
 	}
 
 	public Strand(String abbr, String name) {
@@ -106,11 +93,11 @@ public class Strand extends AbstractEntity {
 
 	public String getHTMLColor() {
 		return "<span style=\""
-			+ "background-color:" + ColorUtil.getHTML(getJColor()) + ";"
-			+ "color:" + ColorUtil.getHTML(getJColor()) + ";\">"
-			+ "&#x25ae;&#x25ae;"
-			+ "</span> " //+ ColorUtil.getHTML(getJColor())
-			;
+				+ "background-color:" + ColorUtil.getHTML(getJColor()) + ";"
+				+ "color:" + ColorUtil.getHTML(getJColor()) + ";\">"
+				+ "&#x25ae;&#x25ae;"
+				+ "</span> " //+ ColorUtil.getHTML(getJColor())
+				;
 	}
 
 	public ColorIcon getColorIcon() {
@@ -257,9 +244,9 @@ public class Strand extends AbstractEntity {
 	@Override
 	public int hashCode() {
 		return hashPlus(super.hashCode(),
-			abbreviation,
-			color,
-			sort);
+				abbreviation,
+				color,
+				sort);
 	}
 
 	@Override

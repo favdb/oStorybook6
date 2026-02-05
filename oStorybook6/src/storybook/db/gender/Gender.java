@@ -19,8 +19,6 @@ package storybook.db.gender;
 
 import java.awt.Dimension;
 import java.io.File;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
@@ -72,19 +70,6 @@ public class Gender extends AbstractEntity {
 
 	public Gender() {
 		super(Book.TYPE.GENDER, "110");
-	}
-
-	public Gender(ResultSet rs) {
-		this();
-		try {
-			childhood = rs.getInt("childhood");
-			adolescence = rs.getInt("adolescence");
-			adulthood = rs.getInt("adulthood");
-			retirement = rs.getInt("retirement");
-			icone = rs.getString("icone");
-		} catch (SQLException ex) {
-			//empty
-		}
 	}
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")

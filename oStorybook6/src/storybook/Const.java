@@ -35,12 +35,12 @@ public class Const {
 	public enum STORYBOOK {
 		NAME("oStorybook"),
 		VERSION_MAJOR("6"),
-		VERSION_MINOR("05"),
+		VERSION_MINOR("06"),
 		VERSION(VERSION_MAJOR + "." + VERSION_MINOR),
 		//replace alpha by empty string for a stable release
 		VERSION_ALPHA(""),
-		RELEASE_DATE("2025-05-13"),
-		COPYRIGHT_YEAR("2012-2025"),
+		RELEASE_DATE("2026-04-21"),
+		COPYRIGHT_YEAR("2012-2026"),
 		COPYRIGHT_COMPANY("The oStorybook Team"),
 		DB_VERSION("5.0"),
 		FILE_EXT_H2DB(".h2.db"),

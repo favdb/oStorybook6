@@ -40,30 +40,30 @@ public class SpellCheck {
 
 	private String htmlText = "";
 	private static String CKEDITOR_HEAD = "<!DOCTYPE html>\n"
-	   + "<html>\n"
-	   + "<head>\n"
-	   + "    <meta charset=\"utf-8\">\n"
-	   + "    <title>oStorybook test Grammalecte</title>\n"
-	   /*+ "    <script class=\"code\" type=\"text/javascript\">\n"
+			+ "<html>\n"
+			+ "<head>\n"
+			+ "    <meta charset=\"utf-8\">\n"
+			+ "    <title>oStorybook test Grammalecte</title>\n"
+			/*+ "    <script class=\"code\" type=\"text/javascript\">\n"
 			+ "        var features =  \"\"  \n"
 			+ "                        + \"menubar=no,toolbar=no,location=no,personalbar=no\"\n"
 			+ "                        + \",status=no,chrome=yes,resizable,centerscreen\";"
 			+ "    </script>"*/
-	   + "    <script src=\"" + getCkEditorFileName() + "\"></script>\n"
-	   + "</head>\n"
-	   + "<body>\n"
-	   + "    <h2>oStorybook : vérification avec Grammalecte</h2>\n"
-	   + "    <form action=\"\" method=\"post\">\n"
-	   + "        <!-- (2): textarea will replace by CKEditor -->\n"
-	   + "        <textarea id=\"editor1\" name=\"editor1\" cols=\"80\" rows=\"20\" style=\"height:100%\">";
+			+ "    <script src=\"" + getCkEditorFileName() + "\"></script>\n"
+			+ "</head>\n"
+			+ "<body>\n"
+			+ "    <h2>oStorybook : vérification avec Grammalecte</h2>\n"
+			+ "    <form action=\"\" method=\"post\">\n"
+			+ "        <!-- (2): textarea will replace by CKEditor -->\n"
+			+ "        <textarea id=\"editor1\" name=\"editor1\" cols=\"80\" rows=\"20\" style=\"height:100%\">";
 	private static String CKEDITOR_END = "</textarea>\n"
-	   + "         <!-- (3): Javascript code to replace textarea with id='editor1' by CKEditor -->\n"
-	   + "        <script>\n"
-	   + "            CKEDITOR.replace( 'editor1' , {height: 500});\n"
-	   + "        </script>\n"
-	   + "    </form>\n"
-	   + "</body>\n"
-	   + "</html>";
+			+ "         <!-- (3): Javascript code to replace textarea with id='editor1' by CKEditor -->\n"
+			+ "        <script>\n"
+			+ "            CKEDITOR.replace( 'editor1' , {height: 500});\n"
+			+ "        </script>\n"
+			+ "    </form>\n"
+			+ "</body>\n"
+			+ "</html>";
 	private MainFrame mainFrame = null;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
@@ -92,14 +92,14 @@ public class SpellCheck {
 		//1 check for existing text
 		if (htmlText.isEmpty()) {
 			MessageDlg.show(mainFrame,
-			   I18N.getMsg("spell.empty"),
-			   I18N.getMsg("spell"),
-			   true);
+					I18N.getMsg("spell.empty"),
+					I18N.getMsg("spell"),
+					true);
 			return false;
 		}
 		//2 get only BODY part of the HTML text
 		String text = Jsoup.parse(htmlText).body().outerHtml()
-		   .replace("<body>", "").replace("</body>", "");
+				.replace("<body>", "").replace("</body>", "");
 		//3 create working HTML file replacing any existing file
 		String workingFile = EnvUtil.getTempDir() + File.separator + "verif.html";
 		if (mainFrame != null) {
@@ -110,24 +110,45 @@ public class SpellCheck {
 		//4 launch Firefox/Chrome
 		Net.openBrowser("file://" + workingFile);
 		MessageDlg.show(mainFrame,
-		   I18N.getMsg("spell.ok"),
-		   "spell",
-		   true);
+				I18N.getMsg("spell.ok"),
+				"spell",
+				true);
 		//5 end launcher
 		return true;
 	}
 
+	/**
+	 * check if CkEditor in installed
+	 *
+	 * @return
+	 */
 	public static boolean checkForCkEditor() {
 		String fname = getCkEditorFileName();
 		File f = new File(fname);
 		return f.exists();
 	}
 
+	/**
+	 * get the CkEditor file name as it was installed
+	 *
+	 * @return
+	 */
 	private static String getCkEditorFileName() {
-		String f = EnvUtil.getHomeDir().getAbsolutePath()
-		   + File.separator + "ckeditor"
-		   + File.separator + "ckeditor.js";
-		return f;
+		File homeDir = EnvUtil.getHomeDir();
+		String targetName = "ckeditor";
+		String folder = targetName;
+		File[] files = homeDir.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				if (file.isDirectory() && file.getName().equalsIgnoreCase(targetName)) {
+					folder = file.getName();
+					break;
+				}
+			}
+		}
+		return homeDir.getAbsolutePath()
+				+ File.separator + folder
+				+ File.separator + "ckeditor.js";
 	}
 
 	/**
@@ -138,12 +159,10 @@ public class SpellCheck {
 	public static void installCkEditor(SpellDlg dlg) {
 		//check if navigator is Firefox or Chrome or Opera or Brave
 		String title = "spelling",
-		   msg = title + ".ckeditor_install_";
+				msg = title + ".ckeditor_install_";
 		if (checkForCkEditor()) {
-			MessageDlg.show(dlg,
-			   I18N.getMsg(msg + "allready"),
-			   title,
-			   true);
+			MessageDlg.show(dlg, I18N.getMsg(msg + "allready"),
+					title, true);
 			return;
 		}
 		String src = Const.SpellCheker.CKEDITOR.toString();
@@ -154,10 +173,8 @@ public class SpellCheck {
 			LOG.err("SpellChecker.installCkEditor() exception", ex);
 		}
 		if (!checkForCkEditor()) {
-			MessageDlg.show(dlg,
-			   I18N.getMsg(msg + "ok"),
-			   title,
-			   true);
+			MessageDlg.show(dlg, I18N.getMsg(msg + "ok"),
+					title, true);
 		}
 	}
 

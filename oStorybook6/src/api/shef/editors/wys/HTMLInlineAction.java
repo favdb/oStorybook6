@@ -8,6 +8,8 @@
  */
 package api.shef.editors.wys;
 
+import api.shef.actions.CompoundManager;
+import api.shef.tools.HtmlUtils;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import javax.swing.Icon;
@@ -20,8 +22,6 @@ import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTML;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import api.shef.actions.CompoundManager;
-import api.shef.tools.HtmlUtils;
 import storybook.shortcut.Shortcuts;
 
 /**
@@ -33,15 +33,15 @@ import storybook.shortcut.Shortcuts;
 public class HTMLInlineAction extends HTMLTextEditAction {
 
 	public static final int EM = 0,
-		STRONG = 1,
-		CODE = 2,
-		CITE = 3,
-		SUP = 4,
-		SUB = 5,
-		BOLD = 6,
-		ITALIC = 7,
-		UNDERLINE = 8,
-		STRIKE = 9;
+			STRONG = 1,
+			CODE = 2,
+			CITE = 3,
+			SUP = 4,
+			SUB = 5,
+			BOLD = 6,
+			ITALIC = 7,
+			UNDERLINE = 8,
+			STRIKE = 9;
 
 	public static final String[] TYPES = {
 		"highlight",

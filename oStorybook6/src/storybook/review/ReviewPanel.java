@@ -122,19 +122,19 @@ public class ReviewPanel extends JPanel implements MouseListener {
 		tb.setLayout(new MigLayout(MIG.get(MIG.FILLX, MIG.INS0, MIG.HIDEMODE3)));
 		tb.setName("CommentsToolbar");
 		JButton bten = Ui.initButton("btAdd", "", ICONS.K.CHAR_COMMENT,
-		   "comment.create",
-		   evt -> reviewAdd());
+				"comment.create",
+				evt -> reviewAdd());
 		tb.add(bten);
 		tb.add(new JLabel(), MIG.GROWX);
 		JPanel p = new JPanel(new MigLayout(MIG.INS0));
 		p.setOpaque(false);
 		btExport = Ui.initButton("btExport", "", ICONS.K.F_EXPORT,
-		   "comments.export",
-		   evt -> reviewsExport());
+				"comments.export",
+				evt -> reviewsExport());
 		p.add(btExport);
 		btImport = Ui.initButton("btImport", "", ICONS.K.F_IMPORT,
-		   "comments.import",
-		   evt -> reviewsImport());
+				"comments.import",
+				evt -> reviewsImport());
 		p.add(btImport);
 		tb.add(p, MIG.RIGHT);
 		return tb;
@@ -145,7 +145,7 @@ public class ReviewPanel extends JPanel implements MouseListener {
 	 *
 	 */
 	private void reviewAdd() {
-		//LOG.printInfos(TT + ".reviewAdd()");
+		//LOG.trace(TT + ".reviewAdd()");
 		if (typist.shefGet() == null) {
 			return;
 		}
@@ -230,7 +230,7 @@ public class ReviewPanel extends JPanel implements MouseListener {
 		//LOG.printInfos(TT + ".reviewsImport()");
 		//select a file to import (XML only)
 		File file = IOUtil.fileSelect(this, "", "xml",
-		   I18N.getMsg("file.type.xml") + " (*.xml)", "import");
+				I18N.getMsg("file.type.xml") + " (*.xml)", "import");
 		if (file == null) {
 			return;
 		}
@@ -238,9 +238,9 @@ public class ReviewPanel extends JPanel implements MouseListener {
 		if (ImportReview.exec(mainFrame, file)) {
 			typist.refresh();
 			JOptionPane.showMessageDialog(null,
-			   I18N.getMsg("comments.import.ok", file.getAbsolutePath()),
-			   I18N.getMsg("import"),
-			   JOptionPane.INFORMATION_MESSAGE);
+					I18N.getMsg("comments.import.ok", file.getAbsolutePath()),
+					I18N.getMsg("import"),
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -255,10 +255,10 @@ public class ReviewPanel extends JPanel implements MouseListener {
 		buf.append(Html.STYLE_B);
 		buf.append(CSS.forEditor());
 		buf.append("tr {"
-		   + "width:100%;\n"
-		   + "border: 1px solid black; \n"
-		   + "border-collapse: collapse;\n"
-		   + "}");
+				+ "width:100%;\n"
+				+ "border: 1px solid black; \n"
+				+ "border-collapse: collapse;\n"
+				+ "}");
 		buf.append(Html.STYLE_E);
 		buf.append(Html.HEAD_E);
 		buf.append(Html.BODY_B);
@@ -365,7 +365,7 @@ public class ReviewPanel extends JPanel implements MouseListener {
 			popupMenu(evt);
 		}
 		if (evt.getClickCount() == 2
-		   && evt.getButton() == MouseEvent.BUTTON1) {// double clicked: edit the comment
+				&& evt.getButton() == MouseEvent.BUTTON1) {// double clicked: edit the comment
 			reviewEdit(endnote);
 		}
 		// allways select the text

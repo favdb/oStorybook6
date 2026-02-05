@@ -17,8 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.db.part;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,328 +38,314 @@ import storybook.ui.MainFrame;
 @SuppressWarnings("serial")
 public class Part extends AbstractEntity {
 
-    public static Part findNumber(List<Part> parts, int n) {
-	for (Part p : parts) {
-	    if (p.getNumber() == n) {
-		return (p);
-	    }
+	public static Part findNumber(List<Part> parts, int n) {
+		for (Part p : parts) {
+			if (p.getNumber() == n) {
+				return (p);
+			}
+		}
+		return (null);
 	}
-	return (null);
-    }
 
-    public static Integer getNextNumber(List<Part> parts) {
-	int n = 0;
-	for (Part p : parts) {
-	    if (p.getNumber() > n) {
-		n = p.getNumber();
-	    }
+	public static Integer getNextNumber(List<Part> parts) {
+		int n = 0;
+		for (Part p : parts) {
+			if (p.getNumber() > n) {
+				n = p.getNumber();
+			}
+		}
+		return (n + 1);
 	}
-	return (n + 1);
-    }
 
-    private Integer number = 0;
-    private Part superpart = null;
-    private Timestamp creationTime = null;
-    private Timestamp objectiveTime = null;
-    private Timestamp doneTime = null;
-    private Integer objectiveChars = 0;
-    private Long superpart_id;
+	private Integer number = 0;
+	private Part superpart = null;
+	private Timestamp creationTime = null;
+	private Timestamp objectiveTime = null;
+	private Timestamp doneTime = null;
+	private Integer objectiveChars = 0;
+	private Long superpart_id;
 
-    public Part() {
-	super(Book.TYPE.PART, "111");
-	this.creationTime = new Timestamp(new Date().getTime());
-	setNotes("");
-	setDescription("");
-	setAssistant("");
-    }
-
-    public Part(ResultSet rs) {
-	super(Book.TYPE.PART, "111", rs);
-	try {
-	    number = rs.getInt("number");
-	    superpart = rs.getObject("superpart", Part.class);
-	    creationTime = rs.getTimestamp("creationTime");
-	    objectiveTime = rs.getTimestamp("objectiveTime");
-	    doneTime = rs.getTimestamp("doneTime");
-	    objectiveChars = rs.getInt("objectiveChars");
-	} catch (SQLException ex) {
-	    //empty
+	public Part() {
+		super(Book.TYPE.PART, "111");
+		this.creationTime = new Timestamp(new Date().getTime());
+		setNotes("");
+		setDescription("");
+		setAssistant("");
 	}
-    }
 
-    public Part(Integer number, String name) {
-	this();
-	this.number = number;
-	setName(name);
-	this.objectiveChars = 0;
-    }
-
-    public Part(Integer number, String name, String notes, Part superpart,
-	    Timestamp creationTime, Timestamp objectiveTime,
-	    Timestamp doneTime) {
-	this(number, name);
-	setNotes(notes);
-	this.superpart = superpart;
-	this.creationTime = creationTime;
-	this.objectiveTime = objectiveTime;
-	this.doneTime = doneTime;
-    }
-
-    /**
-     * get the identification like Pnn where nn is the Part ID
-     *
-     * @return
-     */
-    public String getIdent() {
-	return String.format("P%d", getId());
-    }
-
-    public Integer getNumber() {
-	return this.number;
-    }
-
-    public void setNumber(Integer number) {
-	this.number = number;
-    }
-
-    public String getNumberName() {
-	return this.number + ": " + this.getName();
-    }
-
-    public boolean hasSuperpart() {
-	return superpart != null;
-    }
-
-    public Part getSuperpart() {
-	return this.superpart;
-	//return(null);
-    }
-
-    public void setSuperpart(Part superpart) {
-	this.superpart = superpart;
-    }
-
-    public Long getSuperpartId() {
-	return this.superpart_id;
-	//return(null);
-    }
-
-    public void setSuperpartId(Long value) {
-	this.superpart_id = value;
-    }
-
-    public boolean isPartOfPart(Part ancestor) {
-	return this.getId().equals(ancestor.getId());
-    }
-
-    public boolean hasCreationTime() {
-	return creationTime != null;
-    }
-
-    public void setCreationTime(Timestamp ts) {
-	creationTime = ts;
-    }
-
-    public Timestamp getCreationTime() {
-	return creationTime;
-    }
-
-    public boolean hasObjectiveTime() {
-	return objectiveTime != null;
-    }
-
-    public void setObjectiveTime(Timestamp ts) {
-	objectiveTime = ts;
-    }
-
-    public Timestamp getObjectiveTime() {
-	return objectiveTime;
-    }
-
-    public boolean hasObjectiveChars() {
-	return objectiveChars != null;
-    }
-
-    public Integer getObjectiveChars() {
-	return (hasObjectiveChars()) ? this.objectiveChars : 0;
-    }
-
-    public void setObjectiveChars(Integer objectiveChars) {
-	this.objectiveChars = objectiveChars;
-    }
-
-    public boolean isDone() {
-	return hasDoneTime();
-    }
-
-    public boolean hasDoneTime() {
-	return doneTime != null;
-    }
-
-    public void setDoneTime(Timestamp ts) {
-	doneTime = ts;
-    }
-
-    public Timestamp getDoneTime() {
-	return doneTime;
-    }
-
-    @Override
-    public String toString() {
-	return getNumber() + ": " + getName() + (hasNotes() ? "*" : "");
-    }
-
-    @Override
-    public String toCsv(String quoteStart, String quoteEnd, String separator) {
-	StringBuilder b = new StringBuilder();
-	b.append(quoteStart).append(getClean(this)).append(quoteEnd).append(separator);
-	b.append(quoteStart).append(getClean(number)).append(quoteEnd).append(separator);
-	b.append(quoteStart).append(getClean(getName())).append(quoteEnd).append(separator);
-	b.append(quoteStart).append(getClean(getSuperpart())).append(quoteEnd).append(separator);
-	b.append(quoteStart).append(getClean(getCreationTime())).append(quoteEnd).append(separator);
-	b.append(quoteStart).append(getClean(getObjectiveTime())).append(quoteEnd).append(separator);
-	b.append(quoteStart).append(getClean(getDoneTime())).append(quoteEnd).append(separator);
-	b.append(quoteStart).append(getClean(getObjectiveChars())).append(quoteEnd).append(separator);
-	b.append(quoteStart).append(getClean(getNotes())).append(quoteEnd).append(separator);
-	return (b.toString());
-    }
-
-    @Override
-    public String toHtml() {
-	return (toCsv("<td>", "</td>", "\n"));
-    }
-
-    @Override
-    public String toText() {
-	return (toCsv("", "", "\t"));
-    }
-
-    @Override
-    public String toDetail(Integer detailed) {
-	StringBuilder b = new StringBuilder();
-	b.append(toDetailHeader(detailed));
-	b.append(getInfo(2, DATA.NUMBER, getNumber()));
-	b.append(getInfo(detailed, DATA.PART_SUP, getSuperpart()));
-	if (getObjectiveTime() != null || detailed > 1) {
-	    StringBuilder bx = new StringBuilder();
-	    bx.append(Html.TABLE_B).append(Html.TR_B);
-	    bx.append(getInfo(detailed, DATA.OBJECTIVE_DATE, getObjectiveTime()));
-	    bx.append(getInfo(detailed, DATA.OBJECTIVE_DONE, getDoneTime()));
-	    bx.append(getInfo(detailed, DATA.OBJECTIVE_SIZE, getObjectiveChars()));
-	    bx.append(Html.TR_E).append(Html.TABLE_E);
-	    b.append(getInfo(detailed, DATA.OBJECTIVE, bx.toString()));
+	public Part(Integer number, String name) {
+		this();
+		this.number = number;
+		setName(name);
+		this.objectiveChars = 0;
 	}
-	b.append(toDetailFooter(detailed));
-	return (b.toString());
-    }
 
-    @Override
-    public String toXml() {
-	StringBuilder b = new StringBuilder(toXmlBeg());
-	b.append(XmlUtil.setAttribute(0, XK.NUMBER, getNumber()));
-	b.append(XmlUtil.setAttribute(0, XK.SUP, getSuperpart()));
-	if (getObjectiveTime() != null) {
-	    b.append(XmlUtil.setAttribute(8, XK.OBJECTIVEDATE, getObjectiveTime()));
-	    b.append(XmlUtil.setAttribute(0, XK.OBJECTIVEDONE, getDoneTime()));
-	    b.append(XmlUtil.setAttribute(0, XK.OBJECTIVECHARS, getObjectiveChars()));
+	public Part(Integer number, String name, String notes, Part superpart,
+			Timestamp creationTime, Timestamp objectiveTime,
+			Timestamp doneTime) {
+		this(number, name);
+		setNotes(notes);
+		this.superpart = superpart;
+		this.creationTime = creationTime;
+		this.objectiveTime = objectiveTime;
+		this.doneTime = doneTime;
 	}
-	b.append(">\n");
-	b.append(toXmlEnd());
-	return XmlUtil.beautify(b.toString());
-    }
 
-    public static Part fromXml(Node node) {
-	Part p = new Part();
-	fromXmlBeg(node, p);
-	p.setNumber(XmlUtil.getInteger(node, XK.NUMBER));
-	p.setSuperpartId(XmlUtil.getLong(node, XK.SUP));
-	if (XmlUtil.getTimestamp(node, XK.OBJECTIVEDATE) != null) {
-	    p.setObjectiveTime(XmlUtil.getTimestamp(node, XK.OBJECTIVEDATE));
-	    p.setDoneTime(XmlUtil.getTimestamp(node, XK.OBJECTIVEDONE));
-	    p.setObjectiveChars(XmlUtil.getInteger(node, XK.OBJECTIVECHARS));
+	/**
+	 * get the identification like Pnn where nn is the Part ID
+	 *
+	 * @return
+	 */
+	public String getIdent() {
+		return String.format("P%d", getId());
 	}
-	fromXmlEnd(node, p);
-	return p;
-    }
 
-    @Override
-    public int compareTo(AbstractEntity ch) {
-	return getNumber().compareTo(((Part) ch).getNumber());
-    }
-
-    @Override
-    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
-    public boolean equals(Object obj) {
-	if (!super.equals(obj)) {
-	    return false;
+	public Integer getNumber() {
+		return this.number;
 	}
-	Part test = (Part) obj;
-	boolean ret = true;
-	ret = ret && equalsIntegerNullValue(number, test.getNumber());
-	ret = ret && equalsStringNullValue(getName(), test.getName());
-	ret = ret && equalsStringNullValue(getNotes(), test.getNotes());
-	ret = ret && equalsObjectNullValue(superpart, test.getSuperpart());
-	return ret;
-    }
 
-    @Override
-    public int hashCode() {
-	return hashPlus(super.hashCode(),
-		number,
-		superpart,
-		creationTime,
-		objectiveChars,
-		objectiveTime,
-		doneTime);
-    }
-
-    public static Part find(List<Part> list, String str) {
-	for (Part elem : list) {
-	    if (elem.getName().equals(str)) {
-		return (elem);
-	    }
+	public void setNumber(Integer number) {
+		this.number = number;
 	}
-	return (null);
-    }
 
-    public static Part find(List<Part> list, Long id) {
-	for (Part elem : list) {
-	    if (elem.id.equals(id)) {
-		return (elem);
-	    }
+	public String getNumberName() {
+		return this.number + ": " + this.getName();
 	}
-	return (null);
-    }
 
-    public static List<String> getDefColumns() {
-	List<String> list = AbstractEntity.getDefColumns(Book.TYPE.PART);
-	return (list);
-    }
+	public boolean hasSuperpart() {
+		return superpart != null;
+	}
 
-    public static List<String> getTable() {
-	List<String> ls = new ArrayList<>();
-	String tableName = "part";
-	AbstractEntity.getTable(tableName, ls);
-	ls.add(tableName + ",number,Integer,0");
-	ls.add(tableName + ",part_id,Integer,0");
-	ls.add(tableName + ",creation_ts,Time,0");
-	ls.add(tableName + ",objective_ts,Time,0");
-	ls.add(tableName + ",done_ts,Time,0");
-	ls.add(tableName + ",objective_ch,Integer,0");
-	return (ls);
-    }
+	public Part getSuperpart() {
+		return this.superpart;
+		//return(null);
+	}
 
-    @Override
-    public AbstractEntity copyTo(MainFrame m) {
-	Part ne = new Part();
-	doCopyTo(m, ne);
-	ne.setCreationTime(getCreationTime());
-	ne.setDoneTime(getDoneTime());
-	ne.setNumber(m.project.parts.getLastNumber() + 1);
-	ne.setObjectiveChars(getObjectiveChars());
-	ne.setObjectiveTime(getObjectiveTime());
-	ne.setSuperpart(getSuperpart());
-	return ne;
-    }
+	public void setSuperpart(Part superpart) {
+		this.superpart = superpart;
+	}
+
+	public Long getSuperpartId() {
+		return this.superpart_id;
+		//return(null);
+	}
+
+	public void setSuperpartId(Long value) {
+		this.superpart_id = value;
+	}
+
+	public boolean isPartOfPart(Part ancestor) {
+		return this.getId().equals(ancestor.getId());
+	}
+
+	public boolean hasCreationTime() {
+		return creationTime != null;
+	}
+
+	public void setCreationTime(Timestamp ts) {
+		creationTime = ts;
+	}
+
+	public Timestamp getCreationTime() {
+		return creationTime;
+	}
+
+	public boolean hasObjectiveTime() {
+		return objectiveTime != null;
+	}
+
+	public void setObjectiveTime(Timestamp ts) {
+		objectiveTime = ts;
+	}
+
+	public Timestamp getObjectiveTime() {
+		return objectiveTime;
+	}
+
+	public boolean hasObjectiveChars() {
+		return objectiveChars != null;
+	}
+
+	public Integer getObjectiveChars() {
+		return (hasObjectiveChars()) ? this.objectiveChars : 0;
+	}
+
+	public void setObjectiveChars(Integer objectiveChars) {
+		this.objectiveChars = objectiveChars;
+	}
+
+	public boolean isDone() {
+		return hasDoneTime();
+	}
+
+	public boolean hasDoneTime() {
+		return doneTime != null;
+	}
+
+	public void setDoneTime(Timestamp ts) {
+		doneTime = ts;
+	}
+
+	public Timestamp getDoneTime() {
+		return doneTime;
+	}
+
+	@Override
+	public String toString() {
+		return getNumber() + ": " + getName() + (hasNotes() ? "*" : "");
+	}
+
+	@Override
+	public String toCsv(String quoteStart, String quoteEnd, String separator) {
+		StringBuilder b = new StringBuilder();
+		b.append(quoteStart).append(getClean(this)).append(quoteEnd).append(separator);
+		b.append(quoteStart).append(getClean(number)).append(quoteEnd).append(separator);
+		b.append(quoteStart).append(getClean(getName())).append(quoteEnd).append(separator);
+		b.append(quoteStart).append(getClean(getSuperpart())).append(quoteEnd).append(separator);
+		b.append(quoteStart).append(getClean(getCreationTime())).append(quoteEnd).append(separator);
+		b.append(quoteStart).append(getClean(getObjectiveTime())).append(quoteEnd).append(separator);
+		b.append(quoteStart).append(getClean(getDoneTime())).append(quoteEnd).append(separator);
+		b.append(quoteStart).append(getClean(getObjectiveChars())).append(quoteEnd).append(separator);
+		b.append(quoteStart).append(getClean(getNotes())).append(quoteEnd).append(separator);
+		return (b.toString());
+	}
+
+	@Override
+	public String toHtml() {
+		return (toCsv("<td>", "</td>", "\n"));
+	}
+
+	@Override
+	public String toText() {
+		return (toCsv("", "", "\t"));
+	}
+
+	@Override
+	public String toDetail(Integer detailed) {
+		StringBuilder b = new StringBuilder();
+		b.append(toDetailHeader(detailed));
+		b.append(getInfo(2, DATA.NUMBER, getNumber()));
+		b.append(getInfo(detailed, DATA.PART_SUP, getSuperpart()));
+		if (getObjectiveTime() != null || detailed > 1) {
+			StringBuilder bx = new StringBuilder();
+			bx.append(Html.TABLE_B).append(Html.TR_B);
+			bx.append(getInfo(detailed, DATA.OBJECTIVE_DATE, getObjectiveTime()));
+			bx.append(getInfo(detailed, DATA.OBJECTIVE_DONE, getDoneTime()));
+			bx.append(getInfo(detailed, DATA.OBJECTIVE_SIZE, getObjectiveChars()));
+			bx.append(Html.TR_E).append(Html.TABLE_E);
+			b.append(getInfo(detailed, DATA.OBJECTIVE, bx.toString()));
+		}
+		b.append(toDetailFooter(detailed));
+		return (b.toString());
+	}
+
+	@Override
+	public String toXml() {
+		StringBuilder b = new StringBuilder(toXmlBeg());
+		b.append(XmlUtil.setAttribute(0, XK.NUMBER, getNumber()));
+		b.append(XmlUtil.setAttribute(0, XK.SUP, getSuperpart()));
+		if (getObjectiveTime() != null) {
+			b.append(XmlUtil.setAttribute(8, XK.OBJECTIVEDATE, getObjectiveTime()));
+			b.append(XmlUtil.setAttribute(0, XK.OBJECTIVEDONE, getDoneTime()));
+			b.append(XmlUtil.setAttribute(0, XK.OBJECTIVECHARS, getObjectiveChars()));
+		}
+		b.append(">\n");
+		b.append(toXmlEnd());
+		return XmlUtil.beautify(b.toString());
+	}
+
+	public static Part fromXml(Node node) {
+		Part p = new Part();
+		fromXmlBeg(node, p);
+		p.setNumber(XmlUtil.getInteger(node, XK.NUMBER));
+		p.setSuperpartId(XmlUtil.getLong(node, XK.SUP));
+		if (XmlUtil.getTimestamp(node, XK.OBJECTIVEDATE) != null) {
+			p.setObjectiveTime(XmlUtil.getTimestamp(node, XK.OBJECTIVEDATE));
+			p.setDoneTime(XmlUtil.getTimestamp(node, XK.OBJECTIVEDONE));
+			p.setObjectiveChars(XmlUtil.getInteger(node, XK.OBJECTIVECHARS));
+		}
+		fromXmlEnd(node, p);
+		return p;
+	}
+
+	@Override
+	public int compareTo(AbstractEntity ch) {
+		return getNumber().compareTo(((Part) ch).getNumber());
+	}
+
+	@Override
+	@SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) {
+			return false;
+		}
+		Part test = (Part) obj;
+		boolean ret = true;
+		ret = ret && equalsIntegerNullValue(number, test.getNumber());
+		ret = ret && equalsStringNullValue(getName(), test.getName());
+		ret = ret && equalsStringNullValue(getNotes(), test.getNotes());
+		ret = ret && equalsObjectNullValue(superpart, test.getSuperpart());
+		return ret;
+	}
+
+	@Override
+	public int hashCode() {
+		return hashPlus(super.hashCode(),
+				number,
+				superpart,
+				creationTime,
+				objectiveChars,
+				objectiveTime,
+				doneTime);
+	}
+
+	public static Part find(List<Part> list, String str) {
+		for (Part elem : list) {
+			if (elem.getName().equals(str)) {
+				return (elem);
+			}
+		}
+		return (null);
+	}
+
+	public static Part find(List<Part> list, Long id) {
+		for (Part elem : list) {
+			if (elem.id.equals(id)) {
+				return (elem);
+			}
+		}
+		return (null);
+	}
+
+	public static List<String> getDefColumns() {
+		List<String> list = AbstractEntity.getDefColumns(Book.TYPE.PART);
+		return (list);
+	}
+
+	public static List<String> getTable() {
+		List<String> ls = new ArrayList<>();
+		String tableName = "part";
+		AbstractEntity.getTable(tableName, ls);
+		ls.add(tableName + ",number,Integer,0");
+		ls.add(tableName + ",part_id,Integer,0");
+		ls.add(tableName + ",creation_ts,Time,0");
+		ls.add(tableName + ",objective_ts,Time,0");
+		ls.add(tableName + ",done_ts,Time,0");
+		ls.add(tableName + ",objective_ch,Integer,0");
+		return (ls);
+	}
+
+	@Override
+	public AbstractEntity copyTo(MainFrame m) {
+		Part ne = new Part();
+		doCopyTo(m, ne);
+		ne.setCreationTime(getCreationTime());
+		ne.setDoneTime(getDoneTime());
+		ne.setNumber(m.project.parts.getLastNumber() + 1);
+		ne.setObjectiveChars(getObjectiveChars());
+		ne.setObjectiveTime(getObjectiveTime());
+		ne.setSuperpart(getSuperpart());
+		return ne;
+	}
 
 }

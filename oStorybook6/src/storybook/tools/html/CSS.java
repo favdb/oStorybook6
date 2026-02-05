@@ -303,11 +303,11 @@ public class CSS {
 	}
 
 	/**
-	 * return a CSS using a file with a given Font
+	 * get a CSS String using a CSS file content,
 	 *
 	 * @param nf
 	 * @param font
-	 * @return
+	 * @return if CSS file not exists then return default CSS with the given Font
 	 */
 	public static String fromFile(String nf, Font font) {
 		StringBuilder b = new StringBuilder();

@@ -57,7 +57,6 @@ import storybook.db.scene.SceneStateLCR;
 import storybook.db.scene.Scenes;
 import storybook.db.strand.Strand;
 import storybook.edit.Editor;
-import storybook.project.Project;
 import storybook.review.ReviewPanel;
 import storybook.tools.LOG;
 import storybook.tools.Markdown;
@@ -221,6 +220,11 @@ public class TypistPanel extends AbstractPanel {
 		return toolbar;
 	}
 
+	/**
+	 * initalize left toolbar (hide, change title, new Scene, nav scenes, ignore changes, save,
+	 *
+	 * @return
+	 */
 	private JPanel initTB1() {
 		//LOG.trace(TT + "initTB1()");
 		tb1 = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP1)));
@@ -234,7 +238,7 @@ public class TypistPanel extends AbstractPanel {
 		cbScenes.setMaximumRowCount(15);
 		cbScenes.setMaximumSize(new Dimension(IconUtil.getDefSize() * 16, IconUtil.getDefSize()));
 		tb1.add(cbScenes);
-		//titre de la scène
+		//title of the Scène, and new Scene
 		btTitle = Ui.initButton(BT_TITLE, "", ICONS.K.EDIT,
 				"title.change", e -> sceneChangeTitle());
 		tb1.add(btTitle);
@@ -242,7 +246,32 @@ public class TypistPanel extends AbstractPanel {
 				"scene.new", e -> sceneNew());
 		tb1.add(btNewScene);
 		tb1.add(new JLabel(" "));
-		//navigation dans les scènes
+		//navigation into scènes
+		initNavScenes();
+		// ignore changes
+		btIgnore = Ui.initButton(BT_IGNORE, "", ICONS.K.CANCEL,
+				"discard.changes", e -> refresh());
+		tb1.add(btIgnore);
+		// save changes
+		btSave = Ui.initButton(BT_SAVE, "", ICONS.K.F_SAVE,
+				"file.save", e -> save());
+		tb1.add(btSave);
+		tb1.add(new JLabel(" "));
+		// show info panel
+		btShowInfo = Ui.initButton(BT_INFO, "", ICONS.K.INFO_HIDE,
+				"typist.show_infos", e -> doInfo());
+		tb1.add(btShowInfo);
+		// show/hide review panel
+		ckReview = Ui.initCheckBox(null, "cbComment", "comments",
+				book.getReview(), BNONE, e -> changeCkReview());
+		tb1.add(ckReview);
+		return tb1;
+	}
+
+	/**
+	 * initalize the scenes navigation
+	 */
+	private void initNavScenes() {
 		btFirst = Ui.initButton(BT_FIRST, "", ICONS.K.NAV_FIRST,
 				"export.nav.first", e -> sceneToFirst());
 		tb1.add(btFirst);
@@ -256,22 +285,13 @@ public class TypistPanel extends AbstractPanel {
 				"export.nav.last", e -> sceneToLast());
 		tb1.add(btLast);
 		tb1.add(new JLabel(" "));
-		btIgnore = Ui.initButton(BT_IGNORE, "", ICONS.K.CANCEL,
-				"discard.changes", e -> refresh());
-		tb1.add(btIgnore);
-		btSave = Ui.initButton(BT_SAVE, "", ICONS.K.F_SAVE,
-				"file.save", e -> save());
-		tb1.add(btSave);
-		tb1.add(new JLabel(" "));
-		btShowInfo = Ui.initButton(BT_INFO, "", ICONS.K.INFO_HIDE,
-				"typist.show_infos", e -> doInfo());
-		tb1.add(btShowInfo);
-		ckReview = Ui.initCheckBox(null, "cbComment", "comments",
-				book.getReview(), BNONE, e -> changeCkReview());
-		tb1.add(ckReview);
-		return tb1;
 	}
 
+	/**
+	 * initalize right toolbar for idea, change to normal mode, exit
+	 *
+	 * @return
+	 */
 	private JPanel initTB11() {
 		//LOG.trace(TT + "initTB11()");
 		JPanel tb = new JPanel(new MigLayout(MIG.get(MIG.INS0, MIG.GAP1)));
@@ -291,6 +311,11 @@ public class TypistPanel extends AbstractPanel {
 		return tb;
 	}
 
+	/**
+	 * initialize second toolbar (chapter, status, intensity, strand)
+	 *
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	private JPanel initTB2() {
 		//LOG.trace(TT + "initTB2()");
@@ -325,6 +350,11 @@ public class TypistPanel extends AbstractPanel {
 		return tb2;
 	}
 
+	/**
+	 * initalize status bar
+	 *
+	 * @return
+	 */
 	private JPanel initStatusbar() {
 		//LOG.trace(TT + "initStatusBar()");
 		statusbar = new JPanel();
@@ -334,10 +364,20 @@ public class TypistPanel extends AbstractPanel {
 		return statusbar;
 	}
 
+	/**
+	 * get current scene
+	 *
+	 * @return
+	 */
 	public Scene sceneGet() {
 		return this.scene;
 	}
 
+	/**
+	 * get current Shef editor
+	 *
+	 * @return
+	 */
 	public ShefEditor shefGet() {
 		if (bMarkdown) {
 			return null;
@@ -345,6 +385,11 @@ public class TypistPanel extends AbstractPanel {
 		return this.shef;
 	}
 
+	/**
+	 * propety change
+	 *
+	 * @param evt
+	 */
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent evt) {
 		//LOG.trace(TT + "modelPropertyChange(evt=" + evt.toString() + ")");
@@ -355,6 +400,9 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * refresh the view
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public void refresh() {
@@ -383,6 +431,11 @@ public class TypistPanel extends AbstractPanel {
 		repaint();
 	}
 
+	/**
+	 * get the carret position
+	 *
+	 * @return
+	 */
 	public int getCaretPosition() {
 		if (bMarkdown) {
 			return mdEdit.getCaretPosition();
@@ -391,6 +444,11 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * set the carret position
+	 *
+	 * @param pos
+	 */
 	public void setCaretPosition(int pos) {
 		if (bMarkdown) {
 			mdEdit.setCaretPosition(0);
@@ -399,6 +457,9 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * refresh the summary text
+	 */
 	public void refreshText() {
 		//LOG.trace(TT + "refreshText()");
 		if (scene == null) {
@@ -418,6 +479,11 @@ public class TypistPanel extends AbstractPanel {
 		setOrigin();
 	}
 
+	/**
+	 * set the summary text
+	 *
+	 * @param text
+	 */
 	public void setText(String text) {
 		if (bMarkdown) {
 			mdEdit.setText(text);
@@ -426,14 +492,22 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * save the summary text
+	 */
 	public void saveText() {
-		//LOG.trace(TT + "saveText()");
+		LOG.trace(TT + "saveText()");
 		scene = mainFrame.project.scenes.get(scene.getId());
 		scene.setSummary(getText());
 		mainFrame.getBookController().updateEntity(scene);
 		setOrigin();
 	}
 
+	/**
+	 * get the summary text
+	 *
+	 * @return
+	 */
 	public String getText() {
 		if (bMarkdown) {
 			return mdEdit.getText();
@@ -442,6 +516,9 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * set the origin to detect changes
+	 */
 	public void setOrigin() {
 		if (bMarkdown) {
 			origin = mdEdit.getText().hashCode();
@@ -450,6 +527,11 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * set the navigation
+	 *
+	 * @param scenes
+	 */
 	private void setNav(List<Scene> scenes) {
 		//LOG.trace(TT + "setNav(scenes size=)" + (scenes != null ? scenes.size() : "null"));
 		if (scenes == null || scenes.isEmpty() || toolbar == null) {
@@ -474,6 +556,11 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * get the first Scene
+	 *
+	 * @return
+	 */
 	private Scene sceneGetFirst() {
 		//LOG.trace(TT + "sceneGetFirst()");
 		if (scene != null) {
@@ -486,6 +573,11 @@ public class TypistPanel extends AbstractPanel {
 		return scenes.get(0);
 	}
 
+	/**
+	 * get the last Scene
+	 *
+	 * @return
+	 */
 	private Scene sceneGetLast() {
 		//LOG.trace(TT + "lastSceneGet()");
 		if (scene != null) {
@@ -498,7 +590,13 @@ public class TypistPanel extends AbstractPanel {
 		return scenes.get(scenes.size() - 1);
 	}
 
-	private boolean textToLarge(String topText) {
+	/**
+	 * detect if text is too large
+	 *
+	 * @param topText
+	 * @return
+	 */
+	private boolean textTooLarge(String topText) {
 		//LOG.trace(TT + "textToLarge(topText len=" + topText.length() + ")");
 		if (topText.length() > 32767) {
 			String str = I18N.getMsg("editor.text_too_large");
@@ -509,13 +607,18 @@ public class TypistPanel extends AbstractPanel {
 		return (false);
 	}
 
+	/**
+	 * check if modified
+	 *
+	 * @return
+	 */
 	public int askModified() {
 		//LOG.trace(TT + "askModified()");
 		if (scene != null) {
 			String topText = getText();
 			int nhash = topText.hashCode();
 			if (origin != nhash) {
-				if (textToLarge(topText)) {
+				if (textTooLarge(topText)) {
 					return (JOptionPane.CANCEL_OPTION);
 				}
 				updatedSet();
@@ -548,6 +651,9 @@ public class TypistPanel extends AbstractPanel {
 		return JOptionPane.YES_OPTION;
 	}
 
+	/**
+	 * create a new Scene
+	 */
 	private void sceneNew() {
 		//LOG.trace(TT + "sceneNew()");
 		if (askModified() == JOptionPane.CANCEL_OPTION) {
@@ -588,6 +694,9 @@ public class TypistPanel extends AbstractPanel {
 		refresh();
 	}
 
+	/**
+	 * refresh the scenes
+	 */
 	@SuppressWarnings("unchecked")
 	private void cbScenesRefresh() {
 		//LOG.trace(TT + "cbScenesRefresh()");
@@ -601,6 +710,9 @@ public class TypistPanel extends AbstractPanel {
 		cbScenes.addActionListener(this);
 	}
 
+	/**
+	 * reload the scenes
+	 */
 	@SuppressWarnings("unchecked")
 	private void cbScenesReload() {
 		//LOG.trace(TT + "cbScenesReload()");
@@ -616,6 +728,11 @@ public class TypistPanel extends AbstractPanel {
 		cbScenes.addActionListener(this);
 	}
 
+	/**
+	 * change the Strand
+	 *
+	 * @param name
+	 */
 	private void strandChange(String name) {
 		//LOG.trace(TT + "strandChange()");
 		String s[] = name.split("_");
@@ -631,6 +748,9 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * change the Chapter
+	 */
 	private void chapterChange() {
 		//LOG.trace(TT + "chapterChange()");
 		ChapterSelectDlg dlg = new ChapterSelectDlg(this, scene.getChapter());
@@ -643,6 +763,9 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * change the title
+	 */
 	private void sceneChangeTitle() {
 		//LOG.trace(TT + "sceneChangeTitle()");
 		String s = (String) JOptionPane.showInputDialog(
@@ -655,13 +778,18 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * save all changes
+	 *
+	 * @return
+	 */
 	private boolean save() {
-		//LOG.trace(TT + "save()");
+		LOG.trace(TT + "save()");
 		App.preferences.typistShefSet(shef.getWysiwyg().getShowHideTB());
 		String topText = getText();
 		if (!Html.htmlToText(topText).isEmpty()) {
 			topText = topText.replace("--", "—&nbsp;");
-			if (textToLarge(topText)) {
+			if (textTooLarge(topText)) {
 				return (false);
 			}
 		}
@@ -675,6 +803,9 @@ public class TypistPanel extends AbstractPanel {
 		return true;
 	}
 
+	/**
+	 * set buttons
+	 */
 	public void setButtons() {
 		int hash = getText().hashCode();
 		if (origin != hash) {
@@ -686,17 +817,26 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * set update flag
+	 */
 	public void updatedSet() {
 		modified = true;
 		setButtons();
 	}
 
+	/**
+	 * remove update flag
+	 */
 	public void updatedReset() {
 		modified = false;
 		this.origin = getText().hashCode();
 		setButtons();
 	}
 
+	/**
+	 * close the Scene
+	 */
 	public void sceneClose() {
 		//LOG.trace(TT + "sceneClose()");
 		if (modified) {
@@ -707,6 +847,9 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * save temporary
+	 */
 	public void tempSave() {
 		//LOG.trace(TT + "tempSave()");
 		String svt = scene.getSummary();
@@ -715,6 +858,9 @@ public class TypistPanel extends AbstractPanel {
 		scene.setSummary(svt);
 	}
 
+	/**
+	 * do exit function
+	 */
 	private void doExit() {
 		//LOG.trace(TT + "doExit()");
 		if (!save()) {
@@ -726,6 +872,9 @@ public class TypistPanel extends AbstractPanel {
 		});
 	}
 
+	/**
+	 * go to first Scene
+	 */
 	private void sceneToFirst() {
 		//LOG.trace(TT + "sceneToFirst()");
 		if (askModified() == JOptionPane.CANCEL_OPTION) {
@@ -734,6 +883,9 @@ public class TypistPanel extends AbstractPanel {
 		sceneSet(sceneGetFirst());
 	}
 
+	/**
+	 * go to last Scene
+	 */
 	private void sceneToLast() {
 		//LOG.trace(TT + "sceneToLast()");
 		if (askModified() == JOptionPane.CANCEL_OPTION) {
@@ -742,6 +894,9 @@ public class TypistPanel extends AbstractPanel {
 		sceneSet(sceneGetLast());
 	}
 
+	/**
+	 * go to prior Scene
+	 */
 	private void sceneToPrior() {
 		//LOG.trace(TT + "sceneToPrior()");
 		if (askModified() == JOptionPane.CANCEL_OPTION) {
@@ -750,6 +905,9 @@ public class TypistPanel extends AbstractPanel {
 		setNextScene(-1);
 	}
 
+	/**
+	 * go to next Scene
+	 */
 	private void sceneToNext() {
 		//LOG.trace(TT + "sceneToNext()");
 		if (askModified() == JOptionPane.CANCEL_OPTION) {
@@ -758,6 +916,9 @@ public class TypistPanel extends AbstractPanel {
 		setNextScene(1);
 	}
 
+	/**
+	 * do showing info panel
+	 */
 	private void doInfo() {
 		//LOG.trace(TT + "doInfo()");
 		infosShowHide();
@@ -765,8 +926,11 @@ public class TypistPanel extends AbstractPanel {
 		//mainFrame.setUpdated();
 	}
 
+	/**
+	 * return to the MainFrame view
+	 */
 	private void returnToMainFrame() {
-		LOG.trace(TT + "returnToMainFrame()");
+		//LOG.trace(TT + "returnToMainFrame()");
 		App.preferences.typistShefSet(shef.getWysiwyg().getShowHideTB());
 		if (askModified() == JOptionPane.CANCEL_OPTION) {
 			return;
@@ -781,6 +945,9 @@ public class TypistPanel extends AbstractPanel {
 		mainFrame.typistActivate();
 	}
 
+	/**
+	 * select a scene
+	 */
 	private void sceneSelect() {
 		//LOG.trace(TT + "sceneSelect()");
 		if (askModified() == JOptionPane.CANCEL_OPTION) {
@@ -794,6 +961,11 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * performed action
+	 *
+	 * @param evt
+	 */
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		//LOG.trace(TT + "actionPerformed(evt=" + evt.toString() + ")");
@@ -814,6 +986,9 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * show/hide info panel
+	 */
 	private void infosShowHide() {
 		//LOG.trace(TT + "infosShowHide()");
 		if (panelInfo.isVisible()) {
@@ -829,6 +1004,11 @@ public class TypistPanel extends AbstractPanel {
 		split.setEnabled(panelInfo.isVisible());
 	}
 
+	/**
+	 * set the current Scene
+	 *
+	 * @param s
+	 */
 	private void sceneSet(Scene s) {
 		//LOG.trace(TT + "setScene()");
 		if (s.equals(scene)) {
@@ -845,6 +1025,11 @@ public class TypistPanel extends AbstractPanel {
 		updatedReset();
 	}
 
+	/**
+	 * set current Scene to the indexed given
+	 *
+	 * @param i
+	 */
 	private void setNextScene(int i) {
 		//LOG.trace(TT + "setNextScene(i=" + i + ")");
 		int n1 = cbScenes.getSelectedIndex() + i;
@@ -853,6 +1038,12 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * get a MenuItem with the given name
+	 *
+	 * @param name
+	 * @return
+	 */
 	private JMenuItem getMenuItem(String name) {
 		JMenuItem m = new JMenuItem(I18N.getMsg(name));
 		m.setName(name);
@@ -862,6 +1053,12 @@ public class TypistPanel extends AbstractPanel {
 		return m;
 	}
 
+	/**
+	 * get a MenuItem for the given Strand
+	 *
+	 * @param strand
+	 * @return
+	 */
 	private JMenuItem getMenuItem(Strand strand) {
 		JMenuItem m = new JMenuItem(strand.getName());
 		m.setName("strand_" + strand.getId().toString());
@@ -881,6 +1078,11 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * select a Strand
+	 *
+	 * @param evt
+	 */
 	private void strandSelect(ActionEvent evt) {
 		//LOG.trace(TT + "strandSelect()");
 		JPopupMenu menu = new JPopupMenu();
@@ -894,6 +1096,11 @@ public class TypistPanel extends AbstractPanel {
 		menu.show(bt, 0, bt.getBounds().height);
 	}
 
+	/**
+	 * refresh the given Strand
+	 *
+	 * @param strand
+	 */
 	private void strandRefresh(Strand strand) {
 		//LOG.trace(TT + "strandRefresh(" + LOG.trace(strand) + ")");
 		scene.setStrand(strand);
@@ -901,6 +1108,9 @@ public class TypistPanel extends AbstractPanel {
 		btStrand.setToolTipText(scene.getStrand().getName());
 	}
 
+	/**
+	 * create a new Strand
+	 */
 	private void strandNew() {
 		//LOG.trace(TT + "strandNew()");
 		Strand strand = new Strand();
@@ -912,7 +1122,7 @@ public class TypistPanel extends AbstractPanel {
 	}
 
 	/**
-	 * set full screen
+	 * set full screen mode
 	 */
 	public void setFull() {
 		//LOG.trace(TT + "setFull()");
@@ -935,12 +1145,12 @@ public class TypistPanel extends AbstractPanel {
 	}
 
 	/**
-	 * initalize the Reviw panel, not usable for Markdown
+	 * initialize the Reviw panel, not usable for Markdown
 	 *
 	 * @return
 	 */
 	private JPanel initReview() {
-		//LOG.trace(TT + "initReview()");
+		LOG.trace(TT + "initReview()");
 		if (bMarkdown) {
 
 		} else {
@@ -954,15 +1164,15 @@ public class TypistPanel extends AbstractPanel {
 	/**
 	 * initialize the endnote functions not visible for Markdown
 	 *
-	 * @return a JButton for activate the liste of Endnotes
+	 * @return a JButton for activate the list of Endnotes
 	 */
 	@SuppressWarnings("unchecked")
 	private void initEndnote() {
-		//LOG.trace(TT + "initEndnote()");
+		LOG.trace(TT + "initEndnote()");
 		if (!bMarkdown) {
 			endnotes = mainFrame.project.endnotes.find(Endnote.TYPE.ENDNOTE, scene);
 			btEndnotes = Endnote.getButtonAdd(e -> {
-				Endnote.createEndnote(mainFrame, Endnote.TYPE.ENDNOTE, scene, shef);
+				Endnote.create(mainFrame, Endnote.TYPE.ENDNOTE, scene, shef);
 				endnotes = mainFrame.project.endnotes.find(Endnote.TYPE.ENDNOTE, scene);
 				btEndnotes.setEnabled(!endnotes.isEmpty());
 			});
@@ -972,18 +1182,20 @@ public class TypistPanel extends AbstractPanel {
 		}
 	}
 
+	/**
+	 * show/hide review panel
+	 */
 	private void changeCkReview() {
-		//LOG.trace(TT + "changeCkReview()");
+		LOG.trace(TT + "changeCkReview()");
 		book.setReview(!book.getReview());
 		reviewPanel.setVisible(book.getReview());
 	}
 
+	/**
+	 * reset modified flag
+	 */
 	public void resetModified() {
 		this.modified = false;
-	}
-
-	public Project getProject() {
-		return this.getMainFrame().project;
 	}
 
 }

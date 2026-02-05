@@ -624,10 +624,10 @@ public class ImportSQL {
 				List<String> ls = endnoteSt;
 				Endnote e = new Endnote();
 				getCommon(ls, e, s);
+				e.setType(getInteger(ls, "TYPE", s));
 				e.setNumber(getInteger(ls, "NUMBER", s));
 				e.setSceneId(getLong(ls, "SCENE_ID", s));
 				e.setAspect(getString(ls, "ASPECT", s));
-				e.setType(getInteger(ls, "TYPE", s));
 				e.setSort(getString(ls, "SORT", s));
 				project.endnotes.add(e);
 			}

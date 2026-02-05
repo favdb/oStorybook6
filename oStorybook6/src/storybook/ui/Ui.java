@@ -462,7 +462,7 @@ public class Ui {
 			boolean isEmpty,
 			boolean isAll,
 			ActionListener... action) {
-		//App.trace(TT+".comboboxInit(title="+title+"tooltip, list, toSel, isEmpty, isAll)");
+		//LOG.trace(TT+".comboboxInit(title="+title+"tooltip, list, toSel, isEmpty, isAll)");
 		JComboBox cb = new JComboBox();
 		cb.setMinimumSize(IconUtil.getDefDim());
 		cb.setName(name);

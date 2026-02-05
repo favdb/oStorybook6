@@ -33,6 +33,7 @@ import storybook.tools.xml.XmlUtil;
 import static storybook.tools.xml.XmlUtil.*;
 
 /**
+ * class for Book informations
  *
  * @author FaVdB
  */

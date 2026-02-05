@@ -149,8 +149,6 @@ public abstract class AbstractExport {
 		try {
 			outBuffer = new StringBuilder();
 			outFile = new File(fdir.getAbsolutePath());
-			/* = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(fdir.getAbsolutePath()), "UTF-8"));*/
 		} catch (Exception ex) {
 			ExceptionDlg.show(this.getClass().getSimpleName()
 					+ ".openFile(...) outStream error", ex);
@@ -174,36 +172,8 @@ public abstract class AbstractExport {
 		return true;
 	}
 
-	public boolean setOutStream(String filename) {
-		try {
-			outBuffer = new StringBuilder();
-			outFile = new File(param.getFileName());
-			/*outStream = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(param.getFileName()), "UTF-8"));*/
-			switch (param.getFormat()) {
-				case F_ZXML:
-				case F_XML:
-					writeHeaderXml();
-					break;
-				case F_HTML:
-					writeHeaderHtml();
-					break;
-				case F_TXT:
-					writeHeaderTxt();
-					break;
-				default:
-					break;
-			}
-		} catch (Exception ex) {
-			ExceptionDlg.show(this.getClass().getSimpleName()
-					+ ".setOutStream(filename=" + filename + ") error", ex);
-			return false;
-		}
-		return true;
-	}
-
 	/**
-	 * write a tring to the current file
+	 * add a given String into the current outBuffer
 	 *
 	 * @param str
 	 * @return
@@ -211,8 +181,6 @@ public abstract class AbstractExport {
 	public boolean write(String str) {
 		try {
 			outBuffer.append(str);
-			/*outStream.write(str, 0, str.length());
-			outStream.flush();*/
 		} catch (Exception ex) {
 			ExceptionDlg.show(this.getClass().getSimpleName()
 					+ ".write(str len=" + str.length() + ")", ex);
@@ -240,13 +208,18 @@ public abstract class AbstractExport {
 		return write(b.toString());
 	}
 
+	public boolean headerAllready = false;
+
 	/**
 	 * writeHeaderHtml
 	 *
 	 * @return false if not OK else true
 	 */
 	public boolean writeHeaderHtml() {
-		//LOG.printInfos(TT+".writeHeaderHtml()");
+		//LOG.trace(TT+".writeHeaderHtml()");
+		if (headerAllready) {
+			return true;
+		}
 		StringBuilder b = new StringBuilder();
 		b.append(Html.DOCTYPE);
 		b.append(Html.HTML_B_LANG);
@@ -258,6 +231,7 @@ public abstract class AbstractExport {
 			b.append(Html.intoTag("title", mainFrame.getBook().getTitle()));
 		}
 		BookParamExport paramBook = mainFrame.getBook().getParam().getParamExport();
+		//setting CSS or style
 		if (mainFrame.project.book.info.scenarioGet()) {
 			if (paramBook.getHtmlCss().isEmpty()) {
 				b.append(Html.STYLE_B);
@@ -271,7 +245,7 @@ public abstract class AbstractExport {
 		}
 		b.append(Html.HEAD_E);
 		b.append(Html.BODY_B);
-		outBuffer.append(b.toString());
+		headerAllready = true;
 		return write(b.toString());
 	}
 
@@ -368,7 +342,7 @@ public abstract class AbstractExport {
 	}
 
 	public void closeFile(boolean verbose) {
-		//LOG.printInfos(TT + ".closeFile(verbose=" + (verbose ? "true" : "false")+")");
+		//LOG.trace(TT + ".closeFile(verbose=" + (verbose ? "true" : "false")+")");
 		if (isOpened == false) {
 			return;
 		}
@@ -382,6 +356,7 @@ public abstract class AbstractExport {
 				break;
 			case F_HTML:
 				writeText(Html.BODY_E + Html.HTML_E);
+				headerAllready = false;
 				break;
 			case F_TXT:
 			case F_CSV:

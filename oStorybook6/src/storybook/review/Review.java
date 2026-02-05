@@ -26,14 +26,15 @@ import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import resources.icons.ICONS;
 import storybook.db.endnote.Endnote;
+import storybook.db.endnote.Endnotes;
 import storybook.db.scene.Scene;
+import storybook.dialog.MessageDlg;
 import storybook.model.Model;
 import storybook.tools.html.Html;
 import storybook.ui.MIG;
 import storybook.ui.MainFrame;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.BNONE;
-import storybook.dialog.MessageDlg;
 
 /**
  * static class for Review function
@@ -46,16 +47,7 @@ public class Review {
 
 	private static JCheckBox ckReview;
 	private static JButton btRenumber;
-	private static JButton btRemove;
-
-	/**
-	 * get the menu function
-	 *
-	 * @param mainFrame
-	 */
-	public static void Menu(MainFrame mainFrame) {
-		// empty
-	}
+	private static JButton btRemoveAll;
 
 	/**
 	 * get the properties parameters
@@ -66,20 +58,20 @@ public class Review {
 	public static JPanel Properties(MainFrame mainFrame) {
 		JPanel p = new JPanel(new MigLayout(MIG.get(MIG.HIDEMODE2)));
 		ckReview = Ui.initCheckBox(null, "ckReview", "book.revision",
-		   mainFrame.getBook().info.reviewGet(), BNONE);
+				mainFrame.getBook().info.reviewGet(), BNONE);
 		ckReview.addActionListener(e -> {
 			btRenumber.setVisible(ckReview.isSelected());
-			btRemove.setVisible(ckReview.isSelected());
+			btRemoveAll.setVisible(ckReview.isSelected());
 		});
 		p.add(ckReview);
 		btRenumber = Ui.initButton("btRenumber", "", ICONS.K.SORT, "comments.renumber",
-		   e -> Endnote.renumber(mainFrame, 1));
+				e -> Endnote.renumber(mainFrame, 1));
 		btRenumber.setVisible(ckReview.isSelected());
 		p.add(btRenumber);
-		btRemove = Ui.initButton("btRemove", "", ICONS.K.DELETE, "comments.remove_all",
-		   e -> Endnote.removeAll(mainFrame, Endnote.TYPE.COMMENT));
-		btRemove.setVisible(ckReview.isSelected());
-		p.add(btRemove);
+		btRemoveAll = Ui.initButton("btRemove", "", ICONS.K.DELETE, "comments.remove_all",
+				e -> Endnotes.removeAll(mainFrame, Endnote.TYPE.COMMENT));
+		btRemoveAll.setVisible(ckReview.isSelected());
+		p.add(btRemoveAll);
 		return p;
 	}
 
@@ -96,7 +88,7 @@ public class Review {
 	}
 
 	/**
-	 * find reviews of the given type
+	 * find reviews of the given Scene
 	 *
 	 * @param mainFrame
 	 * @param scene
@@ -158,14 +150,13 @@ public class Review {
 		if (withTitle != null) {
 			b.append(Html.intoPcenter(I18N.getColonMsg("review")));
 		}
-		b.append(Html.TABLE_B);
+		b.append("<table style=\"width:100%;\">\n");
+		//b.append(Html.TABLE_B);
 		int idx = 1;
 		for (Endnote en : list) {
 			b.append(Html.TR_B);
-			b.append(Html.intoTD(linkFrom(idx++, en),
-			   "valign=\"top\" style=\"width:3%\""));
-			b.append(Html.intoTD(en.getNotes(),
-			   "style=\"width:97%\""));
+			b.append(Html.intoTD(linkFrom(idx++, en), "valign=\"top\" style=\"width:3%\""));
+			b.append(Html.intoTD(en.getNotes(), "style=\"width:97%\""));
 			b.append(Html.TR_E);
 		}
 		b.append(Html.TABLE_E);
@@ -185,23 +176,19 @@ public class Review {
 		//LOG.trace(TT + ".create(mainFrame, scene=" + LOG.trace(scene) + ", shef)");
 		JEditorPane ht = htTexte.wysEditorGet().getWysEditor();
 		if (scene == null) {
-			MessageDlg.show(null,
-			   I18N.getMsg("comment.missing_scene"),
-			   "comment.create",
-			   true);
+			MessageDlg.show(null, I18N.getMsg("comment.missing_scene"),
+					TT + "create", true);
 			return null;
 		}
 		if (ht.getSelectedText() == null || ht.getSelectedText().isEmpty()) {
-			MessageDlg.show(null,
-			   I18N.getMsg("comment.missing_text"),
-			   "comment.create",
-			   true);
+			MessageDlg.show(null, I18N.getMsg("comment.missing_text"),
+					TT + "create", true);
 			return null;
 		}
 		int num = Endnote.getNextNumber(Endnote.find(mainFrame, Endnote.TYPE.COMMENT));
 		//initialize notes with selected text
 		String notes = "<div class=\"review\">" + ht.getSelectedText() + "</div>"
-		   + "<p>insérer votre commentaire ici</p>";
+				+ "<p>insérer votre commentaire ici</p>";
 		Endnote en = new Endnote(Endnote.TYPE.COMMENT, scene, num, notes);
 		String sort = ht.getSelectionStart() + " " + ht.getSelectionEnd();
 		en.setSort(sort);

@@ -47,6 +47,7 @@ import storybook.db.location.Locations;
 import storybook.db.part.Part;
 import storybook.db.person.Person;
 import storybook.db.scene.Scene;
+import storybook.db.scene.SceneScript;
 import storybook.db.strand.Strand;
 import storybook.exim.EXIM;
 import storybook.exim.importer.ImportDocument;
@@ -61,7 +62,6 @@ import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
 import storybook.tools.html.HtmlHome;
 import storybook.ui.MainFrame;
-import storybook.ui.panel.script.Script;
 
 /**
  * Export the whole book to an HTML file (or multifile, or String)
@@ -283,8 +283,12 @@ public class ExportBookToHtml extends AbstractExport {
 		}
 		html.append(Html.intoH(1, title, "text-align:center;"));
 		html.append(Html.intoH(2, subtitle, "text-align:center;"));
-		html.append(Html.intoPcenter(I18N.getColonMsg("author_s") + " " + exp.book.getAuthor()));
-		html.append(Html.intoPcenter(I18N.getColonMsg("copyright") + " " + exp.book.getCopyright()));
+		if (exp.book.param.getParamExport().getHtmlAuthor()) {
+			html.append(Html.intoPcenter(I18N.getColonMsg("author_s") + " " + exp.book.getAuthor()));
+		}
+		if (exp.book.param.getParamExport().getHtmlCopyright()) {
+			html.append(Html.intoPcenter(I18N.getColonMsg("copyright") + " " + exp.book.getCopyright()));
+		}
 		html.append(Html.intoP(exp.book.getBlurb()));
 		html.append(ExportBookInfo.getDedication(exp.book, 20));
 		html.append(Html.BODY_E).append(Html.HTML_E);
@@ -422,6 +426,7 @@ public class ExportBookToHtml extends AbstractExport {
 		exp.review = review;
 		exp.onlyPart = onlyPart;
 		exp.bSeparator = true;
+		exp.toFile = false;
 		StringBuilder b = new StringBuilder();
 		b.append(exp.tocBookGet(level, false));
 		b.append(exp.bookGetText());
@@ -464,6 +469,7 @@ public class ExportBookToHtml extends AbstractExport {
 				f.mkdir();
 			}
 			if (param.isMulti()) {
+				// copy navigation icons
 				for (NAV nav : NAV.values()) {
 					copyImage(nav.toString(), imgdir);
 				}
@@ -543,7 +549,7 @@ public class ExportBookToHtml extends AbstractExport {
 				|| layout.getSceneTitle()) {
 			String t = I18N.getMsg("export.toc") + "</b>";
 			if ((adv && web.getSummary().getTitled()) || !adv) {
-				buf.append("<p><a name=\"toc\" /><b>")
+				buf.append("<p><a name=\"toc\"></a><b>")
 						.append(t);
 				if (adv) {
 					buf.append(Html.P_E);
@@ -563,10 +569,10 @@ public class ExportBookToHtml extends AbstractExport {
 				buf.append(tocChapter(part, chapter, level + 1, adv));
 			}
 		}
+		//buf.append(Html.P_E);
 		if (this.onlyPart == null && endnotesHas()) {
 			buf.append(Html.intoH(3, endnotesLinkTo(0)));
 		}
-		buf.append(Html.P_E);
 		if (isOpened && param.isMulti()) {
 			chapterNext = chapters.get(0);
 			sceneNext = scenes.get(0);
@@ -595,7 +601,7 @@ public class ExportBookToHtml extends AbstractExport {
 		if (!adv) {
 			b.append(Html.BR);
 			for (int i = 0; i < level; i++) {
-				b.append("&emsp;");
+				b.append("&nbsp;&nbsp;&nbsp;");
 			}
 		}
 		String cpl = "";
@@ -646,8 +652,23 @@ public class ExportBookToHtml extends AbstractExport {
 	public String tocPart(Part part, int level, boolean adv) {
 		/*LOG.trace(TT + "tocPart(part=" + LOG.trace(part) + ", level=" + level
 		+ ", adv=" + (adv ? "true" : "false") + ")");*/
+		StringBuilder b = new StringBuilder();
 		if (layout.getPartTitle() && (level == 0 || level == 1)) {
-			return tocTo(1, part.getIdent(), part.getName(), adv);
+			if (param.isMultiScene() || param.isMultiChapter()) {
+				Chapter c = mainFrame.project.chapters.findFirst(part);
+				if (c != null) {
+					Scene s = mainFrame.project.scenes.findFirst(c);
+					if (s != null) {
+						b.append(tocTo(1, s.getIdent(), partGetTitle(part), adv));
+					}
+				}
+				if (b.toString().isEmpty()) {
+					b.append(Html.intoH(1, partGetTitle(part), "color: gray;"));
+				}
+				return b.toString();
+			} else {
+				return tocTo(1, part.getIdent(), part.getName(), adv);
+			}
 		} else {
 			return "";
 		}
@@ -730,17 +751,17 @@ public class ExportBookToHtml extends AbstractExport {
 			if (!adv) {
 				b.append(Html.BR);
 				for (int i = 0; i < n + scene.getLevel(); i++) {
-					b.append("&emsp;");
+					b.append("&nbsp;&nbsp;&nbsp;");
 				}
 			}
 			b.append(Html.intoA("toc" + href,
 					book.getTitle() + "-" + scene.getIdent() + ".html" + "#" + scene.getIdent(),
 					EXIM.getTitle(scene.getName()),
-					(adv ? "target=\"mc\"" : "")));
-			return (adv ? Html.intoH(n/* + scene.getLevel()*/, b.toString()) : b.toString());
+					(adv ? " target=\"mc\"" : "")));
+			return (adv ? Html.intoH(n, b.toString()) : b.toString());
 		}
 		if (sceneIsOK(scene)) {
-			return tocTo(n/* + scene.getLevel()*/, scene.getIdent(), scene.getName(), adv);
+			return tocTo(n, scene.getIdent(), scene.getName(), adv);
 		}
 		return "";
 	}
@@ -847,6 +868,7 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @param chapter
 	 */
 	private String chapterGetBegin(Chapter chapter) {
+		//LOG.trace(TT + "chapterGetBegin(chapter=" + LOG.trace(chapter) + ")");
 		if (param.isMultiChapter()) {
 			openFile(filenameOfChapter(chapter).replace(Html.EXT, ""), false);
 		}
@@ -865,14 +887,15 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @param chapter
 	 */
 	private String chapterGetContent(Chapter chapter) {
-		//LOG.trace(TT + ".chapterGet(chapter=" + App.traceEntity(chapter) + ")");
+		//LOG.trace(TT + "chapterGetContent(chapter=" + LOG.trace(chapter) + ")");
 		StringBuilder b = new StringBuilder(chapterGetBegin(chapter));
 		int lev = 1;
 		if (layout.getPartTitle()) {
 			lev++;
+			b.append(partGetTitle(chapter.getPart()));
 		}
 		if (!buffer.toString().isEmpty() && param.isMulti()) {
-			openFile(book.getTitle() + "-" + chapter.getIdent(), false);
+			//openFile(book.getTitle() + "-" + chapter.getIdent(), false);
 		}
 		if (layout.getChapterTitle()) {
 			b.append(titleOf(lev, chapter.getIdent(), chapterGetTitle(chapter)));
@@ -1039,8 +1062,8 @@ public class ExportBookToHtml extends AbstractExport {
 		StringBuilder sb = new StringBuilder();
 		sb.append(sceneBegin(scene));
 		String x = scene.getTextToHtml(param.isMulti());
-		if (Script.isScript(x)) {
-			Script script = new Script(scene);
+		if (SceneScript.isScript(x)) {
+			SceneScript script = new SceneScript(scene);
 			x = script.toHtml(scene);
 		} else if (withExternal) {
 			x = getTextExternal(scene, param.isMulti());
@@ -1159,7 +1182,6 @@ public class ExportBookToHtml extends AbstractExport {
 			}
 			if (!scene.getChapter().equals(lastChapter) && layout.getChapterTitle()) {
 				lastChapter = scene.getChapter();
-				//sb.append(titleOf(n, lastChapter.getIdent(), getTitle(lastChapter.getName())));
 			}
 			title.append(getTitle(scene.getName()));
 			sb.append(titleOf(n + 1, scene.getIdent(), title.toString(), spanB));
@@ -1226,8 +1248,9 @@ public class ExportBookToHtml extends AbstractExport {
 	 */
 	public String endnotesGet() {
 		StringBuilder buf = new StringBuilder();
-		buf.append(Html.intoA("endnotes", "", ""));
-		buf.append(Html.intoH(1, I18N.getMsg("endnote")));
+		buf.append("<a name=\"endnotes\"><h1>");
+		buf.append(I18N.getMsg("endnotes"));
+		buf.append("</h1></a>\n");
 		for (Object obj : endnotes) {
 			Endnote endnote = (Endnote) obj;
 			if (endnote.getScene() == null) {
@@ -1663,19 +1686,30 @@ public class ExportBookToHtml extends AbstractExport {
 	 * @param x
 	 * @return
 	 */
-	private String replaceImages(String x) {
-		final Document document = Jsoup.parse(x);
+	private String replaceImages(String html) {
+		final Document document = Jsoup.parse(html);
 		Elements nodes = document.getElementsByTag("img");
 		for (Element n : nodes) {
-			if (n.attr("src").startsWith("file:")) {
-				File src = new File(n.attr("src"));
-				// add the image file name to the images list
-				imageList.add(n.attr("src"));
-				n.attr("src", "Images/" + src.getName());
-				n.attr("alt", src.getName().replace('.', '-'));
+			String imgsrc = n.attr("src");
+			if (imgsrc.startsWith("http://") || imgsrc.startsWith("https://")) {
+				continue;
 			}
+			String cleanPath = imgsrc.startsWith("file://") ? imgsrc.substring(7) : imgsrc;
+			File srcFile = new File(cleanPath);
+			String fileName = srcFile.getName();
+			if (!imageList.contains(cleanPath)) {
+				imageList.add(cleanPath);
+			}
+			if (toFile) {
+				n.attr("src", "Images/" + fileName);
+			} else {
+				n.attr("src", "file://" + srcFile.getAbsolutePath());
+			}
+			n.attr("alt", fileName.replace('.', '-'));
 		}
-		document.outputSettings().syntax(api.jsoup.nodes.Document.OutputSettings.Syntax.xml);
+		document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
+		document.outputSettings().charset("UTF-8");
+
 		return document.body().html();
 	}
 

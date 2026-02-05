@@ -17,8 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package storybook.db.attribute;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
@@ -42,19 +40,6 @@ public class Attribute extends AbstractEntity {
 
 	public Attribute() {
 		super(Book.TYPE.ATTRIBUTE, "110");
-	}
-
-	public Attribute(ResultSet rs) {
-		super(Book.TYPE.ATTRIBUTE, "110", rs);
-		try {
-			this.key = rs.getString("key");
-			this.value = rs.getString("value");
-			if (this.name.isEmpty()) {
-				this.name = this.key + " > " + this.value;
-			}
-		} catch (SQLException ex) {
-			//empty
-		}
 	}
 
 	public Attribute(String key, String value) {

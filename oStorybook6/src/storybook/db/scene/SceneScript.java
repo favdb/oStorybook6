@@ -15,33 +15,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package storybook.ui.panel.script;
+package storybook.db.scene;
 
 import api.jsoup.Jsoup;
 import api.jsoup.nodes.Document;
 import api.jsoup.select.Elements;
 import i18n.I18N;
-import storybook.db.scene.Scene;
 import storybook.tools.html.Html;
 
 /**
  *
  * @author favdb
  */
-public class Script {
+public class SceneScript {
 
-	private static final String TT = "Script.";
+	private static final String TT = "SceneScript.";
 
 	public static final String EMPTY_LINE = "<p> </p> \n";
 	public static final String SCRIPT_HEADER = "<div class=\"script\">";
 	private String desc = "", visual = "", audio = "", voice = "";
 
-	public Script() {
+	public SceneScript() {
 
 	}
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
-	public Script(Scene scene) {
+	public SceneScript(Scene scene) {
 		decode(scene.getSummary());
 	}
 

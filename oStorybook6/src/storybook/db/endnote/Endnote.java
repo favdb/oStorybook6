@@ -20,8 +20,6 @@ package storybook.db.endnote;
 import api.shef.ShefEditor;
 import i18n.I18N;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
@@ -63,38 +61,16 @@ public class Endnote extends AbstractEntity {
 		super(Book.TYPE.ENDNOTE, "010");
 	}
 
-	public Endnote(ResultSet rs) {
-		super(Book.TYPE.ENDNOTE, "010", rs);
-		try {
-			type = rs.getInt("type");
-			number = rs.getInt("number");
-			scene = rs.getObject("scene", Scene.class);
-		} catch (SQLException ex) {
-			//empty
-		}
-	}
-
-	public Endnote(int type, Scene scene, Integer number) {
-		super(Book.TYPE.ENDNOTE, "010");
-		this.type = type;
-		this.scene = scene;
-		this.number = number;
-	}
-
 	public Endnote(int type, Scene scene, Integer number, String notes) {
-		this(type, scene, number);
+		this();
+		setType(type);
+		setScene(scene);
+		setNumber(number);
 		setNotes(notes);
 	}
 
 	public Endnote(TYPE type, Scene scene, Integer number, String notes) {
 		this(type.ordinal(), scene, number, notes);
-	}
-
-	@SuppressWarnings("OverridableMethodCallInConstructor")
-	public Endnote(int type, Scene scene, Integer number, String notes, int index) {
-		this(type, scene, number, notes);
-		this.type = type;
-		setSort(index);
 	}
 
 	public Integer getType() {
@@ -151,9 +127,9 @@ public class Endnote extends AbstractEntity {
 	}
 
 	/**
-	 * compute default sort value beautify is: pp.cc.ss.ttttt where: - pp is
-	 * part number, 99 if not - cc is chapter number, 99 if not - ss is scene
-	 * number, mandatory - ttttt is text index of the endnote
+	 * compute default sort value beautify is: pp.cc.ss.ttttt where: - pp is part number, 99 if not
+	 * - cc is chapter number, 99 if not - ss is scene number, mandatory - ttttt is text index of
+	 * the endnote
 	 *
 	 * @param loc
 	 */
@@ -284,18 +260,14 @@ public class Endnote extends AbstractEntity {
 	public String getLinkToScene(String dir) {
 		StringBuilder b = new StringBuilder();
 		String snumber = String.format("_%03d", id);
-		b.append(String.format("<a href=\"%s#innote%s\"", dir, snumber))
-				.append(String.format(" name=\"endnote_%s\">", snumber))
+		b.append(String.format("<a href=\"%s#inendnote%s\"", dir, snumber))
+				.append(String.format(" name=\"endnote%s\">", snumber))
 				.append(String.format("%d. </a>", number));
 		return b.toString();
 	}
 
-	/**
-	 * ************************
-	 */
 	//***************************
 	//** Utilities for Endnote **
-	//***************************
 	//***************************
 	/**
 	 * find an Endnote of the given type
@@ -306,43 +278,9 @@ public class Endnote extends AbstractEntity {
 	 * @return
 	 */
 	public static List<Endnote> find(MainFrame mainFrame, TYPE type) {
-		//LOG.printInfos(TT + ".find(mainFrame, type=" + type + ")");
-		List<Endnote> list = mainFrame.project.endnotes.findBySort(type.ordinal());
+		//LOG.trace(TT + ".find(mainFrame, type=" + type + ")");
+		List<Endnote> list = mainFrame.project.endnotes.findByType(type.ordinal());
 		return list;
-	}
-
-	/**
-	 * remove all given type Endnote in the given Scene
-	 *
-	 * @param mainFrame
-	 * @param type
-	 * @param scene
-	 */
-	@SuppressWarnings("unchecked")
-	public static void removeEndnotes(MainFrame mainFrame, TYPE type, Scene scene) {
-		//LOG.printInfos(TT + ".removeEndnotes(mainFrame, scene=" + AbstractEntity.printInfos(scene) + ")");
-		for (Endnote en : (List<Endnote>) mainFrame.project.endnotes.getList()) {
-			removeEndnote(mainFrame, (Endnote) en);
-		}
-	}
-
-	/**
-	 * remove the given Endnote
-	 *
-	 * @param mainFrame
-	 * @param endnote
-	 */
-	public static void removeEndnote(MainFrame mainFrame, Endnote endnote) {
-		//LOG.printInfos(TT + ".removeEndnote(mainFrame, endnote=" + AbstractEntity.printInfos(endnote) + ")");
-		Scene scene = endnote.getScene();
-		if (scene != null) {
-			String link = endnote.getLinkToEndnote("");
-			if (!scene.getSummary().isEmpty()) {
-				scene.setSummary(scene.getSummary().replace(link, ""));
-				mainFrame.getBookModel().ENTITY_Update(scene);
-			}
-		}
-		mainFrame.getBookModel().ENTITY_Delete(endnote);
 	}
 
 	/**
@@ -354,7 +292,7 @@ public class Endnote extends AbstractEntity {
 	 */
 	@SuppressWarnings("unchecked")
 	public static boolean renumber(MainFrame mainFrame, Integer type) {
-		//LOG.printInfos(TT + ".renumber(mainFrame)");
+		//LOG.trace(TT + ".renumber(mainFrame)");
 		mainFrame.cursorSetWaiting();
 		boolean rc = false;
 		Ctrl ctrl = mainFrame.getBookController();
@@ -405,10 +343,10 @@ public class Endnote extends AbstractEntity {
 	 *
 	 * @return
 	 */
-	public static Endnote createEndnote(MainFrame mainFrame, TYPE type,
+	public static Endnote create(MainFrame mainFrame, TYPE type,
 			Scene scene, ShefEditor htTexte) {
 		int num = mainFrame.project.endnotes.getNextNumber();
-		Endnote en = new Endnote(type.ordinal(), scene, num);
+		Endnote en = new Endnote(type.ordinal(), scene, num, "");
 		en.setSort(htTexte.wysEditorGet().getWysEditor().getCaretPosition());
 		if (mainFrame.showEditorAsDialog(en)) {
 			return null;
@@ -417,21 +355,6 @@ public class Endnote extends AbstractEntity {
 		String link = linkTo("", en);
 		htTexte.insertText(link);
 		return en;
-	}
-
-	/**
-	 * remove all Endnotes of the given type
-	 *
-	 * @param mainFrame
-	 * @param type
-	 */
-	@SuppressWarnings("unchecked")
-	public static void removeAll(MainFrame mainFrame, TYPE type) {
-		//LOG.printInfos(TT + ".removeAll(mainFrame, type="
-		//+ (type == 0 ? "endnote" : "comment") + ")");
-		for (Scene scene : (List<Scene>) mainFrame.project.scenes.getList()) {
-			removeEndnotes(mainFrame, type, scene);
-		}
 	}
 
 	/**
@@ -450,8 +373,7 @@ public class Endnote extends AbstractEntity {
 	}
 
 	/**
-	 * resort the Endnotes of the given type in the given Scene, not for
-	 * Comments
+	 * resort the Endnotes of the given type in the given Scene, not for Comments
 	 *
 	 * @param mainFrame
 	 * @param type

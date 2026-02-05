@@ -12,11 +12,7 @@ import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -1355,26 +1351,26 @@ public class Html {
 		}
 		//LOG.trace(TT+"changingLinks(path="+path+", html="+html);
 		Document doc = Jsoup.parse(html);
-		Elements links = doc.select("img[src]");
-		for (Element link : links) {
-			String oldSrc = link.attr("src");
-			if (!checkProtocol(oldSrc)) {
-				oldSrc = "file://" + oldSrc;
+		Elements elements = doc.select("img[src]");
+		for (Element el : elements) {
+			String link = el.attr("src");
+			if (!checkProtocol(link)) {
+				link = "file://" + link;
 			}
-			if (oldSrc.startsWith("file:")) {
+			if (link.startsWith("file:")) {
+				// only for local images
 				try {
-					URL urlo = new URL(oldSrc);
-					File f = Paths.get(urlo.toURI()).toFile();
+					File f = new File(link.replace("file://", ""));
 					if (!f.exists()) {
 						String newSrc = path + File.separator + "Images" + File.separator + f.getName();
 						File fx = new File(newSrc);
 						if (fx.exists()) {
-							URL url = Paths.get(fx.getAbsolutePath()).toUri().toURL();
-							link.attr("src", url.toString());
+							el.attr("src", newSrc);
 						}
 					}
-				} catch (MalformedURLException | URISyntaxException ex) {
+				} catch (Exception ex) {
 					LOG.err(TT + "changeLinks(path=" + path + ", html) error", ex);
+					LOG.err("link=" + link);
 				}
 			}
 		}
@@ -1382,7 +1378,7 @@ public class Html {
 	}
 
 	private static boolean checkProtocol(String src) {
-		String allowed[] = {"http", "https:", "file:"};
+		String allowed[] = {"http:", "https:", "file:"};
 		for (String a : allowed) {
 			if (src.startsWith(a)) {
 				return true;

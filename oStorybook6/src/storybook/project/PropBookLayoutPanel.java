@@ -30,14 +30,15 @@ import javax.swing.event.ChangeListener;
 import resources.icons.ICONS;
 import storybook.App;
 import storybook.Pref;
-import storybook.db.book.BookParamLayout;
 import storybook.db.DB;
+import storybook.db.book.BookParamLayout;
 import storybook.dialog.preferences.PreferencesDlg;
 import storybook.ui.MIG;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.*;
 
 /**
+ * class for layout parameters of the Book
  *
  * @author favdb
  */
@@ -46,14 +47,14 @@ public class PropBookLayoutPanel extends JPanel implements ChangeListener, Actio
 	private static final String TT = "BookLayoutPanel";
 
 	private JCheckBox ckPartTitles;
-	private JCheckBox ckChapterNumbers;
-	private JCheckBox ckChapterRoman;
-	private JCheckBox ckChapterTitles;
-	private JCheckBox ckChapterDatesLocations;
-	private JCheckBox ckChapterDescription;
-	private JCheckBox ckSceneTitles;
-	private JCheckBox ckSceneDidascalie;
-	private JCheckBox ckSceneSeparator;
+	private JCheckBox ckChapterNumbers,
+			ckChapterRoman,
+			ckChapterTitles,
+			ckChapterDatesLocations,
+			ckChapterDescription;
+	private JCheckBox ckSceneTitles,
+			ckSceneDidascalie,
+			ckSceneSeparator;
 	private JTextField tfSceneSeparator;
 	private String separator = "";
 	private final BookParamLayout bookLayout;
@@ -78,51 +79,54 @@ public class PropBookLayoutPanel extends JPanel implements ChangeListener, Actio
 
 	public void initialize() {
 		setLayout(new MigLayout(MIG.get(MIG.FILL, "ins 1", MIG.WRAP), "[][]"));
-		//setBorder(BorderFactory.createTitledBorder(I18N.getMsg("book.layout")));
 		ckPartTitles = addCk("ckPartTitles", "part_titles", bookLayout.getPartTitle());
 		add(ckPartTitles, MIG.SPAN);
+		// parameters for chapters
 		JPanel c = new JPanel(new MigLayout(MIG.get("ins 1", MIG.WRAP), "[][]"));
 		c.setBorder(BorderFactory.createTitledBorder(I18N.getMsg("chapters")));
 		ckChapterTitles = addCk("ckChapterTitles", "chapter_titles", bookLayout.getChapterTitle());
 		c.add(ckChapterTitles, MIG.SKIP);
 		ckChapterNumbers = addCk("ckChapterNumbers", "chapter_numbers",
-		   bookLayout.getChapterNumber());
+				bookLayout.getChapterNumber());
 		c.add(ckChapterNumbers, MIG.get(MIG.SKIP, MIG.SPLIT2));
 		ckChapterNumbers.addChangeListener(this);
 		ckChapterRoman = addCk("ckRoman", "chapter_roman", bookLayout.getChapterRoman());
 		c.add(ckChapterRoman);
 		ckChapterDescription = addCk("ckChapterDescription", "chapter_description",
-		   bookLayout.getChapterDescription());
+				bookLayout.getChapterDescription());
 		c.add(ckChapterDescription, MIG.SKIP);
 		ckChapterDatesLocations = addCk("ckChapterDatesLocations", "chapter_dateslocations",
-		   bookLayout.getChapterDateLocation());
+				bookLayout.getChapterDateLocation());
 		c.add(ckChapterDatesLocations, MIG.SKIP);
 		add(c, MIG.get(MIG.SPAN, "sgx book"));
-
+		//parameters for scenes
 		c = new JPanel(new MigLayout(MIG.get("ins 1", MIG.WRAP, MIG.HIDEMODE3), "[][]"));
 		c.setBorder(BorderFactory.createTitledBorder(I18N.getMsg("scenes")));
 		ckSceneTitles = addCk("ckSceneTitles", "scene_titles", bookLayout.getSceneTitle());
 		ckSceneTitles.addChangeListener(this);
 		c.add(ckSceneTitles, MIG.SKIP);
 		ckSceneDidascalie = addCk("ckSceneDidascalie", "scene_didascalie",
-		   bookLayout.getSceneDidascalie());
+				bookLayout.getSceneDidascalie());
 		c.add(ckSceneDidascalie, MIG.SKIP);
 		ckSceneSeparator = addCk("ckSceneSeparator", "scene_separator",
-		   bookLayout.getSceneSeparator());
+				bookLayout.getSceneSeparator());
 		ckSceneSeparator.addChangeListener(this);
 		c.add(ckSceneSeparator, MIG.get(MIG.SKIP, MIG.SPAN, MIG.SPLIT2));
 		tfSceneSeparator = Ui.getStringField(DB.DATA.SCENE_SEPARATOR, 16, separator, BNONE);
 		tfSceneSeparator.setEnabled(ckSceneSeparator.isSelected());
 		c.add(tfSceneSeparator, MIG.get(MIG.SPAN, MIG.GROW));
 		add(c, MIG.get(MIG.SPAN, "sgx book"));
+		// button to copy parameters to preferences
 		if (withPref) {
 			JButton btPref = Ui.initButton("btPref", "book.layout.copy",
-			   ICONS.K.PREFERENCES, "", this);
+					ICONS.K.PREFERENCES, "", this);
 			add(btPref, MIG.get(MIG.SPAN, MIG.RIGHT));
 		}
+		// review parameters
 		ckShowReview = addCk("ckHideReview", "show_review",
-		   bookLayout.getShowReview());
+				bookLayout.getShowReview());
 		add(ckShowReview, MIG.SPAN);
+		// setting allowing for chapters parameters
 		boolean b = ckChapterTitles.isSelected() || ckChapterNumbers.isSelected();
 		ckChapterRoman.setEnabled(ckChapterNumbers.isSelected());
 		ckChapterDatesLocations.setEnabled(b);

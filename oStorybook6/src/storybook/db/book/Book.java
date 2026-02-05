@@ -33,6 +33,7 @@ import storybook.tools.xml.XmlUtil;
 import storybook.ui.MainFrame;
 
 /**
+ * class for Book properties
  *
  * @author FaVdB
  */
@@ -169,6 +170,12 @@ public class Book {
 		}
 	}
 
+	/**
+	 * get TYPE of element
+	 *
+	 * @param evt
+	 * @return
+	 */
 	public static TYPE getTYPE(PropertyChangeEvent evt) {
 		String prop = evt.getPropertyName();
 		if (prop.contains("_")) {
@@ -179,6 +186,12 @@ public class Book {
 
 	}
 
+	/**
+	 * get TYPE of element of the given entity
+	 *
+	 * @param entity
+	 * @return
+	 */
 	public static TYPE getTYPE(AbstractEntity entity) {
 		if (entity == null) {
 			return (TYPE.NONE);
@@ -197,6 +210,12 @@ public class Book {
 		return (TYPE.NONE);
 	}
 
+	/**
+	 * get icon for the given TYPE
+	 *
+	 * @param type
+	 * @return
+	 */
 	public static Icon getIcon(TYPE type) {
 		return IconUtil.getIconSmall("ent_" + type.toString());
 	}
@@ -296,6 +315,14 @@ public class Book {
 		return false;
 	}
 
+	/**
+	 * get an integer checked by minimum and maximum value
+	 *
+	 * @param value
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public static int checkInteger(int value, int min, int max) {
 		if (value < min) {
 			return min;
@@ -306,19 +333,46 @@ public class Book {
 		}
 	}
 
-	///////////////////////////////////
+	/**
+	 * get an attribute for the given element as a String
+	 *
+	 * @param el
+	 * @param key name of the key to get
+	 * @return
+	 */
 	public String getString(Element el, String key) {
 		return el.getAttribute(key.toLowerCase());
 	}
 
+	/**
+	 * get an PARAM key attribute for the given element as a String
+	 *
+	 * @param el
+	 * @param key
+	 * @return
+	 */
 	public String getString(Element el, PARAM key) {
 		return el.getAttribute(key.toString());
 	}
 
+	/**
+	 * get an PARAM key attribute for the given element as a boolean
+	 *
+	 * @param el
+	 * @param key
+	 * @return
+	 */
 	public boolean getBoolean(Element el, PARAM key) {
 		return el.getAttribute(key.toString()).equals("1");
 	}
 
+	/**
+	 * get an PARAM key attribute for the given element as an Integer
+	 *
+	 * @param el
+	 * @param key
+	 * @return
+	 */
 	public Integer getInteger(Element el, PARAM key) {
 		String r = el.getAttribute(key.toString());
 		if (StringUtil.isNumeric(r)) {
@@ -327,51 +381,112 @@ public class Book {
 		return -1;
 	}
 
+	/**
+	 * set an attribute for the given element with a String
+	 *
+	 * @param el
+	 * @param key
+	 * @param value
+	 */
 	public void setString(Element el, PARAM key, String value) {
 		el.setAttribute(key.toString(), value);
 	}
 
+	/**
+	 * set an attribute for the given element with a boolean
+	 *
+	 * @param el
+	 * @param key
+	 * @param value
+	 */
 	public void setBoolean(Element el, PARAM key, boolean value) {
 		el.setAttribute(key.toString(), (value ? "1" : "0"));
 	}
 
+	/**
+	 * set an attribute for the given element with an integer
+	 *
+	 * @param el
+	 * @param key
+	 * @param value
+	 */
 	public void setInteger(Element el, PARAM key, Integer value) {
 		el.setAttribute(key.toString(), value.toString());
 	}
-	///////////////////////////////////
 
+	/**
+	 * set the creation date with today
+	 */
 	public void setCreation() {
 		info.setCreation();
 	}
 
+	/**
+	 * set the creation date withe the given date String
+	 *
+	 * @param val
+	 */
 	public void setCreation(String val) {
 		info.creationSet(val);
 	}
 
+	/**
+	 * get the creation date as a String
+	 *
+	 * @return
+	 */
 	public String getCreation() {
 		return (info.creationGet());
 	}
 
+	/**
+	 * set update date with today
+	 */
 	public void setMaj() {
 		info.majSet();
 	}
 
-	public String getMaj() {
-		return info.majGet();
-	}
-
-	public Date getMajDate() {
-		return info.majDateGet();
-	}
-
+	/**
+	 * set update date with the given string date
+	 *
+	 * @param c
+	 */
 	public void setMaj(String c) {
 		info.majSet(c);
 	}
 
+	/**
+	 * get the updated date as a String
+	 *
+	 * @return
+	 */
+	public String getMaj() {
+		return info.majGet();
+	}
+
+	/**
+	 * get the updated date as a Date
+	 *
+	 * @return
+	 */
+	public Date getMajDate() {
+		return info.majDateGet();
+	}
+
+	/**
+	 * get the title
+	 *
+	 * @return
+	 */
 	public String getTitle() {
 		return info.titleGet();
 	}
 
+	/**
+	 * set the title
+	 *
+	 * @param value
+	 */
 	public void setTitle(String value) {
 		info.titleSet(value);
 	}
@@ -515,6 +630,13 @@ public class Book {
 		p.setStartDay(c.startday);
 	}*/
 	//
+	/**
+	 * get number of entity for the given TYPE
+	 *
+	 * @param mainFrame
+	 * @param type
+	 * @return
+	 */
 	public static int getNbOf(MainFrame mainFrame, TYPE type) {
 		Project proj = mainFrame.project;
 		switch (type) {

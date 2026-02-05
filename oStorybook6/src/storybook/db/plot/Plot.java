@@ -16,8 +16,6 @@
  */
 package storybook.db.plot;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Node;
@@ -39,15 +37,6 @@ public class Plot extends AbstractEntity {
 
 	public Plot() {
 		super(Book.TYPE.PLOT, "111");
-	}
-
-	public Plot(ResultSet rs) {
-		super(Book.TYPE.PLOT, "111", rs);
-		try {
-			category = rs.getString("category");
-		} catch (SQLException ex) {
-			//empty
-		}
 	}
 
 	public Plot(String name, String cat, String desc, String not) {

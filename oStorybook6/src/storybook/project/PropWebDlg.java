@@ -67,6 +67,7 @@ public class PropWebDlg extends AbsDialog {
 	private ColorPicker cbColor;
 	private List<JLabel> lbCss;
 	private final int NB_H = 3;
+	private JCheckBox ckAuthor, ckCopyright;
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public PropWebDlg(MainFrame mainFrame) {
@@ -115,8 +116,14 @@ public class PropWebDlg extends AbsDialog {
 		slBanner = new JSFileSelector("slBanner", "", web.getBannerImg(), true,
 				I18N.getMsg("file.type.img") + " (*.jpg, *.jpeg)", "jpg");
 		slBanner.setVisible(ckBanner.isSelected());
-		panel.add(slBanner);
-		// header
+		panel.add(slBanner, MIG.SPAN);
+		// header for author and copyright
+		JPanel p2 = new JPanel(new MigLayout(MIG.WRAP, "[]"));
+		ckAuthor = Ui.initCheckBox(p2, "ckAuthor", "web.author",
+				book.param.getParamExport().getHtmlAuthor(), null);
+		ckCopyright = Ui.initCheckBox(p2, "ckCopyright", "web.copyright",
+				book.param.getParamExport().getHtmlCopyright(), null);
+		panel.add(p2, MIG.SPAN);
 		// footer
 		add(panel, MIG.get(MIG.GROWX, MIG.SPAN));
 	}

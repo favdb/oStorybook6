@@ -19,8 +19,6 @@ package storybook.db.event;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -60,21 +58,6 @@ public class Event extends AbstractEntity {
 	public Event() {
 		super(Book.TYPE.EVENT, "010");
 		eventTime = Timestamp.from(Instant.now());
-	}
-
-	@SuppressWarnings("OverridableMethodCallInConstructor")
-	public Event(ResultSet rs) {
-		this();
-		try {
-			title = getName();
-			eventTime = rs.getTimestamp("eventTime");
-			duration = rs.getString("duration");
-			timeStep = rs.getInt("timeStep");
-			category = rs.getString("category");
-			color = rs.getInt("color");
-		} catch (SQLException ex) {
-			//empty
-		}
 	}
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")

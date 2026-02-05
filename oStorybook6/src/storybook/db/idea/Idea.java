@@ -18,8 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package storybook.db.idea;
 
 import i18n.I18N;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -49,17 +47,6 @@ public class Idea extends AbstractEntity {
 
 	public Idea() {
 		super(Book.TYPE.IDEA, "010");
-	}
-
-	public Idea(ResultSet rs) {
-		super(Book.TYPE.IDEA, "010", rs);
-		try {
-			status = rs.getInt("status");
-			category = rs.getString("category");
-			uuid = rs.getString("uuid");
-		} catch (SQLException ex) {
-			//empty
-		}
 	}
 
 	public Idea(Integer status, String note, String category) {

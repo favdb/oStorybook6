@@ -20,8 +20,6 @@ package storybook.db.abs;
 import i18n.I18N;
 import java.awt.Color;
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -97,29 +95,6 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
 		desc = "";
 		notes = "";
 		transientId = transientIdCounter++;
-	}
-
-	@SuppressWarnings("OverridableMethodCallInConstructor")
-	public AbstractEntity(Book.TYPE type, String common, ResultSet rs) {
-		this(type, common);
-		try {
-			setId(rs.getLong("id"));
-			setName(rs.getString("name"));
-			setCreation(rs.getString("creation"));
-			setMaj(rs.getString("maj"));
-			if (common.charAt(0) == '1') {
-				setDescription(rs.getString("description"));
-			}
-			if (common.charAt(1) == '1') {
-				setNotes(rs.getString("notes"));
-			}
-			if (common.charAt(2) == '1') {
-				setAssistant(rs.getString("assistant"));
-			}
-			setAspect(rs.getString("aspect"));
-		} catch (SQLException ex) {
-			//empty
-		}
 	}
 
 	public abstract AbstractEntity copyTo(MainFrame m);
