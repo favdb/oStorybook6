@@ -35,7 +35,7 @@ import storybook.model.Model;
 import storybook.project.Project;
 import storybook.tools.LOG;
 import storybook.ui.SbView;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * Controler Abstract to manage models and views, calling generic fireAgain

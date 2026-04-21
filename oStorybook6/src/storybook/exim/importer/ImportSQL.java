@@ -64,7 +64,7 @@ import storybook.tools.LOG;
 import storybook.tools.file.FileFilter;
 import storybook.tools.file.IOUtil;
 import storybook.tools.zip.ZipUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

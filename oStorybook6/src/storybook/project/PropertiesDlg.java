@@ -48,11 +48,11 @@ import storybook.tools.html.CSS;
 import storybook.tools.html.Html;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.BMANDATORY;
-import static storybook.ui.panel.AbstractPanel.*;
+import static storybook.ui.panels.AbstractPanel.*;
 
 /**
  *

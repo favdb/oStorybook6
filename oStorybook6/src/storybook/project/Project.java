@@ -93,10 +93,10 @@ import storybook.tools.xml.Xml;
 import storybook.tools.xml.XmlCleaner;
 import storybook.tools.zip.ZipUtil;
 import storybook.tools.zip.ZipXml;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
- * class for a Project
+ * class for a Project to contains list of entities and some tools
  *
  * @author favdb
  */
@@ -243,7 +243,7 @@ public class Project {
 	 * initalize the class
 	 */
 	private void init() {
-		//LOG.trace(TT + "init()");
+		LOG.trace(TT + "init()");
 		if (file != null) {
 			name = file.getName();
 			path = file.getParent();
@@ -254,7 +254,7 @@ public class Project {
 	 * initalize default arrays data
 	 */
 	public void initData() {
-		//LOG.trace(TT + "initData()");
+		LOG.trace(TT + "initData()");
 		attributes = new Attributes(this);
 		categorys = new Categorys(this);
 		chapters = new Chapters(this);
@@ -275,6 +275,7 @@ public class Project {
 		strands = new Strands(this);
 		tags = new Tags(this);
 		book = new Book(this);
+		createImageDir();
 	}
 
 	/**
@@ -1213,7 +1214,38 @@ public class Project {
 	 * @return
 	 */
 	public String getImageDir() {
+		if (imageDir == null || imageDir.isEmpty()) {
+			createImageDir();
+		}
 		return this.imageDir;
+	}
+
+	/**
+	 * create the image directory if needed
+	 */
+	private void createImageDir() {
+		String imgDir;
+		if (file != null) {
+			imgDir = file.getParent() + File.separator + "Images";
+			File f = new File(imgDir);
+			if (!f.exists()) {
+				if (!f.mkdir()) {
+					LOG.err(TT + "setImageDir() error: unable to create \"" + imgDir + "\"");
+					return;
+				}
+			}
+			imgDir = imgDir + File.separator + "summary.png";
+			f = new File(imgDir);
+			if (!f.exists()) {
+				try {
+					IOUtil.resourceCopyTo("icons/png/summary.png", f);
+				} catch (Exception ex) {
+					LOG.err("unable to copy summary image to \"" + imgDir + "\"", ex);
+				}
+			}
+			setImageDir(imgDir);
+		}
+
 	}
 
 	/**

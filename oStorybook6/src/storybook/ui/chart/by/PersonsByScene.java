@@ -46,7 +46,7 @@ import storybook.tools.swing.table.TableHeaderCellRenderer;
 import storybook.tools.swing.table.TableHeaderMouseListener;
 import storybook.tools.swing.table.ToolTipHeader;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.chart.AbstractPersonsChart;
 import storybook.ui.chart.legend.StrandsLegendPanel;
 

@@ -31,7 +31,7 @@ import storybook.App;
 import storybook.Pref;
 import storybook.db.book.Book;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

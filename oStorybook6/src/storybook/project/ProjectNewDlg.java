@@ -34,10 +34,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import storybook.db.DB;
 import storybook.dialog.AbsDialog;
+import storybook.tools.LOG;
 import storybook.tools.swing.FontUtil;
 import storybook.tools.swing.js.JSDateChooser;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.*;
 
@@ -51,10 +52,43 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 
 	private JPanel objectivePanel;
 	private JTextField tfTitle, nbParts, nbChapters, nbScenes;
-	private JComboBox nature;
+	private JComboBox cbNature;
 	private JSDateChooser objective;
 	private JCheckBox ckObjective;
 	private JLabel lbDate;
+	int[][] minmax = {//min and max allowed values for number of parts, chapters, scenes to create
+		{1, 9},//parts
+		{1, 10},//chapters
+		{1, 10}//scenes
+	};
+	private JLabel lpParts;
+	private JLabel lbChapters;
+	private JLabel lbScenes;
+	private JPanel pNature;
+
+	//class for allowed values for number of parts, chapters, scenes to create
+	public class Nature {
+
+		public int id;
+		public int[] parts, chapters, scenes;
+
+		public Nature(int id, int[] p, int[] c, int[] s) {
+			this.id = id;
+			this.parts = p;
+			this.chapters = c;
+			this.scenes = s;
+		}
+	}
+
+	public Nature[] natures = {
+		// Nature(id, {pMin, pMax}, {cMin, cMax}, {sMin, sMax})
+		new Nature(0, new int[]{1, 20}, new int[]{1, 100}, new int[]{1, 20}), // Autre
+		new Nature(1, new int[]{1, 9}, new int[]{1, 10}, new int[]{1, 10}), // Roman Long
+		new Nature(2, new int[]{1, 3}, new int[]{1, 10}, new int[]{1, 10}), // Roman
+		new Nature(3, new int[]{1, 1}, new int[]{1, 5}, new int[]{1, 8}), // Roman Court
+		new Nature(4, new int[]{1, 1}, new int[]{1, 3}, new int[]{1, 6}), // Nouvelle
+		new Nature(5, new int[]{1, 1}, new int[]{1, 1}, new int[]{1, 6}) // Histoire courte
+	};
 
 	public ProjectNewDlg(MainFrame mainFrame) {
 		super(mainFrame);
@@ -68,29 +102,29 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 		JLabel lb = new JLabel(I18N.getColonMsg("book.title"));
 		lb.setFont(FontUtil.getBold(lb.getFont()));
 		add(lb, MIG.RIGHT);
-		tfTitle = Ui.getStringField(DB.DATA.TITLE, 32, "", BNONE);
-		add(tfTitle);
+		add(tfTitle = Ui.getStringField(DB.DATA.TITLE, 32, "", BNONE));
+
 		// nature
 		add(new JLabel(I18N.getColonMsg("book.nature")), MIG.RIGHT);
-		nature = PropertiesDlg.initCbNature();
-		nature.addItemListener(this);
-		add(nature);
+		cbNature = PropertiesDlg.initCbNature();
+		cbNature.addItemListener(this);
+		add(cbNature);
+
+		//nature panel
+		pNature = new JPanel(new MigLayout(MIG.WRAP, "[][]"));
+		//nbparts
+		pNature.add(lpParts = new JLabel(getLabel("parts", natures[0].parts)), MIG.get(MIG.SPAN, MIG.SPLIT2));
+		pNature.add(nbParts = Ui.getStringField(DB.DATA.NBPARTS, 1, minmax[0][0], BNONE));
+		//nbChapters
+		pNature.add(lbChapters = new JLabel(getLabel("chapters", natures[0].chapters)), MIG.get(MIG.SPAN, MIG.SPLIT2));
+		pNature.add(nbChapters = Ui.getStringField(DB.DATA.NBCHAPTERS, 2, minmax[1][0], BNONE));
+		//nbScenes
+		pNature.add(lbScenes = new JLabel(getLabel("scenes", natures[0].scenes)), MIG.get(MIG.SPAN, MIG.SPLIT2));
+		pNature.add(nbScenes = Ui.getStringField(DB.DATA.NBSCENES, 2, minmax[2][0], BNONE));
+		add(pNature, MIG.SPAN);
 
 		//objective panel
 		objectivePanel = new JPanel(new MigLayout(MIG.WRAP, "[][]"));
-		//nbparts
-		objectivePanel.add(new JLabel(I18N.getColonMsg("parts.generate.text")), MIG.get(MIG.SPAN, MIG.SPLIT2));
-		nbParts = Ui.getStringField(DB.DATA.NBPARTS, 1, "1", BNONE);
-		objectivePanel.add(nbParts);
-		//nbChapters
-		objectivePanel.add(new JLabel(I18N.getColonMsg("chapters.generate.text")), MIG.get(MIG.SPAN, MIG.SPLIT2));
-		nbChapters = Ui.getStringField(DB.DATA.NBCHAPTERS, 2, "1", BNONE);
-		objectivePanel.add(nbChapters);
-		//nbChapters
-		objectivePanel.add(new JLabel(I18N.getColonMsg("scenes.generate.text")), MIG.get(MIG.SPAN, MIG.SPLIT2));
-		nbScenes = Ui.getStringField(DB.DATA.NBSCENES, 2, "0", BNONE);
-		objectivePanel.add(nbScenes);
-		//objective
 		ckObjective = new JCheckBox(I18N.getMsg("objective"));
 		ckObjective.addChangeListener(this);
 		objectivePanel.add(ckObjective, MIG.SPLIT2);
@@ -104,12 +138,19 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 		add(new JLabel(" "));
 		add(objectivePanel, MIG.SPAN);
 		objectivePanel.setVisible(false);
+
 		// ok/cancel
 		add(new JLabel(" "));
 		add(getCancelButton(), MIG.get(MIG.SPLIT2, MIG.RIGHT));
 		add(getOkButton(), MIG.RIGHT);
+		refreshNature();
 		pack();
 		setLocationRelativeTo(mainFrame);
+	}
+
+	private String getLabel(String key, int nat[]) {
+		String rc = I18N.getMsg(key + ".generate.text");
+		return String.format("%s (%d, %d)", rc, nat[0], nat[1]);
 	}
 
 	@Override
@@ -130,17 +171,24 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 	}
 
 	private boolean checkData() {
-		String rc = "";
+		StringBuilder rc = new StringBuilder();
 		if (tfTitle.getText().isEmpty()) {
-			rc += I18N.getColonMsg("book.title") + I18N.getMsg("error.missing") + "\n";
+			rc.append(I18N.getColonMsg("book.title")).append(I18N.getMsg("error.missing")).append("\n");
 		}
-		rc += checkValue("parts", nbParts, 1, 9);
-		rc += checkValue("chapters", nbChapters, 1, 9);
-		rc += checkValue("scenes", nbScenes, 0, 9);
-		if (rc.isEmpty()) {
+		Nature n = natures[cbNature.getSelectedIndex()];
+		if (cbNature.getSelectedIndex() == 0) {
+			nbParts.setText("1");
+			nbChapters.setText("1");
+			nbScenes.setText("1");
+		} else {
+			rc.append(checkValue("parts", nbParts, n.parts));
+			rc.append(checkValue("chapters", nbChapters, n.chapters));
+			rc.append(checkValue("scenes", nbScenes, n.scenes));
+		}
+		if (rc.toString().isEmpty()) {
 			return true;
 		}
-		JOptionPane.showMessageDialog(this, rc, I18N.getMsg("error"), JOptionPane.OK_OPTION);
+		JOptionPane.showMessageDialog(this, rc.toString(), I18N.getMsg("error"), JOptionPane.OK_OPTION);
 		return false;
 	}
 
@@ -148,14 +196,13 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 	 * check if given JtextField is numeric and value is less than minv and greater than maxv
 	 *
 	 * @param tf
-	 * @param minv
-	 * @param maxv
+	 * @param val: values to check
 	 * @return
 	 */
-	private String checkValue(String key, JTextField tf, int minv, int maxv) {
+	private String checkValue(String key, JTextField tf, int[] val) {
 		if (StringUtil.isNumeric(tf.getText())) {
 			int v = Integer.parseInt(tf.getText());
-			if (v >= minv && v <= maxv) {
+			if (v >= val[0] && v <= val[1]) {
 				return "";
 			}
 			return I18N.getColonMsg(key) + " " + I18N.getMsg("error.wrong") + "\n";
@@ -169,7 +216,7 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 	}
 
 	public int getNature() {
-		return nature.getSelectedIndex();
+		return cbNature.getSelectedIndex();
 	}
 
 	public int getNbParts() {
@@ -199,18 +246,25 @@ public class ProjectNewDlg extends AbsDialog implements ItemListener, ChangeList
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		if (nature.getSelectedIndex() > 0) {
-			objectivePanel.setVisible(true);
-			pack();
-		}
+		LOG.trace(TT + "itemStateChanged(e=" + e.toString() + ")");
+		refreshNature();
+		pack();
 	}
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
+		//LOG.trace(TT + "stateChanged(e=" + e.toString() + ")");
 		if (e.getSource() instanceof JCheckBox) {
 			lbDate.setVisible(ckObjective.isSelected());
 			objective.setVisible(ckObjective.isSelected());
 		}
+	}
+
+	private void refreshNature() {
+		int n = cbNature.getSelectedIndex();
+		LOG.trace((TT + "refreshNature() " + n));
+		pNature.setVisible(n > 0);
+		objective.setVisible(n > 0);
 	}
 
 }

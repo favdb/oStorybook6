@@ -23,11 +23,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JSlider;
 import storybook.App;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
-import storybook.ui.panel.AbstractOptions;
-import storybook.ui.panel.AbstractPanel;
-import storybook.ui.panel.chrono.Chrono;
+import storybook.ui.panels.AbstractOptions;
+import storybook.ui.panels.AbstractPanel;
+import storybook.ui.panels.chrono.Chrono;
 
 /**
  *

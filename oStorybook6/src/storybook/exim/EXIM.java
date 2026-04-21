@@ -25,7 +25,7 @@ import storybook.exim.exporter.Exporter;
 import storybook.exim.importer.Importer;
 import storybook.tools.StringUtil;
 import storybook.tools.file.IOUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
 
 /**

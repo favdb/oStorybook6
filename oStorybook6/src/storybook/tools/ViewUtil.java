@@ -36,14 +36,14 @@ import storybook.db.chapter.Chapter;
 import storybook.db.scene.Scene;
 import storybook.db.strand.Strand;
 import storybook.tools.swing.SwingUtil;
-import storybook.ui.MainFrame;
-import storybook.ui.panel.AbstractPanel;
-import storybook.ui.panel.AbstractScenePanel;
-import storybook.ui.panel.book.BookPanel;
-import storybook.ui.panel.book.BookScenePanel;
-import storybook.ui.panel.book.StrandDateLabel;
-import storybook.ui.panel.manage.Manage;
-import storybook.ui.panel.manage.ManageChapter;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.AbstractPanel;
+import storybook.ui.panels.AbstractScenePanel;
+import storybook.ui.panels.book.BookPanel;
+import storybook.ui.panels.book.BookScenePanel;
+import storybook.ui.panels.book.StrandDateLabel;
+import storybook.ui.panels.manage.Manage;
+import storybook.ui.panels.manage.ManageChapter;
 
 /**
  * Provides tools around the views.

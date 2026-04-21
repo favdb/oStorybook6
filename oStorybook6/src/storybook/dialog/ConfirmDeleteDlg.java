@@ -27,7 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import storybook.db.EntityUtil;
 import storybook.db.abs.AbstractEntity;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

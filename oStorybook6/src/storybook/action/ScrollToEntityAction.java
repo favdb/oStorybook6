@@ -24,7 +24,7 @@ import storybook.db.abs.AbstractEntity;
 import storybook.db.chapter.Chapter;
 import storybook.db.scene.Scene;
 import storybook.tools.ViewUtil;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * @author martin

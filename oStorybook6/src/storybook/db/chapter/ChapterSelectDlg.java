@@ -30,8 +30,8 @@ import resources.icons.ICONS;
 import storybook.edit.Editor;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
-import storybook.ui.panel.typist.TypistPanel;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.typist.TypistPanel;
 
 /**
  * dialog for selecting a Chapter
@@ -67,16 +67,16 @@ public class ChapterSelectDlg extends JDialog {
 		scroller.setViewportView(lstChapters);
 		add(scroller, MIG.SPLIT2);
 		JButton btNew = SwingUtil.createButton("", ICONS.K.NEW_CHAPTER,
-		   "chapter.new", evt -> newChapter());
+				"chapter.new", evt -> newChapter());
 		add(btNew, MIG.get(MIG.TOP, MIG.WRAP));
 		JButton btCancel = SwingUtil.createButton("cancel", ICONS.K.CANCEL,
-		   "cancel", evt -> {
-			   canceled = true;
-			   dispose();
-		   });
+				"cancel", evt -> {
+					canceled = true;
+					dispose();
+				});
 		add(btCancel, MIG.get(MIG.SPLIT2, MIG.RIGHT));
 		JButton btOK = SwingUtil.createButton("ok", ICONS.K.OK,
-		   "ok", evt -> dispose());
+				"ok", evt -> dispose());
 		add(btOK);
 		pack();
 		setLocation(MouseInfo.getPointerInfo().getLocation());
@@ -86,7 +86,7 @@ public class ChapterSelectDlg extends JDialog {
 	private void loadList(int first) {
 		DefaultListModel listModel = (DefaultListModel) lstChapters.getModel();
 		listModel.removeAllElements();
-		List<Chapter> chapters = (List) mainFrame.project.chapters;
+		List<Chapter> chapters = (List) mainFrame.project.chapters.getList();
 		for (Chapter c : chapters) {
 			listModel.addElement(c);
 		}

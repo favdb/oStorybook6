@@ -33,7 +33,7 @@ import storybook.dialog.AbsDialog;
 import storybook.project.PropBookLayoutPanel;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

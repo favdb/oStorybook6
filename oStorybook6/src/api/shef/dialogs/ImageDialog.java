@@ -82,7 +82,7 @@ public class ImageDialog extends HTMLOptionDialog {
 			while (c != null) {
 				if (c.getClass().getSimpleName().equals("MainFrame")) {
 					String src = imgAttr.get("src").toString();
-					String dest = ((storybook.ui.MainFrame) c).imageCopy(src);
+					String dest = ((storybook.ui.frames.main.MainFrame) c).imageCopy(src);
 					imgLink = imgLink.replace(src, dest);
 					break;
 				}

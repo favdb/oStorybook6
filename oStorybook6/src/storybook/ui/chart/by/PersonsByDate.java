@@ -27,7 +27,7 @@ import storybook.db.part.Part;
 import storybook.db.person.Person;
 import storybook.db.scene.Scene;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.chart.AbstractPersonsChart;
 import storybook.ui.chart.occurences.Dataset;
 import storybook.ui.chart.occurences.DatasetItem;

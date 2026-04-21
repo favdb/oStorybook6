@@ -25,7 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import storybook.db.strand.Strand;
 import storybook.tools.ViewUtil;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * @author martin

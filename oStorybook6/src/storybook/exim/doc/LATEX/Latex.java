@@ -17,7 +17,7 @@ import java.io.*;
 import storybook.exim.doc.LATEX.parser.Parser;
 import storybook.exim.doc.LATEX.parser.ParserHandler;
 import storybook.tools.LOG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * Program main class.

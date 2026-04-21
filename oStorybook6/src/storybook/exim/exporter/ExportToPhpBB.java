@@ -23,7 +23,7 @@ import storybook.db.scene.Scene;
 import storybook.exim.EXIM;
 import storybook.tools.clip.Clip;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

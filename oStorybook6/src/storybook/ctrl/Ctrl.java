@@ -28,8 +28,8 @@ import storybook.exim.exporter.Exporter;
 import storybook.model.BlankModel;
 import storybook.model.Model;
 import storybook.project.Project;
-import storybook.ui.MainFrame;
 import storybook.ui.SbView;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * class controler
@@ -49,7 +49,7 @@ public class Ctrl extends AbstractCtrl {
 		return evt.getPropertyName().toLowerCase().contains("update");
 	}
 
-	MainFrame mainFrame;
+	private MainFrame mainFrame;
 
 	public Ctrl(MainFrame m) {
 		super();

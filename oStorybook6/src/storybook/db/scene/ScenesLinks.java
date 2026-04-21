@@ -30,7 +30,7 @@ import storybook.db.person.Person;
 import storybook.db.plot.Plot;
 import storybook.exim.importer.ImportDocument;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
 
 /**

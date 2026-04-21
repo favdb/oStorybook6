@@ -32,7 +32,7 @@ import storybook.tools.ListUtil;
 import storybook.tools.Period;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 public class Relation extends AbstractEntity {
 

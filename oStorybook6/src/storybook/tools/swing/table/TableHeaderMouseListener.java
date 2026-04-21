@@ -24,8 +24,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import resources.icons.ICONS;
 import storybook.db.scene.Scene;
-import storybook.ui.MainFrame;
-import storybook.ui.MainMenu;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.frames.MainMenu;
 
 /**
  *

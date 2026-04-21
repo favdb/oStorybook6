@@ -40,7 +40,7 @@ import resources.icons.IconUtil;
 import storybook.dialog.cover.Cover;
 import storybook.tools.file.IOUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
 
 /**

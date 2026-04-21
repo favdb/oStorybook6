@@ -17,7 +17,7 @@ import resources.icons.IconUtil;
 import storybook.db.endnote.Endnote;
 import storybook.db.scene.Scene;
 import storybook.shortcut.Shortcuts;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

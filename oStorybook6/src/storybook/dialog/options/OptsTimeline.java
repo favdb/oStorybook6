@@ -29,11 +29,11 @@ import javax.swing.event.ChangeListener;
 import storybook.App;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.*;
-import storybook.ui.panel.AbstractOptions;
-import storybook.ui.panel.timeline.TimelinePanel;
+import storybook.ui.panels.AbstractOptions;
+import storybook.ui.panels.timeline.TimelinePanel;
 
 /**
  *

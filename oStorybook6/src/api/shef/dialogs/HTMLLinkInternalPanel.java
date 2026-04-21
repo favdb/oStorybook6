@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import storybook.db.chapter.Chapter;
 import storybook.db.scene.Scene;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 public class HTMLLinkInternalPanel extends JPanel {
 

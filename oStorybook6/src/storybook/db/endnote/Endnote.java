@@ -36,7 +36,7 @@ import storybook.shortcut.Shortcuts;
 import storybook.tools.html.Html;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 public class Endnote extends AbstractEntity {
 

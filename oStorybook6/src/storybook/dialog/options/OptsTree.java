@@ -26,9 +26,9 @@ import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import storybook.App;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
-import storybook.ui.panel.AbstractOptions;
+import storybook.ui.panels.AbstractOptions;
 
 /**
  *

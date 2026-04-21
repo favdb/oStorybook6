@@ -27,7 +27,7 @@ import javax.swing.JScrollPane;
 import api.mig.swing.MigLayout;
 import storybook.tools.spell.SpellUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.dialog.AbsDialog;
 
 /**

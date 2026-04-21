@@ -69,8 +69,8 @@ import storybook.tools.ListUtil;
 import storybook.tools.html.Html;
 import storybook.tools.net.Net;
 import static storybook.tools.swing.SwingUtil.showModalDialog;
-import storybook.ui.MainFrame;
-import storybook.ui.MainMenu;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.frames.MainMenu;
 
 /**
  * utilities for Entity

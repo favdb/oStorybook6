@@ -273,7 +273,7 @@ public class CSS {
 		b.append("em {\n")
 				.append(getParam(COLOR_BG, "yellow"))
 				.append(getParam("font-style", "normal;"))
-				.append("}");
+				.append("}\n");
 		b.append(IOUtil.resourceRead("css/review.css", MainResources.class));
 		return b.toString();
 	}

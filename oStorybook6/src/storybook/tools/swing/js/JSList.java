@@ -38,8 +38,8 @@ import storybook.dialog.EntitySelectDlg;
 import storybook.renderer.EntityLCR;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * JPanel for showing and updating links (Persons, Items, Locations, Tgas, Plots)

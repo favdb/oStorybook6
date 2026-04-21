@@ -27,7 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import storybook.tools.DateUtil;
 import storybook.tools.LOG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * @author martin

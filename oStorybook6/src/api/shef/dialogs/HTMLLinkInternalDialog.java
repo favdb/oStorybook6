@@ -24,7 +24,7 @@ import javax.swing.Icon;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

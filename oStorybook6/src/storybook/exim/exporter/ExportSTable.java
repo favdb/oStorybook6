@@ -28,7 +28,7 @@ import storybook.db.abs.AbsTable;
 import storybook.tools.DateUtil;
 import storybook.tools.LOG;
 import storybook.tools.TextUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
 
 /**

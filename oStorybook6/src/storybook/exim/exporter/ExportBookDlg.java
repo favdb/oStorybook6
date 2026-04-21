@@ -41,9 +41,9 @@ import storybook.exim.exporter.options.HTMLpanel;
 import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
 import static storybook.ui.SbView.VIEWNAME.READING;
 import storybook.ui.Ui;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * dialog for exporting the book
@@ -70,7 +70,7 @@ public class ExportBookDlg extends AbsDialog {
 	 * @param mainFrame
 	 */
 	public static void show(MainFrame mainFrame) {
-		//LOG.printInfos(TT + ".show(mainFrame) " + mainFrame.getBook().getParam().getParamExport().toPrint());
+		//LOG.trace(TT + "show(mainFrame) " + mainFrame.getBook().getParam().getParamExport().toPrint());
 		ExportBookDlg dlg = new ExportBookDlg(mainFrame);
 		dlg.setVisible(true);
 	}
@@ -103,7 +103,7 @@ public class ExportBookDlg extends AbsDialog {
 	 */
 	@Override
 	public void initUi() {
-		//LOG.printInfos(TT + ".initUi() " + paramExport.toPrint());
+		//LOG.trace(TT + "initUi() " + paramExport.toPrint());
 		setLayout(new MigLayout(MIG.get(MIG.FILL, MIG.HIDEMODE3)));
 		setBackground(Color.white);
 		setTitle(I18N.getMsg("export"));
@@ -132,6 +132,9 @@ public class ExportBookDlg extends AbsDialog {
 		checkExists();
 	}
 
+	/**
+	 * initialize folder
+	 */
 	private void initFolder() {
 		add(new JLabel(I18N.getMsg("export.folder")), MIG.SPLIT + " 3");
 		// text field for the folder
@@ -172,7 +175,7 @@ public class ExportBookDlg extends AbsDialog {
 	}
 
 	/**
-	 * check if export dir exists
+	 * check if export directory exists
 	 *
 	 * @return
 	 */

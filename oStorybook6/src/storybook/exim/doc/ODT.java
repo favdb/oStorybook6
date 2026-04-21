@@ -44,7 +44,7 @@ import storybook.tools.html.Html;
 import storybook.tools.xml.Xml;
 import storybook.tools.zip.ZipUtil;
 import storybook.tools.zip.ZipXml;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

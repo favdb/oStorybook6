@@ -28,7 +28,7 @@ import static storybook.exim.exporter.AbstractExport.SILENT;
 import storybook.tools.DateUtil;
 import storybook.tools.html.Html;
 import storybook.tools.xml.XmlUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * export the Episode content to HTML beautify

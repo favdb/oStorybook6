@@ -47,10 +47,10 @@ import storybook.tools.swing.ColorIcon;
 import storybook.tools.swing.FontUtil;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.panel.AbstractPanel;
-import storybook.ui.panel.EntityLinksPanel;
-import storybook.ui.panel.chrono.Chrono;
-import storybook.ui.panel.manage.Manage;
+import storybook.ui.panels.AbstractPanel;
+import storybook.ui.panels.EntityLinksPanel;
+import storybook.ui.panels.chrono.Chrono;
+import storybook.ui.panels.manage.Manage;
 
 /**
  * class for the scene sticker

@@ -24,7 +24,7 @@ import javax.swing.JComboBox;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import static storybook.db.book.Book.TYPE.*;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

@@ -45,7 +45,7 @@ import storybook.dialog.chooser.FontChooserDlg;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.swing.FontUtil;
 import storybook.ui.MIG;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  *

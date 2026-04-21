@@ -61,7 +61,7 @@ import storybook.tools.clip.Clip;
 import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
 import storybook.tools.html.HtmlHome;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * Export the whole book to an HTML file (or multifile, or String)
@@ -192,7 +192,7 @@ public class ExportBookToHtml extends AbstractExport {
 				File dest = new File(exp.imageDir + File.separator + src.getName());
 				IOUtil.fileCopy(src, dest);
 			}
-			File inf = new File(mainFrame.getImageDir() + File.separator + "favicon.ico");
+			File inf = new File(mainFrame.project.getImageDir() + File.separator + "favicon.ico");
 			if (inf.exists()) {
 				File ouf = new File(exp.imageDir + File.separator + "favicon.ico");
 				IOUtil.fileCopy(inf, ouf);
@@ -213,7 +213,7 @@ public class ExportBookToHtml extends AbstractExport {
 	}
 
 	/**
-	 * create the home.tml for advanced
+	 * create the home.html for advanced
 	 *
 	 * @param exp
 	 */
@@ -430,6 +430,7 @@ public class ExportBookToHtml extends AbstractExport {
 		StringBuilder b = new StringBuilder();
 		b.append(exp.tocBookGet(level, false));
 		b.append(exp.bookGetText());
+		//IOUtil.fileWriteString("traceHtml.html", b.toString());
 		return b.toString();
 	}
 
@@ -582,6 +583,7 @@ public class ExportBookToHtml extends AbstractExport {
 			closeFile(SILENT);
 			return "";
 		}
+		buf.append("</p>\n");
 		return buf.toString();
 	}
 
@@ -1220,7 +1222,7 @@ public class ExportBookToHtml extends AbstractExport {
 		//return Html.intoP(
 		//		Html.intoA("", "#toc", I18N.getMsg("toc")),
 		//		Html.FONT_SIZE + ":8px;" + Html.ALIGN_LEFT);
-		String img = "file://" + mainFrame.getImageDir() + "/summary.png";
+		String img = "file://" + mainFrame.project.getImageDir() + "/summary.png";
 		if (isOpened) {
 			img = imageDir + "/" + "summary.png";
 		}

@@ -23,7 +23,7 @@ import java.util.Set;
 import javax.swing.JLabel;
 import storybook.db.person.Person;
 import storybook.tools.swing.ColorUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 public class PersonsLegendPanel extends AbstractLegendPanel {
 

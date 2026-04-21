@@ -33,7 +33,7 @@ import storybook.db.abs.AbstractEntity;
 import storybook.db.abs.AbsTable;
 import storybook.db.book.Book;
 import storybook.review.Review;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
 
 /**

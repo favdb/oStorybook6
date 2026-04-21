@@ -29,7 +29,7 @@ import resources.icons.ICONS;
 import resources.icons.IconUtil;
 import storybook.tools.swing.ColorUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.*;
 import storybook.dialog.chooser.ColorPicker;

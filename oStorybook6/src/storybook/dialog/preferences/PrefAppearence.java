@@ -26,7 +26,7 @@ import storybook.Pref;
 import storybook.ui.MIG;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.*;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  *

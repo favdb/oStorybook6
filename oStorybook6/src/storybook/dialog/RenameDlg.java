@@ -29,7 +29,7 @@ import storybook.ctrl.Ctrl;
 import storybook.db.item.Item;
 import storybook.db.location.Location;
 import storybook.db.tag.Tag;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

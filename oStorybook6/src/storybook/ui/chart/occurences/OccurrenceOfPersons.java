@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import storybook.db.category.Category;
 import storybook.db.person.Person;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.chart.AbstractPersonsChart;
 
 /**

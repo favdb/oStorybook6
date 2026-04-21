@@ -24,13 +24,13 @@ import javax.swing.JToolBar;
 import storybook.db.DB;
 import storybook.db.abs.AbsColumn;
 import static storybook.db.abs.AbsColumn.*;
-import storybook.db.abs.AbstractEntity;
 import storybook.db.abs.AbsTable;
+import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.category.Categorys;
-import storybook.ui.MainFrame;
-import static storybook.ui.panel.AbstractPanel.ALL;
-import static storybook.ui.panel.AbstractPanel.EMPTY;
+import storybook.ui.frames.main.MainFrame;
+import static storybook.ui.panels.AbstractPanel.ALL;
+import static storybook.ui.panels.AbstractPanel.EMPTY;
 
 /**
  * @author martin
@@ -54,6 +54,11 @@ public class IdeaTable extends AbsTable {
 	public JToolBar initToolbar() {
 		super.initToolbar();
 		this.addCbCategories(Categorys.find(mainFrame, getType()), null, !EMPTY, ALL);
+		int nx = mainFrame.getBook().getParam().getParamFilters().getIdeasCat();
+		if (nx != -1) {
+			cbCategories.setSelectedIndex(nx);
+		}
+		cbCategories.addActionListener(this);
 		return toolbar;
 	}
 

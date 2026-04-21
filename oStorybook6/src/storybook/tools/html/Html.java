@@ -28,7 +28,7 @@ import storybook.tools.LOG;
 import storybook.tools.TextUtil;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.swing.FontUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 public class Html {
 
@@ -1404,7 +1404,7 @@ public class Html {
 		api.jsoup.nodes.Document jsoup = Jsoup.parse(html);
 		for (api.jsoup.nodes.Element el : jsoup.body().children()) {
 			if (el.tagName().equals("img")) {
-				String imgDir = mainFrame.getImageDir();
+				String imgDir = mainFrame.project.getImageDir();
 				File dir = new File(imgDir);
 				if (!dir.exists()) {
 					dir.mkdir();

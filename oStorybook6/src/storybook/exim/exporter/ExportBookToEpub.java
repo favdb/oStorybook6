@@ -46,7 +46,7 @@ import storybook.tools.StringUtil;
 import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
 import storybook.tools.zip.ZipUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * export the Book to an EPUB file

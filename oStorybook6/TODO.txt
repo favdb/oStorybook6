@@ -1,4 +1,25 @@
-bernard 17/01/2026===============================================
-a) problème de duplaction du tag "style" lors de l'export HTML=fait
+Création du mode Écrivain
 
-b) finaliser et tester la possibilité d'un CSS spécifique
+Menu général:
+- création du menu Mode et des sous-menu Gestion, Écrivain, Dactylo
+
+Mode Gestion: mode de présentation historique
+Mode Dactylo: mode de focalisation plein écran
+Mode Écrivain: nouveau mode (arbre, editeurs de scènes, Personnages+Lieux+Objets+Actions)
+
+MainMenu à modifier pour mettre en place les différentes version de menus
+
+Menus pour Mode Écrivain
+- Fichier: sans changement
+- Éditer: que Préférences
+- Nouveau: changegnement
+    - pour Créer une scène, personnage, objet-> action: ouvrir l'onglet correspondant
+- Table: modifier pour ouvrir les JFrame correspondants
+- Outils: à supprimer entièrement
+- Vue:
+    - Dactylo: à supprimer
+    - Arbre: à supprimer
+    - autres: à transformer en JFrame
+- Rapports: à transformer en JFrame
+- Disposition: ne garder que le changement de mode
+- Aide: sans changement

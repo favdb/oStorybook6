@@ -43,7 +43,7 @@ import storybook.Pref;
 import storybook.dialog.preferences.PrefLaf;
 import storybook.tools.spell.SpellDlg;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

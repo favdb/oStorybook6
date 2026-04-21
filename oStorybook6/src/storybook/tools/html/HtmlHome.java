@@ -193,23 +193,37 @@ public class HtmlHome {
 		if (ColorUtil.isDark(web.getSummary().getColor())) {
 			fgColor = "#FFFFFF";
 		}
-		String banner = "", banner_text = "";
-		if (web.getBanner()) {
-			if (!web.getBannerImg().isEmpty()) {
-				File f = new File(web.getBannerImg());
-				banner = "background-image: url('" + "Images/" + f.getName() + "');\n";
-			} else {
-				banner_text = Html.intoH(1, exp.book.getTitle(),
-						"margin:0px; text-align:center;padding-top:35px;");
+		String banner = "";
+		StringBuilder banner_text = new StringBuilder();
+		if (web.getBanner() && !web.getBannerImg().isEmpty()) {
+			File f = new File(web.getBannerImg());
+			banner = "background-image: url('" + "Images/" + f.getName() + "');\n";
+		} else {
+			banner_text.append("<div class=\"banner\" style=\"text-align: center;\n "
+					+ "    font-family: sans-serif;\n "
+					+ "    font-weight: bold;\n "
+					+ "    font-size: 2rem;\n "
+					+ "    padding-top: 10px; "
+					+ "\">");
+			banner_text.append(exp.book.getTitle());
+			if (!exp.book.getSubtitle().isEmpty()) {
+				banner_text.append("<div style=\""
+						+ "        font-size: 1.2rem; "
+						+ "        font-style: italic; "
+						+ "        margin-top: -5px; "
+						+ "\">")
+						.append(exp.book.getSubtitle())
+						.append("</div>");
 			}
+			banner_text.append("</div>");
 		}
 		String b = HOME.replace("{banner}", banner)
-				.replace("{banner_text}", banner_text)
+				.replace("{banner_text}", banner_text.toString())
 				.replace("{bkcolor}", bkColor)
 				.replace("{fgcolor}", fgColor)
 				.replace("{msg_err}", msg_err)
 				.replace("{title}", exp.book.getTitle());
-		IOUtil.fileWriteString(exp.param.getDirectory() + "/" + "home.html", b.toString());
+		IOUtil.fileWriteString(exp.param.getDirectory() + "/" + "home.html", b);
 		return true;
 	}
 

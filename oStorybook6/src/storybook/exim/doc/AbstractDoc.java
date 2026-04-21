@@ -31,7 +31,7 @@ import storybook.tools.LOG;
 import storybook.tools.file.IOUtil;
 import storybook.tools.zip.ZipXml;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

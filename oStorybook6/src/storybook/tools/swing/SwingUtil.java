@@ -85,8 +85,8 @@ import storybook.tools.LOG;
 import storybook.tools.StringUtil;
 import storybook.tools.html.Html;
 import storybook.tools.swing.js.JSToolBar;
-import storybook.ui.MainFrame;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.AbstractPanel;
 
 public class SwingUtil {
 

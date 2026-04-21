@@ -35,7 +35,7 @@ import storybook.db.scene.Scene;
 import storybook.dialog.AbsDialog;
 import storybook.tools.swing.FontUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

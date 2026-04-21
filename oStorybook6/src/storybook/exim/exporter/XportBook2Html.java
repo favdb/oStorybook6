@@ -29,7 +29,7 @@ import storybook.db.part.Part;
 import storybook.db.scene.Scene;
 import storybook.project.Project;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * class for exporting a book to Html

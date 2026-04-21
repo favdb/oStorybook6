@@ -25,7 +25,7 @@ import resources.icons.ICONS;
 import storybook.db.book.BookUtil;
 import storybook.dialog.AbsDialog;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
 
 /**

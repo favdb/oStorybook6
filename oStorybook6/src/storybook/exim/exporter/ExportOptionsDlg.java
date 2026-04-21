@@ -40,7 +40,7 @@ import storybook.dialog.AbsDialog;
 import storybook.exim.exporter.options.CSVpanel;
 import storybook.exim.exporter.options.TXTpanel;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

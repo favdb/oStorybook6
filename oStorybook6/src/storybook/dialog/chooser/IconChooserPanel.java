@@ -39,7 +39,7 @@ import resources.icons.ICONS;
 import resources.icons.IconButton;
 import resources.icons.IconUtil;
 import storybook.tools.swing.SwingUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.interfaces.IRefreshable;
 
 @SuppressWarnings("serial")

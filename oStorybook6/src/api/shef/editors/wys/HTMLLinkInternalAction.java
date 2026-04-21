@@ -31,7 +31,7 @@ import resources.icons.ICONS;
 import resources.icons.IconUtil;
 import api.shef.dialogs.HTMLLinkInternalDialog;
 import api.shef.tools.HtmlUtils;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

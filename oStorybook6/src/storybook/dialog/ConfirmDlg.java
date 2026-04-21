@@ -25,7 +25,7 @@ import api.mig.swing.MigLayout;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

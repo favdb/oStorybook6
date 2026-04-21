@@ -31,14 +31,14 @@ import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.swing.ScreenImage;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
 import storybook.ui.SbViewFactory;
 import storybook.ui.chart.AbstractChartPanel;
 import storybook.ui.chart.by.PersonsByScene;
 import storybook.ui.chart.wiww.WiWW;
-import storybook.ui.panel.info.InfoPanel;
-import storybook.ui.panel.memoria.MemoriaPanel;
+import storybook.ui.panels.info.InfoPanel;
+import storybook.ui.panels.memoria.MemoriaPanel;
 
 /**
  *

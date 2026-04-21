@@ -46,10 +46,10 @@ import storybook.App;
 import storybook.Pref;
 import storybook.ctrl.Ctrl;
 import storybook.tools.file.EnvUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
 import storybook.ui.SbViewFactory;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * class to manage the layout

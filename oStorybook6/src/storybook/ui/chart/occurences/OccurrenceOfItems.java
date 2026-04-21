@@ -30,7 +30,7 @@ import javax.swing.JPanel;
 import storybook.db.item.Item;
 import storybook.tools.swing.ColorUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.chart.AbstractChartPanel;
 
 /**

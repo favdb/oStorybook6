@@ -29,7 +29,7 @@ import storybook.db.book.Book;
 import storybook.tools.xml.XmlKey;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 public class Attribute extends AbstractEntity {
 

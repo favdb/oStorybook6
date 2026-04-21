@@ -25,7 +25,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
 import api.mig.swing.MigLayout;
 import resources.icons.ICONS;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * @author martin

@@ -26,7 +26,7 @@ import javax.swing.JRadioButton;
 import storybook.App;
 import storybook.Pref;
 import storybook.tools.swing.FontUtil;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  *

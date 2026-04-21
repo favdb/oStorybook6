@@ -18,7 +18,7 @@
 package storybook.db.book;
 
 import static storybook.exim.exporter.AbstractExport.*;
-import static storybook.tools.xml.XmlUtil.getString;
+import static storybook.tools.xml.XmlUtil.*;
 
 /**
  *
@@ -29,7 +29,7 @@ public class BookParamWeb extends BookParamAbstract {
 	private WEB_SUMMARY summary;
 
 	public enum KW {
-		BANNER, SUMMARY;
+		BANNER, SUMMARY, AUTHOR, COPYRIGHT;
 
 		@Override
 		public String toString() {
@@ -37,7 +37,7 @@ public class BookParamWeb extends BookParamAbstract {
 		}
 	}
 
-	private boolean banner;
+	private boolean banner = false, bAuthor = false, bCopyright = false;
 	private String bannerImg = "";
 
 	@SuppressWarnings("OverridableMethodCallInConstructor")
@@ -58,6 +58,8 @@ public class BookParamWeb extends BookParamAbstract {
 				setBannerImg(x[1]);
 			}
 			setSummary(new WEB_SUMMARY(node));
+			bAuthor = getBoolean(node, KW.AUTHOR.toString());
+			bCopyright = getBoolean(node, KW.COPYRIGHT.toString());
 		} else {
 			summary = new WEB_SUMMARY();
 		}
@@ -72,6 +74,8 @@ public class BookParamWeb extends BookParamAbstract {
 			x.append(",").append(getBannerImg());
 		}
 		b.append(stringAttribute(0, KW.BANNER.toString(), x.toString()));
+		b.append(stringAttribute(0, KW.AUTHOR.toString(), (bAuthor ? "1" : "0")));
+		b.append(stringAttribute(0, KW.COPYRIGHT.toString(), (bCopyright ? "1" : "0")));
 		// summary
 		b.append(summary.toXml());
 		b.append(" />\n");
@@ -100,6 +104,22 @@ public class BookParamWeb extends BookParamAbstract {
 
 	public WEB_SUMMARY getSummary() {
 		return summary;
+	}
+
+	public void setAuthor(boolean value) {
+		this.bAuthor = value;
+	}
+
+	public boolean getAuthor() {
+		return bAuthor;
+	}
+
+	public void setCopyright(boolean value) {
+		this.bCopyright = value;
+	}
+
+	public boolean getCopyright() {
+		return bCopyright;
 	}
 
 }

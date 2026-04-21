@@ -31,7 +31,7 @@ import storybook.db.gender.Gender;
 import storybook.project.Project;
 import storybook.tools.TextUtil;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

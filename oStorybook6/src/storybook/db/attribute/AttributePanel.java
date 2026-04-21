@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import api.mig.swing.MigLayout;
 import storybook.tools.swing.AutoCompleteComboBox;
 import storybook.ui.MIG;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * @author martin

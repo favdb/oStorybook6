@@ -30,7 +30,7 @@ import storybook.db.status.Status;
 import storybook.tools.LOG;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 public class Idea extends AbstractEntity {
 

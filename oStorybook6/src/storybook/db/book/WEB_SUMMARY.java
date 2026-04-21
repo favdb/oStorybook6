@@ -27,6 +27,7 @@ import storybook.tools.swing.ColorUtil;
 import static storybook.tools.xml.XmlUtil.getString;
 
 /**
+ * class for SUMMARY part
  *
  * @author favdb
  */
@@ -205,13 +206,16 @@ public class WEB_SUMMARY {
 		return b.toString();
 	}
 
+	/**
+	 * class for style of SUMMARY part
+	 */
 	public static class WEB_SUMMARY_H {
 
 		private String family = "serif",
-			size = "100",
-			style = "normal",
-			color = "#000000",
-			bkcolor = "#FFFFFF";
+				size = "100",
+				style = "normal",
+				color = "#000000",
+				bkcolor = "#FFFFFF";
 
 		public WEB_SUMMARY_H() {
 		}

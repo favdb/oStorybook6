@@ -31,8 +31,8 @@ import storybook.Pref;
 import storybook.tools.LOG;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
-import storybook.ui.panel.AbstractOptions;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.AbstractOptions;
 
 /**
  *

@@ -23,7 +23,7 @@ import javax.swing.JTabbedPane;
 import resources.icons.IconUtil;
 import storybook.dialog.AbsDialog;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
 
 /**

@@ -26,7 +26,7 @@ import storybook.db.abs.AbsTable;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.tag.Tag;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * @author martin

@@ -42,8 +42,8 @@ import storybook.tools.swing.PrintUtil;
 import storybook.tools.swing.ScreenImage;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.AbstractPanel;
 
 public abstract class AbstractChartPanel extends AbstractPanel implements ActionListener {
 

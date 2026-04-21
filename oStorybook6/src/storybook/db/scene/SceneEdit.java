@@ -83,7 +83,7 @@ import storybook.tools.zip.ZipXml;
 import storybook.ui.MIG;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.*;
-import storybook.ui.panel.script.ScriptPanel;
+import storybook.ui.panels.script.ScriptPanel;
 
 /**
  * panel editor for Scene

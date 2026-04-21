@@ -35,7 +35,7 @@ import storybook.db.book.Book;
 import storybook.db.part.Part;
 import storybook.dialog.AbsDialog;
 import storybook.tools.StringUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

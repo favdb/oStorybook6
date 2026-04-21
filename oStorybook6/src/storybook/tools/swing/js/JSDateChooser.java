@@ -38,8 +38,8 @@ import storybook.App;
 import storybook.Pref;
 import storybook.tools.DateUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * @author martin

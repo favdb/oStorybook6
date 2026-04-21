@@ -54,9 +54,10 @@ import storybook.tools.html.Html;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.js.JSToolBar;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
-import storybook.ui.panel.typist.TypistPanel;
+import storybook.ui.frames.scriber.ScriberPanel;
+import storybook.ui.panels.typist.TypistPanel;
 
 /**
  * class for he JPanel for Reviews
@@ -69,7 +70,8 @@ public class ReviewPanel extends JPanel implements MouseListener {
 
 	private JEditorPane edReviews;
 	private Scene scene;
-	private final TypistPanel typist;
+	private TypistPanel typist = null;
+	private ScriberPanel scriber = null;
 	private JButton btExport, btImport;
 	private final MainFrame mainFrame;
 
@@ -78,6 +80,14 @@ public class ReviewPanel extends JPanel implements MouseListener {
 		this.mainFrame = mainFrame;
 		this.typist = typist;
 		this.scene = typist.sceneGet();
+		initialize();
+	}
+
+	@SuppressWarnings("OverridableMethodCallInConstructor")
+	public ReviewPanel(MainFrame mainFrame, ScriberPanel scriber) {
+		this.mainFrame = mainFrame;
+		this.scriber = scriber;
+		this.scene = scriber.sceneGet();
 		initialize();
 	}
 
@@ -146,12 +156,22 @@ public class ReviewPanel extends JPanel implements MouseListener {
 	 */
 	private void reviewAdd() {
 		//LOG.trace(TT + ".reviewAdd()");
-		if (typist.shefGet() == null) {
-			return;
-		}
-		if (Review.create(mainFrame, scene, typist.shefGet()) != null) {
-			mainFrame.setUpdated();
-			refresh();
+		if (typist != null) {
+			if (typist.shefGet() == null) {
+				return;
+			}
+			if (Review.create(mainFrame, scene, typist.shefGet()) != null) {
+				mainFrame.setUpdated();
+				refresh();
+			}
+		} else {
+			if (scriber.shefGet() == null) {
+				return;
+			}
+			if (Review.create(mainFrame, scene, scriber.shefGet()) != null) {
+				mainFrame.setUpdated();
+				refresh();
+			}
 		}
 	}
 
@@ -236,7 +256,11 @@ public class ReviewPanel extends JPanel implements MouseListener {
 		}
 		// ask if add imported Comments or Replace all
 		if (ImportReview.exec(mainFrame, file)) {
-			typist.refresh();
+			if (typist != null) {
+				typist.refresh();
+			} else {
+				scriber.refresh();
+			}
 			JOptionPane.showMessageDialog(null,
 					I18N.getMsg("comments.import.ok", file.getAbsolutePath()),
 					I18N.getMsg("import"),
@@ -354,7 +378,10 @@ public class ReviewPanel extends JPanel implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent evt) {
 		// allowed only for normaltext not for Markdown
-		if (typist.shefGet() == null) {
+		if (typist != null && typist.shefGet() == null) {
+			return;
+		}
+		if (scriber != null && scriber.shefGet() == null) {
 			return;
 		}
 		Endnote endnote = getEndnote(getHref(evt));
@@ -370,7 +397,12 @@ public class ReviewPanel extends JPanel implements MouseListener {
 		}
 		// allways select the text
 		String sort[] = endnote.getSort().split(" ");
-		JEditorPane ht = typist.shefGet().wysEditorGet().getWysEditor();
+		JEditorPane ht = null;
+		if (typist != null) {
+			ht = typist.shefGet().wysEditorGet().getWysEditor();
+		} else {
+			scriber.shefGet().wysEditorGet().getWysEditor();
+		}
 		if (sort.length == 2) {
 			int start = Integer.parseInt(sort[0]);
 			int end = Integer.parseInt(sort[1]);

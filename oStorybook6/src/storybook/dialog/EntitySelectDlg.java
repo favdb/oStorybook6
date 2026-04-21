@@ -37,7 +37,7 @@ import storybook.db.book.Book;
 import storybook.renderer.EntityLCR;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * dialog to select one or more entities

@@ -23,7 +23,7 @@ import storybook.db.abs.AbsEntitys;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.project.Project;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

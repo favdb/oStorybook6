@@ -43,7 +43,7 @@ import storybook.db.scene.Scene;
 import storybook.db.strand.Strand;
 import storybook.db.tag.Tag;
 import storybook.tools.LOG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
 
 /**

@@ -44,11 +44,11 @@ import storybook.tools.html.CSS;
 import storybook.tools.html.Html;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
-import storybook.ui.panel.AbstractPanel;
-import storybook.ui.panel.typist.TypistPanel;
-import storybook.ui.panel.typist.TypistScenario;
+import storybook.ui.panels.AbstractPanel;
+import storybook.ui.panels.typist.TypistPanel;
+import storybook.ui.panels.typist.TypistScenario;
 
 /**
  *

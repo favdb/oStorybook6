@@ -21,7 +21,7 @@ import java.util.List;
 import javax.swing.JLabel;
 import storybook.db.strand.Strand;
 import storybook.tools.swing.ColorUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 public class StrandsLegendPanel extends AbstractLegendPanel {
 

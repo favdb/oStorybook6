@@ -46,7 +46,7 @@ import storybook.tools.comparator.DateComparator;
 import storybook.tools.comparator.EntityComparator;
 import storybook.tools.comparator.NullComparator;
 import storybook.tools.comparator.ObjectComparator;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * standard definition of a column used as a base class for each table

@@ -18,8 +18,8 @@ package storybook.ui.chart.legend;
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import api.mig.swing.MigLayout;
-import storybook.ui.MainFrame;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.AbstractPanel;
 
 public abstract class AbstractLegendPanel extends AbstractPanel {
 

@@ -45,7 +45,7 @@ import storybook.exim.exporter.options.CSVpanel;
 import storybook.exim.exporter.options.TXTpanel;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * dialog for exporting some data

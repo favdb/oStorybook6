@@ -25,8 +25,8 @@ import javax.swing.JToolBar;
 import storybook.ctrl.ActKey;
 import storybook.db.book.Book;
 import storybook.tools.LOG;
-import storybook.ui.MainFrame;
-import storybook.ui.MainMenu;
+import storybook.ui.frames.MainMenu;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * @author martin
@@ -36,8 +36,7 @@ public class MainActions implements PropertyChangeListener {
 
 	private static final String TT = "MainActions.";
 
-	//private ActionManager actionManager;
-	private final MainFrame mainFrame;
+	private MainFrame mainFrame;
 	private MainMenu mainMenu;
 	private Dimension menuDim;
 

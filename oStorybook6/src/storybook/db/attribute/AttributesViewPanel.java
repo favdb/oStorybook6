@@ -29,8 +29,8 @@ import storybook.tools.html.Html;
 import storybook.tools.swing.LaF;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
-import storybook.ui.panel.AbstractScrollPanel;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.AbstractScrollPanel;
 
 /**
  *

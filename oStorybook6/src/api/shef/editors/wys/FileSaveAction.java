@@ -17,7 +17,7 @@ import storybook.shortcut.Shortcuts;
 import storybook.exim.exporter.ExportBookToDoc;
 import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * Select all action

@@ -16,7 +16,7 @@ import resources.icons.IconUtil;
 import storybook.shortcut.Shortcuts;
 import storybook.exim.importer.ImportDocument;
 import storybook.tools.file.IOUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * Select all action

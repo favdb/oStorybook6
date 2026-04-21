@@ -28,7 +28,7 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  *

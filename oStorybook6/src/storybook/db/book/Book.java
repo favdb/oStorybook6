@@ -30,7 +30,7 @@ import storybook.db.scene.Scene;
 import storybook.project.Project;
 import storybook.tools.StringUtil;
 import storybook.tools.xml.XmlUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * class for Book properties

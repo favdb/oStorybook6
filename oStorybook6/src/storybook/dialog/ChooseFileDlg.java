@@ -30,9 +30,8 @@ import javax.swing.JTextField;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import resources.icons.ICONS;
 import resources.icons.IconUtil;
-import storybook.Const.STORYBOOK;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *
@@ -123,8 +122,8 @@ public class ChooseFileDlg extends AbsDialog {
 		}
 		String name = tfName.getText();
 		if (forceExt) {
-			String fileExtOld = STORYBOOK.FILE_EXT_H2DB.toString();
-			String fileExt = STORYBOOK.FILE_EXT_MVDB.toString();
+			String fileExtOld = ".h2.db";
+			String fileExt = ".mv.db";
 			if ((!name.endsWith(fileExtOld)) && (!name.endsWith(fileExt))) {
 				name += fileExt;
 			}
@@ -134,9 +133,9 @@ public class ChooseFileDlg extends AbsDialog {
 		file = new File(tfDir.getText() + File.separator + name);
 		if ((file.exists()) && (askForOverwrite)) {
 			int ret = JOptionPane.showConfirmDialog(this,
-			   I18N.getMsg("file.save.overwrite.text", file.getName()),
-			   I18N.getMsg("file.save.overwrite.title"),
-			   JOptionPane.YES_NO_OPTION);
+					I18N.getMsg("file.save.overwrite.text", file.getName()),
+					I18N.getMsg("file.save.overwrite.title"),
+					JOptionPane.YES_NO_OPTION);
 			if (ret == JOptionPane.NO_OPTION) {
 				lbWarning.setText(I18N.getMsg("file.new.file.exists"));
 				return;

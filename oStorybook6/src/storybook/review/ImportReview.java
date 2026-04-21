@@ -29,7 +29,7 @@ import storybook.db.endnote.Endnote;
 import storybook.db.scene.Scene;
 import storybook.tools.LOG;
 import storybook.tools.xml.Xml;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * import Comments in the current project

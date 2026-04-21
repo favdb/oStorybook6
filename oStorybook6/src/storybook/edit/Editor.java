@@ -60,9 +60,9 @@ import storybook.tools.swing.ColorUtil;
 import storybook.tools.swing.FontUtil;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * class for the editor

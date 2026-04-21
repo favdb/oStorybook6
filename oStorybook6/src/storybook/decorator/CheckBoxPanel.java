@@ -15,9 +15,9 @@ import javax.swing.JLabel;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.strand.Strand;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.interfaces.IRefreshable;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 @SuppressWarnings("serial")
 public class CheckBoxPanel extends AbstractPanel implements IRefreshable {

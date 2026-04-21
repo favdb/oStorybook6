@@ -1,7 +1,9 @@
 Versions :
 ==========
 6.06: 21/04/2026
-- correcion de ChaptersOrderDlg (plus rapide)
+- petite correction de la mise en forme ExportBookToHtml
+- correction de ChaptersOrderDlg (plus rapide)
+- correction anomalie DnD dans TreePanel
 6.05: 01/01/2026
 - ajout du template_download_en.html pour le build
 - ajout du SHA256 dans le build

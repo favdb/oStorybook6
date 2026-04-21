@@ -33,7 +33,7 @@ import storybook.exim.doc.ODT;
 import storybook.tools.file.FileFilter;
 import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * export the Book to a DOCXor a ODT

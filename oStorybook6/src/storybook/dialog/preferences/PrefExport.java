@@ -32,7 +32,7 @@ import storybook.Pref;
 import storybook.exim.exporter.ExportToPhpBB;
 import storybook.tools.swing.FontUtil;
 import storybook.ui.MIG;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  *

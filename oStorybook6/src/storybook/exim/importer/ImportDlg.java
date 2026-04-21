@@ -48,7 +48,7 @@ import storybook.tools.LOG;
 import storybook.tools.file.EnvUtil;
 import storybook.tools.file.FileFilter;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

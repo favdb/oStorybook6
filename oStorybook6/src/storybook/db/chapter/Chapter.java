@@ -31,7 +31,7 @@ import storybook.tools.TextUtil;
 import storybook.tools.html.Html;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 @SuppressWarnings("serial")
 public class Chapter extends AbstractEntity {
@@ -240,7 +240,7 @@ public class Chapter extends AbstractEntity {
 		if (chapterno == null) {
 			return I18N.getMsg("scenes.unassigned") + (hasNotes() ? "*" : "");
 		}
-		return (getChapterno() + ": " + getName() + (hasNotes() ? "*" : ""));
+		return (/*getChapterno() + ": " +*/getName() + (hasNotes() ? "*" : ""));
 	}
 
 	@Override

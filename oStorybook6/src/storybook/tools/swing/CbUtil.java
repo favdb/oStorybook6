@@ -25,7 +25,7 @@ import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.category.Category;
 import storybook.db.status.Status;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

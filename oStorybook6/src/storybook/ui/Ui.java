@@ -16,6 +16,7 @@
  */
 package storybook.ui;
 
+import storybook.ui.frames.main.MainFrame;
 import api.mig.swing.MigLayout;
 import api.shef.ShefEditor;
 import i18n.I18N;
@@ -70,7 +71,7 @@ import storybook.tools.swing.js.JSCheckList;
  */
 public class Ui {
 
-	private static final String TT = "Ui";
+	private static final String TT = "Ui.";
 
 	public static final String CTRL = "ctrl ", ALT = "alt ", SHIFT = "shift ",
 			CTRL_SHIFT = CTRL + SHIFT, CTRL_ALT = CTRL + ALT;
@@ -94,6 +95,7 @@ public class Ui {
 	public static final boolean MANDATORY = true,
 			NEW = true,
 			ALL = true,
+			ALL_NOT = false,
 			EMPTY = true,
 			HIDE = true,
 			INFO = true,
@@ -218,6 +220,10 @@ public class Ui {
 
 	public static JTextField getStringField(DATA data, int len, String val, String opt) {
 		return getStringField(data.toString(), len, val, opt);
+	}
+
+	public static JTextField getStringField(DATA data, int len, Integer val, String opt) {
+		return getStringField(data.toString(), len, val.toString(), opt);
 	}
 
 	public static JTextField getStringField(String name, int len, String val, String opt) {
@@ -462,7 +468,7 @@ public class Ui {
 			boolean isEmpty,
 			boolean isAll,
 			ActionListener... action) {
-		//LOG.trace(TT+".comboboxInit(title="+title+"tooltip, list, toSel, isEmpty, isAll)");
+		//LOG.trace(TT+"comboboxInit(title="+title+"tooltip, list, toSel, isEmpty, isAll)");
 		JComboBox cb = new JComboBox();
 		cb.setMinimumSize(IconUtil.getDefDim());
 		cb.setName(name);
@@ -487,7 +493,7 @@ public class Ui {
 		if (action != null && action.length > 0) {
 			cb.addActionListener(action[0]);
 		}
-		return (cb);
+		return cb;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -498,7 +504,7 @@ public class Ui {
 			boolean isEmpty,
 			boolean isAll,
 			ActionListener... action) {
-		//App.trace(TT+".comboboxInit(title="+title+"tooltip, list, toSel, isEmpty, isAll)");
+		//App.trace(TT+"comboboxInit(title="+title+"tooltip, list, toSel, isEmpty, isAll)");
 		JComboBox cb = new JComboBox();
 		cb.setMinimumSize(IconUtil.getDefDim());
 		cb.setName(name);
@@ -713,7 +719,7 @@ public class Ui {
 	@SuppressWarnings("unchecked")
 	public static JPanel initListPanel(JPanel panel, MainFrame mainFrame, Book.TYPE type,
 			String title, List<?> list, AbstractEntity tosel, ActionListener actionAdd) {
-		/*LOG.trace(TT+".initListPanel(panel, mainFrame"+
+		/*LOG.trace(TT+"initListPanel(panel, mainFrame"+
 				", type="+type.toString()+
 				", title="+ title+
 				", list nb="+(list!=null?list.size():"null")+
@@ -911,7 +917,7 @@ public class Ui {
 	 */
 	public static JButton initButton(String name, String text, ICONS.K icon,
 			String tooltip, ActionListener... act) {
-		//LOG.trace(TT+".initButton(name=" + name + ",
+		//LOG.trace(TT+"initButton(name=" + name + ",
 		//text=" + text + ", icon=" + icon.toString() + ")");
 		JButton btn = new JButton();
 		btn.setName(name);

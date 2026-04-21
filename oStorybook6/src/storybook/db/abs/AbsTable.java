@@ -105,11 +105,11 @@ import storybook.tools.swing.js.JSColumnControlIcon;
 import storybook.tools.swing.js.JSTable;
 import storybook.tools.swing.js.JSToolBar;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
 import storybook.ui.SbView.VIEWNAME;
 import storybook.ui.Ui;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * Aabstract table class containing an optional header, a JTable, an optional footer
@@ -1353,7 +1353,7 @@ public abstract class AbsTable extends AbstractPanel implements
 	public void addCbCategories(List<String> categories,
 			AbstractEntity selected, boolean empty, boolean all) {
 		toolbar.add(new JLabel(I18N.getColonMsg("categories")));
-		cbCategories = Ui.initComboBox("cbCategories", "", categories, selected, empty, all, this);
+		cbCategories = Ui.initComboBox("cbCategories", "", categories, selected, empty, all);
 		toolbar.add(cbCategories);
 	}
 

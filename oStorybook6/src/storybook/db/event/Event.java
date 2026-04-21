@@ -36,7 +36,7 @@ import storybook.tools.swing.ColorIcon;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 public class Event extends AbstractEntity {
 

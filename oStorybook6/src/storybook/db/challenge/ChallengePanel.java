@@ -45,7 +45,7 @@ import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
 import storybook.ui.Ui;
 import storybook.ui.chart.occurences.DatasetItem;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * JPanel for the Challenge, inspired by Philippe <br>

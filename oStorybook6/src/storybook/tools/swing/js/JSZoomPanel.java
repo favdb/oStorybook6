@@ -26,8 +26,8 @@ import javax.swing.JPanel;
 import resources.icons.ICONS;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
-import storybook.ui.panel.chrono.Chrono;
-import storybook.ui.panel.manage.Manage;
+import storybook.ui.panels.chrono.Chrono;
+import storybook.ui.panels.manage.Manage;
 
 /**
  *

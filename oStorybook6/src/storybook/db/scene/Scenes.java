@@ -47,7 +47,7 @@ import storybook.tools.LOG;
 import storybook.tools.SbDuration;
 import storybook.tools.file.XEditorFile;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * Scene utilities

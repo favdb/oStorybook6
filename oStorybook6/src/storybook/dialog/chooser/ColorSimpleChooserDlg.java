@@ -30,7 +30,7 @@ import storybook.App;
 import storybook.tools.swing.ColorIcon;
 import storybook.tools.swing.ColorUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
 import storybook.dialog.AbsDialog;
 

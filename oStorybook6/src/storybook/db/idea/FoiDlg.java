@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import resources.icons.IconUtil;
 import storybook.dialog.AbsDialog;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * @author martin

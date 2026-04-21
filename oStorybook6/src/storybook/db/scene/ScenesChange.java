@@ -36,7 +36,7 @@ import storybook.db.status.StatusLCR;
 import storybook.db.strand.Strand;
 import storybook.tools.swing.CbUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.dialog.AbsDialog;
 
 /**

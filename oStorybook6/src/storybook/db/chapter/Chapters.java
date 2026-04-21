@@ -27,7 +27,7 @@ import storybook.db.scene.Scene;
 import storybook.project.Project;
 import storybook.tools.ListUtil;
 import storybook.tools.comparator.ObjectComparator;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * Chapter utilities

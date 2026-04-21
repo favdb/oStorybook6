@@ -32,7 +32,7 @@ import storybook.App;
 import storybook.Pref;
 import storybook.tools.file.IOUtil;
 import storybook.ui.MIG;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  *

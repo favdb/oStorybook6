@@ -27,7 +27,7 @@ import storybook.exim.doc.ODT;
 import storybook.tools.LOG;
 import storybook.tools.StringUtil;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * class to hold external Editor File

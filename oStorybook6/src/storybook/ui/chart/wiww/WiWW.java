@@ -25,7 +25,7 @@ import storybook.tools.swing.FontUtil;
 import storybook.tools.swing.ReadOnlyTable;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.table.TableFixedColumn;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.chart.AbstractPersonsChart;
 import storybook.ui.chart.legend.PersonsLegendPanel;
 

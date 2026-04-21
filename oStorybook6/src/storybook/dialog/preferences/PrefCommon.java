@@ -43,7 +43,7 @@ import storybook.tools.swing.ColorIcon;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.synonyms.Synonyms;
 import storybook.ui.MIG;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  *

@@ -295,6 +295,9 @@ public class XmlUtil {
 	 * @return
 	 */
 	public static String getString(Node node, String key) {
+		if (node == null) {
+			return "";
+		}
 		Element e = (Element) node;
 		String value = e.getAttribute(key);
 		if (value == null) {

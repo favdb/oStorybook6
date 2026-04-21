@@ -33,9 +33,9 @@ import storybook.db.book.Book;
 import storybook.db.part.Part;
 import storybook.dialog.AbsDialog;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
-import static storybook.ui.panel.AbstractPanel.*;
+import static storybook.ui.panels.AbstractPanel.*;
 
 /**
  * dialog for changing the Chapters order

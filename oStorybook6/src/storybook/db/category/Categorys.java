@@ -30,7 +30,7 @@ import static storybook.db.book.Book.TYPE.ITEM;
 import static storybook.db.book.Book.TYPE.PLOT;
 import static storybook.db.book.Book.TYPE.TAG;
 import storybook.project.Project;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

@@ -39,8 +39,8 @@ import storybook.edit.Editor;
 import storybook.tools.swing.SwingUtil;
 import storybook.ui.MIG;
 import storybook.ui.Ui;
-import storybook.ui.panel.AbstractPanel;
-import storybook.ui.panel.typist.TypistScenario;
+import storybook.ui.panels.AbstractPanel;
+import storybook.ui.panels.typist.TypistScenario;
 
 /**
  *

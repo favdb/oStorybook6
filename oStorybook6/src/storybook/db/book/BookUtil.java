@@ -50,7 +50,7 @@ import storybook.tools.Markdown;
 import storybook.tools.StringUtil;
 import storybook.tools.file.EnvUtil;
 import storybook.tools.file.FileFilter;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * some utilities for managing Book project

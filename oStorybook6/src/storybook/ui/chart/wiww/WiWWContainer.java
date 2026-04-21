@@ -22,7 +22,7 @@ import storybook.db.location.Location;
 import storybook.db.person.Person;
 import storybook.db.scene.Scene;
 import storybook.tools.DateUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 public class WiWWContainer {
 

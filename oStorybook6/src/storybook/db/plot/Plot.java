@@ -25,7 +25,7 @@ import storybook.db.book.Book;
 import storybook.tools.ListUtil;
 import storybook.tools.xml.XmlKey.XK;
 import storybook.tools.xml.XmlUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

@@ -45,7 +45,7 @@ import storybook.tools.StringUtil;
 import storybook.tools.file.FileFilter;
 import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * class for importing a document file like DOCX, ODT or HTML
@@ -444,14 +444,14 @@ public class ImportDocument {
 		if (filename.isEmpty()) {
 			return false;
 		}
-		if (filename.endsWith(Const.STORYBOOK.FILE_EXT_MVDB.toString())) {
-			filename = filename.replace(Const.STORYBOOK.FILE_EXT_MVDB.toString(), "");
+		if (filename.endsWith(".mv.db")) {
+			filename = filename.replace(".mv.db", "");
 		}
 		if (filename.endsWith(Const.STORYBOOK.FILE_EXT_OSBK.toString())) {
 			filename = filename.replace(Const.STORYBOOK.FILE_EXT_OSBK.toString(), "");
 		}
 		File fOsbk = new File(filename + Const.STORYBOOK.FILE_EXT_OSBK.toString());
-		File fMvdb = new File(filename + Const.STORYBOOK.FILE_EXT_MVDB.toString());
+		File fMvdb = new File(filename + ".mv.db");
 		if (fOsbk.exists() || fMvdb.exists()) {
 			int ret = JOptionPane.showConfirmDialog(null,
 					I18N.getMsg("file.exists", filename),

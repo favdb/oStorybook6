@@ -23,7 +23,7 @@ import storybook.ctrl.ActKey;
 import storybook.db.abs.AbsTable;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * this table is not used

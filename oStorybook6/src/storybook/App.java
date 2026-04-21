@@ -58,7 +58,7 @@ import storybook.tools.swing.LaF;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.splash.Waiting;
 import storybook.tools.synonyms.Synonyms;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * class for the application

@@ -23,7 +23,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import storybook.db.scene.Scene;
 import storybook.tools.LOG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 @SuppressWarnings("serial")
 public class IdTCR extends DefaultTableCellRenderer {

@@ -35,7 +35,7 @@ import storybook.db.strand.Strand;
 import storybook.tools.ListUtil;
 import storybook.tools.TextUtil;
 import storybook.tools.swing.ColorIcon;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * table cell renderer for an entity or a list of entities

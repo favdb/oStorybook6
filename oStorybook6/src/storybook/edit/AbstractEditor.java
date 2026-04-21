@@ -68,10 +68,10 @@ import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.js.JSCheckList;
 import storybook.tools.swing.js.JSDateChooser;
 import storybook.ui.MIG;
-import storybook.ui.MainMenu;
+import storybook.ui.frames.MainMenu;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.*;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  *

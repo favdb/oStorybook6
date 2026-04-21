@@ -88,7 +88,7 @@ import storybook.tools.swing.js.JSMenuScroller;
 import storybook.tools.synonyms.Synonyms;
 import storybook.tools.synonyms.Word;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
 
 /**

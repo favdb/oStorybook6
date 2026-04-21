@@ -40,7 +40,7 @@ import storybook.db.abs.AbstractEntity;
 import storybook.tools.clip.Clip;
 import storybook.tools.html.Html;
 import storybook.tools.xml.Xml;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * The Class JSTable. A JTable able to hide/show columns through a dialog box.

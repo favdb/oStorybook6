@@ -22,7 +22,7 @@ import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.tools.xml.XmlKey;
 import storybook.tools.xml.XmlUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * @hibernate.subclass discriminator-value="0"

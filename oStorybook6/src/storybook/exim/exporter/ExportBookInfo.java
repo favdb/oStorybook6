@@ -17,7 +17,6 @@
 package storybook.exim.exporter;
 
 import i18n.I18N;
-import storybook.Const;
 import storybook.db.book.Book;
 import storybook.tools.html.Html;
 
@@ -51,8 +50,10 @@ public class ExportBookInfo {
 		if (!book.getSubtitle().isEmpty()) {
 			t.append(Html.intoB(book.getSubtitle())).append(Html.BR).append(Html.BR);
 		}
-		t.append(I18N.getMsg("author_s")).append(" ").append(book.getAuthor()).append(Html.BR);
-		if (!book.getCopyright().isEmpty()) {
+		if (book.getParam().getParamWeb().getAuthor()) {
+			t.append(I18N.getMsg("author_s")).append(" ").append(book.getAuthor()).append(Html.BR);
+		}
+		if (!book.getCopyright().isEmpty() && book.getParam().getParamWeb().getCopyright()) {
 			t.append(Html.intoI(book.getCopyright())).append(Html.BR).append(Html.BR);
 		}
 		t.append(Html.P_E);
@@ -69,11 +70,11 @@ public class ExportBookInfo {
 			}
 		}
 		t.append(Html.P_CENTER);
-		t.append(
+		/*t.append(
 				Html.intoSmall(
 						Html.intoI(I18N.getMsg("export.by") + " " + Const.getFullName())
 				)
-		);
+		);*/
 		t.append(Html.P_E);
 		return t.toString();
 	}
@@ -81,7 +82,7 @@ public class ExportBookInfo {
 	public static String getBlurb(Book book) {
 		//LOG.trace(TT + "getBlurb(book)");
 		StringBuilder b = new StringBuilder();
-		b.append(Html.P_EMPTY).append(Html.intoP(book.getBlurb()));
+		b.append(Html.intoP(book.getBlurb()));
 		return b.toString();
 	}
 

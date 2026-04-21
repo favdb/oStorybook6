@@ -23,7 +23,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import storybook.db.category.Category;
 import storybook.db.category.Categorys;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 public abstract class AbstractPersonsChart extends AbstractChartPanel {
 

@@ -33,7 +33,7 @@ import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.db.book.BookUtil;
 import storybook.db.chapter.Chapter;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * @author martin

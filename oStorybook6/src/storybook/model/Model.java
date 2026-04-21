@@ -60,13 +60,13 @@ import storybook.tools.LOG;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.swing.FontUtil;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
 import storybook.ui.SbView.VIEWNAME;
 import static storybook.ui.SbView.VIEWNAME.*;
-import storybook.ui.panel.book.BookPanel;
-import storybook.ui.panel.manage.Manage;
-import storybook.ui.panel.reading.ReadingPanel;
+import storybook.ui.panels.book.BookPanel;
+import storybook.ui.panels.manage.Manage;
+import storybook.ui.panels.reading.ReadingPanel;
 
 /**
  * class for the project Model

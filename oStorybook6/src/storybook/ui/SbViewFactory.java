@@ -54,22 +54,23 @@ import storybook.ui.chart.occurences.OccurrenceOfItems;
 import storybook.ui.chart.occurences.OccurrenceOfLocations;
 import storybook.ui.chart.occurences.OccurrenceOfPersons;
 import storybook.ui.chart.wiww.WiWW;
-import storybook.ui.panel.AbstractPanel;
-import storybook.ui.panel.book.BookPanel;
-import storybook.ui.panel.chrono.Chrono;
-import storybook.ui.panel.info.InfoPanel;
-import storybook.ui.panel.manage.Manage;
-import storybook.ui.panel.memo.MemosPanel;
-import storybook.ui.panel.memoria.MemoriaPanel;
-import storybook.ui.panel.planning.PlanningPanel;
-import storybook.ui.panel.reading.ReadingPanel;
-import storybook.ui.panel.storyboard.Storyboard;
-import storybook.ui.panel.storymap.Storymap;
-import storybook.ui.panel.tell.TellingPanel;
-import storybook.ui.panel.timeline.TimelinePanel;
-import storybook.ui.panel.tree.TreePanel;
-import storybook.ui.panel.typist.TypistPanel;
-import storybook.ui.panel.typist.TypistScenario;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.AbstractPanel;
+import storybook.ui.panels.book.BookPanel;
+import storybook.ui.panels.chrono.Chrono;
+import storybook.ui.panels.info.InfoPanel;
+import storybook.ui.panels.manage.Manage;
+import storybook.ui.panels.memo.MemosPanel;
+import storybook.ui.panels.memoria.MemoriaPanel;
+import storybook.ui.panels.planning.PlanningPanel;
+import storybook.ui.panels.reading.ReadingPanel;
+import storybook.ui.panels.storyboard.Storyboard;
+import storybook.ui.panels.storymap.Storymap;
+import storybook.ui.panels.tell.TellingPanel;
+import storybook.ui.panels.timeline.TimelinePanel;
+import storybook.ui.panels.tree.TreePanel;
+import storybook.ui.panels.typist.TypistPanel;
+import storybook.ui.panels.typist.TypistScenario;
 
 /**
  * factory for the views
@@ -82,7 +83,7 @@ public class SbViewFactory {
 	private static final String TT = "SbViewFactory.";
 
 	private final int NONE = 0, EXPORT = 1, OPTIONS = 10;
-	private final MainFrame mainFrame;
+	private MainFrame mainFrame;
 	private final StringViewMap viewMap;
 	private boolean initialization;
 

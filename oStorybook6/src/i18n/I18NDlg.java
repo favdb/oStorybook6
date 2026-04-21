@@ -61,7 +61,7 @@ import storybook.tools.file.IOUtil;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.js.JSTable;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
 
 /**

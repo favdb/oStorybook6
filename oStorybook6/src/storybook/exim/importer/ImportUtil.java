@@ -41,7 +41,7 @@ import storybook.db.tag.Tag;
 import storybook.project.Project;
 import storybook.tools.LOG;
 import storybook.tools.xml.XmlUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  *

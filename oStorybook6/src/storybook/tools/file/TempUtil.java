@@ -24,7 +24,7 @@ import org.w3c.dom.NodeList;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.scene.Scene;
 import storybook.tools.xml.Xml;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * temp file for a Scene

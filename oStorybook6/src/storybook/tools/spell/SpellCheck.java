@@ -27,7 +27,7 @@ import storybook.tools.file.EnvUtil;
 import storybook.tools.file.IOUtil;
 import storybook.tools.net.Net;
 import storybook.tools.zip.ZipUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * class for using external check with navigator+LanguageTool and CkEditor

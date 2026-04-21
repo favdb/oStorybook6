@@ -27,24 +27,28 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import resources.icons.ICONS;
 import storybook.db.book.BookParamWeb;
 import storybook.dialog.AbsDialog;
-import storybook.dialog.chooser.ColorChooserPanel;
 import storybook.dialog.chooser.ColorPicker;
 import storybook.exim.exporter.ExportBookDlg;
 import storybook.tools.swing.ColorUtil;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.js.JSFileSelector;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
 import storybook.ui.Ui;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * configuration dialog to export HTML for a website
+ *
+ * webadanced options:<br>
+ * <ul>
+ * <li>banner: to use an image banner file</li>
+ * <li>author and copyright: to generate these elements</li>
+ * </ul>
  *
  * @author favdb
  */
@@ -58,12 +62,8 @@ public class PropWebDlg extends AbsDialog {
 	}
 
 	private final BookParamWeb web;
-	private JCheckBox ckBanner;
-	private JCheckBox ckSummary;
-	private JCheckBox summaryChapter;
-	private ColorChooserPanel summaryColor;
+	private JCheckBox ckBanner, ckSummary, summaryChapter;
 	private JSFileSelector slBanner;
-	private JComboBox cbFont;
 	private ColorPicker cbColor;
 	private List<JLabel> lbCss;
 	private final int NB_H = 3;
@@ -120,9 +120,9 @@ public class PropWebDlg extends AbsDialog {
 		// header for author and copyright
 		JPanel p2 = new JPanel(new MigLayout(MIG.WRAP, "[]"));
 		ckAuthor = Ui.initCheckBox(p2, "ckAuthor", "web.author",
-				book.param.getParamExport().getHtmlAuthor(), null);
+				web.getAuthor(), null);
 		ckCopyright = Ui.initCheckBox(p2, "ckCopyright", "web.copyright",
-				book.param.getParamExport().getHtmlCopyright(), null);
+				web.getCopyright(), null);
 		panel.add(p2, MIG.SPAN);
 		// footer
 		add(panel, MIG.get(MIG.GROWX, MIG.SPAN));
@@ -196,6 +196,8 @@ public class PropWebDlg extends AbsDialog {
 			color = ((Color) cbColor.getSelectedItem());
 		}
 		web.getSummary().setColor(ColorUtil.getHTML(color));
+		web.setAuthor(ckAuthor.isSelected());
+		web.setCopyright(ckCopyright.isSelected());
 		mainFrame.setUpdated();
 	}
 
@@ -207,7 +209,7 @@ public class PropWebDlg extends AbsDialog {
 	private void changeH(String nm) {
 		//LOG.trace(TT + "changeH(nm=" + nm + ")");
 		int i = Integer.parseInt(nm.replace("h", "")) - 1;
-		PropWebHDlg dlg = new PropWebHDlg(this, web.getSummary().getH(i));
+		PropWebAdvancedDlg dlg = new PropWebAdvancedDlg(this, web.getSummary().getH(i));
 		dlg.setVisible(true);
 		if (!dlg.isCanceled()) {
 			web.getSummary().setH(i, dlg.getH());

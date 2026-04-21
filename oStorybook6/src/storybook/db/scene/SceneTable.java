@@ -54,7 +54,7 @@ import storybook.tools.SbDuration;
 import storybook.tools.TextUtil;
 import storybook.tools.comparator.ObjectComparator;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.Ui;
 import static storybook.ui.Ui.*;
 
@@ -98,7 +98,6 @@ public class SceneTable extends AbsTable implements ActionListener {
 	@Override
 	public void init() {
 		withPart = true;
-		//mainFrame.project.scenes.relativeDateInit();
 	}
 
 	/**
@@ -151,11 +150,14 @@ public class SceneTable extends AbsTable implements ActionListener {
 				scenes.add(s);
 			}
 		}
-		//Collections.sort(scenes,
-		//		(AbstractEntity r1, AbstractEntity r2) -> r1.getId().compareTo(r2.getId()));
 		return scenes;
 	}
 
+	/**
+	 * initialize the tool bar
+	 *
+	 * @return
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public JToolBar initToolbar() {
@@ -170,8 +172,9 @@ public class SceneTable extends AbsTable implements ActionListener {
 		pStrand.add(new JLabel(I18N.getColonMsg("strand")));
 		cbStrand = new JComboBox();
 		cbStrand.setName(ACT.CB_STRAND.toString());
-		Ui.fillCB(cbStrand, mainFrame.project.getList(Book.TYPE.STRAND), BALL, this);
-		cbStrand.setSelectedIndex(0);
+		Ui.fillCB(cbStrand, mainFrame.project.getList(Book.TYPE.STRAND), BALL);
+		int nx = mainFrame.getBook().getParam().getParamFilters().getScenesStrand();
+		cbStrand.setSelectedIndex((nx != -1 ? nx : 0));
 		cbStrand.addActionListener(this);
 		pStrand.add(cbStrand);
 		toolbar.add(pStrand);
@@ -181,8 +184,9 @@ public class SceneTable extends AbsTable implements ActionListener {
 		pNarrator.add(new JLabel(I18N.getColonMsg("scene.narrator")));
 		cbNarrator = new JComboBox();
 		cbNarrator.setName(ACT.CB_NARRATOR.toString());
-		Ui.fillCB(cbNarrator, mainFrame.project.scenes.findNarrators(), BALL, this);
-		cbNarrator.setSelectedIndex(0);
+		Ui.fillCB(cbNarrator, mainFrame.project.scenes.findNarrators(), BALL);
+		nx = mainFrame.getBook().getParam().getParamFilters().getScenesNarrator();
+		cbNarrator.setSelectedIndex((nx != -1 ? nx : 0));
 		cbNarrator.addActionListener(this);
 		pNarrator.add(cbNarrator);
 		toolbar.add(pNarrator);
@@ -198,7 +202,8 @@ public class SceneTable extends AbsTable implements ActionListener {
 			cb.addItem(st.ordinal());
 		}
 		cb.addItem(I18N.getMsg("status.all"));
-		cb.setSelectedIndex(cb.getItemCount() - 1);
+		int nx = mainFrame.getBook().getParam().getParamFilters().getScenesStatus();
+		cb.setSelectedIndex((nx != -1 ? nx : cb.getItemCount() - 1));
 		cb.setRenderer(new StatusLCR());
 		cb.addActionListener(this);
 		return (cb);
@@ -239,6 +244,18 @@ public class SceneTable extends AbsTable implements ActionListener {
 	public synchronized void actionPerformed(ActionEvent e) {
 		//LOG.trace(TT + "actionPerformed(" + e.toString() + ")");
 		if (e.getSource() instanceof JComboBox) {
+			JComboBox cb = (JComboBox) e.getSource();
+			int idx = cb.getSelectedIndex();
+			if (cb == cbStrand) {
+				mainFrame.getBook().getParam().getParamFilters().setScenesStrand(idx);
+				mainFrame.setUpdated();
+			} else if (cb == cbStatus) {
+				mainFrame.getBook().getParam().getParamFilters().setScenesStatus(idx);
+				mainFrame.setUpdated();
+			} else if (cb == cbNarrator) {
+				mainFrame.getBook().getParam().getParamFilters().setScenesNarrator(idx);
+				mainFrame.setUpdated();
+			}
 			fillTable();
 			return;
 		}

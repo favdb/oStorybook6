@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 import storybook.db.abs.AbstractEntity;
 import storybook.db.book.Book;
 import storybook.tools.LOG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * export list of entities

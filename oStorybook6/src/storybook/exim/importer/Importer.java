@@ -32,7 +32,7 @@ import storybook.ctrl.Ctrl;
 import storybook.db.abs.AbstractEntity;
 import storybook.dialog.ExceptionDlg;
 import storybook.model.Model;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * Importer class

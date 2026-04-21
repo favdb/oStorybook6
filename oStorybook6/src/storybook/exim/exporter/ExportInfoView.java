@@ -29,8 +29,8 @@ import storybook.exim.EXIM;
 import storybook.tools.LOG;
 import storybook.tools.file.IOUtil;
 import storybook.tools.html.Html;
-import storybook.ui.MainFrame;
-import storybook.ui.panel.info.InfoPanel;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.info.InfoPanel;
 
 /**
  * export the Info view data

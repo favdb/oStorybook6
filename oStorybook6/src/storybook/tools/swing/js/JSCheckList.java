@@ -15,9 +15,9 @@ import storybook.db.book.Book;
 import storybook.db.book.Book.TYPE;
 import storybook.db.strand.Strand;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.interfaces.IRefreshable;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * Panel containing a list of check box

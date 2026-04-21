@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
 import storybook.db.scene.Scene;
 import storybook.db.scene.Scenes;
 import storybook.tools.StringUtil;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 
 /**
  * export to a Storyboard format

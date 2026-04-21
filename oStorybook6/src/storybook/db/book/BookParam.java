@@ -26,7 +26,6 @@ import org.w3c.dom.NodeList;
  *
  * @author favdb
  */
-
 public class BookParam {
 
 	private static final String TT = "BookParam.";
@@ -38,6 +37,7 @@ public class BookParam {
 	private BookParamExport paramExport;
 	private BookParamImport paramImport;
 	private BookParamLayout paramLayout;
+	private BookParamFilters paramFilters;
 	public final Book book;
 	private Element elInfo;
 	private BookParamWeb paramWeb;
@@ -103,6 +103,22 @@ public class BookParam {
 		paramLayout = b;
 	}
 
+	public BookParamFilters getParamFilters() {
+		return paramFilters;
+	}
+
+	public void setParamFilters(BookParamFilters b) {
+		paramFilters = b;
+	}
+
+	public BookParamWeb getParamWeb() {
+		return paramWeb;
+	}
+
+	public void setParamWeb(BookParamWeb web) {
+		this.paramWeb = web;
+	}
+
 	public void init() {
 		//LOG.trace(TT + "init()");
 		paramBackup = new BookParamBackup(this);
@@ -110,6 +126,7 @@ public class BookParam {
 		paramExport = new BookParamExport(this);
 		paramImport = new BookParamImport(this);
 		paramLayout = new BookParamLayout(this);
+		paramFilters = new BookParamFilters(this);
 		paramWeb = new BookParamWeb(this);
 		//TODO calendar
 		//paramCalendar.init();
@@ -123,19 +140,12 @@ public class BookParam {
 		b.append(paramExport.toXml());
 		b.append(paramImport.toXml());
 		b.append(paramLayout.toXml());
+		b.append(paramFilters.toXml());
 		b.append(paramWeb.toXml());
 		//TODO calendar
 		//b.append(paramCalendar.toXml());
 		b.append("    </param>\n");
 		return b.toString();
-	}
-
-	public BookParamWeb getParamWeb() {
-		return paramWeb;
-	}
-
-	public void setParamWeb(BookParamWeb web) {
-		this.paramWeb = web;
 	}
 
 }

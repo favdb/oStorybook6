@@ -68,10 +68,10 @@ import storybook.tools.print.TablePrinter;
 import storybook.tools.swing.SwingUtil;
 import storybook.tools.swing.js.JSMenuItem;
 import storybook.ui.MIG;
-import storybook.ui.MainFrame;
+import storybook.ui.frames.main.MainFrame;
 import storybook.ui.SbView;
 import storybook.ui.Ui;
-import storybook.ui.panel.AbstractPanel;
+import storybook.ui.panels.AbstractPanel;
 
 /**
  * JPanel to manage the Episodes

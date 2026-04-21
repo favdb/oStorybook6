@@ -48,7 +48,7 @@ import storybook.ui.Ui;
  */
 public class HTMLpanel extends JPanel implements ChangeListener {
 
-	private static final String TT = "HTMLpanel";
+	private static final String TT = "HTMLpanel.";
 
 	private final ExportBookDlg dlgExport;
 	private JButton btCssFile;
@@ -72,7 +72,7 @@ public class HTMLpanel extends JPanel implements ChangeListener {
 	}
 
 	private void initUi() {
-		//LOG.trace(TT + ".initUi() " + paramExport.toString());
+		//LOG.trace(TT + "initUi() " + paramExport.toString());
 		setLayout(new MigLayout());
 		boolean htmlCss = !paramExport.getHtmlCss().isEmpty();
 		cbUseCss = new JCheckBox(I18N.getMsg("export.options.html.css"));

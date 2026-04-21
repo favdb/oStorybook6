@@ -27,9 +27,9 @@ import javax.swing.event.ChangeEvent;
 import storybook.App;
 import storybook.Pref;
 import storybook.tools.LOG;
-import storybook.ui.MainFrame;
-import storybook.ui.panel.AbstractOptions;
-import storybook.ui.panel.book.BookPanel;
+import storybook.ui.frames.main.MainFrame;
+import storybook.ui.panels.AbstractOptions;
+import storybook.ui.panels.book.BookPanel;
 
 /**
  *
